@@ -11,6 +11,8 @@ versionName = "0.1"
 agp = "8.13.0"
 android-material="1.13.0"
 
+detekt="1.23.8"
+
 kotlin = "2.2.20"
 
 juint = "5.13.4"
@@ -22,9 +24,12 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 
 android-material = { group = "com.google.android.material", name = "material", version.ref = "android-material" }
 
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+
 junit = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "juint" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
