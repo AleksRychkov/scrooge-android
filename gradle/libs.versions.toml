@@ -1,20 +1,28 @@
 [versions]
+# region android-build-logic
+compileSdk = "36"
+minSdk = "26"
+targetSdk = "36"
+applicationId = "dev.aleksrychkov.scrooge"
+versionCode = "1"
+versionName = "0.1"
+# endregion
+
 agp = "8.13.0"
-kotlin = "2.0.21"
-coreKtx = "1.10.1"
-junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-appcompat = "1.6.1"
-material = "1.10.0"
+android-material="1.13.0"
+
+kotlin = "2.2.20"
+
+juint = "5.13.4"
+
 
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+android-material = { group = "com.google.android.material", name = "material", version.ref = "android-material" }
+
+junit = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "juint" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
