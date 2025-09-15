@@ -27,3 +27,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "scrooge-android"
 include(":app")
+
+// core
+include(":core:di")
