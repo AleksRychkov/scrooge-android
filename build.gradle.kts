@@ -1,12 +1,16 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.sqldelight) apply false
 }
 
 allprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
     }
+}
+
+subprojects {
+    apply(from = "$rootDir/config/detekt/detekt.gradle")
 }

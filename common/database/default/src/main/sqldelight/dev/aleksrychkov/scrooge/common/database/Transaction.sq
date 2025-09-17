@@ -1,0 +1,26 @@
+-- Table
+CREATE TABLE IF NOT EXISTS TTransaction (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  amount INTEGER NOT NULL,
+  timestamp INTEGER NOT NULL,
+  type INTEGER NOT NULL,
+  category TEXT NOT NULL,
+  tags TEXT,
+  currencyCode TEXT NOT NULL
+);
+
+-- Queries
+selectFromTo:
+SELECT * FROM TTransaction WHERE timestamp >= ? AND timestamp <= ? ORDER BY timestamp DESC;
+
+create:
+INSERT INTO TTransaction (amount, timestamp, type, category, tags, currencyCode) VALUES (?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE TTransaction SET amount = ?, timestamp = ?, type = ?, category = ?, tags = ?, currencyCode = ? WHERE id = ?;
+
+selectById:
+SELECT * FROM TTransaction WHERE id = ?;
+
+delete:
+DELETE FROM TTransaction WHERE id = ?;

@@ -24,3 +24,7 @@ android {
 dependencies {
     implementation(libs.android.material)
 }
+
+dependencies {
+    implementation(projects.common.database.di)
+}

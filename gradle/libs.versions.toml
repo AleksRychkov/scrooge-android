@@ -11,9 +11,16 @@ versionName = "0.1"
 agp = "8.13.0"
 android-material="1.13.0"
 
+androidx-startup = "1.2.0"
+
 detekt="1.23.8"
 
 kotlin = "2.2.20"
+
+kotlinx-coroutines-core = "1.10.2"
+kotlinx-immutable-collections = "0.4.0"
+
+sqldelight = "2.1.0"
 
 juint = "5.13.4"
 
@@ -24,12 +31,24 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 
 android-material = { group = "com.google.android.material", name = "material", version.ref = "android-material" }
 
+androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidx-startup" }
+
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+kotlinx-immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-immutable-collections" }
+
+sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+
 junit = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "juint" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
+[bundles]
+sqldelight = ["sqldelight-android-driver", "sqldelight-extensions"]
