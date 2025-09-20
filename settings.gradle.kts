@@ -29,7 +29,7 @@ rootProject.name = "scrooge-android"
 include(":app")
 
 // detekt
-include(":detekt-rules")
+include(":config:detekt:rules")
 
 // common
 include(":common:entity")
