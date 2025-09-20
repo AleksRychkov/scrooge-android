@@ -33,6 +33,13 @@ internal class DefaultTagDao(
             }
     }
 
+    override suspend fun getByName(name: String): TagEntity? = withContext(readDispatcher) {
+        database.tagQueries
+            .selectByName(name)
+            .executeAsOneOrNull()
+            ?.let(TagMapper::toEntity)
+    }
+
     override suspend fun create(
         name: String,
         colorHex: String?,

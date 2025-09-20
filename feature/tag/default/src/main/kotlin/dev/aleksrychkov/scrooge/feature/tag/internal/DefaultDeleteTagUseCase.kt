@@ -1,0 +1,21 @@
+package dev.aleksrychkov.scrooge.feature.tag.internal
+
+import dev.aleksrychkov.scrooge.common.database.TagDao
+import dev.aleksrychkov.scrooge.common.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
+import dev.aleksrychkov.scrooge.feature.tag.DeleteTagUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+
+internal class DefaultDeleteTagUseCase(
+    private val tagDao: Lazy<TagDao>,
+    private val ioDispatcher: CoroutineDispatcher,
+) : DeleteTagUseCase {
+
+    override suspend fun invoke(tagEntity: TagEntity): Result<Unit> =
+        withContext(ioDispatcher) {
+            runSuspendCatching {
+                tagDao.value.delete(tagEntity.id)
+            }
+        }
+}

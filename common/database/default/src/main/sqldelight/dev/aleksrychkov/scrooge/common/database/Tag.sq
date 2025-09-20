@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS Tag (
 selectAll:
 SELECT * FROM Tag;
 
+selectByName:
+SELECT * FROM Tag WHERE name = ? LIMIT 1;
+
 create:
 INSERT INTO Tag (name, colorHex) VALUES (?, ?);
 

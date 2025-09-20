@@ -39,3 +39,9 @@ include(":common:database:di")
 
 // core
 include(":core:di")
+include(":core:utils")
+
+// feature
+include(":feature:tag:api")
+include(":feature:tag:default")
+include(":feature:tag:di")

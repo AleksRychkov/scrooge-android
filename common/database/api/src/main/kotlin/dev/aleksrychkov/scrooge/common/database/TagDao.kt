@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TagDao {
     suspend fun get(): Flow<ImmutableList<TagEntity>>
+    suspend fun getByName(name: String): TagEntity?
     suspend fun create(name: String, colorHex: String?)
     suspend fun delete(id: Long)
 }

@@ -9,13 +9,15 @@ versionName = "0.1"
 # endregion
 
 agp = "8.13.0"
-android-material="1.13.0"
+android-material = "1.13.0"
 
 androidx-startup = "1.2.0"
 
-detekt="1.23.8"
+detekt = "1.23.8"
 
 kotlin = "2.2.20"
+
+mockk = "1.14.5"
 
 kotlinx-coroutines-core = "1.10.2"
 kotlinx-immutable-collections = "0.4.0"
@@ -37,7 +39,10 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-core" }
 kotlinx-immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-immutable-collections" }
+
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
