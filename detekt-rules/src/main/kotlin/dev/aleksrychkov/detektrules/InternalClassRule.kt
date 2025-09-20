@@ -1,5 +1,6 @@
 package dev.aleksrychkov.detektrules
 
+import androidx.annotation.VisibleForTesting
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -9,6 +10,10 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
 
 class InternalClassRule : Rule() {
+
+    @VisibleForTesting
+    var testPackageName: String? = null
+
     override val issue: Issue = Issue(
         id = "InternalPackageVisibility",
         severity = Severity.Style,
@@ -20,7 +25,7 @@ class InternalClassRule : Rule() {
         super.visitClass(klass)
 
         // Get package name
-        val packageName = klass.containingKtFile.packageFqName.asString()
+        val packageName = testPackageName ?: klass.containingKtFile.packageFqName.asString()
 
         // Only enforce for internal packages
         if ("internal" in packageName.split(".")) {

@@ -1065,6 +1065,6 @@ formatting:
     indentSize: 4
     maxLineLength: 120
 
-  custom-rules:
-    InternalPackageVisibility:
-      active: true
+custom-rules:
+  InternalPackageVisibility:
+    active: true

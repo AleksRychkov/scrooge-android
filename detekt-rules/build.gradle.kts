@@ -3,6 +3,13 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.detekt.api) // use your Detekt version
+    compileOnly(libs.detekt.api)
+
+    implementation(libs.androidx.annotation)
     implementation(kotlin("stdlib"))
+
+    testImplementation(libs.detekt.test)
+    testImplementation(libs.junit)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

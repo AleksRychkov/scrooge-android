@@ -11,6 +11,7 @@ versionName = "0.1"
 agp = "8.13.0"
 android-material = "1.13.0"
 
+androidx-annotation = "1.9.1"
 androidx-startup = "1.2.0"
 
 detekt = "1.23.8"
@@ -33,10 +34,12 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 
 android-material = { group = "com.google.android.material", name = "material", version.ref = "android-material" }
 
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidx-annotation" }
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidx-startup" }
 
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
+detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-core" }
