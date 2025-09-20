@@ -8,4 +8,5 @@ detekt {
 
 dependencies {
     detektPlugins libs.detekt.formatting
+    detektPlugins(project(":detekt-rules"))
 }

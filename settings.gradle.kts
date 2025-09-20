@@ -28,6 +28,9 @@ dependencyResolutionManagement {
 rootProject.name = "scrooge-android"
 include(":app")
 
+// detekt
+include(":detekt-rules")
+
 // common
 include(":common:entity")
 include(":common:database:api")
