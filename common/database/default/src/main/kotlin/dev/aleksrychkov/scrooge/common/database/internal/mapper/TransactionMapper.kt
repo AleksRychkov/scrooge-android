@@ -8,7 +8,7 @@ import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
 
-object TransactionMapper {
+internal object TransactionMapper {
 
     private const val TAGS_SEPARATOR = "|"
 

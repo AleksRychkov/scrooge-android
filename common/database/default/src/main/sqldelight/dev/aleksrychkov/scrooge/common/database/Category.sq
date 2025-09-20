@@ -1,0 +1,20 @@
+-- Table
+CREATE TABLE IF NOT EXISTS Category (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  name TEXT NOT NULL UNIQUE,
+  type INTEGER NOT NULL,
+  isUserMade INTEGER NOT NULL
+);
+
+-- Queries
+selectAllByType:
+SELECT * FROM Category WHERE type = ?;
+
+create:
+INSERT INTO Category (name, type, isUserMade) VALUES (?, ?, 1);
+
+getByNameAndType:
+SELECT * FROM Category WHERE name = ? AND type = ?;
+
+delete:
+DELETE FROM Category WHERE id = ? AND isUserMade == 1;

@@ -2,6 +2,8 @@ package dev.aleksrychkov.scrooge.common.database
 
 import android.content.Context
 import dev.aleksrychkov.scrooge.common.database.internal.createDriver
+import dev.aleksrychkov.scrooge.common.database.internal.dao.DefaultCategoryDao
+import dev.aleksrychkov.scrooge.common.database.internal.dao.DefaultTagDao
 import dev.aleksrychkov.scrooge.common.database.internal.dao.DefaultTransactionDao
 import dev.aleksrychkov.scrooge.core.di.NaiveModule
 import dev.aleksrychkov.scrooge.core.di.getLazy
@@ -16,6 +18,20 @@ fun buildDatabaseModule(context: Context): NaiveModule {
         singleton { Scrooge(createDriver(context)) }
         singleton<TransactionDao> {
             DefaultTransactionDao(
+                db = getLazy(),
+                readDispatcher = readDispatcher,
+                writeDispatcher = writeDispatcher,
+            )
+        }
+        singleton<CategoryDao> {
+            DefaultCategoryDao(
+                db = getLazy(),
+                readDispatcher = readDispatcher,
+                writeDispatcher = writeDispatcher,
+            )
+        }
+        singleton<TagDao> {
+            DefaultTagDao(
                 db = getLazy(),
                 readDispatcher = readDispatcher,
                 writeDispatcher = writeDispatcher,
