@@ -1,0 +1,20 @@
+plugins {
+    id("build-logic.android-library")
+    alias(libs.plugins.compose)
+}
+
+android {
+    namespace = "dev.aleksrychkov.screeoge.core.designsystem"
+
+    buildFeatures {
+        compose = true
+    }
+}
+
+dependencies {
+    implementation(libs.android.material)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
+}

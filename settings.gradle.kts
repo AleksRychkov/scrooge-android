@@ -38,7 +38,11 @@ include(":common:database:api")
 include(":common:database:default")
 include(":common:database:di")
 
+// component
+include(":component:root")
+
 // core
+include(":core:design-system")
 include(":core:di")
 include(":core:utils")
 
