@@ -1,7 +1,6 @@
 package dev.aleksrychkov.scrooge.common.database.internal.mapper
 
 import dev.aleksrychkov.scrooge.common.database.TTransaction
-import dev.aleksrychkov.scrooge.common.entity.CurrencyCode
 import dev.aleksrychkov.scrooge.common.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.common.entity.TransactionType
 import kotlinx.collections.immutable.persistentSetOf
@@ -32,7 +31,7 @@ internal class TransactionMapperTest {
         assertEquals(TransactionType.Expense, entity.type)
         assertEquals("Food", entity.category)
         assertEquals(persistentSetOf("groceries", "dinner"), entity.tags)
-        assertEquals(CurrencyCode("USD"), entity.currencyCode)
+        assertEquals("USD", entity.currencyCode)
     }
 
     @Test

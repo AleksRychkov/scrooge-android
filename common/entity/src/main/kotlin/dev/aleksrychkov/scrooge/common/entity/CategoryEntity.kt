@@ -1,5 +1,8 @@
 package dev.aleksrychkov.scrooge.common.entity
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class CategoryEntity(
     val id: Long,
     val name: String,

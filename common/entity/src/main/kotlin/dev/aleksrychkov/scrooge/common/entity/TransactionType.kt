@@ -1,5 +1,8 @@
 package dev.aleksrychkov.scrooge.common.entity
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class TransactionType(val type: Int) {
     Income(0),
     Expense(1);

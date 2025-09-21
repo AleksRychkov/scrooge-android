@@ -28,5 +28,6 @@ dependencies {
 dependencies {
     implementation(projects.common.database.di)
     implementation(projects.feature.category.di)
+    implementation(projects.feature.currency.di)
     implementation(projects.feature.tag.di)
 }

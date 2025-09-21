@@ -33,6 +33,7 @@ include(":config:detekt:rules")
 
 // common
 include(":common:entity")
+
 include(":common:database:api")
 include(":common:database:default")
 include(":common:database:di")
@@ -45,6 +46,11 @@ include(":core:utils")
 include(":feature:category:api")
 include(":feature:category:default")
 include(":feature:category:di")
+
+include(":feature:currency:api")
+include(":feature:currency:default")
+include(":feature:currency:di")
+
 include(":feature:tag:api")
 include(":feature:tag:default")
 include(":feature:tag:di")

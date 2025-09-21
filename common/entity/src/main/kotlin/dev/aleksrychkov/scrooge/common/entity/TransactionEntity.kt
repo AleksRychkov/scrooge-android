@@ -1,7 +1,9 @@
 package dev.aleksrychkov.scrooge.common.entity
 
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class TransactionEntity(
     val id: Long,
     val amount: Long,
@@ -9,5 +11,5 @@ data class TransactionEntity(
     val type: TransactionType,
     val category: String,
     val tags: ImmutableSet<String>,
-    val currencyCode: CurrencyCode,
+    val currencyCode: String,
 )
