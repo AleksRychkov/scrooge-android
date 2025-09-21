@@ -1,0 +1,35 @@
+@file:Suppress("Filename")
+
+package dev.aleksrychkov.scrooge.feature.category
+
+import dev.aleksrychkov.scrooge.core.di.NaiveModule
+import dev.aleksrychkov.scrooge.core.di.factory
+import dev.aleksrychkov.scrooge.core.di.getLazy
+import dev.aleksrychkov.scrooge.core.di.module
+import dev.aleksrychkov.scrooge.feature.category.internal.DefaultCreateCategoryUseCase
+import dev.aleksrychkov.scrooge.feature.category.internal.DefaultDeleteCategoryUseCase
+import dev.aleksrychkov.scrooge.feature.category.internal.DefaultObserveCategoryUseCase
+import kotlinx.coroutines.Dispatchers
+
+fun buildCategoryModule(): NaiveModule {
+    return module {
+        factory<DeleteCategoryUseCase> {
+            DefaultDeleteCategoryUseCase(
+                categoryDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<CreateCategoryUseCase> {
+            DefaultCreateCategoryUseCase(
+                categoryDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<ObserveCategoryUseCase> {
+            DefaultObserveCategoryUseCase(
+                categoryDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+    }
+}

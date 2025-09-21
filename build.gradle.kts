@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.detekt)
@@ -8,6 +10,16 @@ plugins {
 allprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
+        testLogging {
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+            events(
+                TestLogEvent.STARTED,
+                TestLogEvent.FAILED,
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED,
+            )
+            showStandardStreams = true
+        }
     }
 }
 

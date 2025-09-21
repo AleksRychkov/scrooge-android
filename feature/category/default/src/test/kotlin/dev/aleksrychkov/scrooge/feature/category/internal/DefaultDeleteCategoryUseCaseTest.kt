@@ -1,0 +1,74 @@
+package dev.aleksrychkov.scrooge.feature.category.internal
+
+import dev.aleksrychkov.scrooge.common.database.CategoryDao
+import dev.aleksrychkov.scrooge.common.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.common.entity.TransactionType
+import dev.aleksrychkov.scrooge.feature.category.DeleteCategoryResult
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+
+internal class DefaultDeleteCategoryUseCaseTest {
+
+    private val testDispatcher = StandardTestDispatcher()
+    private val categoryDao = mockk<CategoryDao>(relaxed = true)
+    private val useCase = DefaultDeleteCategoryUseCase(lazy { categoryDao }, testDispatcher)
+
+    @Test
+    fun `When category is user made Then Success is returned`() = runTest(testDispatcher) {
+        // Given
+        val category = CategoryEntity(
+            id = 1L,
+            name = "Food",
+            type = TransactionType.Expense,
+            isUserMade = true,
+        )
+
+        // When
+        val result: Result<DeleteCategoryResult> = useCase(category)
+
+        // Then
+        assertEquals(Result.success(DeleteCategoryResult.Success), result)
+        coVerify(exactly = 1) { categoryDao.delete(category.id) }
+    }
+
+    @Test
+    fun `When category is not user made Then NotUserMadeViolation is returned`() =
+        runTest(testDispatcher) {
+            // Given
+            val category = CategoryEntity(
+                id = 2L,
+                name = "Salary",
+                type = TransactionType.Expense,
+                isUserMade = false,
+            )
+            // When
+            val result: Result<DeleteCategoryResult> = useCase(category)
+            // Then
+            assertEquals(
+                Result.success(DeleteCategoryResult.NotUserMadeViolation(category)),
+                result
+            )
+            coVerify(exactly = 0) { categoryDao.delete(any()) }
+        }
+
+    @Test
+    fun `When dao throws exception Then failure result is returned`() = runTest(testDispatcher) {
+        // Given
+        val category = CategoryEntity(
+            id = 3L,
+            name = "Transport",
+            type = TransactionType.Expense,
+            isUserMade = true,
+        )
+        coEvery { categoryDao.delete(category.id) } throws IllegalStateException("DB error")
+        // When
+        val result: Result<DeleteCategoryResult> = useCase(category)
+        // Then
+        assert(result.isFailure)
+    }
+}

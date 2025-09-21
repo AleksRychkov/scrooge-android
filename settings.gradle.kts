@@ -42,6 +42,9 @@ include(":core:di")
 include(":core:utils")
 
 // feature
+include(":feature:category:api")
+include(":feature:category:default")
+include(":feature:category:di")
 include(":feature:tag:api")
 include(":feature:tag:default")
 include(":feature:tag:di")
