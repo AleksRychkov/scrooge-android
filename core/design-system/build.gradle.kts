@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.screeoge.core.designsystem"
+    namespace = "dev.aleksrychkov.scrooge.core.designsystem"
 
     buildFeatures {
         compose = true
