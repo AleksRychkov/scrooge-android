@@ -5,14 +5,20 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.main"
+    namespace = "dev.aleksrychkov.scrooge.component.mainTabs"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.component.mainTabs)
+    implementation(projects.component.report)
+    implementation(projects.component.settings)
+    implementation(projects.component.transactions)
+
+    implementation(projects.common.resources)
+
+    implementation(projects.core.designSystem)
 }
 
 dependencies {

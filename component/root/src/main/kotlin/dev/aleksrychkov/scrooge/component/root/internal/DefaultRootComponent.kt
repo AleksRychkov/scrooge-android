@@ -20,6 +20,7 @@ internal class DefaultRootComponent(
             serializer = Configuration.serializer(),
             initialConfiguration = Configuration.Main,
             handleBackButton = true,
+            key = "DefaultRootComponentStack",
             childFactory = ::child,
         )
 

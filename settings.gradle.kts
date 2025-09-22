@@ -42,6 +42,7 @@ include(":common:resources")
 
 // component
 include(":component:main")
+include(":component:main-tabs")
 include(":component:report")
 include(":component:root")
 include(":component:settings")
