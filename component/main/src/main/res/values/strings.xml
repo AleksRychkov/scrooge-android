@@ -1,0 +1,5 @@
+<resources>
+    <string name="component_transactions_title">Transactions</string>
+    <string name="component_report_title">Reports</string>
+    <string name="component_settings_title">Settings</string>
+</resources>

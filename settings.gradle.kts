@@ -40,7 +40,10 @@ include(":common:database:di")
 
 // component
 include(":component:main")
+include(":component:report")
 include(":component:root")
+include(":component:settings")
+include(":component:transactions")
 
 // core
 include(":core:design-system")
