@@ -333,8 +333,9 @@ naming:
   FunctionNaming:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    functionPattern: '[a-z][a-zA-Z0-9]*'
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
+    ignoreAnnotated: ['Composable']
   FunctionParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
@@ -1065,6 +1066,6 @@ formatting:
     indentSize: 4
     maxLineLength: 120
 
-custom-rules:
-  InternalPackageVisibility:
-    active: true
+#custom-rules:
+#  InternalPackageVisibility:
+#    active: true
