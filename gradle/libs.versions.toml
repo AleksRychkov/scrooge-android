@@ -20,6 +20,8 @@ decompose = "3.3.0"
 
 detekt = "1.23.8"
 
+essenty = "2.5.0"
+
 kotlin = "2.2.20"
 
 mockk = "1.14.5"
@@ -49,6 +51,8 @@ androidx-startup = { group = "androidx.startup", name = "startup-runtime", versi
 
 decompose-decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
 decompose-extensionsComposeJetbrains = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
+
+essenty-instance-keeper = { group = "com.arkivanov.essenty", name = "instance-keeper", version.ref = "essenty" }
 
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }

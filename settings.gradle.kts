@@ -48,6 +48,8 @@ include(":component:transactions")
 // core
 include(":core:design-system")
 include(":core:di")
+include(":core:udf")
+include(":core:udf-extensions")
 include(":core:utils")
 
 // feature
