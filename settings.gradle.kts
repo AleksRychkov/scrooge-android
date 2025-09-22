@@ -38,6 +38,8 @@ include(":common:database:api")
 include(":common:database:default")
 include(":common:database:di")
 
+include(":common:resources")
+
 // component
 include(":component:main")
 include(":component:report")
