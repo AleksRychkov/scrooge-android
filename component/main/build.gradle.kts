@@ -5,15 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.root"
+    namespace = "dev.aleksrychkov.scrooge.component.main"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.component.main)
-
     implementation(projects.core.designSystem)
 }
 

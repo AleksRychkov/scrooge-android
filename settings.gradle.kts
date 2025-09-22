@@ -39,6 +39,7 @@ include(":common:database:default")
 include(":common:database:di")
 
 // component
+include(":component:main")
 include(":component:root")
 
 // core
