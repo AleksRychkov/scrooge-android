@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.feature.tag.internal
 
-import dev.aleksrychkov.scrooge.common.database.TagDao
-import dev.aleksrychkov.scrooge.common.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.database.TagDao
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.feature.tag.CreateTagResult
 import io.mockk.coEvery
 import io.mockk.coVerify

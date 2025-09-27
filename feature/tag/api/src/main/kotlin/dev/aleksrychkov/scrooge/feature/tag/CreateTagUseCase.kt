@@ -1,6 +1,6 @@
 package dev.aleksrychkov.scrooge.feature.tag
 
-import dev.aleksrychkov.scrooge.common.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
 
 fun interface CreateTagUseCase {
     suspend operator fun invoke(tagEntity: TagEntity): Result<CreateTagResult>

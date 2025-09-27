@@ -34,10 +34,6 @@ include(":config:detekt:rules")
 // common
 include(":common:entity")
 
-include(":common:database:api")
-include(":common:database:default")
-include(":common:database:di")
-
 include(":common:resources")
 
 // component
@@ -50,6 +46,10 @@ include(":component:transactions")
 include(":component:transaction-crud")
 
 // core
+include(":core:database:api")
+include(":core:database:default")
+include(":core:database:di")
+
 include(":core:design-system")
 include(":core:di")
 include(":core:router")

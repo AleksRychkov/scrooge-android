@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.component.transactioncrud.internal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.common.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 
 @Suppress("UnusedPrivateProperty")
 internal class DefaultTransactionCrudComponent(

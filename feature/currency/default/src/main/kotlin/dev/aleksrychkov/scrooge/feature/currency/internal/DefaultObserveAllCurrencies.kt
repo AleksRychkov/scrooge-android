@@ -1,6 +1,6 @@
 package dev.aleksrychkov.scrooge.feature.currency.internal
 
-import dev.aleksrychkov.scrooge.common.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.currency.ObserveAllCurrencies
 import kotlinx.collections.immutable.ImmutableList

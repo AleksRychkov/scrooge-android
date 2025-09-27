@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.feature.category.internal
 
-import dev.aleksrychkov.scrooge.common.database.CategoryDao
-import dev.aleksrychkov.scrooge.common.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.database.CategoryDao
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.category.CreateCategoryResult
 import dev.aleksrychkov.scrooge.feature.category.CreateCategoryUseCase

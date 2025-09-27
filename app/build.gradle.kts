@@ -28,7 +28,7 @@ dependencies {
 dependencies {
     implementation(projects.component.root)
 
-    implementation(projects.common.database.di)
+//    implementation(projects.core.database.di)
     implementation(projects.feature.category.di)
     implementation(projects.feature.currency.di)
     implementation(projects.feature.tag.di)

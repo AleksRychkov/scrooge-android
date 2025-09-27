@@ -1,8 +1,8 @@
 package dev.aleksrychkov.scrooge.component.transactioncrud
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.common.entity.TransactionType
 import dev.aleksrychkov.scrooge.component.transactioncrud.internal.DefaultTransactionCrudComponent
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionCrud
 
 interface TransactionCrudComponent {

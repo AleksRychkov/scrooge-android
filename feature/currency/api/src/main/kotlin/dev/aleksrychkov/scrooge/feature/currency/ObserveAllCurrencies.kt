@@ -1,6 +1,6 @@
 package dev.aleksrychkov.scrooge.feature.currency
 
-import dev.aleksrychkov.scrooge.common.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 

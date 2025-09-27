@@ -1,6 +1,6 @@
 package dev.aleksrychkov.scrooge.feature.category
 
-import dev.aleksrychkov.scrooge.common.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 
 fun interface CreateCategoryUseCase {
     suspend operator fun invoke(
