@@ -34,8 +34,6 @@ include(":config:detekt:rules")
 // common
 include(":common:entity")
 
-include(":common:resources")
-
 // component
 include(":component:main")
 include(":component:main-tabs")
@@ -52,6 +50,7 @@ include(":core:database:di")
 
 include(":core:design-system")
 include(":core:di")
+include(":core:resources")
 include(":core:router")
 include(":core:udf")
 include(":core:udf-extensions")

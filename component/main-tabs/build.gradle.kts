@@ -16,9 +16,8 @@ dependencies {
     implementation(projects.component.settings)
     implementation(projects.component.transactions)
 
-    implementation(projects.common.resources)
-
     implementation(projects.core.designSystem)
+    implementation(projects.core.resources)
 }
 
 dependencies {

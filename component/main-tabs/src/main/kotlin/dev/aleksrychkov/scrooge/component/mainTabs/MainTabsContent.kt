@@ -30,7 +30,7 @@ import dev.aleksrychkov.scrooge.component.mainTabs.internal.MainTabsComponentInt
 import dev.aleksrychkov.scrooge.component.report.ReportContent
 import dev.aleksrychkov.scrooge.component.settings.SettingsContent
 import dev.aleksrychkov.scrooge.component.transactions.TransactionsContent
-import dev.aleksrychkov.scrooge.common.resources.R as Resources
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 fun MainTabsContent(

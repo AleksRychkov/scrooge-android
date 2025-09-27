@@ -15,8 +15,8 @@ dependencies {
     implementation(projects.core.designSystem)
 
     implementation(projects.common.entity)
-    implementation(projects.common.resources)
 
+    implementation(projects.core.resources)
     implementation(projects.core.router)
 }
 

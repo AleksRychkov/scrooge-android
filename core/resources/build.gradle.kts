@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.common.resources"
+    namespace = "dev.aleksrychkov.scrooge.core.resources"
 }

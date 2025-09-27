@@ -36,7 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
-import dev.aleksrychkov.scrooge.common.resources.R as Resources
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 internal fun AddTransactionFab(
