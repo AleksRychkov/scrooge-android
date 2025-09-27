@@ -47,8 +47,8 @@ private fun TransactionsContent(
         }
 
         AddTransactionFab(
-            onIncomeClicked = {},
-            onExpenseClicked = {},
+            onIncomeClicked = component::addIncome,
+            onExpenseClicked = component::addExpense,
         )
     }
 }

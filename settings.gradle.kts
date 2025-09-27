@@ -47,10 +47,12 @@ include(":component:report")
 include(":component:root")
 include(":component:settings")
 include(":component:transactions")
+include(":component:transaction-crud")
 
 // core
 include(":core:design-system")
 include(":core:di")
+include(":core:router")
 include(":core:udf")
 include(":core:udf-extensions")
 include(":core:utils")

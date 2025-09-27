@@ -5,37 +5,46 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal.Child.MainTabs
+import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal.Child.TransactionCrud
+import dev.aleksrychkov.scrooge.component.main.internal.navigation.MainNavigationConfig
+import dev.aleksrychkov.scrooge.component.main.internal.navigation.MainRouter
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsComponent
-import kotlinx.serialization.Serializable
+import dev.aleksrychkov.scrooge.component.transactioncrud.TransactionCrudComponent
+import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 
 internal class DefaultMainComponent(
     componentContext: ComponentContext,
 ) : MainComponentInternal, ComponentContext by componentContext {
 
-    private val nav = StackNavigation<Config>()
+    private val nav = StackNavigation<MainNavigationConfig>()
+    private val router = MainRouter(navigation = nav)
 
     override val stack: Value<ChildStack<*, MainComponentInternal.Child>> =
         childStack(
             source = nav,
-            serializer = Config.serializer(),
-            initialConfiguration = Config.MainTabs,
-            handleBackButton = false,
+            serializer = MainNavigationConfig.serializer(),
+            initialConfiguration = MainNavigationConfig.MainTabs,
+            handleBackButton = true,
             key = "DefaultMainComponentStack",
             childFactory = ::child,
         )
 
     private fun child(
-        config: Config,
+        config: MainNavigationConfig,
         componentContext: ComponentContext
-    ): MainComponentInternal.Child =
-        when (config) {
-            Config.MainTabs ->
-                MainComponentInternal.Child.MainTabs(MainTabsComponent(componentContext = componentContext))
-        }
+    ): MainComponentInternal.Child {
+        val routerComponentContext = RouterComponentContext(componentContext, router)
+        return when (config) {
+            MainNavigationConfig.MainTabs ->
+                MainTabs(MainTabsComponent(componentContext = routerComponentContext))
 
-    @Serializable
-    private sealed interface Config {
-        @Serializable
-        data object MainTabs : Config
+            is MainNavigationConfig.TransactionCrud -> TransactionCrud(
+                TransactionCrudComponent(
+                    componentContext = routerComponentContext,
+                    destination = config.destination,
+                )
+            )
+        }
     }
 }

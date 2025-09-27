@@ -1,0 +1,5 @@
+package dev.aleksrychkov.scrooge.component.transactioncrud.internal
+
+import dev.aleksrychkov.scrooge.component.transactioncrud.TransactionCrudComponent
+
+internal interface TransactionCrudComponentInternal : TransactionCrudComponent

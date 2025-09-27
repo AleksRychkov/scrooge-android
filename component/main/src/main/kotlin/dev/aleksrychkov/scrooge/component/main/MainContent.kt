@@ -9,6 +9,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsContent
+import dev.aleksrychkov.scrooge.component.transactioncrud.TransactionCrudContent
 
 @Composable
 fun MainContent(
@@ -36,6 +37,11 @@ private fun MainContent(
         ) {
             when (val child = it.instance) {
                 is MainComponentInternal.Child.MainTabs -> MainTabsContent(
+                    modifier = Modifier.fillMaxSize(),
+                    component = child.component,
+                )
+
+                is MainComponentInternal.Child.TransactionCrud -> TransactionCrudContent(
                     modifier = Modifier.fillMaxSize(),
                     component = child.component,
                 )

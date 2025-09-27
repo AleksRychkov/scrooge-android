@@ -13,6 +13,9 @@ android {
 
 dependencies {
     implementation(projects.component.mainTabs)
+    implementation(projects.component.transactionCrud)
+
+    implementation(projects.core.router)
 }
 
 dependencies {
