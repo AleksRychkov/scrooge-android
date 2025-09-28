@@ -32,7 +32,7 @@ include(":app")
 include(":config:detekt:rules")
 
 // common
-include(":common:entity")
+//include(":common:entity")
 
 // component
 include(":component:main")
@@ -50,6 +50,7 @@ include(":core:database:di")
 
 include(":core:design-system")
 include(":core:di")
+include(":core:entity")
 include(":core:resources")
 include(":core:router")
 include(":core:udf")

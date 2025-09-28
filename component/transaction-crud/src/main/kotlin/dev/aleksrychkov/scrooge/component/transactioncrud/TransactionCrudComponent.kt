@@ -11,8 +11,8 @@ interface TransactionCrudComponent {
             componentContext: ComponentContext,
             destination: DestinationTransactionCrud,
         ): TransactionCrudComponent {
-            check(destination.transactionId == null && !destination.isIncome && !destination.isExpense) {
-                destination.transactionId == null && !destination.isIncome && !destination.isExpense
+            if (destination.transactionId == null && !destination.isIncome && !destination.isExpense) {
+                error("Invalid destination: $destination")
             }
             return DefaultTransactionCrudComponent(
                 componentContext = componentContext,
