@@ -12,6 +12,7 @@ dependencies {
     implementation(projects.feature.category.api)
 
     implementation(projects.core.di)
+    implementation(projects.core.resources)
 }
 
 dependencies {

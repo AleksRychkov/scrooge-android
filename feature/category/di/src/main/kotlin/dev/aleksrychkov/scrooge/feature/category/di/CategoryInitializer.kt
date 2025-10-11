@@ -8,7 +8,7 @@ import dev.aleksrychkov.scrooge.feature.category.buildCategoryModule
 @Suppress("unused")
 internal class CategoryInitializer : Initializer<Unit> {
     override fun create(context: Context) {
-        Naive.add(buildCategoryModule())
+        Naive.add(buildCategoryModule(context))
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {

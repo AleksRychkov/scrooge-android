@@ -5,19 +5,20 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.transactioncrud"
+    namespace = "dev.aleksrychkov.scrooge.component.category"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.component.category)
-
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
     implementation(projects.core.entity)
     implementation(projects.core.resources)
-    implementation(projects.core.router)
+    implementation(projects.core.udfExtensions)
+
+    implementation(projects.feature.category.api)
 }
 
 dependencies {

@@ -2,6 +2,7 @@
 <resources>
     <!-- region common -->
     <string name="close">Close</string>
+    <string name="clear">Clear</string>
     <string name="transactions">Transactions</string>
     <string name="reports">Reports</string>
     <string name="settings">Settings</string>
@@ -9,6 +10,27 @@
     <string name="expense">Expense</string>
     <!-- Common -->
 
+    <!-- Category -->
+    <string-array name="income_categories">
+        <item>Salary</item>
+        <item>Deposit interest</item>
+    </string-array>
+    <string-array name="expense_categories">
+        <item>Groceries</item>
+        <item>Clothes and shoes</item>
+        <item>Fun</item>
+        <item>Taxi</item>
+        <item>Cafe and restaurants</item>
+        <item>Transport</item>
+        <item>Pharmacy</item>
+    </string-array>
+
+    <string name="category_delete">Delete category</string>
+    <string name="category_add">Add category</string>
+    <!-- Category -->
+
+    <!-- Transaction -->
     <string name="transaction_add_transaction_title">Add transaction</string>
     <string name="transaction_close_add_transaction_title">Close add transaction</string>
+    <!-- Transaction -->
 </resources>

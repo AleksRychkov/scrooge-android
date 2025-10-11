@@ -35,6 +35,7 @@ include(":config:detekt:rules")
 //include(":common:entity")
 
 // component
+include(":component:category")
 include(":component:main")
 include(":component:main-tabs")
 include(":component:report")

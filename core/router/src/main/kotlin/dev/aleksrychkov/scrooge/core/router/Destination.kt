@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.core.router
 
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,29 +9,28 @@ sealed interface Destination
 @Serializable
 data class DestinationTransactionCrud(
     val transactionId: Long?,
-    val isIncome: Boolean,
-    val isExpense: Boolean,
+    val transactionType: TransactionType,
 ) : Destination {
     companion object {
         fun addIncome(): Destination =
             DestinationTransactionCrud(
                 transactionId = null,
-                isIncome = true,
-                isExpense = false,
+                transactionType = TransactionType.Income,
             )
 
         fun addExpense(): Destination =
             DestinationTransactionCrud(
                 transactionId = null,
-                isIncome = false,
-                isExpense = true,
+                transactionType = TransactionType.Expense,
             )
 
-        fun edit(transactionId: Long): Destination =
+        fun edit(
+            transactionId: Long,
+            type: TransactionType,
+        ): Destination =
             DestinationTransactionCrud(
                 transactionId = transactionId,
-                isIncome = false,
-                isExpense = false,
+                transactionType = type,
             )
     }
 }

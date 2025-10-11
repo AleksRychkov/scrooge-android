@@ -2,17 +2,24 @@
 
 package dev.aleksrychkov.scrooge.feature.category
 
+import android.content.Context
 import dev.aleksrychkov.scrooge.core.di.NaiveModule
 import dev.aleksrychkov.scrooge.core.di.factory
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
+import dev.aleksrychkov.scrooge.feature.category.internal.DefaultCategories
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultCreateCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultDeleteCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultObserveCategoryUseCase
 import kotlinx.coroutines.Dispatchers
 
-fun buildCategoryModule(): NaiveModule {
+fun buildCategoryModule(context: Context): NaiveModule {
     return module {
+        factory {
+            DefaultCategories(
+                context = context,
+            )
+        }
         factory<DeleteCategoryUseCase> {
             DefaultDeleteCategoryUseCase(
                 categoryDao = getLazy(),
@@ -29,6 +36,7 @@ fun buildCategoryModule(): NaiveModule {
             DefaultObserveCategoryUseCase(
                 categoryDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
+                defaultCategories = getLazy(),
             )
         }
     }

@@ -4,5 +4,9 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.core.entity)
+}
+
+dependencies {
     implementation(libs.decompose.decompose)
 }
