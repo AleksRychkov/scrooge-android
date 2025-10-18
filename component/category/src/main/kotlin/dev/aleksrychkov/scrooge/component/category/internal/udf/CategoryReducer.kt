@@ -3,11 +3,16 @@ package dev.aleksrychkov.scrooge.component.category.internal.udf
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.Delete
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.ObserveCategories
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.Search
+import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import dev.aleksrychkov.scrooge.core.resources.R as resources
 
-internal class CategoryReducer :
+internal class CategoryReducer(
+    private val resourceManager: ResourceManager = get(),
+) :
     Reducer<CategoryState, CategoryEvent, CategoryCommand, CategoryEffect> {
 
     @Suppress("LongMethod")
@@ -83,8 +88,10 @@ internal class CategoryReducer :
             is CategoryEvent.Internal.FailedToCreateNewCategoryDuplicate -> {
                 state.reduceWith(event) {
                     effects {
-                        // todo text from resources
-                        val msg = "Category with name \"${event.duplicate.name}\" already exists"
+                        val msg = String.format(
+                            resourceManager.getString(resources.string.category_error_duplicate),
+                            event.duplicate.name
+                        )
                         listOf(CategoryEffect.ShowErrorMessage(msg))
                     }
                 }
@@ -93,8 +100,8 @@ internal class CategoryReducer :
             CategoryEvent.Internal.FailedToCreateNewCategory -> {
                 state.reduceWith(event) {
                     effects {
-                        // todo text from resources
-                        val msg = "Failed to create category"
+                        val msg =
+                            resourceManager.getString(resources.string.category_error_failed_to_create)
                         listOf(CategoryEffect.ShowErrorMessage(msg))
                     }
                 }
@@ -103,8 +110,8 @@ internal class CategoryReducer :
             CategoryEvent.Internal.FailedToCreateNewCategoryEmptyName -> {
                 state.reduceWith(event) {
                     effects {
-                        // todo text from resources
-                        val msg = "Type category name to create new one"
+                        val msg =
+                            resourceManager.getString(resources.string.category_error_empty_name)
                         listOf(CategoryEffect.ShowErrorMessage(msg))
                     }
                 }
@@ -113,8 +120,8 @@ internal class CategoryReducer :
             CategoryEvent.Internal.FailedToDeleteCategory -> {
                 state.reduceWith(event) {
                     effects {
-                        // todo text from resources
-                        val msg = "Failed to delete category"
+                        val msg =
+                            resourceManager.getString(resources.string.category_error_failed_to_delete)
                         listOf(CategoryEffect.ShowErrorMessage(msg))
                     }
                 }
