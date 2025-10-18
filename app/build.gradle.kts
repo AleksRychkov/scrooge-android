@@ -29,6 +29,7 @@ dependencies {
     implementation(projects.component.root)
 
     implementation(projects.core.database.di)
+    implementation(projects.core.resources)
     implementation(projects.feature.category.di)
     implementation(projects.feature.currency.di)
     implementation(projects.feature.tag.di)
