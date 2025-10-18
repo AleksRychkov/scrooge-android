@@ -16,10 +16,14 @@ internal class DefaultCreateCategoryUseCaseTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private val categoryDao = mockk<CategoryDao>(relaxed = true)
-    private val useCase = DefaultCreateCategoryUseCase(lazy { categoryDao }, testDispatcher)
+    private val useCase = DefaultCreateCategoryUseCase(
+        categoryDao = lazy { categoryDao },
+        ioDispatcher = testDispatcher,
+        defaultCategories = mockk(relaxed = true)
+    )
 
     @Test
-    fun `When category does not exist Then Success result is returned`() = runTest(testDispatcher) {
+    fun `When category does not exist Then Success is returned`() = runTest(testDispatcher) {
         // Given
         val category = CategoryEntity(
             id = 0L,
@@ -28,10 +32,12 @@ internal class DefaultCreateCategoryUseCaseTest {
             isUserMade = true,
         )
         coEvery { categoryDao.getByName(category.name, category.type) } returns null
+
         // When
-        val result: Result<CreateCategoryResult> = useCase(category)
+        val result = useCase(category)
+
         // Then
-        assertEquals(Result.success(CreateCategoryResult.Success), result)
+        assertEquals(CreateCategoryResult.Success, result)
         coVerify(exactly = 1) { categoryDao.create(category.name, category.type) }
     }
 
@@ -40,7 +46,7 @@ internal class DefaultCreateCategoryUseCaseTest {
         runTest(testDispatcher) {
             // Given
             val existing = CategoryEntity(
-                id = 0L,
+                id = 1L,
                 name = "Food",
                 type = TransactionType.Expense,
                 isUserMade = true,
@@ -51,16 +57,23 @@ internal class DefaultCreateCategoryUseCaseTest {
                 type = TransactionType.Expense,
                 isUserMade = true,
             )
-            coEvery { categoryDao.getByName(newCategory.name, newCategory.type) } returns existing
+            coEvery {
+                categoryDao.getByName(
+                    newCategory.name,
+                    newCategory.type
+                )
+            } returns existing
+
             // When
-            val result: Result<CreateCategoryResult> = useCase(newCategory)
+            val result = useCase(newCategory)
+
             // Then
-            assertEquals(Result.success(CreateCategoryResult.DuplicateViolation(existing)), result)
+            assertEquals(CreateCategoryResult.DuplicateViolation(existing), result)
             coVerify(exactly = 0) { categoryDao.create(any(), any()) }
         }
 
     @Test
-    fun `When dao throws exception Then failure result is returned`() = runTest(testDispatcher) {
+    fun `When dao throws exception Then Failure is returned`() = runTest(testDispatcher) {
         // Given
         val category = CategoryEntity(
             id = 0L,
@@ -69,14 +82,13 @@ internal class DefaultCreateCategoryUseCaseTest {
             isUserMade = true,
         )
         coEvery {
-            categoryDao.getByName(
-                category.name,
-                category.type
-            )
+            categoryDao.getByName(category.name, category.type)
         } throws IllegalStateException("DB error")
+
         // When
-        val result: Result<CreateCategoryResult> = useCase(category)
+        val result = useCase(category)
+
         // Then
-        assert(result.isFailure)
+        assertEquals(CreateCategoryResult.Failure, result)
     }
 }

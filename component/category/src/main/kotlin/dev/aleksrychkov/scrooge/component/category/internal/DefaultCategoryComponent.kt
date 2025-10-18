@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.component.category.internal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryActor
+import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEvent
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryReducer
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryState
@@ -9,6 +10,7 @@ import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultCategoryComponent(
@@ -16,7 +18,7 @@ internal class DefaultCategoryComponent(
     private val transactionType: TransactionType,
 ) : CategoryComponentInternal, ComponentContext by componentContext {
 
-    private val store: Store<CategoryState, CategoryEvent, Unit> by lazy {
+    private val store: Store<CategoryState, CategoryEvent, CategoryEffect> by lazy {
         instanceKeeper.createStore(
             initialState = CategoryState(),
             actor = CategoryActor(),
@@ -28,11 +30,18 @@ internal class DefaultCategoryComponent(
     override val state: StateFlow<CategoryState>
         get() = store.state
 
-    override fun deleteCategory(categoryEntity: CategoryEntity) {
-        store.handle(CategoryEvent.External.Delete(categoryId = categoryEntity.id))
+    override val effects: Flow<CategoryEffect>
+        get() = store.effects
+
+    override fun deleteCategory(category: CategoryEntity) {
+        store.handle(CategoryEvent.External.Delete(category = category))
     }
 
     override fun setSearchQuery(query: String) {
         store.handle(CategoryEvent.External.Search(query = query))
+    }
+
+    override fun addNewCategory() {
+        store.handle(CategoryEvent.External.AddNewCategory)
     }
 }

@@ -8,5 +8,10 @@ import kotlinx.coroutines.flow.Flow
 fun interface ObserveCategoryUseCase {
     suspend operator fun invoke(
         transactionType: TransactionType,
-    ): Result<Flow<ImmutableList<CategoryEntity>>>
+    ): ObserveCategoryResult
+}
+
+sealed interface ObserveCategoryResult {
+    data class Success(val categories: Flow<ImmutableList<CategoryEntity>>) : ObserveCategoryResult
+    data object Failure : ObserveCategoryResult
 }

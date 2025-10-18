@@ -12,6 +12,10 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.resources)
+}
+
+dependencies {
     implementation(libs.android.material)
 
     implementation(platform(libs.androidx.compose.bom))

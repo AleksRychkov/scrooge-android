@@ -29,10 +29,10 @@ internal class DefaultDeleteCategoryUseCaseTest {
         )
 
         // When
-        val result: Result<DeleteCategoryResult> = useCase(category)
+        val result: DeleteCategoryResult = useCase(category)
 
         // Then
-        assertEquals(Result.success(DeleteCategoryResult.Success), result)
+        assertEquals(DeleteCategoryResult.Success, result)
         coVerify(exactly = 1) { categoryDao.delete(category.id) }
     }
 
@@ -47,10 +47,10 @@ internal class DefaultDeleteCategoryUseCaseTest {
                 isUserMade = false,
             )
             // When
-            val result: Result<DeleteCategoryResult> = useCase(category)
+            val result: DeleteCategoryResult = useCase(category)
             // Then
             assertEquals(
-                Result.success(DeleteCategoryResult.NotUserMadeViolation(category)),
+                DeleteCategoryResult.NotUserMadeViolation(category),
                 result
             )
             coVerify(exactly = 0) { categoryDao.delete(any()) }
@@ -67,8 +67,11 @@ internal class DefaultDeleteCategoryUseCaseTest {
         )
         coEvery { categoryDao.delete(category.id) } throws IllegalStateException("DB error")
         // When
-        val result: Result<DeleteCategoryResult> = useCase(category)
+        val result: DeleteCategoryResult = useCase(category)
         // Then
-        assert(result.isFailure)
+        assertEquals(
+            DeleteCategoryResult.Failure,
+            result
+        )
     }
 }

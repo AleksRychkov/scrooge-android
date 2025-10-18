@@ -27,4 +27,10 @@ dependencies {
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

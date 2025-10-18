@@ -23,10 +23,15 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,11 +39,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.category.internal.CategoryComponentInternal
+import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryState
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -61,13 +74,39 @@ private fun CategoryContent(
     callback: (CategoryEntity?) -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
-    CategoryContent(
+    val scope = rememberCoroutineScope()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    DisposableEffect(component) {
+        val job = scope.launch {
+            component.effects
+                .filter { it is CategoryEffect.ShowErrorMessage }
+                .map { (it as CategoryEffect.ShowErrorMessage).message }
+                .onEach { message ->
+                    snackbarHostState.showSnackbar(message = message)
+                }
+                .collect()
+        }
+        onDispose {
+            job.cancel()
+        }
+    }
+
+    Scaffold(
         modifier = modifier,
-        state = state,
-        selectCategory = callback,
-        deleteCategory = component::deleteCategory,
-        setSearchQuery = component::setSearchQuery,
-    )
+        snackbarHost = { DialogSnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
+        CategoryContent(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+            state = state,
+            selectCategory = callback,
+            deleteCategory = component::deleteCategory,
+            setSearchQuery = component::setSearchQuery,
+            addNewCategoryClicked = component::addNewCategory,
+        )
+    }
 }
 
 @Composable
@@ -77,6 +116,7 @@ private fun CategoryContent(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     setSearchQuery: (String) -> Unit,
+    addNewCategoryClicked: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -87,6 +127,7 @@ private fun CategoryContent(
             modifier = Modifier.fillMaxWidth(),
             state = state,
             setSearchQuery = setSearchQuery,
+            addCategoryClicked = addNewCategoryClicked,
         )
 
         Spacer(modifier = Modifier.height(Normal))
@@ -149,7 +190,7 @@ private fun Category(
             .clickable {
                 selectCategory(value)
             }
-            .padding(horizontal = Large),
+            .padding(start = Large),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -162,7 +203,7 @@ private fun Category(
         if (value.isUserMade) {
             Box(
                 modifier = Modifier
-                    .defaultMinSize(minHeight = itemHeight)
+                    .height(itemHeight)
                     .aspectRatio(1f)
                     .clickable {
                         deleteCategory(value)
@@ -183,7 +224,7 @@ private fun CategoryBar(
     modifier: Modifier,
     state: CategoryState,
     setSearchQuery: (String) -> Unit,
-    addCategoryClicked: () -> Unit = {},
+    addCategoryClicked: () -> Unit,
 ) {
     Row(
         modifier = modifier.height(IntrinsicSize.Max),
@@ -217,9 +258,7 @@ private fun CategoryBar(
             modifier = Modifier
                 .height(60.dp)
                 .aspectRatio(1f)
-                .clickable {
-                    addCategoryClicked()
-                },
+                .debounceClickable(onClick = addCategoryClicked),
             contentAlignment = Alignment.Center,
         ) {
             Icon(

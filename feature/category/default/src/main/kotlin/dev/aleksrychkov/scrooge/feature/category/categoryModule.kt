@@ -15,11 +15,7 @@ import kotlinx.coroutines.Dispatchers
 
 fun buildCategoryModule(context: Context): NaiveModule {
     return module {
-        factory {
-            DefaultCategories(
-                context = context,
-            )
-        }
+        val defaultCategories = DefaultCategories(context = context)
         factory<DeleteCategoryUseCase> {
             DefaultDeleteCategoryUseCase(
                 categoryDao = getLazy(),
@@ -30,13 +26,14 @@ fun buildCategoryModule(context: Context): NaiveModule {
             DefaultCreateCategoryUseCase(
                 categoryDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
+                defaultCategories = defaultCategories,
             )
         }
         factory<ObserveCategoryUseCase> {
             DefaultObserveCategoryUseCase(
                 categoryDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
-                defaultCategories = getLazy(),
+                defaultCategories = defaultCategories,
             )
         }
     }

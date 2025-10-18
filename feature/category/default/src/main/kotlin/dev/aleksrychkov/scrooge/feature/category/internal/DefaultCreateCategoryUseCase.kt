@@ -11,25 +11,36 @@ import kotlinx.coroutines.withContext
 internal class DefaultCreateCategoryUseCase(
     private val categoryDao: Lazy<CategoryDao>,
     private val ioDispatcher: CoroutineDispatcher,
+    private val defaultCategories: DefaultCategories,
 ) : CreateCategoryUseCase {
     override suspend fun invoke(
         categoryEntity: CategoryEntity,
-    ): Result<CreateCategoryResult> =
+    ): CreateCategoryResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
+                val defaultDuplicateCategory = defaultCategories.get(categoryEntity.type)
+                    .find { it.name.contains(categoryEntity.name) }
+                if (defaultDuplicateCategory != null) {
+                    return@runSuspendCatching CreateCategoryResult.DuplicateViolation(
+                        categoryEntity = defaultDuplicateCategory,
+                    )
+                }
+
                 val duplicateCategory = categoryDao.value.getByName(
                     name = categoryEntity.name,
                     type = categoryEntity.type,
                 )
                 if (duplicateCategory != null) {
-                    CreateCategoryResult.DuplicateViolation(categoryEntity = duplicateCategory)
-                } else {
-                    categoryDao.value.create(
-                        name = categoryEntity.name,
-                        type = categoryEntity.type,
+                    return@runSuspendCatching CreateCategoryResult.DuplicateViolation(
+                        categoryEntity = duplicateCategory,
                     )
-                    CreateCategoryResult.Success
                 }
-            }
+
+                categoryDao.value.create(
+                    name = categoryEntity.name,
+                    type = categoryEntity.type,
+                )
+                CreateCategoryResult.Success
+            }.getOrDefault(CreateCategoryResult.Failure)
         }
 }

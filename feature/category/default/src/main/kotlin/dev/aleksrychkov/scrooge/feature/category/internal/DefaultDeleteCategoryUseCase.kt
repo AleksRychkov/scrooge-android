@@ -14,7 +14,7 @@ internal class DefaultDeleteCategoryUseCase(
 ) : DeleteCategoryUseCase {
     override suspend fun invoke(
         categoryEntity: CategoryEntity,
-    ): Result<DeleteCategoryResult> = withContext(ioDispatcher) {
+    ): DeleteCategoryResult = withContext(ioDispatcher) {
         runSuspendCatching {
             if (!categoryEntity.isUserMade) {
                 DeleteCategoryResult.NotUserMadeViolation(categoryEntity)
@@ -22,6 +22,6 @@ internal class DefaultDeleteCategoryUseCase(
                 categoryDao.value.delete(categoryEntity.id)
                 DeleteCategoryResult.Success
             }
-        }
+        }.getOrDefault(DeleteCategoryResult.Failure)
     }
 }
