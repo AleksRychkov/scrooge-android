@@ -3,18 +3,28 @@ CREATE TABLE IF NOT EXISTS Category (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name TEXT NOT NULL UNIQUE,
   type INTEGER NOT NULL,
-  isUserMade INTEGER NOT NULL
+  isUserMade INTEGER NOT NULL,
+  isDeleted  INTEGER NOT NULL
 );
 
 -- Queries
 selectAllByType:
-SELECT * FROM Category WHERE type = ?;
+SELECT * FROM Category WHERE type = ? AND isDeleted = 0;
 
 create:
-INSERT INTO Category (name, type, isUserMade) VALUES (?, ?, 1);
+INSERT INTO Category (name, type, isUserMade, isDeleted) VALUES (?, ?, 1, 0);
 
 getByNameAndType:
-SELECT * FROM Category WHERE name = ? AND type = ?;
+SELECT * FROM Category WHERE name = ? AND type = ? AND isDeleted = 0;
+
+getById:
+SELECT * FROM Category WHERE id = ? LIMIT 1;
 
 delete:
-DELETE FROM Category WHERE id = ? AND isUserMade == 1;
+UPDATE Category SET isDeleted = 1, name = ? WHERE id = ? AND isUserMade == 1;
+
+restore:
+UPDATE Category SET isDeleted = 0, name = ? WHERE id = ? AND isUserMade == 1;
+
+cleanup:
+DELETE FROM Category WHERE isDeleted = 1;

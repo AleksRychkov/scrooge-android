@@ -13,6 +13,8 @@ internal interface CategoryComponentInternal : CategoryComponent {
 
     fun deleteCategory(category: CategoryEntity)
 
+    fun restoreCategory(category: CategoryEntity)
+
     fun setSearchQuery(query: String)
 
     fun addNewCategory()

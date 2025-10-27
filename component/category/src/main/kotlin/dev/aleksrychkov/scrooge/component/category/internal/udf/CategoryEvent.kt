@@ -9,6 +9,7 @@ internal sealed interface CategoryEvent {
         data class Init(val transactionType: TransactionType) : External
         data class Search(val query: String) : External
         data class Delete(val category: CategoryEntity) : External
+        data class Restore(val category: CategoryEntity) : External
         data object AddNewCategory : External
     }
 
@@ -20,5 +21,7 @@ internal sealed interface CategoryEvent {
         data class FailedToCreateNewCategoryDuplicate(val duplicate: CategoryEntity) : Internal
         data object FailedToCreateNewCategoryEmptyName : Internal
         data object FailedToDeleteCategory : Internal
+        data object FailedToRestoreCategory : Internal
+        data class DeletedCategory(val category: CategoryEntity) : Internal
     }
 }

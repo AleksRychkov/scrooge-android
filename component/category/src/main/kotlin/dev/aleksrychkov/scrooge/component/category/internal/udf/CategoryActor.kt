@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.component.category.internal.udf
 import dev.aleksrychkov.scrooge.component.category.internal.udf.actors.CreateCategoryDelegate
 import dev.aleksrychkov.scrooge.component.category.internal.udf.actors.DeleteCategoryDelegate
 import dev.aleksrychkov.scrooge.component.category.internal.udf.actors.ObserveCategoryDelegate
+import dev.aleksrychkov.scrooge.component.category.internal.udf.actors.RestoreCategoryDelegate
 import dev.aleksrychkov.scrooge.component.category.internal.udf.actors.SearchCategoryDelegate
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.udf.Actor
@@ -13,6 +14,7 @@ internal class CategoryActor(
     private val deleteCategory: DeleteCategoryDelegate,
     private val searchCategory: SearchCategoryDelegate,
     private val observeCategory: ObserveCategoryDelegate,
+    private val restoreCategory: RestoreCategoryDelegate,
 ) : Actor<CategoryCommand, CategoryEvent> {
 
     companion object {
@@ -22,6 +24,7 @@ internal class CategoryActor(
                 deleteCategory = DeleteCategoryDelegate(deleteCategoryUseCase = getLazy()),
                 searchCategory = SearchCategoryDelegate(),
                 observeCategory = ObserveCategoryDelegate(observeCategoryUseCase = getLazy()),
+                restoreCategory = RestoreCategoryDelegate(restoreCategoryUseCase = getLazy()),
             )
         }
     }
@@ -32,6 +35,7 @@ internal class CategoryActor(
             is CategoryCommand.Delete -> deleteCategory(command)
             is CategoryCommand.Search -> searchCategory(command)
             is CategoryCommand.CreateNewCategory -> createCategory(command)
+            is CategoryCommand.Restore -> restoreCategory(command)
         }
     }
 }

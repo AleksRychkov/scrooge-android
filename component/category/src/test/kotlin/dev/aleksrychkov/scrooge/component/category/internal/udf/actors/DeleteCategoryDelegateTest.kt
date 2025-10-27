@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertNull
 
 internal class DeleteCategoryDelegateTest {
     private val useCase: DeleteCategoryUseCase = mockk()
@@ -28,13 +27,14 @@ internal class DeleteCategoryDelegateTest {
     private val cmd = CategoryCommand.Delete(category = entity)
 
     @Test
-    fun `When useCase returns Success Then result is empty`() = runTest {
+    fun `When useCase returns Success Then result is DeletedCategory`() = runTest {
         // Given
+        val expected = CategoryEvent.Internal.DeletedCategory(cmd.category)
         coEvery { useCase(entity) } returns DeleteCategoryResult.Success
         // When
         val result = delegate(cmd).firstOrNull()
         // Then
-        assertNull(result)
+        assertEquals(expected, result)
     }
 
     @Test

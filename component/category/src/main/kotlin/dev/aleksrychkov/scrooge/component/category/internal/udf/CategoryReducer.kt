@@ -1,8 +1,11 @@
 package dev.aleksrychkov.scrooge.component.category.internal.udf
 
+import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.CreateNewCategory
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.Delete
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.ObserveCategories
+import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.Restore
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.Search
+import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEffect.ShowInfoMessage
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
@@ -15,7 +18,7 @@ internal class CategoryReducer(
 ) :
     Reducer<CategoryState, CategoryEvent, CategoryCommand, CategoryEffect> {
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun reduce(
         event: CategoryEvent,
         state: CategoryState
@@ -25,6 +28,14 @@ internal class CategoryReducer(
                 state.reduceWith(event) {
                     command {
                         listOf(Delete(category = event.category))
+                    }
+                }
+            }
+
+            is CategoryEvent.External.Restore -> {
+                state.reduceWith(event) {
+                    command {
+                        listOf(Restore(category = event.category))
                     }
                 }
             }
@@ -55,7 +66,7 @@ internal class CategoryReducer(
                 state.reduceWith(event) {
                     command {
                         listOf(
-                            CategoryCommand.CreateNewCategory(
+                            CreateNewCategory(
                                 name = state.searchQuery,
                                 transactionType = state.transactionType,
                             )
@@ -92,7 +103,7 @@ internal class CategoryReducer(
                             resourceManager.getString(resources.string.category_error_duplicate),
                             event.duplicate.name
                         )
-                        listOf(CategoryEffect.ShowErrorMessage(msg))
+                        listOf(ShowInfoMessage(msg))
                     }
                 }
             }
@@ -102,7 +113,7 @@ internal class CategoryReducer(
                     effects {
                         val msg =
                             resourceManager.getString(resources.string.category_error_failed_to_create)
-                        listOf(CategoryEffect.ShowErrorMessage(msg))
+                        listOf(ShowInfoMessage(msg))
                     }
                 }
             }
@@ -112,7 +123,7 @@ internal class CategoryReducer(
                     effects {
                         val msg =
                             resourceManager.getString(resources.string.category_error_empty_name)
-                        listOf(CategoryEffect.ShowErrorMessage(msg))
+                        listOf(ShowInfoMessage(msg))
                     }
                 }
             }
@@ -122,7 +133,35 @@ internal class CategoryReducer(
                     effects {
                         val msg =
                             resourceManager.getString(resources.string.category_error_failed_to_delete)
-                        listOf(CategoryEffect.ShowErrorMessage(msg))
+                        listOf(ShowInfoMessage(msg))
+                    }
+                }
+            }
+
+            CategoryEvent.Internal.FailedToRestoreCategory -> {
+                state.reduceWith(event) {
+                    effects {
+                        val msg =
+                            resourceManager.getString(resources.string.category_error_failed_to_restore)
+                        listOf(ShowInfoMessage(msg))
+                    }
+                }
+            }
+
+            is CategoryEvent.Internal.DeletedCategory -> {
+                state.reduceWith(event) {
+                    effects {
+                        val msg = String.format(
+                            resourceManager.getString(resources.string.category_deleted),
+                            event.category.name
+                        )
+                        listOf(
+                            CategoryEffect.CategoryDeleted(
+                                message = msg,
+                                actionLabel = resourceManager.getString(resources.string.undo),
+                                category = event.category,
+                            )
+                        )
                     }
                 }
             }

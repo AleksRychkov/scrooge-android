@@ -3,6 +3,7 @@
     <!-- region common -->
     <string name="close">Close</string>
     <string name="clear">Clear</string>
+    <string name="undo">Undo</string>
     <string name="transactions">Transactions</string>
     <string name="reports">Reports</string>
     <string name="settings">Settings</string>
@@ -29,8 +30,10 @@
     <string name="category_add">Add category</string>
     <string name="category_error_empty_name">Type category name to create new one</string>
     <string name="category_error_failed_to_delete">Failed to delete category</string>
+    <string name="category_error_failed_to_restore">Failed to restore category</string>
     <string name="category_error_failed_to_create">Failed to create category</string>
     <string name="category_error_duplicate">Category «%s» already exists</string>
+    <string name="category_deleted">Category «%s» deleted</string>
     <!-- Category -->
 
     <!-- Transaction -->

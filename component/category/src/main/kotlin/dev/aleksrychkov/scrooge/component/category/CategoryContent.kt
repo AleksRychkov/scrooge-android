@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -41,15 +42,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.category.internal.CategoryComponentInternal
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryState
+import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
+import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -80,10 +81,23 @@ private fun CategoryContent(
     DisposableEffect(component) {
         val job = scope.launch {
             component.effects
-                .filter { it is CategoryEffect.ShowErrorMessage }
-                .map { (it as CategoryEffect.ShowErrorMessage).message }
-                .onEach { message ->
-                    snackbarHostState.showSnackbar(message = message)
+                .onEach { effect ->
+                    when (effect) {
+                        is CategoryEffect.ShowInfoMessage -> {
+                            snackbarHostState.showCountdownSnackbar(message = effect.message)
+                        }
+
+                        is CategoryEffect.CategoryDeleted -> {
+                            val result = snackbarHostState.showCountdownSnackbar(
+                                message = effect.message,
+                                actionLabel = effect.actionLabel,
+                                useCountDown = true,
+                            )
+                            if (result == SnackbarResult.ActionPerformed) {
+                                component.restoreCategory(category = effect.category)
+                            }
+                        }
+                    }
                 }
                 .collect()
         }
@@ -94,7 +108,14 @@ private fun CategoryContent(
 
     Scaffold(
         modifier = modifier,
-        snackbarHost = { DialogSnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            DialogSnackbarHost(
+                snackbarHostState = snackbarHostState,
+                snackbar = { data ->
+                    CountdownSnackbar(data)
+                },
+            )
+        },
     ) { innerPadding ->
         CategoryContent(
             modifier = Modifier

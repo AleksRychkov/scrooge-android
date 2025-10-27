@@ -37,6 +37,10 @@ internal class DefaultCategoryComponent(
         store.handle(CategoryEvent.External.Delete(category = category))
     }
 
+    override fun restoreCategory(category: CategoryEntity) {
+        store.handle(CategoryEvent.External.Restore(category = category))
+    }
+
     override fun setSearchQuery(query: String) {
         store.handle(CategoryEvent.External.Search(query = query))
     }

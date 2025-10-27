@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SwipeToDismissBox
@@ -21,10 +22,13 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 
 // copied from https://stackoverflow.com/a/79611497
+// changes:
+// * customisable snackbar
 @Composable
 fun DialogSnackbarHost(
+    modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier
+    snackbar: (@Composable (SnackbarData) -> Unit)? = null,
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -74,8 +78,8 @@ fun DialogSnackbarHost(
                     state = dismissState,
                     backgroundContent = {}
                 ) {
-                    SnackbarHost(hostState = snackbarHostState) {
-                        Snackbar(snackbarData = it)
+                    SnackbarHost(hostState = snackbarHostState) { data ->
+                        snackbar?.invoke(data) ?: run { Snackbar(snackbarData = data) }
                     }
                 }
             }

@@ -11,6 +11,7 @@ import dev.aleksrychkov.scrooge.feature.category.internal.DefaultCategories
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultCreateCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultDeleteCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultObserveCategoryUseCase
+import dev.aleksrychkov.scrooge.feature.category.internal.DefaultRestoreCategoryUseCase
 import kotlinx.coroutines.Dispatchers
 
 fun buildCategoryModule(context: Context): NaiveModule {
@@ -18,6 +19,12 @@ fun buildCategoryModule(context: Context): NaiveModule {
         val defaultCategories = DefaultCategories(context = context)
         factory<DeleteCategoryUseCase> {
             DefaultDeleteCategoryUseCase(
+                categoryDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<RestoreCategoryUseCase> {
+            DefaultRestoreCategoryUseCase(
                 categoryDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )
