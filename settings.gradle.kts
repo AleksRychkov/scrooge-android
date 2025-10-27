@@ -41,6 +41,7 @@ include(":component:main-tabs")
 include(":component:report")
 include(":component:root")
 include(":component:settings")
+include(":component:tag")
 include(":component:transactions")
 include(":component:transaction-crud")
 

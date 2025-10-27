@@ -40,4 +40,9 @@
     <string name="transaction_add_transaction_title">Add transaction</string>
     <string name="transaction_close_add_transaction_title">Close add transaction</string>
     <!-- Transaction -->
+
+    <!-- Tag -->
+    <string name="tag_delete">Delete tag</string>
+    <string name="tag_add">Add tag</string>
+    <!-- Tag -->
 </resources>
