@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.feature.tag.internal
 
 import dev.aleksrychkov.scrooge.core.database.TagDao
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.feature.tag.ObserveTagsUseCaseResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class DefaultObserveTagsUseCaseTest {
@@ -30,9 +32,9 @@ internal class DefaultObserveTagsUseCaseTest {
         val flow: Flow<ImmutableList<TagEntity>> = flowOf(tags)
         coEvery { tagDao.get() } returns flow
         // When
-        val result: Result<Flow<ImmutableList<TagEntity>>> = useCase()
+        val result: ObserveTagsUseCaseResult = useCase()
         // Then
-        assertEquals(true, result.isSuccess)
+        assertTrue(result is ObserveTagsUseCaseResult.Success)
         coVerify(exactly = 1) {
             @Suppress("UnusedFlow")
             tagDao.get()
@@ -44,9 +46,9 @@ internal class DefaultObserveTagsUseCaseTest {
         // Given
         coEvery { tagDao.get() } throws IllegalStateException("DB error")
         // When
-        val result: Result<Flow<ImmutableList<TagEntity>>> = useCase()
+        val result: ObserveTagsUseCaseResult = useCase()
         // Then
-        assertEquals(true, result.isFailure)
+        assertEquals(ObserveTagsUseCaseResult.Failure, result)
         coVerify(exactly = 1) {
             @Suppress("UnusedFlow")
             tagDao.get()

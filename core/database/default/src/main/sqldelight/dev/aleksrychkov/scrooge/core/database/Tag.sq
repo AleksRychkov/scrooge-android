@@ -2,18 +2,28 @@
 CREATE TABLE IF NOT EXISTS Tag (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name TEXT NOT NULL UNIQUE,
-  colorHex TEXT
+  colorHex TEXT,
+  isDeleted  INTEGER NOT NULL
 );
 
 -- Queries
 selectAll:
-SELECT * FROM Tag;
+SELECT * FROM Tag WHERE isDeleted = 0;
 
 selectByName:
-SELECT * FROM Tag WHERE name = ? LIMIT 1;
+SELECT * FROM Tag WHERE name = ? AND isDeleted = 0 LIMIT 1;
+
+selectById:
+SELECT * FROM Tag WHERE id = ? LIMIT 1;
 
 create:
-INSERT INTO Tag (name, colorHex) VALUES (?, ?);
+INSERT INTO Tag (name, colorHex, isDeleted) VALUES (?, ?, 0);
 
 delete:
-DELETE FROM Tag WHERE id = ?;
+UPDATE Tag SET isDeleted = 1, name = ? WHERE id = ?;
+
+restore:
+UPDATE Tag SET isDeleted = 0, name = ? WHERE id = ?;
+
+cleanup:
+DELETE FROM Tag WHERE isDeleted = 1;

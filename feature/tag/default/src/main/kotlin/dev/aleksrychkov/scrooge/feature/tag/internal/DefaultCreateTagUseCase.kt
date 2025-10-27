@@ -13,7 +13,7 @@ internal class DefaultCreateTagUseCase(
     private val ioDispatcher: CoroutineDispatcher,
 ) : CreateTagUseCase {
 
-    override suspend fun invoke(tagEntity: TagEntity): Result<CreateTagResult> =
+    override suspend fun invoke(tagEntity: TagEntity): CreateTagResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
                 val duplicateTag = tagDao.value.getByName(tagEntity.name)
@@ -23,6 +23,6 @@ internal class DefaultCreateTagUseCase(
                     tagDao.value.create(tagEntity.name, tagEntity.colorHex)
                     CreateTagResult.Success
                 }
-            }
+            }.getOrDefault(CreateTagResult.Failure)
         }
 }

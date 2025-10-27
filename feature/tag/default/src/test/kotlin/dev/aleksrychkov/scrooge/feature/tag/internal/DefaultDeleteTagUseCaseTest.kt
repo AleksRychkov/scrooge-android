@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.feature.tag.internal
 
 import dev.aleksrychkov.scrooge.core.database.TagDao
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.feature.tag.DeleteTagResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -21,9 +22,9 @@ internal class DefaultDeleteTagUseCaseTest {
         val tag = TagEntity(id = 1L, name = "Groceries", colorHex = "#FF5733")
         coEvery { tagDao.delete(tag.id) } returns Unit
         // When
-        val result: Result<Unit> = useCase(tag)
+        val result: DeleteTagResult = useCase(tag)
         // Then
-        assertEquals(true, result.isSuccess)
+        assertEquals(DeleteTagResult.Success, result)
         coVerify(exactly = 1) { tagDao.delete(tag.id) }
     }
 
@@ -33,9 +34,9 @@ internal class DefaultDeleteTagUseCaseTest {
         val tag = TagEntity(id = 2L, name = "Food", colorHex = "#00FF00")
         coEvery { tagDao.delete(tag.id) } throws IllegalStateException("DB error")
         // When
-        val result: Result<Unit> = useCase(tag)
+        val result: DeleteTagResult = useCase(tag)
         // Then
-        assertEquals(true, result.isFailure)
+        assertEquals(DeleteTagResult.Failure, result)
         coVerify(exactly = 1) { tagDao.delete(tag.id) }
     }
 }

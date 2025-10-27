@@ -9,4 +9,5 @@ interface TagDao {
     suspend fun getByName(name: String): TagEntity?
     suspend fun create(name: String, colorHex: String?)
     suspend fun delete(id: Long)
+    suspend fun restore(id: Long)
 }

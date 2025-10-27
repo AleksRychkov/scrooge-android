@@ -7,7 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class TagState(
-    val categories: ImmutableList<TagEntity> = persistentListOf(),
+    val tags: ImmutableList<TagEntity> = persistentListOf(),
     val filtered: ImmutableList<TagEntity> = persistentListOf(),
     val searchQuery: String = "",
 )

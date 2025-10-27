@@ -12,7 +12,7 @@ internal class RestoreCategoryDelegate(
     private val restoreCategoryUseCase: Lazy<RestoreCategoryUseCase>,
 ) {
     suspend operator fun invoke(cmd: CategoryCommand.Restore): Flow<CategoryEvent> {
-        val result = restoreCategoryUseCase.value.invoke(categoryEntity = cmd.category)
+        val result = restoreCategoryUseCase.value.invoke(category = cmd.category)
         return when (result) {
             RestoreCategoryResult.Success -> emptyFlow()
             else -> flowOf(CategoryEvent.Internal.FailedToRestoreCategory)

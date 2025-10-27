@@ -1,12 +1,10 @@
 package dev.aleksrychkov.scrooge.feature.tag.internal
 
 import dev.aleksrychkov.scrooge.core.database.TagDao
-import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.tag.ObserveTagsUseCase
-import kotlinx.collections.immutable.ImmutableList
+import dev.aleksrychkov.scrooge.feature.tag.ObserveTagsUseCaseResult
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 internal class DefaultObserveTagsUseCase(
@@ -14,10 +12,12 @@ internal class DefaultObserveTagsUseCase(
     private val ioDispatcher: CoroutineDispatcher,
 ) : ObserveTagsUseCase {
 
-    override suspend fun invoke(): Result<Flow<ImmutableList<TagEntity>>> =
+    override suspend fun invoke(): ObserveTagsUseCaseResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
-                tagDao.value.get()
-            }
+                tagDao.value.get().let {
+                    ObserveTagsUseCaseResult.Success(it)
+                }
+            }.getOrDefault(ObserveTagsUseCaseResult.Failure)
         }
 }

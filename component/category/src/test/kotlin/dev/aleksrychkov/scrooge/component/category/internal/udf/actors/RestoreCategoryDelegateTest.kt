@@ -28,7 +28,7 @@ internal class RestoreCategoryDelegateTest {
     private val cmd = CategoryCommand.Restore(category = entity)
 
     @Test
-    fun `When useCase returns Success Then result is DeletedCategory`() = runTest {
+    fun `When useCase returns Success Then result is empty flow`() = runTest {
         // Given
         coEvery { useCase(entity) } returns RestoreCategoryResult.Success
         // When

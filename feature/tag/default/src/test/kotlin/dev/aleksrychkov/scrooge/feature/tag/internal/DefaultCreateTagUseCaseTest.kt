@@ -23,9 +23,9 @@ internal class DefaultCreateTagUseCaseTest {
         val tag = TagEntity(id = 0L, name = "Groceries", colorHex = "#FF5733")
         coEvery { tagDao.getByName(tag.name) } returns null
         // When
-        val result: Result<CreateTagResult> = useCase(tag)
+        val result: CreateTagResult = useCase(tag)
         // Then
-        assertEquals(Result.success(CreateTagResult.Success), result)
+        assertEquals(CreateTagResult.Success, result)
         coVerify(exactly = 1) { tagDao.create(tag.name, tag.colorHex) }
     }
 
@@ -36,12 +36,10 @@ internal class DefaultCreateTagUseCaseTest {
             val existing = TagEntity(id = 1L, name = "Groceries", colorHex = "#FF5733")
             val newTag = TagEntity(id = 2L, name = "Groceries", colorHex = "#00FF00")
             coEvery { tagDao.getByName(newTag.name) } returns existing
-
             // When
-            val result: Result<CreateTagResult> = useCase(newTag)
-
+            val result: CreateTagResult = useCase(newTag)
             // Then
-            assertEquals(Result.success(CreateTagResult.DuplicateViolation(existing)), result)
+            assertEquals(CreateTagResult.DuplicateViolation(existing), result)
         }
 
     @Test
@@ -50,8 +48,8 @@ internal class DefaultCreateTagUseCaseTest {
         val tag = TagEntity(id = 0L, name = "Groceries", colorHex = "#FF5733")
         coEvery { tagDao.getByName(tag.name) } throws IllegalStateException("DB error")
         // When
-        val result: Result<CreateTagResult> = useCase(tag)
+        val result: CreateTagResult = useCase(tag)
         // Then
-        assert(result.isFailure)
+        assertEquals(CreateTagResult.Failure, result)
     }
 }

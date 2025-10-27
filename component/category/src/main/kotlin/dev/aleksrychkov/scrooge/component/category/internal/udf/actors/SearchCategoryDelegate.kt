@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.flowOf
 
 internal class SearchCategoryDelegate {
     operator fun invoke(cmd: CategoryCommand.Search): Flow<CategoryEvent> {
-        val filtered = if (cmd.query.isBlank()) {
-            persistentListOf()
-        } else {
-            cmd.categories
-                .filter {
-                    it.name.lowercase().contains(cmd.query.lowercase())
-                }
-                .toImmutableList()
+        val filtered = when {
+            cmd.query.isBlank() -> persistentListOf()
+            else ->
+                cmd.categories
+                    .filter {
+                        it.name.lowercase().contains(cmd.query.lowercase())
+                    }
+                    .toImmutableList()
         }
         return flowOf(CategoryEvent.Internal.Filtered(list = filtered.toImmutableList()))
     }

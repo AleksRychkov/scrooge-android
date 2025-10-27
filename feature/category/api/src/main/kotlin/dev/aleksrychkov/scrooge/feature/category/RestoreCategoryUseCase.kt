@@ -3,7 +3,7 @@ package dev.aleksrychkov.scrooge.feature.category
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 
 fun interface RestoreCategoryUseCase {
-    suspend operator fun invoke(categoryEntity: CategoryEntity): RestoreCategoryResult
+    suspend operator fun invoke(category: CategoryEntity): RestoreCategoryResult
 }
 
 sealed interface RestoreCategoryResult {

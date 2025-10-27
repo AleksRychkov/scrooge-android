@@ -14,10 +14,10 @@ internal class DefaultRestoreCategoryUseCase(
 ) : RestoreCategoryUseCase {
 
     override suspend fun invoke(
-        categoryEntity: CategoryEntity,
+        category: CategoryEntity,
     ): RestoreCategoryResult = withContext(ioDispatcher) {
         runSuspendCatching {
-            categoryDao.value.restore(categoryEntity.id)
+            categoryDao.value.restore(category.id)
             RestoreCategoryResult.Success
         }.getOrDefault(RestoreCategoryResult.Failure)
     }
