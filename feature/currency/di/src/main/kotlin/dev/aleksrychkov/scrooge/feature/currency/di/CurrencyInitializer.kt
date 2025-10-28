@@ -8,7 +8,7 @@ import dev.aleksrychkov.scrooge.feature.currency.buildCurrencyModule
 @Suppress("unused")
 internal class CurrencyInitializer : Initializer<Unit> {
     override fun create(context: Context) {
-        Naive.add(buildCurrencyModule())
+        Naive.add(buildCurrencyModule(context))
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {

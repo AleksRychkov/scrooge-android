@@ -71,7 +71,8 @@ open class UdfStore<State : Any, Event : Any, Effect : Any, Command : Any>(
                 .process(command)
                 .cancellable()
                 .catch { t ->
-                    // todo: logging
+                    // todo: proper handling
+                    throw t
                 }
                 .collect { handle(it) }
         }

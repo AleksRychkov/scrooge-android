@@ -1,5 +1,6 @@
 plugins {
     id("build-logic.android-library")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -13,7 +14,9 @@ dependencies {
 }
 
 dependencies {
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

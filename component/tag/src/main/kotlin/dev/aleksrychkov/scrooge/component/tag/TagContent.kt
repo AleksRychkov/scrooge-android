@@ -224,7 +224,7 @@ private fun Tag(
             modifier = Modifier
                 .height(itemHeight)
                 .aspectRatio(1f)
-                .clickable { deleteTag(value) },
+                .debounceClickable { deleteTag(value) },
             contentAlignment = Alignment.Center,
         ) {
             Icon(

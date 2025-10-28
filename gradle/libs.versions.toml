@@ -13,8 +13,11 @@ android-material = "1.13.0"
 
 androidx-activity-compose = "1.11.0"
 androidx-annotation = "1.9.1"
+androidx-datastore = "1.1.7"
 androidx-compose-bom = "2025.09.00"
 androidx-startup = "1.2.0"
+
+coil = "3.3.0"
 
 decompose = "3.3.0"
 
@@ -47,16 +50,20 @@ androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidx-annotation" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidx-datastore" }
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidx-startup" }
+
+coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 
 decompose-decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
 decompose-extensionsComposeJetbrains = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
 
-essenty-instance-keeper = { group = "com.arkivanov.essenty", name = "instance-keeper", version.ref = "essenty" }
-
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
+
+essenty-instance-keeper = { group = "com.arkivanov.essenty", name = "instance-keeper", version.ref = "essenty" }
 
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-core" }
@@ -81,3 +88,4 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 [bundles]
 sqldelight = ["sqldelight-android-driver", "sqldelight-extensions"]
+coil = ["coil", "coil-okhttp"]

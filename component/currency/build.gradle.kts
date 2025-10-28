@@ -28,6 +28,8 @@ dependencies {
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
 
+    implementation(libs.bundles.coil)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)

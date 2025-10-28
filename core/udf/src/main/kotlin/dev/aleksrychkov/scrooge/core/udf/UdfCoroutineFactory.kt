@@ -15,6 +15,7 @@ fun UdfScope(): CoroutineScope = CoroutineScope(
         CoroutineName("StoreScope") +
         SupervisorJob() +
         CoroutineExceptionHandler { _, exception ->
-            // todo logging
+            // todo: proper handling
+            throw exception
         }
 )

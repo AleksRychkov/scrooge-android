@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyEffect
 import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyEvent
 import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyReducer
 import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyState
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +27,11 @@ internal class DefaultCurrencyComponent(
     override val state: StateFlow<CurrencyState>
         get() = store.state
 
-    override fun setSearchQuery(query: String) {
-        store.handle(CurrencyEvent.External.Search(query = query))
+    override fun removeFromFavorite(currency: CurrencyEntity) {
+        store.handle(CurrencyEvent.External.RemoveFromFavorite(currency = currency))
+    }
+
+    override fun addToFavorite(currency: CurrencyEntity) {
+        store.handle(CurrencyEvent.External.AddToFavorite(currency = currency))
     }
 }

@@ -226,7 +226,7 @@ private fun Category(
                 modifier = Modifier
                     .height(itemHeight)
                     .aspectRatio(1f)
-                    .clickable {
+                    .debounceClickable {
                         deleteCategory(value)
                     },
                 contentAlignment = Alignment.Center,

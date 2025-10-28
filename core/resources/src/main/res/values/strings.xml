@@ -51,4 +51,9 @@
     <string name="tag_error_failed_to_delete">Failed to delete tag</string>
     <string name="tag_error_failed_to_restore">Failed to restore tag</string>
     <!-- Tag -->
+
+    <!-- Currency -->
+    <string name="currency_tab_all">All</string>
+    <string name="currency_tab_favorite">Favorite</string>
+    <!-- Currency -->
 </resources>
