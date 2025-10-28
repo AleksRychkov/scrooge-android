@@ -14,20 +14,20 @@ android-material = "1.13.0"
 androidx-activity-compose = "1.11.0"
 androidx-annotation = "1.9.1"
 androidx-datastore = "1.1.7"
-androidx-compose-bom = "2025.09.00"
+androidx-compose-bom = "2025.10.01"
 androidx-startup = "1.2.0"
 
 coil = "3.3.0"
 
-decompose = "3.3.0"
+decompose = "3.4.0"
 
 detekt = "1.23.8"
 
 essenty = "2.5.0"
 
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 
-mockk = "1.14.5"
+mockk = "1.14.6"
 
 kotlinx-coroutines-core = "1.10.2"
 kotlinx-immutable-collections = "0.4.0"
@@ -47,6 +47,7 @@ android-material = { group = "com.google.android.material", name = "material", v
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core" }
 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidx-annotation" }
