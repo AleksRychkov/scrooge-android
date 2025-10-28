@@ -5,10 +5,10 @@ package dev.aleksrychkov.scrooge.feature.currency
 import dev.aleksrychkov.scrooge.core.di.NaiveModule
 import dev.aleksrychkov.scrooge.core.di.factory
 import dev.aleksrychkov.scrooge.core.di.module
-import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultObserveAllCurrencies
+import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultGetCurrenciesUseCase
 
 fun buildCurrencyModule(): NaiveModule {
     return module {
-        factory<ObserveAllCurrencies> { DefaultObserveAllCurrencies() }
+        factory<GetCurrenciesUseCase> { DefaultGetCurrenciesUseCase() }
     }
 }

@@ -17,6 +17,8 @@ dependencies {
     implementation(projects.core.entity)
     implementation(projects.core.resources)
     implementation(projects.core.udfExtensions)
+
+    implementation(projects.feature.currency.api)
 }
 
 dependencies {

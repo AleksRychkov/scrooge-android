@@ -22,11 +22,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.currency.internal.CurrencyComponentInternal
 import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyState
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
@@ -49,17 +51,18 @@ fun CurrencyContent(
 }
 
 @Composable
-@Suppress("UnusedParameter")
 private fun CurrencyContent(
     modifier: Modifier,
     component: CurrencyComponentInternal,
     callback: (CurrencyEntity?) -> Unit,
 ) {
+    val state by component.state.collectAsStateWithLifecycle()
+
     CurrencyContent(
         modifier = modifier,
-        state = CurrencyState(),
+        state = state,
         selectCurrency = callback,
-        setSearchQuery = {},
+        setSearchQuery = component::setSearchQuery,
     )
 }
 
