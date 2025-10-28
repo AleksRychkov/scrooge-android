@@ -5,21 +5,18 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.transactioncrud"
+    namespace = "dev.aleksrychkov.scrooge.component.currency"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.component.category)
-    implementation(projects.component.currency)
-    implementation(projects.component.tag)
-
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
     implementation(projects.core.entity)
     implementation(projects.core.resources)
-    implementation(projects.core.router)
+    implementation(projects.core.udfExtensions)
 }
 
 dependencies {
@@ -28,4 +25,10 @@ dependencies {
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.aleksrychkov.scrooge.component.transactioncrud.internal.TransactionCrudComponentInternal
 import dev.aleksrychkov.scrooge.component.transactioncrud.internal.modal.CategoryModal
+import dev.aleksrychkov.scrooge.component.transactioncrud.internal.modal.CurrencyModal
 import dev.aleksrychkov.scrooge.component.transactioncrud.internal.modal.TagModal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 
@@ -45,12 +46,20 @@ private fun TransactionCrudContent(
         Button(onClick = component::openTagModal) {
             Text("Add tag")
         }
+
+        Spacer(modifier = Modifier.height(Large))
+        Button(onClick = component::openCurrencyModal) {
+            Text("Select currency")
+        }
     }
 
     CategoryModal(
         component = component,
     )
     TagModal(
+        component = component,
+    )
+    CurrencyModal(
         component = component,
     )
 }

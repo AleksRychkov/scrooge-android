@@ -25,8 +25,7 @@ enum class CurrencyEntity(
         currencyCode = "EUR",
         currencyNumCode = "978",
         currencySymbol = "€",
-        flagUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg" +
-            "/330px-Flag_of_Europe.svg.png",
+        flagUrl = "https://flagcdn.com/w320/eu.png",
     ),
     USD(
         currencyName = "United States dollar",

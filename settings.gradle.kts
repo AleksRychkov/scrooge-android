@@ -31,11 +31,9 @@ include(":app")
 // detekt
 include(":config:detekt:rules")
 
-// common
-//include(":common:entity")
-
 // component
 include(":component:category")
+include(":component:currency")
 include(":component:main")
 include(":component:main-tabs")
 include(":component:report")
@@ -49,7 +47,6 @@ include(":component:transaction-crud")
 include(":core:database:api")
 include(":core:database:default")
 include(":core:database:di")
-
 include(":core:design-system")
 include(":core:di")
 include(":core:entity")

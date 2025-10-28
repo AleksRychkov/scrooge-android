@@ -8,8 +8,10 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.category.CategoryComponent
+import dev.aleksrychkov.scrooge.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.component.tag.TagComponent
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 
@@ -22,6 +24,7 @@ internal class DefaultTransactionCrudComponent(
 
     private val categoryNavigation = SlotNavigation<TransactionType>()
     private val tagNavigation = SlotNavigation<Unit>()
+    private val currencyNavigation = SlotNavigation<Unit>()
 
     override val categoryModal: Value<ChildSlot<*, CategoryComponent>> =
         childSlot(
@@ -44,6 +47,18 @@ internal class DefaultTransactionCrudComponent(
             key = "TagModalSlot",
         ) { type, childComponentContext ->
             TagComponent(
+                componentContext = childComponentContext,
+            )
+        }
+
+    override val currencyModal: Value<ChildSlot<*, CurrencyComponent>> =
+        childSlot(
+            source = currencyNavigation,
+            serializer = null,
+            handleBackButton = true,
+            key = "CurrencyModalSlot",
+        ) { type, childComponentContext ->
+            CurrencyComponent(
                 componentContext = childComponentContext,
             )
         }
@@ -74,5 +89,17 @@ internal class DefaultTransactionCrudComponent(
 
     override fun removeTag(value: TagEntity) {
         println("ASDASD remove tag $value")
+    }
+
+    override fun openCurrencyModal() {
+        currencyNavigation.activate(Unit)
+    }
+
+    override fun closeCurrencyModal() {
+        currencyNavigation.dismiss()
+    }
+
+    override fun selectCurrency(value: CurrencyEntity) {
+        println("ASDASD selectCurrency $value")
     }
 }
