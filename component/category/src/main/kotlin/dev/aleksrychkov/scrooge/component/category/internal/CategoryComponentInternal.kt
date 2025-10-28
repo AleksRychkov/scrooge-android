@@ -12,10 +12,7 @@ internal interface CategoryComponentInternal : CategoryComponent {
     val effects: Flow<CategoryEffect>
 
     fun deleteCategory(category: CategoryEntity)
-
     fun restoreCategory(category: CategoryEntity)
-
     fun setSearchQuery(query: String)
-
     fun addNewCategory()
 }
