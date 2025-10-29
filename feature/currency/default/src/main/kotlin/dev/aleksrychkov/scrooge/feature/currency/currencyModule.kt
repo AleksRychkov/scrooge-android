@@ -5,6 +5,7 @@ package dev.aleksrychkov.scrooge.feature.currency
 import android.content.Context
 import dev.aleksrychkov.scrooge.core.di.NaiveModule
 import dev.aleksrychkov.scrooge.core.di.factory
+import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.di.singleton
 import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultAddToFavoriteCurrencyUseCase
@@ -22,7 +23,9 @@ fun buildCurrencyModule(context: Context): NaiveModule {
                 context = context,
             )
         }
-        singleton<FavoriteCurrencyRepository> { FavoriteCurrencyRepository() }
+        singleton<FavoriteCurrencyRepository> {
+            FavoriteCurrencyRepository(source = getLazy())
+        }
         factory<GetCurrenciesUseCase> { DefaultGetCurrenciesUseCase() }
         factory<AddToFavoriteCurrencyUseCase> { DefaultAddToFavoriteCurrencyUseCase() }
         factory<RemoveFromFavoriteCurrencyUseCase> { DefaultRemoveFromFavoriteCurrencyUseCase() }

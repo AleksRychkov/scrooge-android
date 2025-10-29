@@ -1,6 +1,5 @@
 package dev.aleksrychkov.scrooge.feature.currency.internal.data.repository
 
-import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.currency.internal.data.source.FavoriteCurrencySource
@@ -14,8 +13,10 @@ import kotlinx.coroutines.flow.onSubscription
 
 internal interface FavoriteCurrencyRepository {
     companion object {
-        operator fun invoke(): FavoriteCurrencyRepository {
-            return DefaultFavoriteCurrencyRepository(lazySource = getLazy())
+        operator fun invoke(
+            source: Lazy<FavoriteCurrencySource>
+        ): FavoriteCurrencyRepository {
+            return DefaultFavoriteCurrencyRepository(lazySource = source)
         }
     }
 
