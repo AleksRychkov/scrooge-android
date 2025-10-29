@@ -1,10 +1,12 @@
 package dev.aleksrychkov.scrooge.core.designsystem.composables
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -36,7 +38,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import kotlin.math.roundToInt
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "LongMethod")
 @Composable
 fun AppTabBar(
     modifier: Modifier,
@@ -95,9 +97,18 @@ fun AppTabBar(
                             .clickable { onOptionSelected(index) },
                         contentAlignment = Alignment.Center
                     ) {
+                        val isSelected = index == selectedIndex
+                        val textColor = if (isSystemInDarkTheme()) {
+                            Color.White
+                        } else {
+                            animateColorAsState(
+                                targetValue = if (isSelected) Color.White else Color.Black,
+                                animationSpec = tween(durationMillis = 250),
+                            ).value
+                        }
                         Text(
                             text = option,
-                            color = Color.Black,
+                            color = textColor,
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp
                         )
