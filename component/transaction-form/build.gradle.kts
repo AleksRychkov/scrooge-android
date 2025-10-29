@@ -17,15 +17,25 @@ dependencies {
     implementation(projects.component.tag)
 
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
     implementation(projects.core.entity)
     implementation(projects.core.resources)
     implementation(projects.core.router)
+    implementation(projects.core.udfExtensions)
+
+    implementation(projects.feature.currency.api)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    implementation(libs.kotlinx.datetime)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

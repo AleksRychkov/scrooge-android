@@ -10,8 +10,10 @@ import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.di.singleton
 import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultAddToFavoriteCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultGetCurrenciesUseCase
+import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultGetLastUsedCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultObserveFavoriteCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultRemoveFromFavoriteCurrencyUseCase
+import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultSetLastUsedCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.internal.data.repository.FavoriteCurrencyRepository
 import dev.aleksrychkov.scrooge.feature.currency.internal.data.source.FavoriteCurrencySource
 
@@ -30,5 +32,7 @@ fun buildCurrencyModule(context: Context): NaiveModule {
         factory<AddToFavoriteCurrencyUseCase> { DefaultAddToFavoriteCurrencyUseCase() }
         factory<RemoveFromFavoriteCurrencyUseCase> { DefaultRemoveFromFavoriteCurrencyUseCase() }
         factory<ObserveFavoriteCurrencyUseCase> { DefaultObserveFavoriteCurrencyUseCase() }
+        factory<GetLastUsedCurrencyUseCase> { DefaultGetLastUsedCurrencyUseCase() }
+        factory<SetLastUsedCurrencyUseCase> { DefaultSetLastUsedCurrencyUseCase() }
     }
 }

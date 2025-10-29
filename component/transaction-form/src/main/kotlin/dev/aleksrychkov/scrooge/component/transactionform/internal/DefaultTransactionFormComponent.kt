@@ -10,12 +10,22 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.component.tag.TagComponent
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormActor
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEvent
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormReducer
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormState
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.router.Router
+import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
+import dev.aleksrychkov.scrooge.core.udf.Store
+import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import kotlinx.coroutines.flow.StateFlow
 
-@Suppress("UnusedPrivateProperty")
+@Suppress("UnusedPrivateProperty", "TooManyFunctions")
 internal class DefaultTransactionFormComponent(
     private val componentContext: ComponentContext,
     private val transactionId: Long? = null,
@@ -25,6 +35,25 @@ internal class DefaultTransactionFormComponent(
     private val categoryNavigation = SlotNavigation<TransactionType>()
     private val tagNavigation = SlotNavigation<Unit>()
     private val currencyNavigation = SlotNavigation<Unit>()
+
+    private val router: Router by lazy {
+        (componentContext as RouterComponentContext).router
+    }
+
+    private val store: Store<FormState, FormEvent, FormEffect> by lazy {
+        instanceKeeper.createStore(
+            initialState = FormState(
+                transactionType = transactionType,
+                transactionId = transactionId,
+            ),
+            actor = FormActor(),
+            reducer = FormReducer(),
+            startEvent = FormEvent.External.Init(transactionId),
+        )
+    }
+
+    override val state: StateFlow<FormState>
+        get() = store.state
 
     override val categoryModal: Value<ChildSlot<*, CategoryComponent>> =
         childSlot(
@@ -71,8 +100,8 @@ internal class DefaultTransactionFormComponent(
         categoryNavigation.dismiss()
     }
 
-    override fun setCategory(value: CategoryEntity) {
-        println("ASDASD set category $value")
+    override fun setCategory(category: CategoryEntity) {
+        store.handle(FormEvent.External.SetCategory(category = category))
     }
 
     override fun openTagModal() {
@@ -83,12 +112,12 @@ internal class DefaultTransactionFormComponent(
         tagNavigation.dismiss()
     }
 
-    override fun addTag(value: TagEntity) {
-        println("ASDASD add tag $value")
+    override fun addTag(tag: TagEntity) {
+        store.handle(FormEvent.External.AddTag(tag = tag))
     }
 
-    override fun removeTag(value: TagEntity) {
-        println("ASDASD remove tag $value")
+    override fun removeTag(tag: TagEntity) {
+        store.handle(FormEvent.External.RemoveTag(tag = tag))
     }
 
     override fun openCurrencyModal() {
@@ -99,7 +128,24 @@ internal class DefaultTransactionFormComponent(
         currencyNavigation.dismiss()
     }
 
-    override fun selectCurrency(value: CurrencyEntity) {
-        println("ASDASD selectCurrency $value")
+    override fun selectCurrency(currency: CurrencyEntity) {
+        store.handle(FormEvent.External.SetCurrency(currency = currency))
+    }
+
+    override fun onBackClicked() {
+        router.close()
+    }
+
+    override fun setAmount(amount: String) {
+        store.handle(FormEvent.External.SetAmount(amount = amount))
+    }
+
+    override fun onSubmitClicked() {
+        // todo
+    }
+
+    override fun onDateSelected(timestamp: Long?) {
+        if (timestamp == null) return
+        store.handle(FormEvent.External.SetDate(timestamp = timestamp))
     }
 }
