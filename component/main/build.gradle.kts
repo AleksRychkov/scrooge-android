@@ -13,7 +13,7 @@ android {
 
 dependencies {
     implementation(projects.component.mainTabs)
-    implementation(projects.component.transactionCrud)
+    implementation(projects.component.transactionForm)
 
     implementation(projects.core.router)
 }

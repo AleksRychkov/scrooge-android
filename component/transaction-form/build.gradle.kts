@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.transactioncrud"
+    namespace = "dev.aleksrychkov.scrooge.component.transactionform"
     buildFeatures {
         compose = true
     }

@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.component.transactions.internal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.core.router.DestinationTransactionCrud
+import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 
@@ -14,10 +14,10 @@ internal class DefaultTransactionsComponent(
     }
 
     override fun addIncome() {
-        DestinationTransactionCrud.addIncome().let(router::open)
+        DestinationTransactionForm.addIncome().let(router::open)
     }
 
     override fun addExpense() {
-        DestinationTransactionCrud.addExpense().let(router::open)
+        DestinationTransactionForm.addExpense().let(router::open)
     }
 }

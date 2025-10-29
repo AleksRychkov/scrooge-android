@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transactioncrud
+package dev.aleksrychkov.scrooge.component.transactionform
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,27 +9,27 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.aleksrychkov.scrooge.component.transactioncrud.internal.TransactionCrudComponentInternal
-import dev.aleksrychkov.scrooge.component.transactioncrud.internal.modal.CategoryModal
-import dev.aleksrychkov.scrooge.component.transactioncrud.internal.modal.CurrencyModal
-import dev.aleksrychkov.scrooge.component.transactioncrud.internal.modal.TagModal
+import dev.aleksrychkov.scrooge.component.transactionform.internal.TransactionFormComponentInternal
+import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.CategoryModal
+import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.CurrencyModal
+import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.TagModal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 
 @Composable
-fun TransactionCrudContent(
+fun TransactionFormContent(
     modifier: Modifier,
-    component: TransactionCrudComponent
+    component: TransactionFormComponent
 ) {
-    TransactionCrudContent(
+    TransactionFormContent(
         modifier = modifier,
-        component = component as TransactionCrudComponentInternal,
+        component = component as TransactionFormComponentInternal,
     )
 }
 
 @Composable
-private fun TransactionCrudContent(
+private fun TransactionFormContent(
     modifier: Modifier,
-    component: TransactionCrudComponentInternal,
+    component: TransactionFormComponentInternal,
 ) {
     Column(
         modifier = modifier

@@ -7,19 +7,19 @@ import kotlinx.serialization.Serializable
 sealed interface Destination
 
 @Serializable
-data class DestinationTransactionCrud(
+data class DestinationTransactionForm(
     val transactionId: Long?,
     val transactionType: TransactionType,
 ) : Destination {
-    companion object {
+    companion object Companion {
         fun addIncome(): Destination =
-            DestinationTransactionCrud(
+            DestinationTransactionForm(
                 transactionId = null,
                 transactionType = TransactionType.Income,
             )
 
         fun addExpense(): Destination =
-            DestinationTransactionCrud(
+            DestinationTransactionForm(
                 transactionId = null,
                 transactionType = TransactionType.Expense,
             )
@@ -28,7 +28,7 @@ data class DestinationTransactionCrud(
             transactionId: Long,
             type: TransactionType,
         ): Destination =
-            DestinationTransactionCrud(
+            DestinationTransactionForm(
                 transactionId = transactionId,
                 transactionType = type,
             )

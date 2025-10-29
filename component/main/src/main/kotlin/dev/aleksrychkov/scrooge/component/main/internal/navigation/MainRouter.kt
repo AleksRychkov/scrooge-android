@@ -4,7 +4,7 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import dev.aleksrychkov.scrooge.core.router.Destination
-import dev.aleksrychkov.scrooge.core.router.DestinationTransactionCrud
+import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 
 internal class MainRouter(
@@ -12,9 +12,9 @@ internal class MainRouter(
 ) : Router {
     override fun open(destination: Destination) {
         when (destination) {
-            is DestinationTransactionCrud -> {
+            is DestinationTransactionForm -> {
                 navigation.pushNew(
-                    MainNavigationConfig.TransactionCrud(
+                    MainNavigationConfig.TransactionForm(
                         destination = destination,
                     )
                 )

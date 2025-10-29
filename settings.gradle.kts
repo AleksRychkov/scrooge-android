@@ -41,7 +41,7 @@ include(":component:root")
 include(":component:settings")
 include(":component:tag")
 include(":component:transactions")
-include(":component:transaction-crud")
+include(":component:transaction-form")
 
 // core
 include(":core:database:api")

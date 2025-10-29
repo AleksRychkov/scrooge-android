@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transactioncrud.internal
+package dev.aleksrychkov.scrooge.component.transactionform.internal
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
@@ -16,11 +16,11 @@ import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 
 @Suppress("UnusedPrivateProperty")
-internal class DefaultTransactionCrudComponent(
+internal class DefaultTransactionFormComponent(
     private val componentContext: ComponentContext,
     private val transactionId: Long? = null,
     private val transactionType: TransactionType,
-) : TransactionCrudComponentInternal, ComponentContext by componentContext {
+) : TransactionFormComponentInternal, ComponentContext by componentContext {
 
     private val categoryNavigation = SlotNavigation<TransactionType>()
     private val tagNavigation = SlotNavigation<Unit>()

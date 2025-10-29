@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transactioncrud.internal.modal
+package dev.aleksrychkov.scrooge.component.transactionform.internal.modal
 
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,30 +11,30 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
-import dev.aleksrychkov.scrooge.component.currency.CurrencyComponent
-import dev.aleksrychkov.scrooge.component.currency.CurrencyContent
-import dev.aleksrychkov.scrooge.component.transactioncrud.internal.TransactionCrudComponentInternal
-import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.component.tag.TagComponent
+import dev.aleksrychkov.scrooge.component.tag.TagContent
+import dev.aleksrychkov.scrooge.component.transactionform.internal.TransactionFormComponentInternal
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun CurrencyModal(
-    component: TransactionCrudComponentInternal,
+internal fun TagModal(
+    component: TransactionFormComponentInternal,
 ) {
-    val currencySlot = component.currencyModal.subscribeAsState().value
-    CurrencyModal(
-        slot = currencySlot,
-        close = component::closeCurrencyModal,
-        select = component::selectCurrency,
+    val categorySlot = component.tagModal.subscribeAsState().value
+    TagModal(
+        slot = categorySlot,
+        close = component::closeTagModal,
+        select = component::addTag,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CurrencyModal(
-    slot: ChildSlot<*, CurrencyComponent>,
+private fun TagModal(
+    slot: ChildSlot<*, TagComponent>,
     close: () -> Unit,
-    select: (CurrencyEntity) -> Unit,
+    select: (TagEntity) -> Unit,
 ) {
     slot.child?.instance?.also { component ->
         val scope = rememberCoroutineScope()
@@ -47,11 +47,11 @@ private fun CurrencyModal(
                 .statusBarsPadding(),
             sheetState = modalBottomSheetState,
         ) {
-            CurrencyContent(
+            TagContent(
                 modifier = Modifier.fillMaxSize(),
                 component = component,
-                callback = { currencyEntity ->
-                    currencyEntity?.let(select)
+                callback = { tagEntity ->
+                    tagEntity?.let(select)
                     scope.launch {
                         modalBottomSheetState.hide()
                     }.invokeOnCompletion {
