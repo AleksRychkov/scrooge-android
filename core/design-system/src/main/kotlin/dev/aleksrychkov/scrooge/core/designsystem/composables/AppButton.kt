@@ -9,6 +9,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
@@ -20,7 +21,10 @@ fun AppButton(
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = ButtonDefaults.buttonColors()
-        .copy(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        .copy(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = contentColorFor(MaterialTheme.colorScheme.primaryContainer),
+        ),
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
