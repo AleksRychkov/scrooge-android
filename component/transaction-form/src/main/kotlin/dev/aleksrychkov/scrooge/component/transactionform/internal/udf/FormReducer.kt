@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.component.transactionform.internal.udf
 
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.LoadTransaction
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.Submit
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect.ShowErrorMessage
 import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.AmountFormatter
 import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.toDateString
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
@@ -16,7 +17,7 @@ internal class FormReducer(
     private val resourceManager: ResourceManager,
 ) : Reducer<FormState, FormEvent, FormCommand, FormEffect> {
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun reduce(
         event: FormEvent,
         state: FormState
@@ -109,7 +110,7 @@ internal class FormReducer(
                 }
                 effects {
                     val msg = resourceManager.getString(Resources.string.form_empty_amount)
-                    listOf(FormEffect.ShowErrorMessage(message = msg))
+                    listOf(ShowErrorMessage(message = msg))
                 }
             }
 
@@ -119,7 +120,26 @@ internal class FormReducer(
                 }
                 effects {
                     val msg = resourceManager.getString(Resources.string.form_empty_category)
-                    listOf(FormEffect.ShowErrorMessage(message = msg))
+                    listOf(ShowErrorMessage(message = msg))
+                }
+            }
+
+            FormEvent.Internal.CreateTransactionFailure -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+                effects {
+                    val msg = resourceManager.getString(Resources.string.form_failed_submit)
+                    listOf(ShowErrorMessage(message = msg))
+                }
+            }
+
+            FormEvent.Internal.CreateTransactionSuccess -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+                command {
+                    listOf(FormCommand.SetLastUsedCurrency(state.currency), FormCommand.Exit)
                 }
             }
         }

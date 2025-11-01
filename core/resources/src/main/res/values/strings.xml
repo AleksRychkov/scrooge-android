@@ -70,5 +70,6 @@
     <string name="form_edit_transaction">Edit transaction</string>
     <string name="form_empty_category">Select category</string>
     <string name="form_empty_amount">Set amount</string>
+    <string name="form_failed_submit">Failed to submit</string>
     <!-- Form -->
 </resources>

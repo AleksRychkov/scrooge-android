@@ -21,5 +21,7 @@ internal sealed interface FormEvent {
         data class LastUsedCurrency(val currency: CurrencyEntity) : Internal
         data object EmptyAmount : Internal
         data object EmptyCategory : Internal
+        data object CreateTransactionSuccess : Internal
+        data object CreateTransactionFailure : Internal
     }
 }

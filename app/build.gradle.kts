@@ -33,4 +33,5 @@ dependencies {
     implementation(projects.feature.category.di)
     implementation(projects.feature.currency.di)
     implementation(projects.feature.tag.di)
+    implementation(projects.feature.transaction.di)
 }

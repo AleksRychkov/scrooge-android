@@ -68,3 +68,7 @@ include(":feature:currency:di")
 include(":feature:tag:api")
 include(":feature:tag:default")
 include(":feature:tag:di")
+
+include(":feature:transaction:api")
+include(":feature:transaction:default")
+include(":feature:transaction:di")

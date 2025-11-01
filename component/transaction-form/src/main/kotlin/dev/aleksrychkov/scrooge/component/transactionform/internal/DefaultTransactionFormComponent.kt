@@ -48,8 +48,8 @@ internal class DefaultTransactionFormComponent(
                 transactionType = transactionType,
                 transactionId = transactionId,
             ),
-            actor = FormActor(),
-            reducer = FormReducer(get()),
+            actor = FormActor(router = router),
+            reducer = FormReducer(resourceManager = get()),
             startEvent = FormEvent.External.Init(transactionId),
         )
     }
@@ -79,7 +79,7 @@ internal class DefaultTransactionFormComponent(
             serializer = null,
             handleBackButton = true,
             key = "TagModalSlot",
-        ) { type, childComponentContext ->
+        ) { _, childComponentContext ->
             TagComponent(
                 componentContext = childComponentContext,
             )
@@ -91,7 +91,7 @@ internal class DefaultTransactionFormComponent(
             serializer = null,
             handleBackButton = true,
             key = "CurrencyModalSlot",
-        ) { type, childComponentContext ->
+        ) { _, childComponentContext ->
             CurrencyComponent(
                 componentContext = childComponentContext,
             )
