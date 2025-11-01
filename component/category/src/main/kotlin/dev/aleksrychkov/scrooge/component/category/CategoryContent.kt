@@ -1,5 +1,7 @@
 package dev.aleksrychkov.scrooge.component.category
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,18 +19,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -36,16 +35,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.category.internal.CategoryComponentInternal
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryState
+import dev.aleksrychkov.scrooge.core.designsystem.composables.AppButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
+import dev.aleksrychkov.scrooge.core.designsystem.composables.SearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
@@ -171,29 +172,42 @@ private fun CategoryList(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
 ) {
-    LazyColumn(
-        modifier = modifier,
+    Box(
+        modifier = modifier
+            .padding(horizontal = Normal)
+            .padding(bottom = Normal)
     ) {
-        val categories = if (state.searchQuery.isNotBlank()) {
-            state.filtered
-        } else {
-            state.categories
-        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    shape = CardDefaults.shape,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                )
+                .clip(CardDefaults.shape)
+                .animateContentSize(),
+        ) {
+            val categories = if (state.searchQuery.isNotBlank()) {
+                state.filtered
+            } else {
+                state.categories
+            }
 
-        items(
-            items = categories,
-            key = { category -> category.id }
-        ) { category ->
-            Category(
-                modifier = Modifier.animateItem(),
-                value = category,
-                selectCategory = selectCategory,
-                deleteCategory = deleteCategory,
-            )
-        }
+            items(
+                items = categories,
+                key = { category -> category.id }
+            ) { category ->
+                Category(
+                    modifier = Modifier.animateItem(),
+                    value = category,
+                    selectCategory = selectCategory,
+                    deleteCategory = deleteCategory,
+                )
+            }
 
-        item {
-            NavigationBarSpacer()
+            item {
+                NavigationBarSpacer()
+            }
         }
     }
 }
@@ -258,36 +272,20 @@ private fun CategoryBar(
                 .padding(start = Normal)
                 .weight(weight = 1f, fill = true),
         ) {
-            TextField(
+            SearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.searchQuery,
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                trailingIcon = {
-                    if (state.searchQuery.isNotBlank()) {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = stringResource(Resources.string.clear),
-                            modifier = Modifier
-                                .clickable { setSearchQuery("") },
-                        )
-                    }
-                },
-                onValueChange = setSearchQuery,
+                onValueChanged = setSearchQuery,
             )
         }
 
-        Box(
+        AppButton(
             modifier = Modifier
-                .height(60.dp)
-                .aspectRatio(1f)
-                .debounceClickable(onClick = addCategoryClicked),
-            contentAlignment = Alignment.Center,
+                .height(IntrinsicSize.Max)
+                .padding(horizontal = Normal),
+            onClick = addCategoryClicked,
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Add,
-                contentDescription = stringResource(Resources.string.category_add),
-            )
+            Text(text = stringResource(Resources.string.add))
         }
     }
 }

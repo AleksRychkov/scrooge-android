@@ -145,7 +145,7 @@ private fun TransactionFormContent(
                 },
                 actions = {
                     TextButton(onClick = component::onSubmitClicked) {
-                        Text(text = stringResource(Resources.string.form_submit))
+                        Text(text = stringResource(Resources.string.submit))
                     }
                 }
             )
@@ -250,7 +250,7 @@ private fun FormContent(
                 .padding(Normal),
             onClick = submitClicked,
         ) {
-            Text(stringResource(Resources.string.form_submit))
+            Text(stringResource(Resources.string.submit))
         }
     }
 }
@@ -277,7 +277,7 @@ private fun Amount(
             value = amount,
             singleLine = true,
             label = {
-                Text(text = stringResource(Resources.string.form_amount))
+                Text(text = stringResource(Resources.string.amount))
             },
             placeholder = {
                 val placeholder = amount.ifBlank { "$currency 0.00" }
@@ -335,7 +335,7 @@ private fun Category(
         value = category?.name.orEmpty(),
         singleLine = true,
         label = {
-            Text(stringResource(Resources.string.form_category))
+            Text(stringResource(Resources.string.category))
         },
         colors = TextFieldDefaults.colors().copy(
             focusedContainerColor = Color.Transparent,
@@ -372,7 +372,7 @@ private fun Date(
         value = date,
         singleLine = true,
         label = {
-            Text(stringResource(Resources.string.form_date))
+            Text(stringResource(Resources.string.date))
         },
         colors = TextFieldDefaults.colors().copy(
             focusedContainerColor = Color.Transparent,
