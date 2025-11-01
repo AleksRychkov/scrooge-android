@@ -25,7 +25,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -66,11 +65,11 @@ import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.TagModa
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormState
 import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.rememberAmountVisualTransformation
+import dev.aleksrychkov.scrooge.core.designsystem.composables.AppButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.AppCard
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
-import dev.aleksrychkov.scrooge.core.designsystem.theme.ColorCurrency
 import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
@@ -304,9 +303,9 @@ private fun Amount(
             modifier = Modifier.width(Normal)
         )
 
-        Button(
+        AppButton(
+            modifier = Modifier.height(IntrinsicSize.Max),
             onClick = openCurrencyModal,
-            colors = ButtonDefaults.buttonColors().copy(containerColor = ColorCurrency)
         ) {
             Text(text = currency)
         }
