@@ -36,7 +36,6 @@
     </string-array>
 
     <string name="category_delete">Delete category</string>
-    <string name="category_add">Add category</string>
     <string name="category_error_empty_name">Type category name to create new one</string>
     <string name="category_error_failed_to_delete">Failed to delete category</string>
     <string name="category_error_failed_to_restore">Failed to restore category</string>
