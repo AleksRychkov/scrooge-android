@@ -38,4 +38,8 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     debugImplementation(libs.androidx.ui.tooling)
+
+    testImplementation(libs.junit)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

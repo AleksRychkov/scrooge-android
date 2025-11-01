@@ -6,10 +6,12 @@ import dev.aleksrychkov.scrooge.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.component.tag.TagComponent
 import dev.aleksrychkov.scrooge.component.transactionform.TransactionFormComponent
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormState
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 @Suppress("TooManyFunctions")
@@ -19,6 +21,7 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
     val currencyModal: Value<ChildSlot<*, CurrencyComponent>>
 
     val state: StateFlow<FormState>
+    val effects: Flow<FormEffect>
 
     fun openCategoryModal()
     fun closeCategoryModal()

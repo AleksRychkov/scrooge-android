@@ -13,9 +13,13 @@ internal sealed interface FormEvent {
         data class SetDate(val timestamp: Long) : External
         data class AddTag(val tag: TagEntity) : External
         data class RemoveTag(val tag: TagEntity) : External
+        data object Submit : External
+        data object SubmitSuccess : External
     }
 
     sealed interface Internal : FormEvent {
         data class LastUsedCurrency(val currency: CurrencyEntity) : Internal
+        data object EmptyAmount : Internal
+        data object EmptyCategory : Internal
     }
 }

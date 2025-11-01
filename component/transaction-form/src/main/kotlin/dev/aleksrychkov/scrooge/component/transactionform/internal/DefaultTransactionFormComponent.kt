@@ -15,6 +15,7 @@ import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffec
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEvent
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormReducer
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormState
+import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
@@ -23,6 +24,7 @@ import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 @Suppress("UnusedPrivateProperty", "TooManyFunctions")
@@ -47,13 +49,16 @@ internal class DefaultTransactionFormComponent(
                 transactionId = transactionId,
             ),
             actor = FormActor(),
-            reducer = FormReducer(),
+            reducer = FormReducer(get()),
             startEvent = FormEvent.External.Init(transactionId),
         )
     }
 
     override val state: StateFlow<FormState>
         get() = store.state
+
+    override val effects: Flow<FormEffect>
+        get() = store.effects
 
     override val categoryModal: Value<ChildSlot<*, CategoryComponent>> =
         childSlot(
@@ -141,7 +146,7 @@ internal class DefaultTransactionFormComponent(
     }
 
     override fun onSubmitClicked() {
-        // todo
+        store.handle(FormEvent.External.Submit)
     }
 
     override fun onDateSelected(timestamp: Long?) {

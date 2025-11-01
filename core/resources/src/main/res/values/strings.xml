@@ -64,8 +64,11 @@
     <string name="form_edit_transaction">Edit transaction</string>
     <string name="form_amount">Amount</string>
     <string name="form_category">Category</string>
+    <string name="form_currency">Currency</string>
     <string name="form_date">Date</string>
     <string name="form_tags">Tags</string>
     <string name="form_submit">Submit</string>
+    <string name="form_empty_category">Select category</string>
+    <string name="form_empty_amount">Set amount</string>
     <!-- Form -->
 </resources>

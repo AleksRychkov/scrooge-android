@@ -1,13 +1,22 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal.udf
 
+import dev.aleksrychkov.scrooge.component.transactionform.internal.AmountFormatter
 import dev.aleksrychkov.scrooge.component.transactionform.internal.toDateString
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.LoadTransaction
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.Submit
+import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Instant
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
-internal class FormReducer : Reducer<FormState, FormEvent, FormCommand, FormEffect> {
+internal class FormReducer(
+    private val resourceManager: ResourceManager,
+) : Reducer<FormState, FormEvent, FormCommand, FormEffect> {
+
+    @Suppress("LongMethod")
     override fun reduce(
         event: FormEvent,
         state: FormState
@@ -28,11 +37,26 @@ internal class FormReducer : Reducer<FormState, FormEvent, FormCommand, FormEffe
                 }
             }
 
-            is FormEvent.External.AddTag -> TODO()
-            is FormEvent.External.RemoveTag -> TODO()
+            is FormEvent.External.AddTag -> state.reduceWith(event) {
+                state {
+                    val tmp = tags.toMutableSet()
+                    tmp.add(event.tag)
+                    copy(tags = tmp.toPersistentList())
+                }
+            }
+
+            is FormEvent.External.RemoveTag -> state.reduceWith(event) {
+                state {
+                    val tmp = tags.toMutableSet()
+                    tmp.remove(event.tag)
+                    copy(tags = tmp.toPersistentList())
+                }
+            }
+
             is FormEvent.External.SetAmount -> state.reduceWith(event) {
                 state {
-                    copy(amount = event.amount)
+                    val sanitizedAmount = AmountFormatter.sanitizeValue(event.amount)
+                    copy(amount = sanitizedAmount)
                 }
             }
 
@@ -61,6 +85,41 @@ internal class FormReducer : Reducer<FormState, FormEvent, FormCommand, FormEffe
             is FormEvent.External.SetCurrency -> state.reduceWith(event) {
                 state {
                     copy(currency = event.currency)
+                }
+            }
+
+            FormEvent.External.Submit -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = true)
+                }
+                command {
+                    listOf(Submit(state = state.copy()))
+                }
+            }
+
+            FormEvent.External.SubmitSuccess -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+            }
+
+            FormEvent.Internal.EmptyAmount -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+                effects {
+                    val msg = resourceManager.getString(Resources.string.form_empty_amount)
+                    listOf(FormEffect.ShowErrorMessage(message = msg))
+                }
+            }
+
+            FormEvent.Internal.EmptyCategory -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+                effects {
+                    val msg = resourceManager.getString(Resources.string.form_empty_category)
+                    listOf(FormEffect.ShowErrorMessage(message = msg))
                 }
             }
         }
