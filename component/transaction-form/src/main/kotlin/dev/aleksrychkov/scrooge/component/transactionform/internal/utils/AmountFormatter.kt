@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transactionform.internal
+package dev.aleksrychkov.scrooge.component.transactionform.internal.utils
 
 internal object AmountFormatter {
 

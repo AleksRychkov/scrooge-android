@@ -1,9 +1,9 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal.udf
 
-import dev.aleksrychkov.scrooge.component.transactionform.internal.AmountFormatter
-import dev.aleksrychkov.scrooge.component.transactionform.internal.toDateString
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.LoadTransaction
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.Submit
+import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.AmountFormatter
+import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.toDateString
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult

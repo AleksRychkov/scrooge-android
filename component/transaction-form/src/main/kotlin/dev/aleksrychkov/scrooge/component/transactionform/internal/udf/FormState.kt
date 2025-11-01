@@ -3,7 +3,7 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal.udf
 
 import androidx.compose.runtime.Immutable
-import dev.aleksrychkov.scrooge.component.transactionform.internal.toDateString
+import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.toDateString
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity

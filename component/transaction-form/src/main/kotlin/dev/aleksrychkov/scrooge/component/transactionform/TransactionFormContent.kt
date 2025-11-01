@@ -63,9 +63,9 @@ import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.Categor
 import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.CurrencyModal
 import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.DatePickerModal
 import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.TagModal
-import dev.aleksrychkov.scrooge.component.transactionform.internal.rememberAmountVisualTransformation
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormState
+import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.rememberAmountVisualTransformation
 import dev.aleksrychkov.scrooge.core.designsystem.composables.AppCard
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable

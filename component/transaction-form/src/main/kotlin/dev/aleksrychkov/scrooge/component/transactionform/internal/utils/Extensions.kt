@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transactionform.internal
+package dev.aleksrychkov.scrooge.component.transactionform.internal.utils
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone

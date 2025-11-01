@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transactionform.internal
+package dev.aleksrychkov.scrooge.component.transactionform.internal.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -7,7 +7,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import dev.aleksrychkov.scrooge.component.transactionform.internal.AmountFormatter.formatAmount
+import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.AmountFormatter.formatAmount
+import kotlin.text.iterator
 
 private class AmountVisualTransformation(
     private val currency: String
