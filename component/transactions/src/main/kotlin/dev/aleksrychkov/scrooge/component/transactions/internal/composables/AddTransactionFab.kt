@@ -20,7 +20,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +33,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -82,9 +83,9 @@ internal fun AddTransactionFab(
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = if (expanded) {
-                        stringResource(Resources.string.transaction_close_add_transaction_title)
+                        stringResource(Resources.string.close)
                     } else {
-                        stringResource(Resources.string.transaction_add_transaction_title)
+                        stringResource(Resources.string.form_add_transaction)
                     },
                     modifier = Modifier.rotate(rotation)
                 )
@@ -119,7 +120,7 @@ private fun FabItems(
                     imageVector = ImageVector.vectorResource(Resources.drawable.ic_trending_up_24px),
                     contentDescription = null,
                     modifier = Modifier.size(ButtonDefaults.IconSize),
-                    tint = MaterialTheme.colorScheme.tertiaryContainer
+                    tint = IncomeColor,
                 )
                 Spacer(Modifier.size(Large))
                 Text(stringResource(Resources.string.income))
@@ -135,7 +136,7 @@ private fun FabItems(
                     imageVector = ImageVector.vectorResource(Resources.drawable.ic_trending_down_24px),
                     contentDescription = null,
                     modifier = Modifier.size(ButtonDefaults.IconSize),
-                    tint = MaterialTheme.colorScheme.errorContainer
+                    tint = ExpenseColor,
                 )
                 Spacer(Modifier.size(Large))
                 Text(stringResource(Resources.string.expense))
