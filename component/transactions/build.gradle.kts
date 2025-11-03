@@ -24,9 +24,14 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    implementation(libs.kotlinx.datetime)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

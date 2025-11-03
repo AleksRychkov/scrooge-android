@@ -73,7 +73,7 @@ internal val DarkScheme = darkColorScheme(
     onBackground = darkOnSurface,
 
     surface = darkSurface,
-    surfaceContainerLow = Color.Black,
+    surfaceContainerLow = darkSurface,
     onSurface = darkOnSurface,
 
     surfaceVariant = Color(0xFF1D1D16),
