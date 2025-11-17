@@ -20,7 +20,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -111,6 +113,11 @@ private fun FabItems(
             horizontalAlignment = Alignment.End
         ) {
             Button(
+                colors = ButtonDefaults.buttonColors()
+                    .copy(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = contentColorFor(MaterialTheme.colorScheme.primaryContainer),
+                    ),
                 onClick = {
                     onIncomeClicked()
                     closeItems()
@@ -127,6 +134,11 @@ private fun FabItems(
             }
 
             Button(
+                colors = ButtonDefaults.buttonColors()
+                    .copy(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = contentColorFor(MaterialTheme.colorScheme.primaryContainer),
+                    ),
                 onClick = {
                     onExpenseClicked()
                     closeItems()
