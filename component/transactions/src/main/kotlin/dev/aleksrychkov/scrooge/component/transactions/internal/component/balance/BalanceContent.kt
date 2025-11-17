@@ -3,7 +3,9 @@ package dev.aleksrychkov.scrooge.component.transactions.internal.component.balan
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -63,7 +67,8 @@ private fun BalanceContent(
                 color = MaterialTheme.colorScheme.surfaceVariant,
             )
             .clip(CardDefaults.shape)
-            .padding(Normal),
+            .padding(Normal)
+            .animateContentSize(),
     ) {
         BalanceItem(
             icon = Resources.drawable.ic_trending_up_24px,
@@ -81,7 +86,12 @@ private fun BalanceContent(
             values = state.expense,
             color = ExpenseColor,
         )
-        Spacer(modifier = Modifier.height(Normal2X))
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = Normal)
+        )
 
         BalanceItem(
             icon = Resources.drawable.ic_balance_24px,
@@ -90,6 +100,27 @@ private fun BalanceContent(
             values = state.total,
             color = Color.Unspecified,
         )
+
+        AnimatedVisibility(
+            visible = !state.isLoading && state.total.isNotEmpty()
+        ) {
+            Column {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Normal)
+                )
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {}
+                ) {
+                    Text(
+                        text = stringResource(Resources.string.details),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -119,9 +150,14 @@ private fun BalanceItem(
             visible = isLoading
         ) {
             CircularProgressIndicator(
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(18.dp)
             )
         }
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+    ) {
         AnimatedVisibility(
             visible = !isLoading
         ) {
@@ -129,10 +165,10 @@ private fun BalanceItem(
                 values.forEach { item ->
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = item.value,
+                        text = item.value + " ${item.currency.currencySymbol}",
                         textAlign = TextAlign.End,
                         color = color,
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 }
             }

@@ -33,7 +33,9 @@ internal class DefaultTransactionsComponent(
     private val _balanceComponent: BalanceComponent by lazy {
         BalanceComponent(
             componentContext = childContext("BalanceComponentContext")
-        )
+        ).also {
+            it.setPeriod(_state.value.selectedPeriod)
+        }
     }
 
     override val periodModal: Value<ChildSlot<*, PeriodComponent>> =

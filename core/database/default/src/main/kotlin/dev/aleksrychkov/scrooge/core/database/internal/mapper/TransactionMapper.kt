@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
 import dev.aleksrychkov.scrooge.core.database.TTransaction
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableSet
@@ -19,7 +20,7 @@ internal object TransactionMapper {
             type = TransactionType.from(transaction.type.toInt()),
             category = transaction.category,
             tags = toTags(transaction.tags),
-            currencyCode = transaction.currencyCode,
+            currency = CurrencyEntity.fromCurrencyCode(transaction.currencyCode)!!,
         )
 
     fun toDatabaseTags(value: Set<String>?): String? {

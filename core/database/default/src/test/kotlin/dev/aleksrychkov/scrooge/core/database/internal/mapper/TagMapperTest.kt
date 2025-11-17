@@ -13,7 +13,8 @@ internal class TagMapperTest {
         val tag = Tag(
             id = 1L,
             name = "Groceries",
-            colorHex = "#FF5733"
+            colorHex = "#FF5733",
+            isDeleted = 0L,
         )
         // When
         val entity: TagEntity = TagMapper.toEntity(tag)
@@ -29,7 +30,8 @@ internal class TagMapperTest {
         val tag = Tag(
             id = 2L,
             name = "NoColor",
-            colorHex = ""
+            colorHex = "",
+            isDeleted = 0L,
         )
         // When
         val entity = TagMapper.toEntity(tag)
@@ -43,7 +45,8 @@ internal class TagMapperTest {
         val tag = Tag(
             id = 3L,
             name = "OptionalColor",
-            colorHex = null
+            colorHex = null,
+            isDeleted = 0L,
         )
         // When
         val entity = TagMapper.toEntity(tag)

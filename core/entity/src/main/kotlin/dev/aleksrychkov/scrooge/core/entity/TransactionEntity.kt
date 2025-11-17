@@ -11,5 +11,5 @@ data class TransactionEntity(
     val type: TransactionType,
     val category: String,
     val tags: ImmutableSet<String>,
-    val currencyCode: String,
+    val currency: CurrencyEntity,
 )

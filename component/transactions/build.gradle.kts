@@ -18,6 +18,8 @@ dependencies {
     implementation(projects.core.resources)
     implementation(projects.core.router)
     implementation(projects.core.udfExtensions)
+
+    implementation(projects.feature.transaction.api)
 }
 
 dependencies {

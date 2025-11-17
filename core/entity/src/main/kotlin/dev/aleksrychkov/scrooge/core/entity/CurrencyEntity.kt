@@ -316,7 +316,7 @@ enum class CurrencyEntity(
     );
 
     companion object Companion {
-        fun fromNumCode(numCode: String): CurrencyEntity? =
-            CurrencyEntity.entries.firstOrNull { it.currencyNumCode == numCode }
+        fun fromCurrencyCode(currencyCode: String): CurrencyEntity? =
+            CurrencyEntity.entries.firstOrNull { it.currencyCode == currencyCode }
     }
 }

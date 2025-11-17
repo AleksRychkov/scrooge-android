@@ -8,36 +8,9 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 internal data class BalanceState(
     val isLoading: Boolean = false,
-    val income: ImmutableList<BalanceItem> = persistentListOf(
-        BalanceItem(
-            currency = CurrencyEntity.RUB,
-            value = "123.12 ${CurrencyEntity.RUB.currencySymbol}"
-        ),
-        BalanceItem(
-            currency = CurrencyEntity.EUR,
-            value = "222.12 ${CurrencyEntity.EUR.currencySymbol}"
-        ),
-    ),
-    val expense: ImmutableList<BalanceItem> = persistentListOf(
-        BalanceItem(
-            currency = CurrencyEntity.RUB,
-            value = "10.12 ${CurrencyEntity.RUB.currencySymbol}"
-        ),
-        BalanceItem(
-            currency = CurrencyEntity.EUR,
-            value = "20.12 ${CurrencyEntity.EUR.currencySymbol}"
-        ),
-    ),
-    val total: ImmutableList<BalanceItem> = persistentListOf(
-        BalanceItem(
-            currency = CurrencyEntity.RUB,
-            value = "113.00 ${CurrencyEntity.RUB.currencySymbol}"
-        ),
-        BalanceItem(
-            currency = CurrencyEntity.EUR,
-            value = "200.12 ${CurrencyEntity.EUR.currencySymbol}"
-        ),
-    ),
+    val income: ImmutableList<BalanceItem> = persistentListOf(),
+    val expense: ImmutableList<BalanceItem> = persistentListOf(),
+    val total: ImmutableList<BalanceItem> = persistentListOf(),
 )
 
 internal data class BalanceItem(

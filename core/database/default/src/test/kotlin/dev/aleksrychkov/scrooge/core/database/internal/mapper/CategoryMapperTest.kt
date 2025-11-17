@@ -15,7 +15,8 @@ internal class CategoryMapperTest {
             id = 1L,
             type = TransactionType.Expense.type.toLong(),
             name = "Food",
-            isUserMade = 1L
+            isUserMade = 1L,
+            isDeleted = 0L,
         )
         // When
         val entity: CategoryEntity = CategoryMapper.toEntity(category)
@@ -33,7 +34,8 @@ internal class CategoryMapperTest {
             id = 2L,
             type = TransactionType.Income.type.toLong(),
             name = "Salary",
-            isUserMade = 0L
+            isUserMade = 0L,
+            isDeleted = 0L,
         )
         // When
         val entity = CategoryMapper.toEntity(category)

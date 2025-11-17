@@ -1,8 +1,12 @@
 package dev.aleksrychkov.scrooge.component.transactions.internal.component.balance
 
 import com.arkivanov.decompose.ComponentContext
+import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.udf.BalanceActor
+import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.udf.BalanceEvent
+import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.udf.BalanceReducer
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.udf.BalanceState
-import kotlinx.coroutines.flow.MutableStateFlow
+import dev.aleksrychkov.scrooge.core.udf.Store
+import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Instant
 
@@ -24,10 +28,18 @@ private class DefaultBalanceComponent(
     componentContext: ComponentContext
 ) : BalanceComponent, ComponentContext by componentContext {
 
+    private val store: Store<BalanceState, BalanceEvent, Unit> by lazy {
+        instanceKeeper.createStore(
+            initialState = BalanceState(isLoading = true),
+            actor = BalanceActor(),
+            reducer = BalanceReducer(),
+        )
+    }
+
     override val state: StateFlow<BalanceState>
-        get() = MutableStateFlow(BalanceState())
+        get() = store.state
 
     override fun setPeriod(instant: Instant) {
-        // todo
+        store.handle(BalanceEvent.External.SetPeriod(instant = instant))
     }
 }
