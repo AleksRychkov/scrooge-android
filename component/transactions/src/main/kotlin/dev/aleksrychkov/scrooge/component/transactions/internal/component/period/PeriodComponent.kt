@@ -31,7 +31,7 @@ private class DefaultPeriodComponent(
     instant: Instant,
 ) : PeriodComponent, ComponentContext by componentContext {
 
-    private val _state = MutableStateFlow(PeriodState(instant))
+    private val _state = MutableStateFlow(PeriodState.initial(instant))
 
     override val state: StateFlow<PeriodState>
         get() = _state.asStateFlow()

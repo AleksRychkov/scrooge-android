@@ -13,6 +13,7 @@ import kotlin.time.Instant
 
 @Immutable
 internal data class PeriodState(
+    val initialYear: Int,
     val selected: Instant,
     val selectedYear: Int,
     val selectedMonth: Int,
@@ -22,15 +23,27 @@ internal data class PeriodState(
             val now = Clock.System.now()
             val date = DateTimeUtils.getDate(now)
             return PeriodState(
+                initialYear = date.year,
                 selected = now,
                 selectedYear = date.year,
                 selectedMonth = date.month.number,
             )
         }
 
-        operator fun invoke(instant: Instant): PeriodState {
+        fun initial(instant: Instant): PeriodState {
             val date = DateTimeUtils.getDate(instant)
             return PeriodState(
+                initialYear = date.year,
+                selected = instant,
+                selectedYear = date.year,
+                selectedMonth = date.month.number,
+            )
+        }
+
+        operator fun invoke(instant: Instant, initialYear: Int): PeriodState {
+            val date = DateTimeUtils.getDate(instant)
+            return PeriodState(
+                initialYear = initialYear,
                 selected = instant,
                 selectedYear = date.year,
                 selectedMonth = date.month.number,
@@ -42,17 +55,17 @@ internal data class PeriodState(
 internal fun PeriodState.incrementYear(): PeriodState {
     val date = DateTimeUtils.getDate(this.selected)
     val newDate = date.plus(1, DateTimeUnit.YEAR)
-    return PeriodState(newDate.toInstantAtStartOfDay())
+    return PeriodState(newDate.toInstantAtStartOfDay(), initialYear = this.initialYear)
 }
 
 internal fun PeriodState.decrementYear(): PeriodState {
     val date = DateTimeUtils.getDate(this.selected)
     val newDate = date.minus(1, DateTimeUnit.YEAR)
-    return PeriodState(newDate.toInstantAtStartOfDay())
+    return PeriodState(newDate.toInstantAtStartOfDay(), initialYear = this.initialYear)
 }
 
 internal fun PeriodState.setMonth(month: Int): PeriodState {
     val date = DateTimeUtils.getDate(this.selected)
     val newDate = LocalDate(date.year, month, 1)
-    return PeriodState(newDate.toInstantAtStartOfDay())
+    return PeriodState(newDate.toInstantAtStartOfDay(), initialYear = this.initialYear)
 }

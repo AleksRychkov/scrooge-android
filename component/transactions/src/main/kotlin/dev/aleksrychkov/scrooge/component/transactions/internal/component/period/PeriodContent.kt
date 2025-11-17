@@ -72,28 +72,34 @@ internal fun PeriodContent(
             onDecrementYearClicked = onDecrementYearClicked,
         )
 
+        val isSelectedYearInitial = state.initialYear == state.selectedYear
+
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
             months = arrayOf(Month.JANUARY, Month.FEBRUARY, Month.MARCH),
             selectedMonth = state.selectedMonth,
+            isSelectedYearInitial = isSelectedYearInitial,
             onMonthClicked = onMonthClicked,
         )
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
             months = arrayOf(Month.APRIL, Month.MAY, Month.JUNE),
             selectedMonth = state.selectedMonth,
+            isSelectedYearInitial = isSelectedYearInitial,
             onMonthClicked = onMonthClicked,
         )
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
             months = arrayOf(Month.JULY, Month.AUGUST, Month.SEPTEMBER),
             selectedMonth = state.selectedMonth,
+            isSelectedYearInitial = isSelectedYearInitial,
             onMonthClicked = onMonthClicked,
         )
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
             months = arrayOf(Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER),
             selectedMonth = state.selectedMonth,
+            isSelectedYearInitial = isSelectedYearInitial,
             onMonthClicked = onMonthClicked,
         )
     }
@@ -150,6 +156,7 @@ private fun MonthRow(
     modifier: Modifier,
     selectedMonth: Int,
     months: Array<Month>,
+    isSelectedYearInitial: Boolean,
     onMonthClicked: (Int) -> Unit,
 ) {
     Row(
@@ -166,7 +173,7 @@ private fun MonthRow(
                     onMonthClicked(month.number)
                 }
             ) {
-                val color = if (month.number == selectedMonth) {
+                val color = if (isSelectedYearInitial && month.number == selectedMonth) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     Color.Unspecified
