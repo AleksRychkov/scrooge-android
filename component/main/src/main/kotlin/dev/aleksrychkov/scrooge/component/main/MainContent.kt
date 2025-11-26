@@ -10,6 +10,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsContent
 import dev.aleksrychkov.scrooge.component.transactionform.TransactionFormContent
+import dev.aleksrychkov.scrooge.component.transactionslist.TransactionsListContent
 
 @Composable
 fun MainContent(
@@ -42,6 +43,11 @@ private fun MainContent(
                 )
 
                 is MainComponentInternal.Child.TransactionForm -> TransactionFormContent(
+                    modifier = Modifier.fillMaxSize(),
+                    component = child.component,
+                )
+
+                is MainComponentInternal.Child.TransactionsList -> TransactionsListContent(
                     modifier = Modifier.fillMaxSize(),
                     component = child.component,
                 )

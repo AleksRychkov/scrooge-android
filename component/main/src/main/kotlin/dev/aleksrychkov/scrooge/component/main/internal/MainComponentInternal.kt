@@ -5,6 +5,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.main.MainComponent
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.component.transactionform.TransactionFormComponent
+import dev.aleksrychkov.scrooge.component.transactionslist.TransactionsListComponent
 
 internal interface MainComponentInternal : MainComponent {
     val stack: Value<ChildStack<*, Child>>
@@ -12,5 +13,6 @@ internal interface MainComponentInternal : MainComponent {
     sealed class Child {
         class MainTabs(val component: MainTabsComponent) : Child()
         class TransactionForm(val component: TransactionFormComponent) : Child()
+        class TransactionsList(val component: TransactionsListComponent) : Child()
     }
 }

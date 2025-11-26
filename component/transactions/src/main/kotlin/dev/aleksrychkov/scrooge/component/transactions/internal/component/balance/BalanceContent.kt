@@ -51,13 +51,15 @@ internal fun BalanceContent(
     BalanceContent(
         modifier = modifier,
         state = state,
+        onDetailsClicked = component::onDetailsClicked,
     )
 }
 
 @Composable
 private fun BalanceContent(
     modifier: Modifier,
-    state: BalanceState
+    state: BalanceState,
+    onDetailsClicked: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -112,7 +114,7 @@ private fun BalanceContent(
                 )
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {}
+                    onClick = onDetailsClicked,
                 ) {
                     Text(
                         text = stringResource(Resources.string.details),
