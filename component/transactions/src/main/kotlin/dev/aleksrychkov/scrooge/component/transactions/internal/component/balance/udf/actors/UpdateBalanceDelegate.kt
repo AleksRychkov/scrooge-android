@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.component.transactions.internal.component.balanc
 import dev.aleksrychkov.scrooge.component.transactions.internal.utils.DateTimeUtils
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.entity.amountToValue
 import dev.aleksrychkov.scrooge.feature.transaction.GetTransactionsResult
 import dev.aleksrychkov.scrooge.feature.transaction.GetTransactionsUseCase
 import kotlinx.collections.immutable.ImmutableList
@@ -13,15 +14,10 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlin.math.abs
 
 internal class UpdateBalanceDelegate(
     private val useCase: Lazy<GetTransactionsUseCase>,
 ) {
-    private companion object {
-        const val AMOUNT_CHUNK_SIZE = 3
-        const val CENTS = 100L
-    }
 
     suspend operator fun invoke(cmd: BalanceCommand.UpdateBalance): Flow<BalanceEvent> {
         val pair = DateTimeUtils.getMonthStartEndTimestamp(cmd.instant)
@@ -44,6 +40,7 @@ internal class UpdateBalanceDelegate(
         }
     }
 
+    // todo: move this to reducer
     private fun mapTransactionsToBalanceItems(
         transactions: ImmutableList<TransactionEntity>
     ): Triple<ImmutableList<BalanceItem>, ImmutableList<BalanceItem>, ImmutableList<BalanceItem>> {
@@ -81,33 +78,5 @@ internal class UpdateBalanceDelegate(
         }.toImmutableList()
 
         return Triple(incomeItems, expenseItems, totalItems)
-    }
-
-    private fun Long.amountToValue(): String {
-        val sign = if (this < 0) "-" else ""
-        val absValue = abs(this)
-        val major = absValue / CENTS
-        val minor = absValue % CENTS
-        return "$sign$major.${minor.toString().padStart(2, '0')}".formatAmount()
-    }
-
-    private fun String.formatAmount(delimiter: Char = '.'): String {
-        if (this.isBlank()) return this
-        val sign = if (this.contains("-")) "-" else ""
-
-        val parts = this.replace("-", "").split(delimiter)
-
-        val integerPart = parts[0]
-            .replace("\\s".toRegex(), "")
-            .reversed()
-            .chunked(AMOUNT_CHUNK_SIZE)
-            .joinToString(" ")
-            .reversed()
-
-        return if (parts.size > 1) {
-            "$sign $integerPart$delimiter${parts[1]}"
-        } else {
-            "$sign $integerPart"
-        }
     }
 }
