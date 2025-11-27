@@ -15,7 +15,9 @@ import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultObserveFavorite
 import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultRemoveFromFavoriteCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.internal.DefaultSetLastUsedCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.internal.data.repository.FavoriteCurrencyRepository
+import dev.aleksrychkov.scrooge.feature.currency.internal.data.repository.LastUsedCurrencyRepository
 import dev.aleksrychkov.scrooge.feature.currency.internal.data.source.FavoriteCurrencySource
+import dev.aleksrychkov.scrooge.feature.currency.internal.data.source.LastUsedCurrencySource
 
 fun buildCurrencyModule(context: Context): NaiveModule {
     return module {
@@ -32,7 +34,16 @@ fun buildCurrencyModule(context: Context): NaiveModule {
         factory<AddToFavoriteCurrencyUseCase> { DefaultAddToFavoriteCurrencyUseCase() }
         factory<RemoveFromFavoriteCurrencyUseCase> { DefaultRemoveFromFavoriteCurrencyUseCase() }
         factory<ObserveFavoriteCurrencyUseCase> { DefaultObserveFavoriteCurrencyUseCase() }
-        factory<GetLastUsedCurrencyUseCase> { DefaultGetLastUsedCurrencyUseCase() }
-        factory<SetLastUsedCurrencyUseCase> { DefaultSetLastUsedCurrencyUseCase() }
+        factory<GetLastUsedCurrencyUseCase> { DefaultGetLastUsedCurrencyUseCase(repository = getLazy()) }
+        factory<SetLastUsedCurrencyUseCase> { DefaultSetLastUsedCurrencyUseCase(repository = getLazy()) }
+        factory<LastUsedCurrencySource> {
+            LastUsedCurrencySource(
+                storeName = "last_used_currency",
+                context = context,
+            )
+        }
+        singleton<LastUsedCurrencyRepository> {
+            LastUsedCurrencyRepository(source = getLazy())
+        }
     }
 }

@@ -8,5 +8,5 @@ fun interface GetLastUsedCurrencyUseCase {
 
 sealed interface GetLastUsedCurrencyResult {
     data class Success(val currency: CurrencyEntity) : GetLastUsedCurrencyResult
-    data object Failure : GetLastUsedCurrencyResult
+    data object Empty : GetLastUsedCurrencyResult
 }
