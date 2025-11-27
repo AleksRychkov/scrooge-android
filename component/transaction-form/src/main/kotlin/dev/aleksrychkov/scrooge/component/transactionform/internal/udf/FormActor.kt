@@ -6,8 +6,10 @@ import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.actors.Su
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.udf.Actor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.withContext
 
 internal class FormActor(
     private val router: Router,
@@ -24,9 +26,13 @@ internal class FormActor(
                     getLastUsedCurrency = getLazy(),
                     setLastUsedCurrency = getLazy(),
                 ),
-                loadTransaction = LoadTransactionDelegate(),
+                loadTransaction = LoadTransactionDelegate(
+                    router = router,
+                    useCase = getLazy(),
+                ),
                 submitDelegate = SubmitDelegate(
-                    createUseCase = getLazy()
+                    createUseCase = getLazy(),
+                    editUseCase = getLazy(),
                 ),
             )
         }
@@ -42,8 +48,10 @@ internal class FormActor(
         }
     }
 
-    private fun exit(): Flow<FormEvent> {
-        router.close()
+    private suspend fun exit(): Flow<FormEvent> {
+        withContext(Dispatchers.Main) {
+            router.close()
+        }
         return emptyFlow()
     }
 }

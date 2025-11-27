@@ -7,6 +7,8 @@ import dev.aleksrychkov.scrooge.core.di.factory
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultCreateTransactionUseCase
+import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultEditTransactionUseCase
+import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetTransactionsUseCase
 import kotlinx.coroutines.Dispatchers
 
@@ -20,6 +22,18 @@ fun buildTransactionModule(): NaiveModule {
         }
         factory<GetTransactionsUseCase> {
             DefaultGetTransactionsUseCase(
+                transactionDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<GetTransactionUseCase> {
+            DefaultGetTransactionUseCase(
+                transactionDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<EditTransactionUseCase> {
+            DefaultEditTransactionUseCase(
                 transactionDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )

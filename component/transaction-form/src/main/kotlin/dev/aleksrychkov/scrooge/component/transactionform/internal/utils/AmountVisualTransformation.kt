@@ -7,8 +7,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.AmountFormatter.formatAmount
-import kotlin.text.iterator
+import dev.aleksrychkov.scrooge.core.entity.formatAmount
 
 private class AmountVisualTransformation(
     private val currency: String

@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal
 
 import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.AmountFormatter
+import dev.aleksrychkov.scrooge.core.entity.DELIMITER
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -18,18 +19,18 @@ internal class AmountFormatterTest {
             Arguments.of("00", "0"),
             Arguments.of("001", "1"),
             Arguments.of("100", "100"),
-            Arguments.of("1.", "1."),
-            Arguments.of("0.", "0."),
-            Arguments.of("00000.", "0."),
+            Arguments.of("1.", "1$DELIMITER"),
+            Arguments.of("0.", "0$DELIMITER"),
+            Arguments.of("00000.", "0$DELIMITER"),
             Arguments.of(".", ""),
-            Arguments.of("1..", "1."),
-            Arguments.of("1.0.", "1.0"),
-            Arguments.of("1.0.00", "1.0"),
-            Arguments.of("1,", "1."),
-            Arguments.of("01.", "1."),
-            Arguments.of("1.0", "1.0"),
-            Arguments.of("1.10", "1.10"),
-            Arguments.of("1.101", "1.10"),
+            Arguments.of("1..", "1$DELIMITER"),
+            Arguments.of("1.0.", "1${DELIMITER}0"),
+            Arguments.of("1.0.00", "1${DELIMITER}0"),
+            Arguments.of("1,", "1$DELIMITER"),
+            Arguments.of("01.", "1$DELIMITER"),
+            Arguments.of("1.0", "1${DELIMITER}0"),
+            Arguments.of("1.10", "1${DELIMITER}10"),
+            Arguments.of("1.101", "1${DELIMITER}10"),
         )
     }
 

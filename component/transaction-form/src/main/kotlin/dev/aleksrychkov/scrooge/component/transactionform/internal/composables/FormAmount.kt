@@ -23,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.rememberAmountVisualTransformation
 import dev.aleksrychkov.scrooge.core.designsystem.composables.AppButton
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.entity.DELIMITER
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -50,7 +51,7 @@ internal fun FormAmount(
                 Text(text = stringResource(Resources.string.amount))
             },
             placeholder = {
-                val placeholder = amount.ifBlank { "$currency 0.00" }
+                val placeholder = amount.ifBlank { "$currency 0${DELIMITER}00" }
                 Text(text = placeholder)
             },
             keyboardOptions = KeyboardOptions(

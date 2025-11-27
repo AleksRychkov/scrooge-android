@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.component.transactionform.internal.udf
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 
 internal sealed interface FormEvent {
     sealed interface External : FormEvent {
@@ -21,7 +22,8 @@ internal sealed interface FormEvent {
         data class LastUsedCurrency(val currency: CurrencyEntity) : Internal
         data object EmptyAmount : Internal
         data object EmptyCategory : Internal
-        data object CreateTransactionSuccess : Internal
-        data object CreateTransactionFailure : Internal
+        data object SubmitTransactionSuccess : Internal
+        data object SubmitTransactionFailure : Internal
+        data class SuccessLoadTransaction(val entity: TransactionEntity) : Internal
     }
 }

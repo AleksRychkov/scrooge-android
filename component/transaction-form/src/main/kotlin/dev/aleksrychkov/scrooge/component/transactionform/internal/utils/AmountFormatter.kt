@@ -1,25 +1,25 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal.utils
 
-internal object AmountFormatter {
+import dev.aleksrychkov.scrooge.core.entity.DELIMITER
 
-    private const val AMOUNT_CHUNK_SIZE = 3
+internal object AmountFormatter {
 
     fun sanitizeValue(input: String): String {
         var value = input.trim()
-            .replace(",", ".")
+            .replace('.', DELIMITER)
             .replace(Regex("\\s+"), "")
             .replace(Regex("[^0-9.,]"), "")
 
-        if (value.isBlank() || value == ".") return ""
+        if (value.isBlank() || value == DELIMITER.toString()) return ""
 
-        if (value.contains(".")) {
-            val indexOfSecondsDelimiter = value.indexOfSecond('.')
+        if (value.contains(DELIMITER)) {
+            val indexOfSecondsDelimiter = value.indexOfSecond(DELIMITER)
             if (indexOfSecondsDelimiter != -1) {
                 value = value.take(indexOfSecondsDelimiter)
             }
         }
 
-        val valueSplit = value.split('.')
+        val valueSplit = value.split(DELIMITER)
         var (integerPart, decimalPart) = if (valueSplit.size > 1) {
             valueSplit[0] to valueSplit[1]
         } else {
@@ -30,26 +30,8 @@ internal object AmountFormatter {
         }
         decimalPart = decimalPart.substring(0, 2.coerceAtMost(decimalPart.length))
 
-        return if (decimalPart.isNotBlank() || value.contains(".")) {
-            "$integerPart.$decimalPart"
-        } else {
-            integerPart
-        }
-    }
-
-    fun String.formatAmount(delimiter: Char = '.'): String {
-        if (this.isBlank()) return this
-        val parts = this.split(delimiter)
-
-        val integerPart = parts[0]
-            .replace("\\s".toRegex(), "")
-            .reversed()
-            .chunked(AMOUNT_CHUNK_SIZE)
-            .joinToString(" ")
-            .reversed()
-
-        return if (parts.size > 1) {
-            "$integerPart$delimiter${parts[1]}"
+        return if (decimalPart.isNotBlank() || value.contains(DELIMITER)) {
+            "$integerPart$DELIMITER$decimalPart"
         } else {
             integerPart
         }

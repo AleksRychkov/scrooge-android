@@ -6,6 +6,7 @@ import kotlin.math.abs
 
 private const val AMOUNT_CHUNK_SIZE = 3
 private const val CENTS = 100L
+const val DELIMITER = ','
 
 @Serializable
 data class TransactionEntity(
@@ -24,10 +25,10 @@ fun Long.amountToValue(): String {
     val absValue = abs(this)
     val major = absValue / CENTS
     val minor = absValue % CENTS
-    return "$sign$major.${minor.toString().padStart(2, '0')}".formatAmount()
+    return "$sign$major${DELIMITER}${minor.toString().padStart(2, '0')}".formatAmount()
 }
 
-private fun String.formatAmount(delimiter: Char = '.'): String {
+fun String.formatAmount(delimiter: Char = DELIMITER): String {
     if (this.isBlank()) return this
     val sign = if (this.contains("-")) "-" else ""
 

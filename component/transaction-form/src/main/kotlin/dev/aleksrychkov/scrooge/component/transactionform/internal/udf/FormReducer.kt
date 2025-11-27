@@ -5,10 +5,14 @@ import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormComma
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect.ShowErrorMessage
 import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.AmountFormatter
 import dev.aleksrychkov.scrooge.component.transactionform.internal.utils.toDateString
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.amountToValue
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -124,7 +128,7 @@ internal class FormReducer(
                 }
             }
 
-            FormEvent.Internal.CreateTransactionFailure -> state.reduceWith(event) {
+            FormEvent.Internal.SubmitTransactionFailure -> state.reduceWith(event) {
                 state {
                     copy(isLoading = false)
                 }
@@ -134,12 +138,33 @@ internal class FormReducer(
                 }
             }
 
-            FormEvent.Internal.CreateTransactionSuccess -> state.reduceWith(event) {
+            FormEvent.Internal.SubmitTransactionSuccess -> state.reduceWith(event) {
                 state {
                     copy(isLoading = false)
                 }
                 command {
                     listOf(FormCommand.SetLastUsedCurrency(state.currency), FormCommand.Exit)
+                }
+            }
+
+            is FormEvent.Internal.SuccessLoadTransaction -> state.reduceWith(event) {
+                val sanitizedAmount =
+                    AmountFormatter.sanitizeValue(event.entity.amount.amountToValue())
+                val timestamp = Instant.fromEpochMilliseconds(event.entity.timestamp)
+                state {
+                    copy(
+                        isLoading = false,
+                        transactionType = event.entity.type,
+                        amount = sanitizedAmount,
+                        timestamp = timestamp,
+                        timestampReadable = timestamp.toDateString(),
+                        category = CategoryEntity.from(
+                            name = event.entity.category,
+                            type = event.entity.type,
+                        ),
+                        tags = event.entity.tags.map { TagEntity.from(it) }.toImmutableList(),
+                        currency = event.entity.currency,
+                    )
                 }
             }
         }
