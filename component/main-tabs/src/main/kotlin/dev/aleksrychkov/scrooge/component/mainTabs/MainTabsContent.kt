@@ -57,10 +57,13 @@ private fun MainContent(
                 .consumeWindowInsets(WindowInsets.navigationBars),
             component = component,
         )
-        BottomBar(
-            modifier = Modifier.fillMaxWidth(),
-            component = component,
-        )
+        // todo: hide as we don't have any contents for reports and settings tabs
+        if (false) {
+            BottomBar(
+                modifier = Modifier.fillMaxWidth(),
+                component = component,
+            )
+        }
     }
 }
 
