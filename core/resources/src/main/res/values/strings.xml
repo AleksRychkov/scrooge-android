@@ -13,6 +13,7 @@
     <string name="date">Date</string>
     <string name="tags">Tags</string>
     <string name="submit">Submit</string>
+    <string name="delete">Delete</string>
     <string name="transactions">Transactions</string>
     <string name="reports">Reports</string>
     <string name="settings">Settings</string>
@@ -67,6 +68,10 @@
 
     <!-- Form -->
     <string name="form_add_transaction">Add transaction</string>
+    <string name="form_add_income">Add income</string>
+    <string name="form_add_expense">Add expense</string>
+    <string name="form_edit_income">Edit income</string>
+    <string name="form_edit_expense">Edit expense</string>
     <string name="form_edit_transaction">Edit transaction</string>
     <string name="form_empty_category">Select category</string>
     <string name="form_empty_amount">Set amount</string>
