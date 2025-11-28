@@ -1,8 +1,10 @@
 package dev.aleksrychkov.scrooge.component.transactionslist.internal.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,12 +12,15 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import dev.aleksrychkov.scrooge.component.transactionslist.internal.udf.TransactionsGroup
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.persistentListOf
@@ -34,13 +39,30 @@ internal fun TransactionsGroupItem(
             )
             .clip(CardDefaults.shape),
     ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Normal),
-            text = group.date,
-            style = MaterialTheme.typography.titleMedium,
-        )
+        Row(
+            modifier = Modifier.padding(Normal),
+            verticalAlignment = Alignment.Top,
+        ) {
+            Text(
+                text = group.date,
+                style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
+            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = Tinny),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Top,
+            ) {
+                group.totals.forEach {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.25f),
+                    )
+                }
+            }
+        }
 
         group.transactions.forEach { t ->
             TransactionItem(
@@ -62,6 +84,7 @@ private fun FormContentPreview() {
                 modifier = Modifier.fillMaxWidth(),
                 group = TransactionsGroup(
                     date = "26.11.2025",
+                    totals = persistentListOf("-123,00 $"),
                     transactions = persistentListOf(
                         TransactionEntity.DUMMY,
                         TransactionEntity.DUMMY.copy(

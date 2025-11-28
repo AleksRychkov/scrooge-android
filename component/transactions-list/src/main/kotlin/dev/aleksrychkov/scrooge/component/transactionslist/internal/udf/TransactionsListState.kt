@@ -13,6 +13,7 @@ internal data class TransactionsListState(
 
 @Immutable
 internal data class TransactionsGroup(
-    val date: String,
-    val transactions: ImmutableList<TransactionEntity>,
+    val date: String = "",
+    val totals: ImmutableList<String> = persistentListOf(),
+    val transactions: ImmutableList<TransactionEntity> = persistentListOf(),
 )
