@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal.udf
 
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.Delete
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.LoadTransaction
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormCommand.Submit
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect.ShowErrorMessage
@@ -102,6 +103,34 @@ internal class FormReducer(
                 }
             }
 
+            FormEvent.External.Delete -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = true)
+                }
+                command {
+                    listOf(Delete(state = state.copy()))
+                }
+            }
+
+            FormEvent.Internal.DeleteTransactionSuccess -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+                command {
+                    listOf(FormCommand.Exit)
+                }
+            }
+
+            FormEvent.Internal.DeleteTransactionFailure -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+                effects {
+                    val msg = resourceManager.getString(Resources.string.form_failed_delete)
+                    listOf(ShowErrorMessage(message = msg))
+                }
+            }
+
             FormEvent.External.SubmitSuccess -> state.reduceWith(event) {
                 state {
                     copy(isLoading = false)
@@ -165,6 +194,15 @@ internal class FormReducer(
                         tags = event.entity.tags.map { TagEntity.from(it) }.toImmutableList(),
                         currency = event.entity.currency,
                     )
+                }
+            }
+
+            FormEvent.Internal.FailedLoadTransaction -> state.reduceWith(event) {
+                state {
+                    copy(isLoading = false)
+                }
+                command {
+                    listOf(FormCommand.Exit)
                 }
             }
         }

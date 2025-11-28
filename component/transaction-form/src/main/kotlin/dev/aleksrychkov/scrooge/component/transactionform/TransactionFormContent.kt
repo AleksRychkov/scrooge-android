@@ -7,16 +7,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -129,6 +133,7 @@ private fun FormContent(
         onDateSelected = component::onDateSelected,
         removeTag = component::removeTag,
         submitClicked = component::onSubmitClicked,
+        deleteClicked = component::onDeleteClicked,
     )
 }
 
@@ -144,6 +149,7 @@ private fun FormContent(
     onDateSelected: (Long?) -> Unit,
     removeTag: (TagEntity) -> Unit,
     submitClicked: () -> Unit,
+    deleteClicked: () -> Unit,
 ) {
     AppCard(
         modifier = modifier
@@ -196,7 +202,63 @@ private fun FormContent(
         ) {
             Text(stringResource(Resources.string.submit))
         }
+
+        DeleteTransaction(
+            state = state,
+            deleteClicked = deleteClicked,
+        )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DeleteTransaction(
+    state: FormState,
+    deleteClicked: () -> Unit,
+) {
+    if (state.transactionId == null) return
+    val isConfirmationAlertVisible = remember { mutableStateOf(false) }
+    TextButton(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = Normal)
+            .padding(bottom = Normal),
+        onClick = {
+            isConfirmationAlertVisible.value = true
+        }
+    ) {
+        Text(stringResource(Resources.string.delete))
+    }
+    if (!isConfirmationAlertVisible.value) return
+    AlertDialog(
+        onDismissRequest = {
+            isConfirmationAlertVisible.value = false
+        },
+        text = {
+            Text(
+                text = stringResource(Resources.string.form_delete_confirmation_text)
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    isConfirmationAlertVisible.value = false
+                    deleteClicked()
+                }
+            ) {
+                Text(text = stringResource(Resources.string.confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    isConfirmationAlertVisible.value = false
+                }
+            ) {
+                Text(text = stringResource(Resources.string.dismiss))
+            }
+        },
+    )
 }
 
 @Composable
@@ -225,6 +287,7 @@ private fun FormContentPreview() {
                 onDateSelected = {},
                 removeTag = {},
                 submitClicked = {},
+                deleteClicked = {},
             )
         }
     }

@@ -8,4 +8,5 @@ internal sealed interface FormCommand {
     data class SetLastUsedCurrency(val currency: CurrencyEntity) : FormCommand
     data class LoadTransaction(val transactionId: Long) : FormCommand
     data class Submit(val state: FormState) : FormCommand
+    data class Delete(val state: FormState) : FormCommand
 }

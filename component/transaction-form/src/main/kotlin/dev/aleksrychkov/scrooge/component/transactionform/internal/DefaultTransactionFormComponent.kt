@@ -149,6 +149,10 @@ internal class DefaultTransactionFormComponent(
         store.handle(FormEvent.External.Submit)
     }
 
+    override fun onDeleteClicked() {
+        store.handle(FormEvent.External.Delete)
+    }
+
     override fun onDateSelected(timestamp: Long?) {
         if (timestamp == null) return
         store.handle(FormEvent.External.SetDate(timestamp = timestamp))

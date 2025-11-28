@@ -15,6 +15,7 @@ internal sealed interface FormEvent {
         data class AddTag(val tag: TagEntity) : External
         data class RemoveTag(val tag: TagEntity) : External
         data object Submit : External
+        data object Delete : External
         data object SubmitSuccess : External
     }
 
@@ -24,6 +25,9 @@ internal sealed interface FormEvent {
         data object EmptyCategory : Internal
         data object SubmitTransactionSuccess : Internal
         data object SubmitTransactionFailure : Internal
+        data object DeleteTransactionSuccess : Internal
+        data object DeleteTransactionFailure : Internal
         data class SuccessLoadTransaction(val entity: TransactionEntity) : Internal
+        data object FailedLoadTransaction : Internal
     }
 }

@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal.udf
 
+import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.actors.DeleteDelegate
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.actors.LastUsedCurrencyDelegate
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.actors.LoadTransactionDelegate
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.actors.SubmitDelegate
@@ -16,6 +17,7 @@ internal class FormActor(
     private val lastUsedCurrency: LastUsedCurrencyDelegate,
     private val loadTransaction: LoadTransactionDelegate,
     private val submitDelegate: SubmitDelegate,
+    private val deleteDelegate: DeleteDelegate,
 ) : Actor<FormCommand, FormEvent> {
 
     companion object {
@@ -27,12 +29,14 @@ internal class FormActor(
                     setLastUsedCurrency = getLazy(),
                 ),
                 loadTransaction = LoadTransactionDelegate(
-                    router = router,
                     useCase = getLazy(),
                 ),
                 submitDelegate = SubmitDelegate(
                     createUseCase = getLazy(),
                     editUseCase = getLazy(),
+                ),
+                deleteDelegate = DeleteDelegate(
+                    useCase = getLazy(),
                 ),
             )
         }
@@ -44,6 +48,7 @@ internal class FormActor(
             is FormCommand.SetLastUsedCurrency -> lastUsedCurrency.set(command)
             is FormCommand.LoadTransaction -> loadTransaction(command)
             is FormCommand.Submit -> submitDelegate(command)
+            is FormCommand.Delete -> deleteDelegate(command)
             FormCommand.Exit -> exit()
         }
     }

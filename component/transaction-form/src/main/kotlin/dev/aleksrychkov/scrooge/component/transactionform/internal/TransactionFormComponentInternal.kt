@@ -42,4 +42,5 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
     fun onDateSelected(timestamp: Long?)
 
     fun onSubmitClicked()
+    fun onDeleteClicked()
 }
