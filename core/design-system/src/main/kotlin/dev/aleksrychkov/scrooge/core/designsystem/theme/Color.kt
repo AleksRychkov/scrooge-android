@@ -86,5 +86,5 @@ internal val DarkScheme = darkColorScheme(
     onErrorContainer = Color(0xFFFFDAD6),
 )
 
-val IncomeColor = Color(0xFF81C091)
+val IncomeColor = Color(0xFF68B73F)
 val ExpenseColor = Color(0xFFCF6F6B)

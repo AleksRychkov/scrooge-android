@@ -8,11 +8,11 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 internal data class TransactionsListState(
     val isLoading: Boolean = false,
-    val transactions: ImmutableList<DayTransactions> = persistentListOf(),
+    val transactions: ImmutableList<TransactionsGroup> = persistentListOf(),
 )
 
 @Immutable
-internal data class DayTransactions(
+internal data class TransactionsGroup(
     val date: String,
     val transactions: ImmutableList<TransactionEntity>,
 )

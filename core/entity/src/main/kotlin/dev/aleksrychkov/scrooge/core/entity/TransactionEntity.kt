@@ -1,8 +1,10 @@
 package dev.aleksrychkov.scrooge.core.entity
 
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.serialization.Serializable
 import kotlin.math.abs
+import kotlin.time.Clock
 
 private const val AMOUNT_CHUNK_SIZE = 3
 private const val CENTS = 100L
@@ -17,7 +19,25 @@ data class TransactionEntity(
     val category: String,
     val tags: ImmutableSet<String>,
     val currency: CurrencyEntity,
-)
+) {
+    companion object {
+        val DUMMY: TransactionEntity = TransactionEntity(
+            id = 0,
+            amount = 125,
+            timestamp = Clock.System.now().toEpochMilliseconds(),
+            type = TransactionType.Income,
+            category = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
+                "tempor incididunt ut labore et dolore magna aliqua",
+            tags = persistentSetOf(
+                "tag1",
+                "tag2",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" +
+                    " incididunt ut labore et dolore magna aliqua"
+            ),
+            currency = CurrencyEntity.RUB,
+        )
+    }
+}
 
 // todo: tests?
 fun Long.amountToValue(): String {

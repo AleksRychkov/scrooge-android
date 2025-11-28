@@ -12,7 +12,7 @@ internal class TransactionsListMapper {
 
     fun transactionsToDayTransactions(
         transactions: List<TransactionEntity>,
-    ): ImmutableList<DayTransactions> {
+    ): ImmutableList<TransactionsGroup> {
         return transactions
             .groupBy { transaction ->
                 val timeZone = TimeZone.currentSystemDefault()
@@ -20,7 +20,7 @@ internal class TransactionsListMapper {
                 instant.toLocalDateTime(timeZone).date
             }
             .map { entry ->
-                DayTransactions(
+                TransactionsGroup(
                     date = "${entry.key.day}.${entry.key.month.number}.${entry.key.year}",
                     transactions = entry.value.toImmutableList(),
                 )

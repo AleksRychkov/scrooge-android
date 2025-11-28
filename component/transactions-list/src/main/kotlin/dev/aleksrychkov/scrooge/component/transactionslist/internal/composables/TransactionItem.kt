@@ -1,0 +1,150 @@
+package dev.aleksrychkov.scrooge.component.transactionslist.internal.composables
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
+import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
+import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
+import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.entity.amountToValue
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
+
+@Composable
+internal fun TransactionItem(
+    modifier: Modifier,
+    transaction: TransactionEntity,
+    onTransactionClicked: (TransactionEntity) -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .clickable {
+                onTransactionClicked(transaction)
+            }
+            .padding(horizontal = Normal, vertical = Large),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            val (bgColor, icon) = when (transaction.type) {
+                TransactionType.Income -> IncomeColor to Resources.drawable.ic_trending_up_24px
+                TransactionType.Expense -> ExpenseColor to Resources.drawable.ic_trending_down_24px
+            }
+            Icon(
+                modifier = Modifier
+                    .height(48.dp)
+                    .width(48.dp)
+                    .clip(CircleShape)
+                    .background(bgColor)
+                    .padding(Normal),
+                tint = Color.White,
+                imageVector = ImageVector.vectorResource(icon),
+                contentDescription = null,
+            )
+            Column(
+                modifier = Modifier.padding(start = Normal),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    val (color, sign) = when (transaction.type) {
+                        TransactionType.Income -> IncomeColor to "+"
+                        TransactionType.Expense -> ExpenseColor to "-"
+                    }
+
+                    Text(
+                        modifier = Modifier
+                            .weight(weight = 1f)
+                            .padding(end = Normal),
+                        text = transaction.category,
+                        style = MaterialTheme.typography.titleMedium,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+
+                    Text(
+                        color = color,
+                        text = "$sign${transaction.amount.amountToValue()} ${transaction.currency.currencySymbol}",
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+
+                if (transaction.tags.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = Small),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .height(12.dp)
+                                .width(12.dp),
+                            imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary,
+                        )
+
+                        Text(
+                            modifier = Modifier
+                                .padding(start = Small)
+                                .horizontalScroll(rememberScrollState()),
+                            text = transaction.tags.joinToString(),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontStyle = FontStyle.Italic,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+@Suppress("UnusedPrivateMember")
+private fun FormContentPreview() {
+    AppTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            TransactionItem(
+                modifier = Modifier.fillMaxWidth(),
+                transaction = TransactionEntity.DUMMY,
+                onTransactionClicked = {},
+            )
+        }
+    }
+}
