@@ -8,13 +8,13 @@ versionCode = "1"
 versionName = "0.1"
 # endregion
 
-agp = "8.13.0"
+agp = "8.13.1"
 android-material = "1.13.0"
 
-androidx-activity-compose = "1.11.0"
+androidx-activity-compose = "1.12.0"
 androidx-annotation = "1.9.1"
-androidx-datastore = "1.1.7"
-androidx-compose-bom = "2025.10.01"
+androidx-datastore = "1.2.0"
+androidx-compose-bom = "2025.11.01"
 androidx-startup = "1.2.0"
 
 coil = "3.3.0"
@@ -34,12 +34,12 @@ kotlinx-datetime = "0.7.1"
 kotlinx-immutable-collections = "0.4.0"
 kotlinx-serialization-json = "1.9.0"
 
-sqldelight = "2.1.0"
+sqldelight = "2.2.1"
 
-uiToolingPreviewAndroid = "1.9.4"
-uiTooling = "1.9.4"
+uiToolingPreviewAndroid = "1.9.5"
+uiTooling = "1.9.5"
 
-juint = "5.13.4"
+juint = "6.0.1"
 
 
 [libraries]
