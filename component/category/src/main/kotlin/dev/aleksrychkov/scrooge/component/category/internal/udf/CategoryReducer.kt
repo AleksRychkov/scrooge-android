@@ -1,6 +1,5 @@
 package dev.aleksrychkov.scrooge.component.category.internal.udf
 
-import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.CreateNewCategory
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.Delete
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.ObserveCategories
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryCommand.Restore
@@ -62,19 +61,6 @@ internal class CategoryReducer(
                 }
             }
 
-            CategoryEvent.External.AddNewCategory -> {
-                state.reduceWith(event) {
-                    command {
-                        listOf(
-                            CreateNewCategory(
-                                name = state.searchQuery,
-                                transactionType = state.transactionType,
-                            )
-                        )
-                    }
-                }
-            }
-
             is CategoryEvent.Internal.Categories -> {
                 state.reduceWith(event) {
                     if (state.searchQuery.isNotBlank()) {
@@ -92,38 +78,6 @@ internal class CategoryReducer(
                 state.reduceWith(event) {
                     state {
                         copy(filtered = event.list)
-                    }
-                }
-            }
-
-            is CategoryEvent.Internal.FailedToCreateNewCategoryDuplicate -> {
-                state.reduceWith(event) {
-                    effects {
-                        val msg = String.format(
-                            resourceManager.getString(resources.string.category_error_duplicate),
-                            event.duplicate.name
-                        )
-                        listOf(ShowInfoMessage(msg))
-                    }
-                }
-            }
-
-            CategoryEvent.Internal.FailedToCreateNewCategory -> {
-                state.reduceWith(event) {
-                    effects {
-                        val msg =
-                            resourceManager.getString(resources.string.category_error_failed_to_create)
-                        listOf(ShowInfoMessage(msg))
-                    }
-                }
-            }
-
-            CategoryEvent.Internal.FailedToCreateNewCategoryEmptyName -> {
-                state.reduceWith(event) {
-                    effects {
-                        val msg =
-                            resourceManager.getString(resources.string.category_error_empty_name)
-                        listOf(ShowInfoMessage(msg))
                     }
                 }
             }

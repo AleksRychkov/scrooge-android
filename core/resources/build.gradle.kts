@@ -13,4 +13,7 @@ dependencies {
 dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.startup)
+    implementation(platform(libs.androidx.compose.bom))
+    api(libs.androidx.compose.material.icons)
+    api(libs.androidx.compose.material.icons.extended)
 }

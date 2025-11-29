@@ -7,6 +7,7 @@
     <string name="undo">Undo</string>
     <string name="ok">OK</string>
     <string name="add">Add</string>
+    <string name="save">Save</string>
     <string name="amount">Amount</string>
     <string name="category">Category</string>
     <string name="currency">Currency</string>
@@ -47,6 +48,8 @@
     <string name="category_error_failed_to_create">Failed to create category</string>
     <string name="category_error_duplicate">Category «%s» already exists</string>
     <string name="category_deleted">Category «%s» deleted</string>
+    <string name="category_name_placeholder">New category name</string>
+    <string name="category_select_icon">Select icon</string>
     <!-- Category -->
 
     <!-- Transaction -->

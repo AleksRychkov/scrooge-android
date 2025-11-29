@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.category.internal.CategoryComponentInternal
+import dev.aleksrychkov.scrooge.component.category.internal.modal.CreateCategoryModal
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryState
 import dev.aleksrychkov.scrooge.core.designsystem.composables.AppButton
@@ -128,9 +129,12 @@ private fun CategoryContent(
             selectCategory = callback,
             deleteCategory = component::deleteCategory,
             setSearchQuery = component::setSearchQuery,
-            addNewCategoryClicked = component::addNewCategory,
+            addNewCategoryClicked = component::openAddCategoryModal,
         )
     }
+    CreateCategoryModal(
+        component = component,
+    )
 }
 
 @Composable

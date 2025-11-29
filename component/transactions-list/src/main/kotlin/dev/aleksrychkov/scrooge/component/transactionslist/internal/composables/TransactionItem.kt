@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
+import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
@@ -62,8 +63,8 @@ internal fun TransactionItem(
             }
             Icon(
                 modifier = Modifier
-                    .height(48.dp)
-                    .width(48.dp)
+                    .height(CategoryIconSize)
+                    .width(CategoryIconSize)
                     .clip(CircleShape)
                     .background(bgColor)
                     .padding(Normal),

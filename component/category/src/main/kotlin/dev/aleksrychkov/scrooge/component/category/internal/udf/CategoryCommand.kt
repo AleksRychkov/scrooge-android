@@ -11,9 +11,4 @@ internal sealed interface CategoryCommand {
         val query: String,
         val categories: List<CategoryEntity>,
     ) : CategoryCommand
-
-    data class CreateNewCategory(
-        val name: String,
-        val transactionType: TransactionType,
-    ) : CategoryCommand
 }
