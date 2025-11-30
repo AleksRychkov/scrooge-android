@@ -39,6 +39,7 @@ internal class DefaultCreateCategoryUseCase(
                 categoryDao.value.create(
                     name = categoryEntity.name,
                     type = categoryEntity.type,
+                    iconId = categoryEntity.iconId,
                 )
                 CreateCategoryResult.Success
             }.getOrDefault(CreateCategoryResult.Failure)

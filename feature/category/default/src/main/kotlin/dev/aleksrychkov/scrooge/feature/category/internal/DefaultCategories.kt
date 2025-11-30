@@ -28,32 +28,38 @@ class DefaultCategories(
 
     private fun getIncomeCategories(): List<CategoryEntity> {
         if (incomeCategories == null) {
-            incomeCategories = context.resources.getStringArray(Resources.array.income_categories)
-                .toList()
-                .map { name ->
-                    CategoryEntity(
-                        id = id.andDecrement,
-                        name = name,
-                        type = TransactionType.Income,
-                        isUserMade = false,
-                    )
-                }
+            val iconIds = context.resources
+                .getStringArray(Resources.array.income_categories_icon_ids)
+            val names = context.resources
+                .getStringArray(Resources.array.income_categories)
+            incomeCategories = names.mapIndexed { index, name ->
+                CategoryEntity(
+                    id = id.andDecrement,
+                    name = name,
+                    type = TransactionType.Income,
+                    isUserMade = false,
+                    iconId = iconIds[index] ?: "",
+                )
+            }
         }
         return requireNotNull(incomeCategories)
     }
 
     private fun getExpenseCategories(): List<CategoryEntity> {
         if (expenseCategories == null) {
-            expenseCategories = context.resources.getStringArray(Resources.array.expense_categories)
-                .toList()
-                .map { name ->
-                    CategoryEntity(
-                        id = id.andDecrement,
-                        name = name,
-                        type = TransactionType.Expense,
-                        isUserMade = false,
-                    )
-                }
+            val iconIds = context.resources
+                .getStringArray(Resources.array.expense_categories_icon_ids)
+            val names = context.resources
+                .getStringArray(Resources.array.expense_categories)
+            expenseCategories = names.mapIndexed { index, name ->
+                CategoryEntity(
+                    id = id.andDecrement,
+                    name = name,
+                    type = TransactionType.Expense,
+                    isUserMade = false,
+                    iconId = iconIds[index] ?: "",
+                )
+            }
         }
         return requireNotNull(expenseCategories)
     }

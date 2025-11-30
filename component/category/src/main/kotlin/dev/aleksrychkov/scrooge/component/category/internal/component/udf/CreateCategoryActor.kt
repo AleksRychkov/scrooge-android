@@ -28,7 +28,6 @@ internal class CreateCategoryActor(
         }
     }
 
-    @Suppress("UnusedParameter")
     private suspend fun create(
         name: String,
         icon: CategoryIcon,
@@ -39,7 +38,11 @@ internal class CreateCategoryActor(
         }
 
         return createCategoryMutex.withLock {
-            val entity = CategoryEntity.from(name = name, type = transactionType)
+            val entity = CategoryEntity.from(
+                name = name,
+                type = transactionType,
+                iconId = icon.id,
+            )
             when (val result = useCase.value.invoke(categoryEntity = entity)) {
                 is CreateCategoryResult.DuplicateViolation -> {
                     flowOf(

@@ -65,11 +65,15 @@ internal class DefaultCategoryDao(
 
     override suspend fun create(
         name: String,
-        type: TransactionType
+        type: TransactionType,
+        iconId: String,
+        isUserMade: Boolean,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
         database.categoryQueries.create(
             name = name,
             type = type.type.toLong(),
+            isUserMade = if (isUserMade) 1 else 0,
+            iconId = iconId,
         )
     }
 

@@ -11,5 +11,6 @@ internal object CategoryMapper {
             type = TransactionType.from(category.type.toInt()),
             name = category.name,
             isUserMade = category.isUserMade == 1L,
+            iconId = category.iconId,
         )
 }

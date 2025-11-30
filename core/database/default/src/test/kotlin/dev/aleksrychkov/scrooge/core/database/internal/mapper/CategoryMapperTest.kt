@@ -17,6 +17,7 @@ internal class CategoryMapperTest {
             name = "Food",
             isUserMade = 1L,
             isDeleted = 0L,
+            iconId = "iconId"
         )
         // When
         val entity: CategoryEntity = CategoryMapper.toEntity(category)
@@ -25,6 +26,7 @@ internal class CategoryMapperTest {
         assertEquals(TransactionType.Expense, entity.type)
         assertEquals("Food", entity.name)
         assertEquals(true, entity.isUserMade)
+        assertEquals("iconId", entity.iconId)
     }
 
     @Test
@@ -36,6 +38,7 @@ internal class CategoryMapperTest {
             name = "Salary",
             isUserMade = 0L,
             isDeleted = 0L,
+            iconId = "",
         )
         // When
         val entity = CategoryMapper.toEntity(category)

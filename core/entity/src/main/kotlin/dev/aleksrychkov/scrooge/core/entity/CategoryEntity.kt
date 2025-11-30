@@ -8,14 +8,20 @@ data class CategoryEntity(
     val name: String,
     val type: TransactionType,
     val isUserMade: Boolean,
+    val iconId: String,
 ) {
     companion object {
-        fun from(name: String, type: TransactionType): CategoryEntity =
+        fun from(
+            name: String,
+            type: TransactionType,
+            iconId: String = "",
+        ): CategoryEntity =
             CategoryEntity(
                 id = 0L,
                 name = name,
                 type = type,
                 isUserMade = true,
+                iconId = iconId,
             )
     }
 }

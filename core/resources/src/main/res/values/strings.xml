@@ -30,6 +30,12 @@
     <string-array name="income_categories">
         <item>Salary</item>
         <item>Deposit interest</item>
+        <item>Cashback</item>
+    </string-array>
+    <string-array name="income_categories_icon_ids">
+        <item>Payments</item>
+        <item>AccountBalance</item>
+        <item>Redeem</item>
     </string-array>
     <string-array name="expense_categories">
         <item>Groceries</item>
@@ -40,6 +46,15 @@
         <item>Transport</item>
         <item>Pharmacy</item>
     </string-array>
+    <string-array name="expense_categories_icon_ids">
+        <item>ShoppingBasket</item>
+        <item>Checkroom</item>
+        <item>Attractions</item>
+        <item>LocalTaxi</item>
+        <item>Restaurant</item>
+        <item>DirectionsBus</item>
+        <item>LocalPharmacy</item>
+    </string-array>
 
     <string name="category_delete">Delete category</string>
     <string name="category_error_empty_name">Type category name to create new one</string>
@@ -48,7 +63,7 @@
     <string name="category_error_failed_to_create">Failed to create category</string>
     <string name="category_error_duplicate">Category «%s» already exists</string>
     <string name="category_deleted">Category «%s» deleted</string>
-    <string name="category_name_placeholder">New category name</string>
+    <string name="category_name_placeholder">Category name</string>
     <string name="category_select_icon">Select icon</string>
     <!-- Category -->
 

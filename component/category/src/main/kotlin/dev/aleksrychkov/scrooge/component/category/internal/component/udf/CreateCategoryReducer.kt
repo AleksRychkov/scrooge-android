@@ -1,10 +1,12 @@
 package dev.aleksrychkov.scrooge.component.category.internal.component.udf
 
 import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import kotlinx.collections.immutable.toImmutableList
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 internal class CreateCategoryReducer(
@@ -21,6 +23,7 @@ internal class CreateCategoryReducer(
                         isLoading = false,
                         name = event.name,
                         transactionType = event.transactionType,
+                        availableIcons = CategoryIcons.toImmutableList(),
                     )
                 }
             }

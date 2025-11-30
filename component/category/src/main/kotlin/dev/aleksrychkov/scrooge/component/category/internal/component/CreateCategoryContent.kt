@@ -51,6 +51,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcon
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
 import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -178,7 +179,7 @@ private fun CreateCategoryContent(
             verticalArrangement = Arrangement.spacedBy(Small),
             horizontalArrangement = Arrangement.spacedBy(Small),
         ) {
-            items(items = CategoryIcons) { item ->
+            items(items = state.availableIcons) { item ->
                 Box(
                     modifier = Modifier
                         .width(IntrinsicSize.Max)
@@ -216,6 +217,7 @@ private fun FormContentPreview() {
                 state = CreateCategoryState(
                     name = "Salary",
                     selectedCategoryIcon = UncategorizedIcon,
+                    availableIcons = CategoryIcons.toImmutableList(),
                 ),
                 setName = {},
                 setIcon = {},
