@@ -20,6 +20,8 @@
     <string name="settings">Settings</string>
     <string name="income">Income</string>
     <string name="expense">Expense</string>
+    <string name="add_income">Add income</string>
+    <string name="add_expense">Add expense</string>
     <string name="total">Total</string>
     <string name="details">Details</string>
     <string name="confirm">Confirm</string>
@@ -89,8 +91,6 @@
 
     <!-- Form -->
     <string name="form_add_transaction">Add transaction</string>
-    <string name="form_add_income">Add income</string>
-    <string name="form_add_expense">Add expense</string>
     <string name="form_edit_income">Edit income</string>
     <string name="form_edit_expense">Edit expense</string>
     <string name="form_edit_transaction">Edit transaction</string>

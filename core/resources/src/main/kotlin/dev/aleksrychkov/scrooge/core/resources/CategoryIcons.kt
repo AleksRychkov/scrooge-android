@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.core.resources
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.CompareArrows
 import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AddBusiness
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.rounded.CardGiftcard
 import androidx.compose.material.icons.rounded.CardMembership
 import androidx.compose.material.icons.rounded.Chalet
 import androidx.compose.material.icons.rounded.Checkroom
+import androidx.compose.material.icons.rounded.CompareArrows
 import androidx.compose.material.icons.rounded.ConfirmationNumber
 import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.CrueltyFree
@@ -183,6 +185,7 @@ val CategoryIcons: Set<CategoryIcon> by lazy {
         CategoryIcon("Doorbell", Icons.Rounded.Doorbell),
         CategoryIcon("ElectricBolt", Icons.Rounded.ElectricBolt),
         CategoryIcon("GasMeter", Icons.Rounded.GasMeter),
+        CategoryIcon("CompareArrows", Icons.AutoMirrored.Rounded.CompareArrows),
     )
 }
 

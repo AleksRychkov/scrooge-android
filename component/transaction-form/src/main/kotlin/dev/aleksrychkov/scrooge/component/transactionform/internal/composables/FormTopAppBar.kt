@@ -44,7 +44,7 @@ private fun FormTopAppBar(
             title = if (isEditing) {
                 stringResource(Resources.string.form_edit_income)
             } else {
-                stringResource(Resources.string.form_add_income)
+                stringResource(Resources.string.add_income)
             }
         }
 
@@ -52,7 +52,7 @@ private fun FormTopAppBar(
             title = if (isEditing) {
                 stringResource(Resources.string.form_edit_expense)
             } else {
-                stringResource(Resources.string.form_add_expense)
+                stringResource(Resources.string.add_expense)
             }
         }
     }
