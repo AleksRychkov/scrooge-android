@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS TTransaction (
   timestamp INTEGER NOT NULL,
   type INTEGER NOT NULL,
   category TEXT NOT NULL,
+  categoryIconId TEXT NOT NULL,
   tags TEXT,
   currencyCode TEXT NOT NULL
 );
@@ -14,10 +15,10 @@ selectFromTo:
 SELECT * FROM TTransaction WHERE timestamp >= ? AND timestamp <= ? ORDER BY timestamp DESC;
 
 create:
-INSERT INTO TTransaction (amount, timestamp, type, category, tags, currencyCode) VALUES (?, ?, ?, ?, ?, ?);
+INSERT INTO TTransaction (amount, timestamp, type, category, categoryIconId, tags, currencyCode) VALUES (?, ?, ?, ?, ?, ?, ?);
 
 update:
-UPDATE TTransaction SET amount = ?, timestamp = ?, type = ?, category = ?, tags = ?, currencyCode = ? WHERE id = ?;
+UPDATE TTransaction SET amount = ?, timestamp = ?, type = ?, category = ?, categoryIconId = ?, tags = ?, currencyCode = ? WHERE id = ?;
 
 selectById:
 SELECT * FROM TTransaction WHERE id = ?;

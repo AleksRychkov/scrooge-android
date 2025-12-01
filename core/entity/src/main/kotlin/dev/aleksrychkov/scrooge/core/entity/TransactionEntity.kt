@@ -17,6 +17,7 @@ data class TransactionEntity(
     val timestamp: Long,
     val type: TransactionType,
     val category: String,
+    val categoryIconId: String,
     val tags: ImmutableSet<String>,
     val currency: CurrencyEntity,
 ) {
@@ -28,6 +29,7 @@ data class TransactionEntity(
             type = TransactionType.Income,
             category = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
                 "tempor incididunt ut labore et dolore magna aliqua",
+            categoryIconId = "Savings",
             tags = persistentSetOf(
                 "tag1",
                 "tag2",

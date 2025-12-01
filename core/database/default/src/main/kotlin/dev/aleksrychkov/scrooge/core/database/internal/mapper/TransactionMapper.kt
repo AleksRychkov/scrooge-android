@@ -19,6 +19,7 @@ internal object TransactionMapper {
             timestamp = transaction.timestamp,
             type = TransactionType.from(transaction.type.toInt()),
             category = transaction.category,
+            categoryIconId = transaction.categoryIconId,
             tags = toTags(transaction.tags),
             currency = CurrencyEntity.fromCurrencyCode(transaction.currencyCode)!!,
         )

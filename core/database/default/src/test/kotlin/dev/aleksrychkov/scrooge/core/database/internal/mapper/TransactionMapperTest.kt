@@ -20,6 +20,7 @@ internal class TransactionMapperTest {
             timestamp = 123456789L,
             type = TransactionType.Expense.type.toLong(),
             category = "Food",
+            categoryIconId = "Savings",
             tags = "groceries|dinner",
             currencyCode = "USD"
         )
@@ -74,6 +75,7 @@ internal class TransactionMapperTest {
             timestamp = 999999L,
             type = TransactionType.Income.type.toLong(),
             category = "Salary",
+            categoryIconId = "Savings",
             tags = null,
             currencyCode = "EUR"
         )
