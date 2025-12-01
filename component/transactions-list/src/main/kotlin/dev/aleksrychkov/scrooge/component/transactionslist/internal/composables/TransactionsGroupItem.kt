@@ -17,18 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import dev.aleksrychkov.scrooge.component.transactionslist.internal.udf.TransactionsGroup
+import dev.aleksrychkov.scrooge.component.transactionslist.internal.udf.TransactionsGroupDto
+import dev.aleksrychkov.scrooge.component.transactionslist.internal.udf.TransactionsItemDto
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun TransactionsGroupItem(
     modifier: Modifier,
-    group: TransactionsGroup,
+    group: TransactionsGroupDto,
     onTransactionClicked: (TransactionEntity) -> Unit,
 ) {
     Column(
@@ -82,14 +84,17 @@ private fun FormContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TransactionsGroupItem(
                 modifier = Modifier.fillMaxWidth(),
-                group = TransactionsGroup(
+                group = TransactionsGroupDto(
                     date = "26.11.2025",
                     totals = persistentListOf("-123,00 $"),
                     transactions = persistentListOf(
-                        TransactionEntity.DUMMY,
-                        TransactionEntity.DUMMY.copy(
-                            amount = 345,
-                            type = TransactionType.Expense
+                        TransactionsItemDto(
+                            category = TransactionEntity.DUMMY.category,
+                            icon = UncategorizedIcon,
+                            amount = "+123,00 $",
+                            type = TransactionType.Expense,
+                            ref = TransactionEntity.DUMMY,
+                            tags = TransactionEntity.DUMMY.tags.joinToString(),
                         )
                     )
                 ),

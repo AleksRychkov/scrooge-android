@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.aleksrychkov.scrooge.component.transactionslist.internal.udf.TransactionsItemDto
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
@@ -37,19 +38,19 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
-import dev.aleksrychkov.scrooge.core.entity.amountToValue
+import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 internal fun TransactionItem(
     modifier: Modifier,
-    transaction: TransactionEntity,
+    transaction: TransactionsItemDto,
     onTransactionClicked: (TransactionEntity) -> Unit,
 ) {
     Column(
         modifier = modifier
             .clickable {
-                onTransactionClicked(transaction)
+                onTransactionClicked(transaction.ref)
             }
             .padding(horizontal = Normal, vertical = Large),
     ) {
@@ -57,19 +58,19 @@ internal fun TransactionItem(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val (bgColor, icon) = when (transaction.type) {
-                TransactionType.Income -> IncomeColor to Resources.drawable.ic_trending_up_24px
-                TransactionType.Expense -> ExpenseColor to Resources.drawable.ic_trending_down_24px
+            val transactionColor = when (transaction.type) {
+                TransactionType.Income -> IncomeColor
+                TransactionType.Expense -> ExpenseColor
             }
             Icon(
                 modifier = Modifier
                     .height(CategoryIconSize)
                     .width(CategoryIconSize)
                     .clip(CircleShape)
-                    .background(bgColor)
+                    .background(transactionColor)
                     .padding(Normal),
                 tint = Color.White,
-                imageVector = ImageVector.vectorResource(icon),
+                imageVector = transaction.icon.icon,
                 contentDescription = null,
             )
             Column(
@@ -81,11 +82,6 @@ internal fun TransactionItem(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
                 ) {
-                    val (color, sign) = when (transaction.type) {
-                        TransactionType.Income -> IncomeColor to "+"
-                        TransactionType.Expense -> ExpenseColor to "-"
-                    }
-
                     Text(
                         modifier = Modifier
                             .weight(weight = 1f)
@@ -97,8 +93,8 @@ internal fun TransactionItem(
                     )
 
                     Text(
-                        color = color,
-                        text = "$sign${transaction.amount.amountToValue()} ${transaction.currency.currencySymbol}",
+                        color = transactionColor,
+                        text = transaction.amount,
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 }
@@ -123,7 +119,7 @@ internal fun TransactionItem(
                             modifier = Modifier
                                 .padding(start = Small)
                                 .horizontalScroll(rememberScrollState()),
-                            text = transaction.tags.joinToString(),
+                            text = transaction.tags,
                             style = MaterialTheme.typography.bodySmall,
                             fontStyle = FontStyle.Italic,
                             color = MaterialTheme.colorScheme.secondary,
@@ -143,7 +139,14 @@ private fun FormContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TransactionItem(
                 modifier = Modifier.fillMaxWidth(),
-                transaction = TransactionEntity.DUMMY,
+                transaction = TransactionsItemDto(
+                    category = TransactionEntity.DUMMY.category,
+                    icon = UncategorizedIcon,
+                    amount = "+123,00 $",
+                    type = TransactionType.Income,
+                    ref = TransactionEntity.DUMMY,
+                    tags = TransactionEntity.DUMMY.tags.joinToString(),
+                ),
                 onTransactionClicked = {},
             )
         }

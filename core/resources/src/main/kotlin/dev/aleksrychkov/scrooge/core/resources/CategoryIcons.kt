@@ -5,20 +5,35 @@ import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AddBusiness
 import androidx.compose.material.icons.rounded.AddShoppingCart
+import androidx.compose.material.icons.rounded.Apartment
 import androidx.compose.material.icons.rounded.AssuredWorkload
 import androidx.compose.material.icons.rounded.Atm
 import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Attractions
+import androidx.compose.material.icons.rounded.Bed
 import androidx.compose.material.icons.rounded.Biotech
+import androidx.compose.material.icons.rounded.Bungalow
+import androidx.compose.material.icons.rounded.Cabin
 import androidx.compose.material.icons.rounded.CardGiftcard
 import androidx.compose.material.icons.rounded.CardMembership
+import androidx.compose.material.icons.rounded.Chalet
 import androidx.compose.material.icons.rounded.Checkroom
 import androidx.compose.material.icons.rounded.ConfirmationNumber
 import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.CrueltyFree
 import androidx.compose.material.icons.rounded.DirectionsBus
+import androidx.compose.material.icons.rounded.Doorbell
 import androidx.compose.material.icons.rounded.Elderly
+import androidx.compose.material.icons.rounded.ElectricBike
+import androidx.compose.material.icons.rounded.ElectricBolt
+import androidx.compose.material.icons.rounded.ElectricCar
+import androidx.compose.material.icons.rounded.ElectricMeter
+import androidx.compose.material.icons.rounded.ElectricScooter
+import androidx.compose.material.icons.rounded.ElectricalServices
+import androidx.compose.material.icons.rounded.GasMeter
 import androidx.compose.material.icons.rounded.Healing
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Light
 import androidx.compose.material.icons.rounded.LocalActivity
 import androidx.compose.material.icons.rounded.LocalAirport
 import androidx.compose.material.icons.rounded.LocalAtm
@@ -52,7 +67,11 @@ import androidx.compose.material.icons.rounded.MedicalServices
 import androidx.compose.material.icons.rounded.Medication
 import androidx.compose.material.icons.rounded.Money
 import androidx.compose.material.icons.rounded.Museum
+import androidx.compose.material.icons.rounded.NightShelter
 import androidx.compose.material.icons.rounded.Payments
+import androidx.compose.material.icons.rounded.PestControlRodent
+import androidx.compose.material.icons.rounded.Pets
+import androidx.compose.material.icons.rounded.Plumbing
 import androidx.compose.material.icons.rounded.PointOfSale
 import androidx.compose.material.icons.rounded.QuestionMark
 import androidx.compose.material.icons.rounded.Receipt
@@ -66,8 +85,10 @@ import androidx.compose.material.icons.rounded.ShoppingBag
 import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material.icons.rounded.Store
+import androidx.compose.material.icons.rounded.Storm
 import androidx.compose.material.icons.rounded.SwitchAccount
 import androidx.compose.material.icons.rounded.Vaccines
+import androidx.compose.material.icons.rounded.Weekend
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -140,6 +161,28 @@ val CategoryIcons: Set<CategoryIcon> by lazy {
         CategoryIcon("LocalPostOffice", Icons.Rounded.LocalPostOffice),
         CategoryIcon("LocalSee", Icons.Rounded.LocalSee),
         CategoryIcon("LocalShipping", Icons.Rounded.LocalShipping),
+        CategoryIcon("Bungalow", Icons.Rounded.Bungalow),
+        CategoryIcon("ElectricCar", Icons.Rounded.ElectricCar),
+        CategoryIcon("ElectricBike", Icons.Rounded.ElectricBike),
+        CategoryIcon("ElectricBolt", Icons.Rounded.ElectricBolt),
+        CategoryIcon("ElectricMeter", Icons.Rounded.ElectricMeter),
+        CategoryIcon("ElectricScooter", Icons.Rounded.ElectricScooter),
+        CategoryIcon("ElectricalServices", Icons.Rounded.ElectricalServices),
+        CategoryIcon("Storm", Icons.Rounded.Storm),
+        CategoryIcon("Home", Icons.Rounded.Home),
+        CategoryIcon("Cabin", Icons.Rounded.Cabin),
+        CategoryIcon("Chalet", Icons.Rounded.Chalet),
+        CategoryIcon("NightShelter", Icons.Rounded.NightShelter),
+        CategoryIcon("Plumbing", Icons.Rounded.Plumbing),
+        CategoryIcon("Weekend", Icons.Rounded.Weekend),
+        CategoryIcon("Light", Icons.Rounded.Light),
+        CategoryIcon("PestControlRodent", Icons.Rounded.PestControlRodent),
+        CategoryIcon("Pets", Icons.Rounded.Pets),
+        CategoryIcon("Apartment", Icons.Rounded.Apartment),
+        CategoryIcon("Bed", Icons.Rounded.Bed),
+        CategoryIcon("Doorbell", Icons.Rounded.Doorbell),
+        CategoryIcon("ElectricBolt", Icons.Rounded.ElectricBolt),
+        CategoryIcon("GasMeter", Icons.Rounded.GasMeter),
     )
 }
 
@@ -148,4 +191,8 @@ data class CategoryIcon(val id: String, val icon: ImageVector)
 
 val UncategorizedIcon: CategoryIcon by lazy {
     CategoryIcon("QuestionMark", Icons.Rounded.QuestionMark)
+}
+
+fun categoryIconFromId(id: String, fallback: CategoryIcon = UncategorizedIcon): CategoryIcon {
+    return CategoryIcons.firstOrNull { it.id == id } ?: fallback
 }
