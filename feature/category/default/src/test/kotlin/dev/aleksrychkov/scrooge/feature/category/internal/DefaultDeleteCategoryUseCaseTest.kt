@@ -25,7 +25,7 @@ internal class DefaultDeleteCategoryUseCaseTest {
             id = 1L,
             name = "Food",
             type = TransactionType.Expense,
-            isUserMade = true,
+            iconId = "",
         )
 
         // When
@@ -37,33 +37,13 @@ internal class DefaultDeleteCategoryUseCaseTest {
     }
 
     @Test
-    fun `When category is not user made Then NotUserMadeViolation is returned`() =
-        runTest(testDispatcher) {
-            // Given
-            val category = CategoryEntity(
-                id = 2L,
-                name = "Salary",
-                type = TransactionType.Expense,
-                isUserMade = false,
-            )
-            // When
-            val result: DeleteCategoryResult = useCase(category)
-            // Then
-            assertEquals(
-                DeleteCategoryResult.NotUserMadeViolation(category),
-                result
-            )
-            coVerify(exactly = 0) { categoryDao.delete(any()) }
-        }
-
-    @Test
     fun `When dao throws exception Then failure result is returned`() = runTest(testDispatcher) {
         // Given
         val category = CategoryEntity(
             id = 3L,
             name = "Transport",
             type = TransactionType.Expense,
-            isUserMade = true,
+            iconId = "",
         )
         coEvery { categoryDao.delete(category.id) } throws IllegalStateException("DB error")
         // When

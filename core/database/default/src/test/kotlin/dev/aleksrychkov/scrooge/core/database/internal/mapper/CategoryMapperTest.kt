@@ -15,7 +15,6 @@ internal class CategoryMapperTest {
             id = 1L,
             type = TransactionType.Expense.type.toLong(),
             name = "Food",
-            isUserMade = 1L,
             isDeleted = 0L,
             iconId = "iconId"
         )
@@ -25,24 +24,6 @@ internal class CategoryMapperTest {
         assertEquals(1L, entity.id)
         assertEquals(TransactionType.Expense, entity.type)
         assertEquals("Food", entity.name)
-        assertEquals(true, entity.isUserMade)
         assertEquals("iconId", entity.iconId)
-    }
-
-    @Test
-    fun `When isUserMade is 0 Then entity has isUserMade false`() {
-        // Given
-        val category = Category(
-            id = 2L,
-            type = TransactionType.Income.type.toLong(),
-            name = "Salary",
-            isUserMade = 0L,
-            isDeleted = 0L,
-            iconId = "",
-        )
-        // When
-        val entity = CategoryMapper.toEntity(category)
-        // Then
-        assertEquals(false, entity.isUserMade)
     }
 }

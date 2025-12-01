@@ -16,12 +16,8 @@ internal class DefaultDeleteCategoryUseCase(
         categoryEntity: CategoryEntity,
     ): DeleteCategoryResult = withContext(ioDispatcher) {
         runSuspendCatching {
-            if (!categoryEntity.isUserMade) {
-                DeleteCategoryResult.NotUserMadeViolation(categoryEntity)
-            } else {
-                categoryDao.value.delete(categoryEntity.id)
-                DeleteCategoryResult.Success
-            }
+            categoryDao.value.delete(categoryEntity.id)
+            DeleteCategoryResult.Success
         }.getOrDefault(DeleteCategoryResult.Failure)
     }
 }

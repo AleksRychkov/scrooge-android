@@ -7,7 +7,6 @@ data class CategoryEntity(
     val id: Long,
     val name: String,
     val type: TransactionType,
-    val isUserMade: Boolean,
     val iconId: String,
 ) {
     companion object {
@@ -20,7 +19,6 @@ data class CategoryEntity(
                 id = 0L,
                 name = name,
                 type = type,
-                isUserMade = true,
                 iconId = iconId,
             )
     }

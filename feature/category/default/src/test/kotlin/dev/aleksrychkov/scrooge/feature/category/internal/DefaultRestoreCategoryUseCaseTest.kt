@@ -25,7 +25,7 @@ internal class DefaultRestoreCategoryUseCaseTest {
             id = 3L,
             name = "Transport",
             type = TransactionType.Expense,
-            isUserMade = true,
+            iconId = "",
         )
         coEvery { categoryDao.restore(category.id) } throws IllegalStateException("DB error")
         // When
@@ -44,7 +44,7 @@ internal class DefaultRestoreCategoryUseCaseTest {
             id = 1L,
             name = "Food",
             type = TransactionType.Expense,
-            isUserMade = true,
+            iconId = "",
         )
         // When
         val result: RestoreCategoryResult = useCase(category)

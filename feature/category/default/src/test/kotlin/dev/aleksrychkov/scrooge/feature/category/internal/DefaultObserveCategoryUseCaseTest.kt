@@ -24,7 +24,12 @@ internal class DefaultObserveCategoryUseCaseTest {
     private val testDispatcher: CoroutineDispatcher = StandardTestDispatcher()
     private val categoryDao = mockk<CategoryDao>()
     private val useCase =
-        DefaultObserveCategoryUseCase(lazy { categoryDao }, testDispatcher, mockk(relaxed = true))
+        DefaultObserveCategoryUseCase(
+            lazy { categoryDao },
+            testDispatcher,
+            mockk(relaxed = true),
+            mockk(relaxed = true)
+        )
 
     @Test
     fun `When dao returns flow Then result is success`() = runTest(testDispatcher) {
@@ -34,7 +39,7 @@ internal class DefaultObserveCategoryUseCaseTest {
                 id = 1L,
                 name = "Food",
                 type = TransactionType.Expense,
-                isUserMade = true,
+                iconId = "",
             )
         )
         val flow: Flow<ImmutableList<CategoryEntity>> = flowOf(categories)

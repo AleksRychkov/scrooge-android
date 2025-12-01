@@ -22,7 +22,7 @@ internal class DeleteCategoryDelegateTest {
         id = 1L,
         name = "Food",
         type = TransactionType.Expense,
-        isUserMade = true,
+        iconId = "",
     )
     private val cmd = CategoryCommand.Delete(category = entity)
 
@@ -35,16 +35,6 @@ internal class DeleteCategoryDelegateTest {
         val result = delegate(cmd).firstOrNull()
         // Then
         assertEquals(expected, result)
-    }
-
-    @Test
-    fun `When category is not user made Then result is FailedToDeleteCategory`() = runTest {
-        // Given
-        coEvery { useCase(entity) } returns DeleteCategoryResult.NotUserMadeViolation(categoryEntity = entity)
-        // When
-        val result = delegate(cmd).first()
-        // Then
-        assertEquals(CategoryEvent.Internal.FailedToDeleteCategory, result)
     }
 
     @Test

@@ -18,13 +18,13 @@ internal class SearchCategoryDelegateTest {
             id = 0L,
             name = "1",
             type = TransactionType.Expense,
-            isUserMade = true
+            iconId = "",
         ),
         CategoryEntity(
             id = 0L,
             name = "2",
             type = TransactionType.Expense,
-            isUserMade = true
+            iconId = "",
         ),
     )
 

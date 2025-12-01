@@ -261,21 +261,19 @@ private fun Category(
             text = value.name,
         )
 
-        if (value.isUserMade) {
-            Box(
-                modifier = Modifier
-                    .height(itemHeight)
-                    .aspectRatio(1f)
-                    .debounceClickable {
-                        deleteCategory(value)
-                    },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = stringResource(Resources.string.category_delete),
-                )
-            }
+        Box(
+            modifier = Modifier
+                .height(itemHeight)
+                .aspectRatio(1f)
+                .debounceClickable {
+                    deleteCategory(value)
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = stringResource(Resources.string.category_delete),
+            )
         }
     }
 }

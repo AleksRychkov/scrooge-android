@@ -29,7 +29,7 @@ internal class DefaultCreateCategoryUseCaseTest {
             id = 0L,
             name = "Food",
             type = TransactionType.Expense,
-            isUserMade = true,
+            iconId = "",
         )
         coEvery { categoryDao.getByName(category.name, category.type) } returns null
 
@@ -38,7 +38,7 @@ internal class DefaultCreateCategoryUseCaseTest {
 
         // Then
         assertEquals(CreateCategoryResult.Success, result)
-        coVerify(exactly = 1) { categoryDao.create(category.name, category.type) }
+        coVerify(exactly = 1) { categoryDao.create(category.name, category.type, category.iconId) }
     }
 
     @Test
@@ -49,13 +49,13 @@ internal class DefaultCreateCategoryUseCaseTest {
                 id = 1L,
                 name = "Food",
                 type = TransactionType.Expense,
-                isUserMade = true,
+                iconId = "",
             )
             val newCategory = CategoryEntity(
                 id = 2L,
                 name = "Food",
                 type = TransactionType.Expense,
-                isUserMade = true,
+                iconId = "",
             )
             coEvery {
                 categoryDao.getByName(
@@ -69,7 +69,7 @@ internal class DefaultCreateCategoryUseCaseTest {
 
             // Then
             assertEquals(CreateCategoryResult.DuplicateViolation(existing), result)
-            coVerify(exactly = 0) { categoryDao.create(any(), any()) }
+            coVerify(exactly = 0) { categoryDao.create(any(), any(), any()) }
         }
 
     @Test
@@ -79,7 +79,7 @@ internal class DefaultCreateCategoryUseCaseTest {
             id = 0L,
             name = "Food",
             type = TransactionType.Expense,
-            isUserMade = true,
+            iconId = "",
         )
         coEvery {
             categoryDao.getByName(category.name, category.type)

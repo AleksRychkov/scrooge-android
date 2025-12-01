@@ -23,7 +23,7 @@ internal class RestoreCategoryDelegateTest {
         id = 1L,
         name = "Food",
         type = TransactionType.Expense,
-        isUserMade = true,
+        iconId = "",
     )
     private val cmd = CategoryCommand.Restore(category = entity)
 
