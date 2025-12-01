@@ -68,6 +68,7 @@
     <!-- Category -->
 
     <!-- Transaction -->
+    <string name="transactions_period_current_month">Current month</string>
     <!-- Transaction -->
 
     <!-- Tag -->

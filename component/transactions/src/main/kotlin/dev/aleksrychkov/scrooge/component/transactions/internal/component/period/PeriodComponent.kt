@@ -24,6 +24,7 @@ internal interface PeriodComponent {
     fun incrementYear()
     fun decrementYear()
     fun monthSelected(month: Int): Instant
+    fun currentMonthClicked(): Instant
 }
 
 private class DefaultPeriodComponent(
@@ -46,5 +47,10 @@ private class DefaultPeriodComponent(
 
     override fun monthSelected(month: Int): Instant {
         return _state.value.setMonth(month = month).selected
+    }
+
+    override fun currentMonthClicked(): Instant {
+        _state.value = PeriodState()
+        return _state.value.selected
     }
 }

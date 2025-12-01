@@ -18,12 +18,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +37,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 import kotlin.time.Instant
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 internal fun PeriodContent(
@@ -53,6 +56,10 @@ internal fun PeriodContent(
             val instant = component.monthSelected(month = month)
             callback(instant)
         },
+        onCurrentMonthClicked = {
+            val instant = component.currentMonthClicked()
+            callback(instant)
+        }
     )
 }
 
@@ -63,6 +70,7 @@ internal fun PeriodContent(
     onIncrementYearClicked: () -> Unit,
     onDecrementYearClicked: () -> Unit,
     onMonthClicked: (Int) -> Unit,
+    onCurrentMonthClicked: () -> Unit,
 ) {
     Column(modifier = modifier) {
         YearRow(
@@ -102,6 +110,18 @@ internal fun PeriodContent(
             isSelectedYearInitial = isSelectedYearInitial,
             onMonthClicked = onMonthClicked,
         )
+
+        TextButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = Small, horizontal = Large),
+            onClick = onCurrentMonthClicked,
+        ) {
+            Text(
+                color = MaterialTheme.colorScheme.secondary,
+                text = stringResource(Resources.string.transactions_period_current_month)
+            )
+        }
     }
 }
 
@@ -114,8 +134,7 @@ private fun YearRow(
 ) {
     Row(
         modifier = modifier
-            .height(IntrinsicSize.Min)
-            .padding(horizontal = Large),
+            .height(IntrinsicSize.Min),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -201,6 +220,7 @@ private fun FormContentPreview() {
                 onIncrementYearClicked = {},
                 onDecrementYearClicked = {},
                 onMonthClicked = {},
+                onCurrentMonthClicked = {},
             )
         }
     }

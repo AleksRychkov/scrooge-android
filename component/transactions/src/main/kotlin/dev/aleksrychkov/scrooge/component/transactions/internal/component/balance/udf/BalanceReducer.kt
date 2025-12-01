@@ -17,7 +17,7 @@ internal class BalanceReducer : Reducer<BalanceState, BalanceEvent, BalanceComma
                     listOf(UpdateBalance(instant = event.instant))
                 }
                 state {
-                    copy(isLoading = true)
+                    copy(isLoading = true, period = event.instant)
                 }
             }
 
