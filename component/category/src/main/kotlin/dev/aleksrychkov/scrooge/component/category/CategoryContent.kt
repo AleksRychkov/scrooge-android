@@ -2,7 +2,6 @@ package dev.aleksrychkov.scrooge.component.category
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,23 +37,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.category.internal.CategoryComponentInternal
 import dev.aleksrychkov.scrooge.component.category.internal.modal.CreateCategoryModal
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.component.category.internal.udf.CategoryState
-import dev.aleksrychkov.scrooge.core.designsystem.composables.AppButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
-import dev.aleksrychkov.scrooge.core.designsystem.composables.SearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
@@ -183,18 +182,11 @@ private fun CategoryList(
     deleteCategory: (CategoryEntity) -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .padding(horizontal = Normal)
-            .padding(bottom = Normal)
+        modifier = modifier.padding(bottom = Normal)
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    shape = CardDefaults.shape,
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                )
-                .clip(CardDefaults.shape)
                 .animateContentSize(),
         ) {
             val categories = if (state.searchQuery.isNotBlank()) {
@@ -229,12 +221,11 @@ private fun Category(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
 ) {
-    val itemHeight = 60.dp
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = itemHeight)
-            .clickable {
+            .defaultMinSize(minHeight = ListItemHeight)
+            .debounceClickable {
                 selectCategory(value)
             }
             .padding(start = Large),
@@ -246,9 +237,9 @@ private fun Category(
                 .height(CategoryIconSize)
                 .width(CategoryIconSize)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .background(MaterialTheme.colorScheme.secondary)
                 .padding(Normal),
-            tint = Color.White,
+            tint = MaterialTheme.colorScheme.onSecondary,
             imageVector = CategoryIcons.find { it.id == value.iconId }?.icon
                 ?: UncategorizedIcon.icon,
             contentDescription = null,
@@ -263,15 +254,19 @@ private fun Category(
 
         Box(
             modifier = Modifier
-                .height(itemHeight)
+                .height(ListItemHeight)
+                .padding(Normal)
                 .aspectRatio(1f)
+                .clip(CircleShape)
                 .debounceClickable {
                     deleteCategory(value)
-                },
+                }
+                .padding(Medium),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Icons.Filled.Delete,
+                tint = MaterialTheme.colorScheme.error,
                 contentDescription = stringResource(Resources.string.category_delete),
             )
         }
@@ -286,25 +281,25 @@ private fun CategoryBar(
     addCategoryClicked: () -> Unit,
 ) {
     Row(
-        modifier = modifier.height(IntrinsicSize.Max),
+        modifier = modifier
+            .height(IntrinsicSize.Max)
+            .padding(horizontal = Large),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .padding(start = Normal)
-                .weight(weight = 1f, fill = true),
+            modifier = Modifier.weight(weight = 1f, fill = true),
         ) {
-            SearchTextField(
+            DsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.searchQuery,
                 onValueChanged = setSearchQuery,
             )
         }
 
-        AppButton(
+        DsButton(
             modifier = Modifier
-                .height(IntrinsicSize.Max)
-                .padding(horizontal = Normal),
+                .fillMaxHeight()
+                .padding(start = Normal),
             onClick = addCategoryClicked,
         ) {
             Text(text = stringResource(Resources.string.add))

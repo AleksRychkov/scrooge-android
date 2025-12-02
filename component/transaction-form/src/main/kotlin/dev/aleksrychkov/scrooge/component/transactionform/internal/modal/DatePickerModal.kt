@@ -1,7 +1,9 @@
 package dev.aleksrychkov.scrooge.component.transactionform.internal.modal
 
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -21,6 +23,9 @@ internal fun DatePickerModal(
     )
 
     DatePickerDialog(
+        colors = DatePickerDefaults.colors().copy(
+            containerColor = MaterialTheme.colorScheme.background,
+        ),
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(onClick = {
@@ -36,6 +41,11 @@ internal fun DatePickerModal(
             }
         }
     ) {
-        DatePicker(state = datePickerState)
+        DatePicker(
+            state = datePickerState,
+            colors = DatePickerDefaults.colors().copy(
+                containerColor = MaterialTheme.colorScheme.background,
+            )
+        )
     }
 }

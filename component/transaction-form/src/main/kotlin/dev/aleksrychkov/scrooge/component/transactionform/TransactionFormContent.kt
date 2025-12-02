@@ -1,17 +1,18 @@
 package dev.aleksrychkov.scrooge.component.transactionform
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -38,7 +39,6 @@ import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.Currenc
 import dev.aleksrychkov.scrooge.component.transactionform.internal.modal.TagModal
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.component.transactionform.internal.udf.FormState
-import dev.aleksrychkov.scrooge.core.designsystem.composables.AppCard
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
@@ -151,7 +151,7 @@ private fun FormContent(
     submitClicked: () -> Unit,
     deleteClicked: () -> Unit,
 ) {
-    AppCard(
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
@@ -166,7 +166,7 @@ private fun FormContent(
             openCurrencyModal = openCurrencyModal,
         )
 
-        FormDivider()
+        Spacer(modifier = Modifier.height(Normal))
 
         FormCategory(
             modifier = Modifier.fillMaxWidth(),
@@ -174,7 +174,7 @@ private fun FormContent(
             openCategoryModal = openCategoryModal,
         )
 
-        FormDivider()
+        Spacer(modifier = Modifier.height(Normal))
 
         FormDate(
             modifier = Modifier.fillMaxWidth(),
@@ -183,7 +183,7 @@ private fun FormContent(
             onDateSelected = onDateSelected,
         )
 
-        FormDivider()
+        Spacer(modifier = Modifier.height(HalfNormal))
 
         FormTags(
             modifier = Modifier.fillMaxWidth(),
@@ -192,12 +192,10 @@ private fun FormContent(
             removeTag = removeTag,
         )
 
-        FormDivider()
-
-        Button(
+        ExtendedFloatingActionButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Normal),
+                .padding(vertical = Normal),
             onClick = submitClicked,
         ) {
             Text(stringResource(Resources.string.submit))
@@ -221,8 +219,8 @@ private fun DeleteTransaction(
     TextButton(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Normal)
-            .padding(bottom = Normal),
+            .padding(vertical = Normal),
+        shape = MaterialTheme.shapes.large,
         onClick = {
             isConfirmationAlertVisible.value = true
         }
@@ -258,16 +256,6 @@ private fun DeleteTransaction(
                 Text(text = stringResource(Resources.string.dismiss))
             }
         },
-    )
-}
-
-@Composable
-private fun FormDivider() {
-    HorizontalDivider(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = HalfNormal),
-        color = DividerDefaults.color.copy(alpha = 0.2f),
     )
 }
 

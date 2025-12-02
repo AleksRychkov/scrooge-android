@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.component.currency
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -50,8 +49,9 @@ import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyState
 import dev.aleksrychkov.scrooge.core.designsystem.composables.AppTabBar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -145,9 +145,7 @@ private fun CurrencyList(
     }
 
     Box(
-        modifier = modifier
-            .padding(horizontal = Normal)
-            .padding(bottom = Normal)
+        modifier = modifier.padding(bottom = Normal)
     ) {
         val listState = rememberLazyListState()
 
@@ -158,11 +156,6 @@ private fun CurrencyList(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    shape = CardDefaults.shape,
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                )
-                .clip(CardDefaults.shape)
                 .animateContentSize(),
             state = listState,
         ) {
@@ -193,7 +186,7 @@ private fun CurrencyItem(
     addToFavorite: (CurrencyEntity) -> Unit,
 ) {
     Row(
-        modifier = modifier.height(60.dp),
+        modifier = modifier.height(ListItemHeight),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CurrencyImage(
@@ -215,9 +208,9 @@ private fun CurrencyItem(
 
         Box(
             modifier = Modifier
+                .height(ListItemHeight)
+                .padding(Normal)
                 .aspectRatio(1f)
-                .fillMaxSize()
-                .padding(Small)
                 .clip(CircleShape)
                 .debounceClickable {
                     if (item.isFavorite) {
@@ -225,7 +218,8 @@ private fun CurrencyItem(
                     } else {
                         addToFavorite(item.currency)
                     }
-                },
+                }
+                .padding(Medium),
             contentAlignment = Alignment.Center,
         ) {
             val iconImage = if (item.isFavorite) {
@@ -239,9 +233,7 @@ private fun CurrencyItem(
                 LocalContentColor.current
             }
             Icon(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Normal),
+                modifier = Modifier.fillMaxSize(),
                 imageVector = iconImage,
                 contentDescription = null,
                 tint = iconTint,
@@ -258,6 +250,11 @@ private fun CurrencyImage(
     AsyncImage(
         modifier = modifier
             .aspectRatio(1f)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.secondary,
+                shape = CircleShape
+            )
             .clip(CircleShape),
         model = ImageRequest.Builder(LocalContext.current)
             .data(currency?.flagUrl)

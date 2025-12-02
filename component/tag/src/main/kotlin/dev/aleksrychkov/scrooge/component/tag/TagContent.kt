@@ -1,7 +1,6 @@
 package dev.aleksrychkov.scrooge.component.tag
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,9 +19,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -37,19 +37,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.tag.internal.TagComponentInternal
 import dev.aleksrychkov.scrooge.component.tag.internal.udf.TagEffect
 import dev.aleksrychkov.scrooge.component.tag.internal.udf.TagState
-import dev.aleksrychkov.scrooge.core.designsystem.composables.AppButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
-import dev.aleksrychkov.scrooge.core.designsystem.composables.SearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import kotlinx.coroutines.flow.collect
@@ -172,18 +173,11 @@ private fun TagsList(
     deleteTag: (TagEntity) -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .padding(horizontal = Normal)
-            .padding(bottom = Normal)
+        modifier = modifier.padding(bottom = Normal)
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    shape = CardDefaults.shape,
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                )
-                .clip(CardDefaults.shape)
                 .animateContentSize(),
         ) {
             val tags = if (state.searchQuery.isNotBlank()) {
@@ -218,11 +212,10 @@ private fun Tag(
     selectTag: (TagEntity) -> Unit,
     deleteTag: (TagEntity) -> Unit,
 ) {
-    val itemHeight = 60.dp
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = itemHeight)
+            .defaultMinSize(minHeight = ListItemHeight)
             .clickable {
                 selectTag(value)
             }
@@ -238,13 +231,17 @@ private fun Tag(
 
         Box(
             modifier = Modifier
-                .height(itemHeight)
+                .height(ListItemHeight)
+                .padding(Normal)
                 .aspectRatio(1f)
-                .debounceClickable { deleteTag(value) },
+                .clip(CircleShape)
+                .debounceClickable { deleteTag(value) }
+                .padding(Medium),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Icons.Filled.Delete,
+                tint = MaterialTheme.colorScheme.error,
                 contentDescription = stringResource(Resources.string.tag_delete),
             )
         }
@@ -259,25 +256,25 @@ private fun TagBar(
     addTagClicked: () -> Unit,
 ) {
     Row(
-        modifier = modifier.height(IntrinsicSize.Max),
+        modifier = modifier
+            .height(IntrinsicSize.Max)
+            .padding(horizontal = Large),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .padding(start = Normal)
-                .weight(weight = 1f, fill = true),
+            modifier = Modifier.weight(weight = 1f, fill = true),
         ) {
-            SearchTextField(
+            DsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.searchQuery,
                 onValueChanged = setSearchQuery,
             )
         }
 
-        AppButton(
+        DsButton(
             modifier = Modifier
-                .height(IntrinsicSize.Max)
-                .padding(horizontal = Normal),
+                .fillMaxHeight()
+                .padding(start = Normal),
             onClick = addTagClicked,
         ) {
             Text(text = stringResource(Resources.string.add))

@@ -6,14 +6,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -21,7 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
-fun RoundedTextField(
+fun DsTextField(
     modifier: Modifier,
     value: String,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -32,8 +29,8 @@ fun RoundedTextField(
     TextField(
         modifier = modifier
             .background(
-                shape = CardDefaults.shape,
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.large,
+                color = MaterialTheme.colorScheme.secondary,
             ),
         value = value,
         singleLine = true,
@@ -57,14 +54,6 @@ fun RoundedTextField(
             }
         },
         onValueChange = onValueChanged,
-        colors = TextFieldDefaults.colors().copy(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            unfocusedTextColor = Color.Unspecified,
-            disabledIndicatorColor = Color.Transparent,
-            errorIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
+        colors = DsInputTextFieldsColors(),
     )
 }

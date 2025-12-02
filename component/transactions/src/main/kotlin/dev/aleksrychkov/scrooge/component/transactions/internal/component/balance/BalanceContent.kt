@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -24,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -34,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.udf.BalanceItem
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.udf.BalanceState
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsCard
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
@@ -61,65 +59,63 @@ private fun BalanceContent(
     state: BalanceState,
     onDetailsClicked: () -> Unit,
 ) {
-    Column(
-        modifier = modifier
-            .padding(Large)
-            .background(
-                shape = CardDefaults.shape,
-                color = MaterialTheme.colorScheme.surfaceVariant,
-            )
-            .clip(CardDefaults.shape)
-            .padding(Normal)
-            .animateContentSize(),
+    DsCard(
+        modifier = modifier.padding(Large),
     ) {
-        BalanceItem(
-            icon = Resources.drawable.ic_trending_up_24px,
-            title = Resources.string.income,
-            isLoading = state.isLoading,
-            values = state.income,
-            color = IncomeColor,
-        )
-        Spacer(modifier = Modifier.height(Normal2X))
-
-        BalanceItem(
-            icon = Resources.drawable.ic_trending_down_24px,
-            title = Resources.string.expense,
-            isLoading = state.isLoading,
-            values = state.expense,
-            color = ExpenseColor,
-        )
-
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = Normal)
-        )
-
-        BalanceItem(
-            icon = Resources.drawable.ic_balance_24px,
-            title = Resources.string.total,
-            isLoading = state.isLoading,
-            values = state.total,
-            color = Color.Unspecified,
-        )
-
-        AnimatedVisibility(
-            visible = !state.isLoading && state.total.isNotEmpty()
+        Column(
+            modifier = modifier
+                .padding(Normal)
+                .animateContentSize()
         ) {
-            Column {
-                HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = Normal)
-                )
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onDetailsClicked,
-                ) {
-                    Text(
-                        text = stringResource(Resources.string.details),
-                        style = MaterialTheme.typography.titleMedium,
+            BalanceItem(
+                icon = Resources.drawable.ic_trending_up_24px,
+                title = Resources.string.income,
+                isLoading = state.isLoading,
+                values = state.income,
+                color = IncomeColor,
+            )
+            Spacer(modifier = Modifier.height(Normal2X))
+
+            BalanceItem(
+                icon = Resources.drawable.ic_trending_down_24px,
+                title = Resources.string.expense,
+                isLoading = state.isLoading,
+                values = state.expense,
+                color = ExpenseColor,
+            )
+
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Normal)
+            )
+
+            BalanceItem(
+                icon = Resources.drawable.ic_balance_24px,
+                title = Resources.string.total,
+                isLoading = state.isLoading,
+                values = state.total,
+                color = Color.Unspecified,
+            )
+
+            AnimatedVisibility(
+                visible = !state.isLoading && state.total.isNotEmpty()
+            ) {
+                Column {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = Normal)
                     )
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onDetailsClicked,
+                    ) {
+                        Text(
+                            text = stringResource(Resources.string.details),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
                 }
             }
         }

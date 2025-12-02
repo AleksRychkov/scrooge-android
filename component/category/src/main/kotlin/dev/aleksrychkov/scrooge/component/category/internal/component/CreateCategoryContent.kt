@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,10 +37,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.category.internal.component.udf.CreateCategoryEffect
 import dev.aleksrychkov.scrooge.component.category.internal.component.udf.CreateCategoryState
-import dev.aleksrychkov.scrooge.core.designsystem.composables.AppButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
-import dev.aleksrychkov.scrooge.core.designsystem.composables.RoundedTextField
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
@@ -126,7 +127,9 @@ private fun CreateCategoryContent(
             .animateContentSize()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
@@ -141,7 +144,7 @@ private fun CreateCategoryContent(
                 contentDescription = null,
             )
 
-            RoundedTextField(
+            DsTextField(
                 modifier = Modifier
                     .weight(weight = 1f, fill = true)
                     .height(IntrinsicSize.Min)
@@ -151,7 +154,7 @@ private fun CreateCategoryContent(
                     if (state.name.isEmpty()) {
                         Text(
                             text = stringResource(Resources.string.category_name_placeholder),
-                            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.25f),
+                            color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.25f),
                         )
                     }
                 },
@@ -160,8 +163,8 @@ private fun CreateCategoryContent(
                 }
             )
 
-            AppButton(
-                modifier = Modifier.height(IntrinsicSize.Max),
+            DsButton(
+                modifier = Modifier.fillMaxHeight(),
                 onClick = submit,
             ) {
                 Text(text = stringResource(Resources.string.save))
@@ -194,9 +197,9 @@ private fun CreateCategoryContent(
                             .debounceClickable {
                                 setIcon(item)
                             }
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .background(MaterialTheme.colorScheme.secondary)
                             .padding(Normal),
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onSecondary,
                         imageVector = item.icon,
                         contentDescription = null,
                     )
@@ -215,7 +218,7 @@ private fun FormContentPreview() {
             CreateCategoryContent(
                 modifier = Modifier.fillMaxWidth(),
                 state = CreateCategoryState(
-                    name = "Salary",
+                    name = "",
                     selectedCategoryIcon = UncategorizedIcon,
                     availableIcons = CategoryIcons.toImmutableList(),
                 ),

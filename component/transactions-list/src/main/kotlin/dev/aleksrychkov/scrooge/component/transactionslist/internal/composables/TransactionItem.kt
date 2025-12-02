@@ -52,7 +52,8 @@ internal fun TransactionItem(
             .clickable {
                 onTransactionClicked(transaction.ref)
             }
-            .padding(horizontal = Normal, vertical = Large),
+            .padding(horizontal = Large)
+            .padding(bottom = Normal),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -112,7 +113,7 @@ internal fun TransactionItem(
                                 .width(12.dp),
                             imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
 
                         Text(
@@ -122,7 +123,7 @@ internal fun TransactionItem(
                             text = transaction.tags,
                             style = MaterialTheme.typography.bodySmall,
                             fontStyle = FontStyle.Italic,
-                            color = MaterialTheme.colorScheme.secondary,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }

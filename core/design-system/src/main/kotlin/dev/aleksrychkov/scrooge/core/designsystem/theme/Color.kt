@@ -12,18 +12,17 @@ val primaryBlue = Color(0xFF2196F3)
 
 val onPrimaryWhite = Color(0xFFFFFFFF)
 
-val lightBackground = Color(0xFFF0F2F5)
-val lightSurface = Color(0xFFFFFFFF)
-val lightOnSurface = Color(0xFF1C1B1F)
+val lightBackground = Color(0xFFFFFFFF)
+val lightOnSurface = Color(0xFF363636)
 
 internal val LightScheme = lightColorScheme(
-    primary = primaryBlue,
-    onPrimary = onPrimaryWhite,
-    primaryContainer = Color(0xFFD3E0EA),
-    onPrimaryContainer = Color(0xFF001F2A),
+    primary = Color(0xFF2196F3),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFF7F7F7),
+    onPrimaryContainer = Color(0xFF363636),
 
-    secondary = Color(0xFF52616B),
-    onSecondary = Color(0xFFFFFFFF),
+    secondary = Color(0xFFF7F7F7),
+    onSecondary = Color(0xFF363636),
     secondaryContainer = Color(0xFFD6E4ED),
     onSecondaryContainer = Color(0xFF0F1B25),
 
@@ -35,14 +34,12 @@ internal val LightScheme = lightColorScheme(
     background = lightBackground,
     onBackground = lightOnSurface,
 
-    surface = lightSurface,
-    surfaceContainerLow = lightSurface,
+    surface = lightBackground,
     onSurface = lightOnSurface,
+    surfaceContainerHighest = Color(0xFFFFFFFF), // Card container color
+    surfaceContainerLow = Color(0xFFFFFFFF), // Card container color
 
-    surfaceVariant = Color(0xFFF0F0F0),
-    onSurfaceVariant = Color(0xFF49454E),
-
-    outline = Color(0xFF7A757F),
+    outline = Color(0xFF363636),
     error = Color(0xFFDD553A),
     onError = Color(0xFFFFFFFF),
     errorContainer = Color(0xFFFFDAD6),

@@ -63,7 +63,7 @@ fun AppTabBar(
         modifier = modifier
             .height(44.dp)
             .clip(CardDefaults.shape)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.secondary)
             .padding(Small)
     ) {
         BoxWithConstraints {

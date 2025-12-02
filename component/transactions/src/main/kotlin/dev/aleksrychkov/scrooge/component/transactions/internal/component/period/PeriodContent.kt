@@ -115,10 +115,11 @@ internal fun PeriodContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = Small, horizontal = Large),
+            shape = MaterialTheme.shapes.large,
             onClick = onCurrentMonthClicked,
         ) {
             Text(
-                color = MaterialTheme.colorScheme.secondary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 text = stringResource(Resources.string.transactions_period_current_month)
             )
         }

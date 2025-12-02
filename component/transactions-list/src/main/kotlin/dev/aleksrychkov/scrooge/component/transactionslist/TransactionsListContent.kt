@@ -23,7 +23,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.transactionslist.internal.TransactionsListComponentInternal
 import dev.aleksrychkov.scrooge.component.transactionslist.internal.composables.TransactionsGroupItem
 import dev.aleksrychkov.scrooge.component.transactionslist.internal.udf.TransactionsListState
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
@@ -95,10 +94,7 @@ private fun Content(
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(
-            horizontal = Large,
-            vertical = Normal,
-        ),
+        contentPadding = PaddingValues(vertical = Normal),
         verticalArrangement = Arrangement.spacedBy(Normal2X),
     ) {
         items(

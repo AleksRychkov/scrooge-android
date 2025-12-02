@@ -6,7 +6,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
@@ -19,7 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
-fun SearchTextField(
+fun DsSearchTextField(
     modifier: Modifier,
     value: String,
     onValueChanged: (String) -> Unit,
@@ -27,8 +26,8 @@ fun SearchTextField(
     TextField(
         modifier = modifier
             .background(
-                shape = CardDefaults.shape,
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.large,
+                color = MaterialTheme.colorScheme.secondary,
             ),
         value = value,
         singleLine = true,
