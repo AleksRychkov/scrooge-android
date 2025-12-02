@@ -47,85 +47,81 @@ internal fun TransactionItem(
     transaction: TransactionsItemDto,
     onTransactionClicked: (TransactionEntity) -> Unit,
 ) {
-    Column(
+    Row(
         modifier = modifier
             .clickable {
                 onTransactionClicked(transaction.ref)
             }
             .padding(horizontal = Large)
-            .padding(bottom = Normal),
+            .padding(vertical = Normal),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+        val transactionColor = when (transaction.type) {
+            TransactionType.Income -> IncomeColor
+            TransactionType.Expense -> ExpenseColor
+        }
+        Icon(
+            modifier = Modifier
+                .height(CategoryIconSize)
+                .width(CategoryIconSize)
+                .clip(CircleShape)
+                .background(transactionColor)
+                .padding(Normal),
+            tint = Color.White,
+            imageVector = transaction.icon.icon,
+            contentDescription = null,
+        )
+        Column(
+            modifier = Modifier.padding(start = Normal),
+            verticalArrangement = Arrangement.Center,
         ) {
-            val transactionColor = when (transaction.type) {
-                TransactionType.Income -> IncomeColor
-                TransactionType.Expense -> ExpenseColor
-            }
-            Icon(
-                modifier = Modifier
-                    .height(CategoryIconSize)
-                    .width(CategoryIconSize)
-                    .clip(CircleShape)
-                    .background(transactionColor)
-                    .padding(Normal),
-                tint = Color.White,
-                imageVector = transaction.icon.icon,
-                contentDescription = null,
-            )
-            Column(
-                modifier = Modifier.padding(start = Normal),
-                verticalArrangement = Arrangement.Center,
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
             ) {
+                Text(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(end = Normal),
+                    text = transaction.category,
+                    style = MaterialTheme.typography.titleMedium,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
+
+                Text(
+                    color = transactionColor,
+                    text = transaction.amount,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+
+            if (transaction.tags.isNotEmpty()) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Small),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
                 ) {
-                    Text(
+                    Icon(
                         modifier = Modifier
-                            .weight(weight = 1f)
-                            .padding(end = Normal),
-                        text = transaction.category,
-                        style = MaterialTheme.typography.titleMedium,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
+                            .height(12.dp)
+                            .width(12.dp),
+                        imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
 
                     Text(
-                        color = transactionColor,
-                        text = transaction.amount,
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                }
-
-                if (transaction.tags.isNotEmpty()) {
-                    Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = Small),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .height(12.dp)
-                                .width(12.dp),
-                            imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-
-                        Text(
-                            modifier = Modifier
-                                .padding(start = Small)
-                                .horizontalScroll(rememberScrollState()),
-                            text = transaction.tags,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontStyle = FontStyle.Italic,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
+                            .padding(start = Small)
+                            .horizontalScroll(rememberScrollState()),
+                        text = transaction.tags,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontStyle = FontStyle.Italic,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
                 }
             }
         }

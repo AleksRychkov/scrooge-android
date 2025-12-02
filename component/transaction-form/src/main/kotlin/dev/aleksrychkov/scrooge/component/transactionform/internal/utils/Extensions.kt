@@ -9,7 +9,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
 internal fun Instant.toDateString(): String =
-    this.toLocalDateTime(TimeZone.UTC)
+    this.toLocalDateTime(TimeZone.currentSystemDefault())
         .date
         .format(
             LocalDate.Format {
