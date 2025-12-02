@@ -81,7 +81,6 @@ private fun TransactionsAppBar(
         },
         actions = {
             TextButton(
-                modifier = Modifier.padding(end = Large),
                 onClick = {
                     component.openPeriodModal(state.selectedPeriod)
                 },
