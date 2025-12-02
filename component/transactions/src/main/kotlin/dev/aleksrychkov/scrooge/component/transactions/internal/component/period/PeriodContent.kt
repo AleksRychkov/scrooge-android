@@ -114,7 +114,7 @@ internal fun PeriodContent(
         TextButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = Small, horizontal = Large),
+                .padding(vertical = Normal, horizontal = Large),
             shape = MaterialTheme.shapes.large,
             onClick = onCurrentMonthClicked,
         ) {
