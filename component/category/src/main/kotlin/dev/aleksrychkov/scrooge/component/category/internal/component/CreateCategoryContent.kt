@@ -45,7 +45,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
-import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
@@ -123,7 +122,8 @@ private fun CreateCategoryContent(
 ) {
     Column(
         modifier = modifier
-            .padding(vertical = Normal, horizontal = Large)
+            .padding(horizontal = Large)
+            .padding(bottom = Normal)
             .animateContentSize()
     ) {
         Row(
@@ -132,23 +132,11 @@ private fun CreateCategoryContent(
                 .height(IntrinsicSize.Max),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                modifier = Modifier
-                    .height(CategoryIconSize)
-                    .width(CategoryIconSize)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(Normal),
-                tint = Color.White,
-                imageVector = state.selectedCategoryIcon.icon,
-                contentDescription = null,
-            )
-
             DsTextField(
                 modifier = Modifier
                     .weight(weight = 1f, fill = true)
                     .height(IntrinsicSize.Min)
-                    .padding(horizontal = Normal),
+                    .padding(end = Normal),
                 value = state.name,
                 placeholder = {
                     if (state.name.isEmpty()) {
@@ -172,7 +160,7 @@ private fun CreateCategoryContent(
         }
 
         Text(
-            modifier = Modifier.padding(vertical = HalfNormal),
+            modifier = Modifier.padding(vertical = Normal),
             text = stringResource(Resources.string.category_select_icon),
             style = MaterialTheme.typography.bodyLarge,
         )
@@ -189,6 +177,10 @@ private fun CreateCategoryContent(
                         .height(IntrinsicSize.Max),
                     contentAlignment = Alignment.Center,
                 ) {
+                    val (tintColor, bgColor) = when {
+                        item.id == state.selectedCategoryIcon.id -> Color.White to MaterialTheme.colorScheme.primary
+                        else -> MaterialTheme.colorScheme.onSecondary to MaterialTheme.colorScheme.secondary
+                    }
                     Icon(
                         modifier = Modifier
                             .height(CategoryIconSize)
@@ -197,9 +189,9 @@ private fun CreateCategoryContent(
                             .debounceClickable {
                                 setIcon(item)
                             }
-                            .background(MaterialTheme.colorScheme.secondary)
+                            .background(bgColor)
                             .padding(Normal),
-                        tint = MaterialTheme.colorScheme.onSecondary,
+                        tint = tintColor,
                         imageVector = item.icon,
                         contentDescription = null,
                     )

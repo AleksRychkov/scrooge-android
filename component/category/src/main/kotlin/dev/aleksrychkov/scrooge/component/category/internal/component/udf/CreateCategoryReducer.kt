@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.component.category.internal.component.udf
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
+import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
@@ -19,11 +20,12 @@ internal class CreateCategoryReducer(
         return when (event) {
             is CreateCategoryEvent.External.Init -> state.reduceWith(event) {
                 state {
+                    val icons = listOf(UncategorizedIcon) + CategoryIcons
                     copy(
                         isLoading = false,
                         name = event.name,
                         transactionType = event.transactionType,
-                        availableIcons = CategoryIcons.toImmutableList(),
+                        availableIcons = icons.toImmutableList(),
                     )
                 }
             }
