@@ -14,6 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -27,8 +33,15 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.DELIMITER
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
+@Suppress("MagicNumber")
+@OptIn(FlowPreview::class)
 @Composable
 internal fun FormAmount(
     modifier: Modifier,
@@ -47,15 +60,30 @@ internal fun FormAmount(
         ) {
             val focusManager = LocalFocusManager.current
             val amountFormatter = rememberAmountVisualTransformation(currency = currency)
+
+            var text by remember {
+                mutableStateOf("")
+            }
+            LaunchedEffect(key1 = Unit) {
+                text = amount
+                snapshotFlow { text }
+                    .debounce(300L)
+                    .distinctUntilChanged()
+                    .onEach {
+                        amountChanged(it)
+                    }
+                    .launchIn(this)
+            }
+
             TextField(
                 modifier = Modifier.weight(weight = 1f, fill = true),
-                value = amount,
+                value = text,
                 singleLine = true,
                 label = {
                     Text(text = stringResource(Resources.string.amount))
                 },
                 placeholder = {
-                    val placeholder = amount.ifBlank { "$currency 0${DELIMITER}00" }
+                    val placeholder = text.ifBlank { "$currency 0${DELIMITER}00" }
                     Text(text = placeholder)
                 },
                 keyboardOptions = KeyboardOptions(
@@ -66,7 +94,7 @@ internal fun FormAmount(
                     onDone = { focusManager.clearFocus() }
                 ),
                 onValueChange = { value ->
-                    amountChanged(value)
+                    text = value
                 },
                 colors = DsInputTextFieldsColors(),
                 visualTransformation = amountFormatter,

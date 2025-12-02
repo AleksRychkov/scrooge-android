@@ -44,13 +44,13 @@ private class DefaultCreateCategoryComponent(
 
     private val store: Store<CreateCategoryState, CreateCategoryEvent, CreateCategoryEffect> by lazy {
         instanceKeeper.createStore(
-            initialState = CreateCategoryState(),
+            initialState = CreateCategoryState(
+                name = name,
+                transactionType = transactionType,
+            ),
             actor = CreateCategoryActor(),
             reducer = CreateCategoryReducer(),
-            startEvent = CreateCategoryEvent.External.Init(
-                name = name,
-                transactionType = transactionType
-            ),
+            startEvent = CreateCategoryEvent.External.Init,
         )
     }
 

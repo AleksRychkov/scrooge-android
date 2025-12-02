@@ -1,16 +1,11 @@
 package dev.aleksrychkov.scrooge.component.category.internal.component.udf
 
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
-import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcon
 
 internal sealed interface CreateCategoryEvent {
     sealed interface External : CreateCategoryEvent {
-        data class Init(
-            val name: String,
-            val transactionType: TransactionType,
-        ) : CreateCategoryEvent
-
+        data object Init : CreateCategoryEvent
         data class SetName(val name: String) : CreateCategoryEvent
         data class SetIcon(val icon: CategoryIcon) : CreateCategoryEvent
         data object Submit : CreateCategoryEvent

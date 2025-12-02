@@ -18,13 +18,11 @@ internal class CreateCategoryReducer(
         state: CreateCategoryState
     ): ReducerResult<CreateCategoryState, CreateCategoryCommand, CreateCategoryEffect> {
         return when (event) {
-            is CreateCategoryEvent.External.Init -> state.reduceWith(event) {
+            CreateCategoryEvent.External.Init -> state.reduceWith(event) {
                 state {
                     val icons = listOf(UncategorizedIcon) + CategoryIcons
                     copy(
                         isLoading = false,
-                        name = event.name,
-                        transactionType = event.transactionType,
                         availableIcons = icons.toImmutableList(),
                     )
                 }
