@@ -14,7 +14,6 @@ android {
 dependencies {
     implementation(projects.component.mainTabs)
     implementation(projects.component.transactionForm)
-    implementation(projects.component.transactionsList)
 
     implementation(projects.core.router)
 }

@@ -1,7 +1,6 @@
 package dev.aleksrychkov.scrooge.component.main.internal.navigation
 
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
-import dev.aleksrychkov.scrooge.core.router.DestinationTransactionsList
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,10 +11,5 @@ internal sealed interface MainNavigationConfig {
     @Serializable
     data class TransactionForm(
         val destination: DestinationTransactionForm,
-    ) : MainNavigationConfig
-
-    @Serializable
-    data class TransactionsList(
-        val destination: DestinationTransactionsList,
     ) : MainNavigationConfig
 }

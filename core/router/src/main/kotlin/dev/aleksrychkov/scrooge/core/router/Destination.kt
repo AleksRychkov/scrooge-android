@@ -34,9 +34,3 @@ data class DestinationTransactionForm(
             )
     }
 }
-
-@Serializable
-data class DestinationTransactionsList(
-    val periodFrom: Long,
-    val periodTo: Long,
-) : Destination

@@ -7,12 +7,10 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal.Child.MainTabs
 import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal.Child.TransactionForm
-import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal.Child.TransactionsList
 import dev.aleksrychkov.scrooge.component.main.internal.navigation.MainNavigationConfig
 import dev.aleksrychkov.scrooge.component.main.internal.navigation.MainRouter
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.component.transactionform.TransactionFormComponent
-import dev.aleksrychkov.scrooge.component.transactionslist.TransactionsListComponent
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 
 internal class DefaultMainComponent(
@@ -43,13 +41,6 @@ internal class DefaultMainComponent(
 
             is MainNavigationConfig.TransactionForm -> TransactionForm(
                 TransactionFormComponent(
-                    componentContext = routerComponentContext,
-                    destination = config.destination,
-                )
-            )
-
-            is MainNavigationConfig.TransactionsList -> TransactionsList(
-                TransactionsListComponent(
                     componentContext = routerComponentContext,
                     destination = config.destination,
                 )
