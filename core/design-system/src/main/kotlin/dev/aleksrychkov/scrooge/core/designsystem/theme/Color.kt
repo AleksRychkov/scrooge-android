@@ -6,17 +6,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-// https://dribbble.com/shots/21887035-Mobile-App-Design-for-a-Currency-Converter-App
-
 val primaryBlue = Color(0xFF2196F3)
 
-val onPrimaryWhite = Color(0xFFFFFFFF)
-
-val lightBackground = Color(0xFFFFFFFF)
-val lightOnSurface = Color(0xFF363636)
-
 internal val LightScheme = lightColorScheme(
-    primary = Color(0xFF2196F3),
+    primary = primaryBlue,
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = Color(0xFFF7F7F7),
     onPrimaryContainer = Color(0xFF363636),
@@ -26,16 +19,11 @@ internal val LightScheme = lightColorScheme(
     secondaryContainer = Color(0xFFD6E4ED),
     onSecondaryContainer = Color(0xFF0F1B25),
 
-    tertiary = Color(0xFF5C527A),
-    onTertiary = Color(0xFFFFFFFF),
-    tertiaryContainer = Color(0xFFE4DAFF),
-    onTertiaryContainer = Color(0xFF190F34),
+    background = Color(0xFFFFFFFF),
+    onBackground = Color(0xFF363636),
 
-    background = lightBackground,
-    onBackground = lightOnSurface,
-
-    surface = lightBackground,
-    onSurface = lightOnSurface,
+    surface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFF363636),
     surfaceContainerHighest = Color(0xFFFFFFFF), // Card container color
     surfaceContainerLow = Color(0xFFFFFFFF), // Card container color
 
@@ -46,32 +34,24 @@ internal val LightScheme = lightColorScheme(
     onErrorContainer = Color(0xFF410002),
 )
 
-val darkBackground = Color(0xFF121212)
-val darkSurface = Color(0xFF1E1E1E)
-val darkOnSurface = Color(0xFFE0E0E0)
-
 internal val DarkScheme = darkColorScheme(
     primary = primaryBlue,
-    onPrimary = onPrimaryWhite,
-    primaryContainer = Color(0xFF004B67),
-    onPrimaryContainer = Color(0xFFC0E8FF),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFF222223),
+    onPrimaryContainer = Color(0xFFFFFFFF),
 
-    secondary = Color(0xFFBCC7D0),
-    onSecondary = Color(0xFF24313B),
+    secondary = Color(0xFF222223),
+    onSecondary = Color(0xFFFFFFFF),
     secondaryContainer = Color(0xFF3B4852),
     onSecondaryContainer = Color(0xFFD6E4ED),
 
-    tertiary = Color(0xFFC6BEF7),
-    onTertiary = Color(0xFF2E2449),
-    tertiaryContainer = Color(0xFF453B61),
-    onTertiaryContainer = Color(0xFFE4DAFF),
+    background = Color(0xFF191919),
+    onBackground = Color(0xFFFFFFFF),
 
-    background = darkBackground,
-    onBackground = darkOnSurface,
-
-    surface = darkSurface,
-    surfaceContainerLow = darkSurface,
-    onSurface = darkOnSurface,
+    surface = Color(0xFF191919),
+    onSurface = Color(0xFFFFFFFF),
+    surfaceContainerHighest = Color(0xFF191919), // Card container color
+    surfaceContainerLow = Color(0xFF191919), // Card container color
 
     surfaceVariant = Color(0xFF1D1D16),
     onSurfaceVariant = Color(0xFFCAC4D0),
