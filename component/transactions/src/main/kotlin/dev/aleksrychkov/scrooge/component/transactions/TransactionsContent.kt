@@ -1,12 +1,12 @@
 package dev.aleksrychkov.scrooge.component.transactions
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -16,21 +16,27 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.transactions.internal.TransactionsComponentInternal
-import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.BalanceComponent
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.BalanceContent
 import dev.aleksrychkov.scrooge.component.transactions.internal.modal.PeriodModal
+import dev.aleksrychkov.scrooge.component.transactionslist.TransactionsListContent
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -96,17 +102,40 @@ private fun Content(
     modifier: Modifier,
     component: TransactionsComponentInternal
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        ColumnContent(
-            modifier = Modifier.weight(1f),
-            balanceComponent = component.balanceComponent,
-        )
-        AddIncomeExpense(
+    var balanceHeight by remember { mutableIntStateOf(0) }
+    var addIncomeExpenseHeight by remember { mutableIntStateOf(0) }
+    val density = LocalDensity.current
+    val extraPaddingPx = remember { with(density) { Normal2X.roundToPx() } }
+
+    Box(modifier = modifier) {
+        TransactionsListContent(
             modifier = Modifier.fillMaxWidth(),
-            component = component,
+            paddingTop = balanceHeight,
+            paddingBottom = addIncomeExpenseHeight,
+            component = component.transactionsListComponent,
         )
+        BalanceContent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onSizeChanged { size ->
+                    balanceHeight = size.height + extraPaddingPx
+                },
+            component = component.balanceComponent,
+        )
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            AddIncomeExpense(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onSizeChanged { size ->
+                        addIncomeExpenseHeight = size.height + extraPaddingPx
+                    },
+                component = component,
+            )
+        }
     }
 }
 
@@ -154,23 +183,6 @@ private fun AddIncomeExpense(
                     )
                 },
                 text = { Text(text = stringResource(Resources.string.add_expense)) },
-            )
-        }
-    }
-}
-
-@Composable
-private fun ColumnContent(
-    modifier: Modifier,
-    balanceComponent: BalanceComponent,
-) {
-    LazyColumn(
-        modifier = modifier,
-    ) {
-        item {
-            BalanceContent(
-                modifier = Modifier.fillMaxWidth(),
-                component = balanceComponent,
             )
         }
     }

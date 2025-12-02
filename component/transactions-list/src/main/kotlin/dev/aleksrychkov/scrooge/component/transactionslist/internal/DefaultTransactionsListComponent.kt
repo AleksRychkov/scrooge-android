@@ -27,7 +27,7 @@ internal class DefaultTransactionsListComponent(
             initialState = TransactionsListState(),
             actor = TransactionsListActor(),
             reducer = TransactionsListReducer(),
-            startEvent = TransactionsListEvent.External.Initial(period = period),
+            startEvent = TransactionsListEvent.External.SetPeriod(period = period),
         )
     }
 
@@ -43,5 +43,9 @@ internal class DefaultTransactionsListComponent(
             transactionId = transaction.id,
             type = transaction.type,
         ).let(router::open)
+    }
+
+    override fun setPeriod(period: Pair<Long, Long>) {
+        store.handle(TransactionsListEvent.External.SetPeriod(period = period))
     }
 }

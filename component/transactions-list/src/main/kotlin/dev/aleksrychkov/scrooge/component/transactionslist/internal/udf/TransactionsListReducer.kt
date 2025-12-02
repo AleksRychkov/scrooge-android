@@ -18,7 +18,7 @@ internal class TransactionsListReducer :
         state: TransactionsListState
     ): ReducerResult<TransactionsListState, TransactionsListCommand, Unit> {
         return when (event) {
-            is TransactionsListEvent.External.Initial -> state.reduceWith(event) {
+            is TransactionsListEvent.External.SetPeriod -> state.reduceWith(event) {
                 command {
                     listOf(LoadTransactions(period = event.period))
                 }

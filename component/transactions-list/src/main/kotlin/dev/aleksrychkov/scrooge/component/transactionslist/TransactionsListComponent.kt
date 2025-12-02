@@ -15,5 +15,17 @@ interface TransactionsListComponent {
                 period = destination.periodFrom to destination.periodTo,
             )
         }
+
+        operator fun invoke(
+            componentContext: ComponentContext,
+            period: Pair<Long, Long>,
+        ): TransactionsListComponent {
+            return DefaultTransactionsListComponent(
+                componentContext = componentContext,
+                period = period,
+            )
+        }
     }
+
+    fun setPeriod(period: Pair<Long, Long>)
 }

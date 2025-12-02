@@ -10,6 +10,8 @@ import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.BalanceComponent
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.period.PeriodComponent
+import dev.aleksrychkov.scrooge.component.transactions.internal.utils.DateTimeUtils
+import dev.aleksrychkov.scrooge.component.transactionslist.TransactionsListComponent
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
@@ -38,6 +40,15 @@ internal class DefaultTransactionsComponent(
         }
     }
 
+    private val _transactionsListComponent: TransactionsListComponent by lazy {
+        val period = state.value.selectedPeriod
+        val startEnd = DateTimeUtils.getMonthStartEndTimestamp(period)
+        TransactionsListComponent(
+            componentContext = childContext("TransactionsListComponent"),
+            period = startEnd,
+        )
+    }
+
     override val periodModal: Value<ChildSlot<*, PeriodComponent>> =
         childSlot(
             source = periodNavigation,
@@ -56,6 +67,9 @@ internal class DefaultTransactionsComponent(
 
     override val balanceComponent: BalanceComponent
         get() = _balanceComponent
+
+    override val transactionsListComponent: TransactionsListComponent
+        get() = _transactionsListComponent
 
     override fun addIncome() {
         DestinationTransactionForm.addIncome().let(router::open)
@@ -76,5 +90,7 @@ internal class DefaultTransactionsComponent(
     override fun setPeriod(instant: Instant) {
         _state.value = TransactionsState(instant)
         _balanceComponent.setPeriod(instant = instant)
+        val startEnd = DateTimeUtils.getMonthStartEndTimestamp(instant)
+        _transactionsListComponent.setPeriod(period = startEnd)
     }
 }

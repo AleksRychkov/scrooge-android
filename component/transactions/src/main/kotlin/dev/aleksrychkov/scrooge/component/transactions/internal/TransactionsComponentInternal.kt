@@ -5,6 +5,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.transactions.TransactionsComponent
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.balance.BalanceComponent
 import dev.aleksrychkov.scrooge.component.transactions.internal.component.period.PeriodComponent
+import dev.aleksrychkov.scrooge.component.transactionslist.TransactionsListComponent
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Instant
 
@@ -14,6 +15,7 @@ internal interface TransactionsComponentInternal : TransactionsComponent {
     val state: StateFlow<TransactionsState>
 
     val balanceComponent: BalanceComponent
+    val transactionsListComponent: TransactionsListComponent
 
     fun addIncome()
     fun addExpense()
