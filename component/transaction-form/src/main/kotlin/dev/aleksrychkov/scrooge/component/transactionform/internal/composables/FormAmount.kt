@@ -64,8 +64,12 @@ internal fun FormAmount(
             var text by remember {
                 mutableStateOf("")
             }
+            LaunchedEffect(key1 = amount) {
+                if (amount != text) {
+                    text = amount
+                }
+            }
             LaunchedEffect(key1 = Unit) {
-                text = amount
                 snapshotFlow { text }
                     .debounce(300L)
                     .distinctUntilChanged()
