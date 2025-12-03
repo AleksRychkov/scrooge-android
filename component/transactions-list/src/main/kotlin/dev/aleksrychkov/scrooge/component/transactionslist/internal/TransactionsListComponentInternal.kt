@@ -10,4 +10,5 @@ internal interface TransactionsListComponentInternal : TransactionsListComponent
 
     fun onBackClicked()
     fun onTransactionClicked(transaction: TransactionEntity)
+    fun onListStateChanged(position: Pair<Int, Int>)
 }

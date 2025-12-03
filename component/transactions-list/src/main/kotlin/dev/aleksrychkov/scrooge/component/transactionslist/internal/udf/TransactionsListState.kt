@@ -11,6 +11,8 @@ import kotlinx.collections.immutable.persistentListOf
 internal data class TransactionsListState(
     val isLoading: Boolean = false,
     val transactions: ImmutableList<TransactionsGroupDto> = persistentListOf(),
+    val scrollIndex: Int = 0,
+    val scrollOffset: Int = 0,
 )
 
 @Immutable

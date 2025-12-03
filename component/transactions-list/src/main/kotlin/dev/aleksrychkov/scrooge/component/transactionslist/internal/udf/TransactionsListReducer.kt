@@ -27,6 +27,12 @@ internal class TransactionsListReducer :
                 }
             }
 
+            is TransactionsListEvent.External.SetListState -> state.reduceWith(event) {
+                state {
+                    copy(scrollIndex = event.index, scrollOffset = event.offset)
+                }
+            }
+
             TransactionsListEvent.Internal.FailedToLoadTransactions -> state.reduceWith(event) {
                 state {
                     copy(isLoading = false, transactions = persistentListOf())
@@ -38,6 +44,8 @@ internal class TransactionsListReducer :
                     copy(
                         isLoading = false,
                         transactions = mapper.transactionsToDayTransactions(event.transactions),
+                        scrollIndex = 0,
+                        scrollOffset = 0,
                     )
                 }
             }

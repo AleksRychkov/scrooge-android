@@ -45,6 +45,15 @@ internal class DefaultTransactionsListComponent(
         ).let(router::open)
     }
 
+    override fun onListStateChanged(position: Pair<Int, Int>) {
+        store.handle(
+            TransactionsListEvent.External.SetListState(
+                index = position.first,
+                offset = position.second,
+            )
+        )
+    }
+
     override fun setPeriod(period: Pair<Long, Long>) {
         store.handle(TransactionsListEvent.External.SetPeriod(period = period))
     }
