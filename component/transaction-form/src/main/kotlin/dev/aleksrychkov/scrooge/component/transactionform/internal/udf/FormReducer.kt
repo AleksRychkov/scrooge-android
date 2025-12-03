@@ -190,6 +190,7 @@ internal class FormReducer(
                         category = CategoryEntity.from(
                             name = event.entity.category,
                             type = event.entity.type,
+                            iconId = event.entity.categoryIconId,
                         ),
                         tags = event.entity.tags.map { TagEntity.from(it) }.toImmutableList(),
                         currency = event.entity.currency,
