@@ -1,30 +1,48 @@
 package dev.aleksrychkov.scrooge.component.transactionslist.internal.udf
 
+import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.entity.amountToValue
+import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.resources.categoryIconFromId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
 import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 import kotlin.time.Instant
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
-internal class TransactionsListMapper {
+internal class TransactionsListMapper(
+    private val resourceManager: ResourceManager = get(),
+) {
 
     fun transactionsToDayTransactions(
         transactions: List<TransactionEntity>,
     ): ImmutableList<TransactionsGroupDto> {
+        val timeZone = TimeZone.currentSystemDefault()
+        val today = Clock.System.now().toLocalDateTime(timeZone).date
         return transactions
             .groupBy { transaction ->
-                val timeZone = TimeZone.currentSystemDefault()
                 val instant = Instant.fromEpochMilliseconds(transaction.timestamp)
                 instant.toLocalDateTime(timeZone).date
             }
             .map { entry ->
+                val diff = today.minus(entry.key)
+                val date = when {
+                    diff.years == 0 && diff.months == 0 && diff.days == 0 ->
+                        resourceManager.getString(Resources.string.today)
+
+                    diff.years == 0 && diff.months == 0 && diff.days == 1 ->
+                        resourceManager.getString(Resources.string.yesterday)
+
+                    else -> "${entry.key.day}.${entry.key.month.number}.${entry.key.year}"
+                }
                 TransactionsGroupDto(
-                    date = "${entry.key.day}.${entry.key.month.number}.${entry.key.year}",
+                    date = date,
                     totals = calculateTotals(entry.value),
                     transactions = transactionToItemDto(entry.value),
                 )
