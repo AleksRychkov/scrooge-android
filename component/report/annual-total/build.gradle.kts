@@ -14,6 +14,7 @@ android {
 dependencies {
     implementation(projects.core.designSystem)
     implementation(projects.core.resources)
+    implementation(projects.core.udfExtensions)
 }
 
 dependencies {
@@ -26,6 +27,7 @@ dependencies {
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
 
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.immutable.collections)
 
     debugImplementation(libs.androidx.ui.tooling)
