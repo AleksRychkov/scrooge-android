@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import dev.aleksrychkov.scrooge.component.report.annualtotal.ReportAnnualTotalContent
 import dev.aleksrychkov.scrooge.component.report.root.internal.ReportComponentInternal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -24,7 +25,6 @@ fun ReportContent(
     )
 }
 
-@Suppress("unused")
 @Composable
 private fun ReportContent(
     modifier: Modifier,
@@ -63,5 +63,14 @@ private fun Content(
     Children(
         modifier = modifier,
         stack = component.stack,
-    ) { }
+    ) {
+        when (val child = it.instance) {
+            is ReportComponentInternal.Child.Annual -> {
+                ReportAnnualTotalContent(
+                    modifier = Modifier.fillMaxSize(),
+                    component = child.component,
+                )
+            }
+        }
+    }
 }

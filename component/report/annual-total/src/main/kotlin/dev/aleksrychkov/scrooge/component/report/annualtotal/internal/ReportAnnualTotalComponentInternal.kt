@@ -1,0 +1,5 @@
+package dev.aleksrychkov.scrooge.component.report.annualtotal.internal
+
+import dev.aleksrychkov.scrooge.component.report.annualtotal.ReportAnnualTotalComponent
+
+internal interface ReportAnnualTotalComponentInternal : ReportAnnualTotalComponent

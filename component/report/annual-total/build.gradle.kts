@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.report.root"
+    namespace = "dev.aleksrychkov.scrooge.component.report.annualtotal"
     buildFeatures {
         compose = true
     }
@@ -14,8 +14,6 @@ android {
 dependencies {
     implementation(projects.core.designSystem)
     implementation(projects.core.resources)
-
-    implementation(projects.component.report.annualTotal)
 }
 
 dependencies {
