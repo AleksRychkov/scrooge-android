@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -15,12 +16,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
@@ -57,13 +58,10 @@ private fun MainContent(
                 .consumeWindowInsets(WindowInsets.navigationBars),
             component = component,
         )
-        // todo: hide as we don't have any contents for reports and settings tabs
-        if (false) {
-            BottomBar(
-                modifier = Modifier.fillMaxWidth(),
-                component = component,
-            )
-        }
+        BottomBar(
+            modifier = Modifier.fillMaxWidth(),
+            component = component,
+        )
     }
 }
 
@@ -126,7 +124,9 @@ private fun BottomBar(
         modifier = modifier
     ) {
         NavigationBar(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp), // copied from NavigationBarHeight
         ) {
             BottomBarItem(
                 isSelected = activeComponent is MainTabsComponentInternal.Child.Transactions,
@@ -165,7 +165,6 @@ private fun RowScope.BottomBarItem(
     NavigationBarItem(
         selected = isSelected,
         onClick = onClick,
-        label = { Text(text = title) },
         icon = {
             Icon(
                 icon,
