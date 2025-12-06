@@ -1,7 +1,39 @@
 package dev.aleksrychkov.scrooge.component.report.internal
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.stack.ChildStack
+import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.value.Value
+import kotlinx.serialization.Serializable
 
 internal class DefaultReportComponent(
     private val componentContext: ComponentContext
-) : ReportComponentInternal, ComponentContext by componentContext
+) : ReportComponentInternal, ComponentContext by componentContext {
+    private val navigation = StackNavigation<Configuration>()
+
+    override val stack: Value<ChildStack<*, ReportComponentInternal.Child>> =
+        childStack(
+            source = navigation,
+            serializer = Configuration.serializer(),
+            initialConfiguration = Configuration.Annual,
+            handleBackButton = false,
+            key = "DefaultReportComponentStack",
+            childFactory = ::child,
+        )
+
+    @Suppress("UnusedParameter")
+    private fun child(
+        configuration: Configuration,
+        childComponentContext: ComponentContext
+    ): ReportComponentInternal.Child =
+        when (configuration) {
+            Configuration.Annual -> ReportComponentInternal.Child.Annual()
+        }
+
+    @Serializable
+    private sealed interface Configuration {
+        @Serializable
+        data object Annual : Configuration
+    }
+}
