@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.report
+package dev.aleksrychkov.scrooge.component.report.root
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import dev.aleksrychkov.scrooge.component.report.internal.ReportComponentInternal
+import dev.aleksrychkov.scrooge.component.report.root.internal.ReportComponentInternal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable

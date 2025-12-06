@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.report.internal
+package dev.aleksrychkov.scrooge.component.report.root.internal
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack

@@ -1,7 +1,10 @@
 @file:Suppress("LongMethod", "MagicNumber")
 
-package dev.aleksrychkov.scrooge.component.report.internal.composables
+package dev.aleksrychkov.scrooge.component.report.root.internal.composables
 
+import android.content.res.Configuration
+import android.graphics.BlurMaskFilter
+import android.graphics.Paint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -20,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -107,7 +111,7 @@ private fun DonutLabels(
 
     val configuration = LocalConfiguration.current
     val isLandscape =
-        configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val modifier = if (isLandscape) {
         Modifier.fillMaxHeight()
@@ -137,11 +141,11 @@ private fun DonutLabels(
                 fontSizeInPx
             }
             drawIntoCanvas { canvas ->
-                val paint = android.graphics.Paint().apply {
+                val paint = Paint().apply {
                     color = textColor.toArgb()
                     textSize = txtSize
                     isAntiAlias = true
-                    textAlign = android.graphics.Paint.Align.CENTER
+                    textAlign = Paint.Align.CENTER
                 }
                 canvas.nativeCanvas.drawText(text, x, y, paint)
             }
@@ -158,7 +162,7 @@ private fun DonutArcsNeonBlur(
 ) {
     val configuration = LocalConfiguration.current
     val isLandscape =
-        configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val modifier = if (isLandscape) {
         Modifier.fillMaxHeight()
@@ -180,22 +184,22 @@ private fun DonutArcsNeonBlur(
 
         var startAngle = -90f
 
-        val baseArcRect = androidx.compose.ui.geometry.Rect(
+        val baseArcRect = Rect(
             left = -10f,
             top = 10f,
             right = size.width + 10f,
             bottom = size.height + 10f,
         )
-        val baseArcPaint = android.graphics.Paint().apply {
+        val baseArcPaint = Paint().apply {
             color = mainGlowColor.toArgb()
-            style = android.graphics.Paint.Style.STROKE
+            style = Paint.Style.STROKE
             this.strokeWidth = baseStroke.width
             isAntiAlias = true
-            strokeCap = android.graphics.Paint.Cap.ROUND
+            strokeCap = Paint.Cap.ROUND
             setMaskFilter(
-                android.graphics.BlurMaskFilter(
+                BlurMaskFilter(
                     150f,
-                    android.graphics.BlurMaskFilter.Blur.NORMAL
+                    BlurMaskFilter.Blur.NORMAL
                 )
             )
         }
@@ -220,22 +224,22 @@ private fun DonutArcsNeonBlur(
             style = baseStroke
         )
 
-        val rect = androidx.compose.ui.geometry.Rect(
+        val rect = Rect(
             left = -5f,
             top = 5f,
             right = size.width + 5f,
             bottom = size.height + 5f,
         )
-        val glowSegmentPaint = android.graphics.Paint().apply {
+        val glowSegmentPaint = Paint().apply {
             color = Color.Black.copy(alpha = 0.2f).toArgb()
-            style = android.graphics.Paint.Style.STROKE
+            style = Paint.Style.STROKE
             this.strokeWidth = baseStroke.width
             isAntiAlias = true
-            strokeCap = android.graphics.Paint.Cap.ROUND
+            strokeCap = Paint.Cap.ROUND
             setMaskFilter(
-                android.graphics.BlurMaskFilter(
+                BlurMaskFilter(
                     20f,
-                    android.graphics.BlurMaskFilter.Blur.NORMAL
+                    BlurMaskFilter.Blur.NORMAL
                 )
             )
         }

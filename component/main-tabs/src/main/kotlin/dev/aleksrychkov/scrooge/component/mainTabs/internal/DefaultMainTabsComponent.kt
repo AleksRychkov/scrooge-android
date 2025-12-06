@@ -11,7 +11,7 @@ import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackCallback
 import com.arkivanov.essenty.lifecycle.doOnDestroy
-import dev.aleksrychkov.scrooge.component.report.ReportComponent
+import dev.aleksrychkov.scrooge.component.report.root.ReportComponent
 import dev.aleksrychkov.scrooge.component.settings.SettingsComponent
 import dev.aleksrychkov.scrooge.component.transactions.TransactionsComponent
 import kotlinx.serialization.Serializable

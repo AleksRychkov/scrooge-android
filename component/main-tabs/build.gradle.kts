@@ -12,7 +12,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.component.report)
+    implementation(projects.component.report.root)
     implementation(projects.component.settings)
     implementation(projects.component.transactions)
 
