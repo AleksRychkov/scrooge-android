@@ -8,6 +8,6 @@ import kotlin.time.Instant
 @Immutable
 internal data class BalanceState(
     val isLoading: Boolean = false,
-    val balanceData: DsBalanceData = DsBalanceData(),
+    val balance: DsBalanceData = DsBalanceData(),
     val period: Instant = Clock.System.now(),
 )

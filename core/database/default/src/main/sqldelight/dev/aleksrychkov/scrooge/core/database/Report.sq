@@ -1,0 +1,9 @@
+-- Queries
+amountForPeriodByTypeAndCode:
+SELECT
+	type,
+	currencyCode,
+	sum(amount)
+FROM TTransaction
+WHERE timestamp >= ? AND timestamp <= ?
+GROUP BY type, currencyCode;

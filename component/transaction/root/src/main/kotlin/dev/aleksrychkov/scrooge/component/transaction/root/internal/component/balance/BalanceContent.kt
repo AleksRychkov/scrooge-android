@@ -26,6 +26,6 @@ private fun BalanceContent(
 ) {
     DsBalanceCard(
         modifier = modifier,
-        data = state.balanceData,
+        data = state.balance,
     )
 }

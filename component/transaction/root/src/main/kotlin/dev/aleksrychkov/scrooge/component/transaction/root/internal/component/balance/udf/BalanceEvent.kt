@@ -1,7 +1,6 @@
 package dev.aleksrychkov.scrooge.component.transaction.root.internal.component.balance.udf
 
-import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
-import kotlinx.collections.immutable.ImmutableList
+import dev.aleksrychkov.scrooge.core.entity.ReportAmountForPeriodByTypeAndCodeEntity
 import kotlin.time.Instant
 
 internal sealed interface BalanceEvent {
@@ -11,6 +10,6 @@ internal sealed interface BalanceEvent {
 
     sealed interface Internal : BalanceEvent {
         data object FailedToUpdateBalance : Internal
-        data class UpdateBalance(val transactions: ImmutableList<TransactionEntity>) : Internal
+        data class UpdateBalance(val result: ReportAmountForPeriodByTypeAndCodeEntity) : Internal
     }
 }

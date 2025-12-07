@@ -22,6 +22,7 @@ dependencies {
     implementation(projects.core.udfExtensions)
 
     implementation(projects.feature.transaction.api)
+    implementation(projects.feature.reports.api)
 }
 
 dependencies {

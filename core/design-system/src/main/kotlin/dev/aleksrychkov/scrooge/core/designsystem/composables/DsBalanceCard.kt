@@ -74,7 +74,7 @@ fun DsBalanceCard(
                             style = MaterialTheme.typography.titleLarge,
                         )
                         Text(
-                            text = item.value,
+                            text = item.amount,
                             style = MaterialTheme.typography.titleLarge,
                         )
                     }
@@ -136,7 +136,7 @@ private fun IncomeExpenseBlock(
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
-                        text = item.value,
+                        text = item.amount,
                         color = color,
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -155,7 +155,7 @@ data class DsBalanceData(
     @Immutable
     data class Total(
         val currencySymbol: String,
-        val value: String,
+        val amount: String,
     )
 }
 
@@ -171,31 +171,31 @@ private fun DsBalanceCardPreview() {
                     income = persistentListOf(
                         DsBalanceData.Total(
                             currencySymbol = "₽",
-                            value = "123,00"
+                            amount = "123,00"
                         ),
                         DsBalanceData.Total(
                             currencySymbol = "€",
-                            value = "123,00"
+                            amount = "123,00"
                         )
                     ),
                     expense = persistentListOf(
                         DsBalanceData.Total(
                             currencySymbol = "₽",
-                            value = "123,00"
+                            amount = "123,00"
                         ),
                         DsBalanceData.Total(
                             currencySymbol = "€",
-                            value = "123,00"
+                            amount = "123,00"
                         )
                     ),
                     total = persistentListOf(
                         DsBalanceData.Total(
                             currencySymbol = "₽",
-                            value = "0,00"
+                            amount = "0,00"
                         ),
                         DsBalanceData.Total(
                             currencySymbol = "€",
-                            value = "0,00"
+                            amount = "0,00"
                         )
                     ),
                 ),

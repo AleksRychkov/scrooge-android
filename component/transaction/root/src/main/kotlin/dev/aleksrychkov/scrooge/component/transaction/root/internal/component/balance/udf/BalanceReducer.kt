@@ -1,13 +1,11 @@
 package dev.aleksrychkov.scrooge.component.transaction.root.internal.component.balance.udf
 
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsBalanceData
-import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
-import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.entity.ReportAmountForPeriodByTypeAndCodeEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToValue
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 internal class BalanceReducer : Reducer<BalanceState, BalanceEvent, BalanceCommand, Unit> {
@@ -29,7 +27,6 @@ internal class BalanceReducer : Reducer<BalanceState, BalanceEvent, BalanceComma
                 state {
                     copy(
                         isLoading = false,
-                        balanceData = DsBalanceData()
                     )
                 }
             }
@@ -38,53 +35,39 @@ internal class BalanceReducer : Reducer<BalanceState, BalanceEvent, BalanceComma
                 state {
                     copy(
                         isLoading = false,
-                        balanceData = mapTransactionsToBalanceData(event.transactions),
+                        balance = map(event.result),
                     )
                 }
             }
         }
     }
 
-    private fun mapTransactionsToBalanceData(
-        transactions: ImmutableList<TransactionEntity>
-    ): DsBalanceData {
-        val groupedByCurrency = transactions
-            .sortedBy { it.currency }
-            .groupBy { it.currency }
-
-        val incomeItems = groupedByCurrency.map { (currency, txs) ->
-            val incomeSum = txs
-                .filter { it.type == TransactionType.Income }
-                .sumOf { it.amount }
-            DsBalanceData.Total(
-                currencySymbol = currency.currencySymbol,
-                value = incomeSum.amountToValue()
-            )
-        }.toImmutableList()
-
-        val expenseItems = groupedByCurrency.map { (currency, txs) ->
-            val expenseSum = txs
-                .filter { it.type == TransactionType.Expense }
-                .sumOf { it.amount }
-            DsBalanceData.Total(
-                currencySymbol = currency.currencySymbol,
-                value = expenseSum.amountToValue()
-            )
-        }.toImmutableList()
-
-        val totalItems = groupedByCurrency.map { (currency, txs) ->
-            val incomeSum = txs.filter { it.type == TransactionType.Income }.sumOf { it.amount }
-            val expenseSum = txs.filter { it.type == TransactionType.Expense }.sumOf { it.amount }
-            DsBalanceData.Total(
-                currencySymbol = currency.currencySymbol,
-                value = (incomeSum - expenseSum).amountToValue()
-            )
-        }.toImmutableList()
-
+    private fun map(r: ReportAmountForPeriodByTypeAndCodeEntity): DsBalanceData {
         return DsBalanceData(
-            income = incomeItems,
-            expense = expenseItems,
-            total = totalItems,
+            income = r.income
+                .map { value ->
+                    DsBalanceData.Total(
+                        currencySymbol = value.currency.currencySymbol,
+                        amount = value.amount.amountToValue(),
+                    )
+                }
+                .toImmutableList(),
+            expense = r.expense
+                .map { value ->
+                    DsBalanceData.Total(
+                        currencySymbol = value.currency.currencySymbol,
+                        amount = value.amount.amountToValue(),
+                    )
+                }
+                .toImmutableList(),
+            total = r.total
+                .map { value ->
+                    DsBalanceData.Total(
+                        currencySymbol = value.currency.currencySymbol,
+                        amount = value.amount.amountToValue(),
+                    )
+                }
+                .toImmutableList(),
         )
     }
 }
