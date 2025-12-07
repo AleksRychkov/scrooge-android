@@ -32,6 +32,7 @@ dependencies {
     implementation(projects.core.resources)
     implementation(projects.feature.category.di)
     implementation(projects.feature.currency.di)
+    implementation(projects.feature.reports.di)
     implementation(projects.feature.tag.di)
     implementation(projects.feature.transaction.di)
 }

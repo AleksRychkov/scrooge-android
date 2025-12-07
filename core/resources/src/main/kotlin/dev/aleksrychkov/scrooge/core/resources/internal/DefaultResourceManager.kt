@@ -11,4 +11,7 @@ internal class DefaultResourceManager(
 
     override fun getString(stringRes: Int, vararg args: String): String =
         context.getString(stringRes, *args)
+
+    override fun getStringArray(id: Int): Array<String> =
+        context.resources.getStringArray(id)
 }

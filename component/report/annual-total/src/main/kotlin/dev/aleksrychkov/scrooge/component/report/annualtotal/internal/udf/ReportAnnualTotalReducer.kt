@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.udf
 
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.udf.ReportAnnualTotalCommand.Load
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
@@ -16,7 +17,7 @@ internal class ReportAnnualTotalReducer :
                     copy(isLoading = true, selectedYear = event.year)
                 }
                 command {
-                    listOf(ReportAnnualTotalCommand.Load(year = event.year))
+                    listOf(Load(year = event.year))
                 }
             }
 
@@ -26,7 +27,7 @@ internal class ReportAnnualTotalReducer :
                     copy(isLoading = true, selectedYear = year)
                 }
                 command {
-                    listOf(ReportAnnualTotalCommand.Load(year = year))
+                    listOf(Load(year = year))
                 }
             }
 
@@ -36,7 +37,7 @@ internal class ReportAnnualTotalReducer :
                     copy(isLoading = true, selectedYear = year)
                 }
                 command {
-                    listOf(ReportAnnualTotalCommand.Load(year = year))
+                    listOf(Load(year = year))
                 }
             }
         }

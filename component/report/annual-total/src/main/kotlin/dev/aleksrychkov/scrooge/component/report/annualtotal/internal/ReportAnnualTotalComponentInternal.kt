@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal interface ReportAnnualTotalComponentInternal : ReportAnnualTotalComponent {
     val state: StateFlow<ReportAnnualTotalState>
 
+    fun openPeriodModal()
     fun incrementYear()
     fun decrementYear()
     fun currentYear()

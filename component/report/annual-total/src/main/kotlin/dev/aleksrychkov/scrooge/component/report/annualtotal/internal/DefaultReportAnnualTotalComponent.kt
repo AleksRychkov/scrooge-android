@@ -31,6 +31,9 @@ internal class DefaultReportAnnualTotalComponent(
     override val state: StateFlow<ReportAnnualTotalState>
         get() = store.state
 
+    @Suppress("EmptyFunctionBlock")
+    override fun openPeriodModal() {}
+
     override fun incrementYear() {
         store.handle(ReportAnnualTotalEvent.External.IncrementYear)
     }

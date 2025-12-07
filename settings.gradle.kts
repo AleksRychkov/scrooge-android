@@ -59,18 +59,8 @@ include(":core:udf-extensions")
 include(":core:utils")
 
 // feature
-include(":feature:category:api")
-include(":feature:category:default")
-include(":feature:category:di")
-
-include(":feature:currency:api")
-include(":feature:currency:default")
-include(":feature:currency:di")
-
-include(":feature:tag:api")
-include(":feature:tag:default")
-include(":feature:tag:di")
-
-include(":feature:transaction:api")
-include(":feature:transaction:default")
-include(":feature:transaction:di")
+listOf("category", "currency", "reports", "tag", "transaction").forEach {
+    include(":feature:$it:api")
+    include(":feature:$it:default")
+    include(":feature:$it:di")
+}
