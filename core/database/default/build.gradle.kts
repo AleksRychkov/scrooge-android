@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.bundles.sqldelight)
 
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
 
     testImplementation(libs.junit)
     testRuntimeOnly(libs.junit.platform.launcher)
