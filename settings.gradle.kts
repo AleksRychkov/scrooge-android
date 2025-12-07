@@ -43,6 +43,7 @@ include(":component:main:tabs")
 include(":component:main:root")
 
 include(":component:report:annual-total")
+include(":component:report:period-total")
 include(":component:report:root")
 
 include(":component:transaction:form")

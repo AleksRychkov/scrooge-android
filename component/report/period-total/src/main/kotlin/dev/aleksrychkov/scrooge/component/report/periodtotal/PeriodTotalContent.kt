@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.core.designsystem.composables
+package dev.aleksrychkov.scrooge.component.report.periodtotal
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -16,13 +16,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.PeriodTotalComponentInternal
+import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalState
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
@@ -31,14 +34,48 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
-fun DsBalanceCard(
+fun PeriodTotalContent(
     modifier: Modifier,
-    data: DsBalanceData,
+    component: PeriodTotalComponent,
+) {
+    PeriodTotalContent(
+        modifier = modifier,
+        component = component as PeriodTotalComponentInternal,
+    )
+}
+
+@Composable
+private fun PeriodTotalContent(
+    modifier: Modifier,
+    component: PeriodTotalComponentInternal,
+) {
+    val state by component.state.collectAsStateWithLifecycle()
+
+    Content(
+        modifier = modifier,
+        state = state,
+    )
+}
+
+@Composable
+private fun Content(
+    modifier: Modifier,
+    state: PeriodTotalState,
+) {
+    TotalContent(
+        modifier = modifier,
+        data = state.data,
+    )
+}
+
+@Composable
+private fun TotalContent(
+    modifier: Modifier,
+    data: PeriodTotalState.ByType
 ) {
     Card(
         modifier = modifier,
@@ -111,7 +148,7 @@ fun DsBalanceCard(
 private fun IncomeExpenseBlock(
     modifier: Modifier,
     title: String,
-    items: List<DsBalanceData.Total>,
+    items: List<PeriodTotalState.ByType.Value>,
     color: Color,
 ) {
     Column(
@@ -146,54 +183,41 @@ private fun IncomeExpenseBlock(
     }
 }
 
-@Immutable
-data class DsBalanceData(
-    val income: ImmutableList<Total> = persistentListOf(),
-    val expense: ImmutableList<Total> = persistentListOf(),
-    val total: ImmutableList<Total> = persistentListOf(),
-) {
-    @Immutable
-    data class Total(
-        val currencySymbol: String,
-        val amount: String,
-    )
-}
-
 @Preview
 @Composable
 @Suppress("UnusedPrivateMember")
-private fun DsBalanceCardPreview() {
+private fun TotalContentPreview() {
     AppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
-            DsBalanceCard(
+            TotalContent(
                 modifier = Modifier.fillMaxWidth(),
-                data = DsBalanceData(
+                data = PeriodTotalState.ByType(
                     income = persistentListOf(
-                        DsBalanceData.Total(
+                        PeriodTotalState.ByType.Value(
                             currencySymbol = "₽",
                             amount = "123,00"
                         ),
-                        DsBalanceData.Total(
+                        PeriodTotalState.ByType.Value(
                             currencySymbol = "€",
                             amount = "123,00"
                         )
                     ),
                     expense = persistentListOf(
-                        DsBalanceData.Total(
+                        PeriodTotalState.ByType.Value(
                             currencySymbol = "₽",
                             amount = "123,00"
                         ),
-                        DsBalanceData.Total(
+                        PeriodTotalState.ByType.Value(
                             currencySymbol = "€",
                             amount = "123,00"
                         )
                     ),
                     total = persistentListOf(
-                        DsBalanceData.Total(
+                        PeriodTotalState.ByType.Value(
                             currencySymbol = "₽",
                             amount = "0,00"
                         ),
-                        DsBalanceData.Total(
+                        PeriodTotalState.ByType.Value(
                             currencySymbol = "€",
                             amount = "0,00"
                         )

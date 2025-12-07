@@ -8,8 +8,8 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.component.transaction.list.TransactionsListComponent
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.balance.BalanceComponent
 import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period.PeriodComponent
 import dev.aleksrychkov.scrooge.component.transaction.root.internal.utils.DateTimeUtils
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
@@ -32,11 +32,12 @@ internal class DefaultTransactionsComponent(
 
     private val _state = MutableStateFlow(TransactionsState())
 
-    private val _balanceComponent: BalanceComponent by lazy {
-        BalanceComponent.Companion(
-            componentContext = childContext("BalanceComponentContext")
+    private val _periodTotalComponent: PeriodTotalComponent by lazy {
+        PeriodTotalComponent(
+            componentContext = childContext("PeriodTotalComponentContext")
         ).also {
-            it.setPeriod(_state.value.selectedPeriod)
+            val startEnd = DateTimeUtils.getMonthStartEndTimestamp(_state.value.selectedPeriod)
+            it.setPeriod(fromTimestamp = startEnd.first, toTimestamp = startEnd.second)
         }
     }
 
@@ -65,8 +66,8 @@ internal class DefaultTransactionsComponent(
     override val state: StateFlow<TransactionsState>
         get() = _state.asStateFlow()
 
-    override val balanceComponent: BalanceComponent
-        get() = _balanceComponent
+    override val periodTotalComponent: PeriodTotalComponent
+        get() = _periodTotalComponent
 
     override val transactionsListComponent: TransactionsListComponent
         get() = _transactionsListComponent
@@ -89,8 +90,11 @@ internal class DefaultTransactionsComponent(
 
     override fun setPeriod(instant: Instant) {
         _state.value = TransactionsState(instant)
-        _balanceComponent.setPeriod(instant = instant)
         val startEnd = DateTimeUtils.getMonthStartEndTimestamp(instant)
+        _periodTotalComponent.setPeriod(
+            fromTimestamp = startEnd.first,
+            toTimestamp = startEnd.second,
+        )
         _transactionsListComponent.setPeriod(period = startEnd)
     }
 }

@@ -27,9 +27,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.component.transaction.list.TransactionsListContent
 import dev.aleksrychkov.scrooge.component.transaction.root.internal.TransactionsComponentInternal
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.balance.BalanceContent
 import dev.aleksrychkov.scrooge.component.transaction.root.internal.modal.PeriodModal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
@@ -114,13 +114,13 @@ private fun Content(
             paddingBottom = addIncomeExpenseHeight,
             component = component.transactionsListComponent,
         )
-        BalanceContent(
+        PeriodTotalContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .onSizeChanged { size ->
                     balanceHeight = size.height + extraPaddingPx
                 },
-            component = component.balanceComponent,
+            component = component.periodTotalComponent,
         )
 
         Column(

@@ -1,0 +1,52 @@
+package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
+
+import dev.aleksrychkov.scrooge.core.entity.ReportAmountForPeriodByTypeAndCodeEntity
+import dev.aleksrychkov.scrooge.core.entity.amountToValue
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+
+internal data class PeriodTotalState(
+    val isLoading: Boolean = true,
+    val data: ByType = ByType(),
+) {
+    data class ByType(
+        val income: ImmutableList<Value> = persistentListOf(),
+        val expense: ImmutableList<Value> = persistentListOf(),
+        val total: ImmutableList<Value> = persistentListOf(),
+    ) {
+        data class Value(
+            val currencySymbol: String,
+            val amount: String,
+        )
+    }
+}
+
+internal fun ReportAmountForPeriodByTypeAndCodeEntity.mapToStateValue(): PeriodTotalState.ByType {
+    return PeriodTotalState.ByType(
+        income = this.income
+            .map { value ->
+                PeriodTotalState.ByType.Value(
+                    currencySymbol = value.currency.currencySymbol,
+                    amount = value.amount.amountToValue(),
+                )
+            }
+            .toImmutableList(),
+        expense = this.expense
+            .map { value ->
+                PeriodTotalState.ByType.Value(
+                    currencySymbol = value.currency.currencySymbol,
+                    amount = value.amount.amountToValue(),
+                )
+            }
+            .toImmutableList(),
+        total = this.total
+            .map { value ->
+                PeriodTotalState.ByType.Value(
+                    currencySymbol = value.currency.currencySymbol,
+                    amount = value.amount.amountToValue(),
+                )
+            }
+            .toImmutableList(),
+    )
+}

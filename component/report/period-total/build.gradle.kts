@@ -5,36 +5,33 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.transaction.root"
+    namespace = "dev.aleksrychkov.scrooge.component.report.periodtotal"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.component.report.periodTotal)
-    implementation(projects.component.transaction.list)
-
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
-    implementation(projects.core.entity)
     implementation(projects.core.resources)
-    implementation(projects.core.router)
     implementation(projects.core.udfExtensions)
+
+    implementation(projects.feature.reports.api)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material.icons)
     implementation(libs.androidx.ui.tooling.preview.android)
-
-    implementation(libs.androidx.activity.compose)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
 
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.immutable.collections)
 
     debugImplementation(libs.androidx.ui.tooling)
 }
