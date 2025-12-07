@@ -22,4 +22,9 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.ui.tooling.preview.android)
+
+    implementation(libs.kotlinx.immutable.collections)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

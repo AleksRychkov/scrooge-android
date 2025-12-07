@@ -1,9 +1,14 @@
 package dev.aleksrychkov.scrooge.component.transaction.root.internal.component.balance.udf
 
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsBalanceData
+import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.entity.amountToValue
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 internal class BalanceReducer : Reducer<BalanceState, BalanceEvent, BalanceCommand, Unit> {
     override fun reduce(
@@ -24,9 +29,7 @@ internal class BalanceReducer : Reducer<BalanceState, BalanceEvent, BalanceComma
                 state {
                     copy(
                         isLoading = false,
-                        income = persistentListOf(),
-                        expense = persistentListOf(),
-                        total = persistentListOf(),
+                        balanceData = DsBalanceData()
                     )
                 }
             }
@@ -35,12 +38,53 @@ internal class BalanceReducer : Reducer<BalanceState, BalanceEvent, BalanceComma
                 state {
                     copy(
                         isLoading = false,
-                        income = event.income,
-                        expense = event.expense,
-                        total = event.total,
+                        balanceData = mapTransactionsToBalanceData(event.transactions),
                     )
                 }
             }
         }
+    }
+
+    private fun mapTransactionsToBalanceData(
+        transactions: ImmutableList<TransactionEntity>
+    ): DsBalanceData {
+        val groupedByCurrency = transactions
+            .sortedBy { it.currency }
+            .groupBy { it.currency }
+
+        val incomeItems = groupedByCurrency.map { (currency, txs) ->
+            val incomeSum = txs
+                .filter { it.type == TransactionType.Income }
+                .sumOf { it.amount }
+            DsBalanceData.Total(
+                currencySymbol = currency.currencySymbol,
+                value = incomeSum.amountToValue()
+            )
+        }.toImmutableList()
+
+        val expenseItems = groupedByCurrency.map { (currency, txs) ->
+            val expenseSum = txs
+                .filter { it.type == TransactionType.Expense }
+                .sumOf { it.amount }
+            DsBalanceData.Total(
+                currencySymbol = currency.currencySymbol,
+                value = expenseSum.amountToValue()
+            )
+        }.toImmutableList()
+
+        val totalItems = groupedByCurrency.map { (currency, txs) ->
+            val incomeSum = txs.filter { it.type == TransactionType.Income }.sumOf { it.amount }
+            val expenseSum = txs.filter { it.type == TransactionType.Expense }.sumOf { it.amount }
+            DsBalanceData.Total(
+                currencySymbol = currency.currencySymbol,
+                value = (incomeSum - expenseSum).amountToValue()
+            )
+        }.toImmutableList()
+
+        return DsBalanceData(
+            income = incomeItems,
+            expense = expenseItems,
+            total = totalItems,
+        )
     }
 }
