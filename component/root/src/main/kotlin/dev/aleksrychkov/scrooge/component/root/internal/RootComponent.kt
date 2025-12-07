@@ -2,7 +2,7 @@ package dev.aleksrychkov.scrooge.component.root.internal
 
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.component.main.MainComponent
+import dev.aleksrychkov.scrooge.component.main.root.MainComponent
 
 internal interface RootComponent {
     val stack: Value<ChildStack<*, Child>>

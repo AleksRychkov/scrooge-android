@@ -5,23 +5,22 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.root"
+    namespace = "dev.aleksrychkov.scrooge.component.main.root"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.component.main.root)
+    implementation(projects.component.main.tabs)
+    implementation(projects.component.transaction.form)
 
-    implementation(projects.core.designSystem)
+    implementation(projects.core.router)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
-
-    implementation(libs.androidx.activity.compose)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)

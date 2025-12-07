@@ -32,15 +32,19 @@ include(":app")
 include(":config:detekt:rules")
 
 // component
+include(":component:root")
+
 include(":component:category")
 include(":component:currency")
-include(":component:main")
-include(":component:main-tabs")
-include(":component:report:annual-total")
-include(":component:report:root")
-include(":component:root")
 include(":component:settings")
 include(":component:tag")
+
+include(":component:main:tabs")
+include(":component:main:root")
+
+include(":component:report:annual-total")
+include(":component:report:root")
+
 include(":component:transaction:form")
 include(":component:transaction:list")
 include(":component:transaction:root")
