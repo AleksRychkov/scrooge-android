@@ -5,7 +5,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.component.report.root.ReportComponent
 import dev.aleksrychkov.scrooge.component.settings.SettingsComponent
-import dev.aleksrychkov.scrooge.component.transactions.TransactionsComponent
+import dev.aleksrychkov.scrooge.component.transaction.root.TransactionsComponent
 
 internal interface MainTabsComponentInternal : MainTabsComponent {
     val stack: Value<ChildStack<*, Child>>

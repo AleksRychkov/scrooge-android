@@ -10,7 +10,7 @@ import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal.Ch
 import dev.aleksrychkov.scrooge.component.main.internal.navigation.MainNavigationConfig
 import dev.aleksrychkov.scrooge.component.main.internal.navigation.MainRouter
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsComponent
-import dev.aleksrychkov.scrooge.component.transactionform.TransactionFormComponent
+import dev.aleksrychkov.scrooge.component.transaction.form.TransactionFormComponent
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 
 internal class DefaultMainComponent(

@@ -14,7 +14,7 @@ android {
 dependencies {
     implementation(projects.component.report.root)
     implementation(projects.component.settings)
-    implementation(projects.component.transactions)
+    implementation(projects.component.transaction.root)
 
     implementation(projects.core.designSystem)
     implementation(projects.core.resources)

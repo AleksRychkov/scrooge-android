@@ -9,7 +9,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import dev.aleksrychkov.scrooge.component.main.internal.MainComponentInternal
 import dev.aleksrychkov.scrooge.component.mainTabs.MainTabsContent
-import dev.aleksrychkov.scrooge.component.transactionform.TransactionFormContent
+import dev.aleksrychkov.scrooge.component.transaction.form.TransactionFormContent
 
 @Composable
 fun MainContent(

@@ -41,9 +41,9 @@ include(":component:report:root")
 include(":component:root")
 include(":component:settings")
 include(":component:tag")
-include(":component:transaction-form")
-include(":component:transactions")
-include(":component:transactions-list")
+include(":component:transaction:form")
+include(":component:transaction:list")
+include(":component:transaction:root")
 
 // core
 include(":core:database:api")

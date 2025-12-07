@@ -13,7 +13,7 @@ import com.arkivanov.essenty.backhandler.BackCallback
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import dev.aleksrychkov.scrooge.component.report.root.ReportComponent
 import dev.aleksrychkov.scrooge.component.settings.SettingsComponent
-import dev.aleksrychkov.scrooge.component.transactions.TransactionsComponent
+import dev.aleksrychkov.scrooge.component.transaction.root.TransactionsComponent
 import kotlinx.serialization.Serializable
 
 internal class DefaultMainTabsComponent(

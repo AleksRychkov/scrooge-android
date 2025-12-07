@@ -30,7 +30,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import dev.aleksrychkov.scrooge.component.mainTabs.internal.MainTabsComponentInternal
 import dev.aleksrychkov.scrooge.component.report.root.ReportContent
 import dev.aleksrychkov.scrooge.component.settings.SettingsContent
-import dev.aleksrychkov.scrooge.component.transactions.TransactionsContent
+import dev.aleksrychkov.scrooge.component.transaction.root.TransactionsContent
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
