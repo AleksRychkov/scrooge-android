@@ -102,7 +102,7 @@ private fun Content(
     modifier: Modifier,
     component: TransactionsComponentInternal
 ) {
-    var balanceHeight by remember { mutableIntStateOf(0) }
+    var periodTotalHeight by remember { mutableIntStateOf(0) }
     var addIncomeExpenseHeight by remember { mutableIntStateOf(0) }
     val density = LocalDensity.current
     val extraPaddingPx = remember { with(density) { Normal2X.roundToPx() } }
@@ -110,7 +110,7 @@ private fun Content(
     Box(modifier = modifier) {
         TransactionsListContent(
             modifier = Modifier.fillMaxWidth(),
-            paddingTop = balanceHeight,
+            paddingTop = periodTotalHeight,
             paddingBottom = addIncomeExpenseHeight,
             component = component.transactionsListComponent,
         )
@@ -118,7 +118,7 @@ private fun Content(
             modifier = Modifier
                 .fillMaxWidth()
                 .onSizeChanged { size ->
-                    balanceHeight = size.height + extraPaddingPx
+                    periodTotalHeight = size.height + extraPaddingPx
                 },
             component = component.periodTotalComponent,
         )

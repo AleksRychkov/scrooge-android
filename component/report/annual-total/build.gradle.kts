@@ -12,6 +12,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.component.report.periodTotal)
+
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
     implementation(projects.core.resources)
