@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.PeriodTotalComponentInternal
@@ -41,10 +42,12 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun PeriodTotalContent(
     modifier: Modifier,
     component: PeriodTotalComponent,
+    elevation: Dp = Medium,
 ) {
     PeriodTotalContent(
         modifier = modifier,
         component = component as PeriodTotalComponentInternal,
+        elevation = elevation,
     )
 }
 
@@ -52,12 +55,14 @@ fun PeriodTotalContent(
 private fun PeriodTotalContent(
     modifier: Modifier,
     component: PeriodTotalComponentInternal,
+    elevation: Dp
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
     Content(
         modifier = modifier,
         state = state,
+        elevation = elevation,
     )
 }
 
@@ -65,21 +70,24 @@ private fun PeriodTotalContent(
 private fun Content(
     modifier: Modifier,
     state: PeriodTotalState,
+    elevation: Dp,
 ) {
     TotalContent(
         modifier = modifier,
         data = state.data,
+        elevation = elevation,
     )
 }
 
 @Composable
 private fun TotalContent(
     modifier: Modifier,
-    data: PeriodTotalState.ByType
+    data: PeriodTotalState.ByType,
+    elevation: Dp,
 ) {
     Card(
         modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = Medium),
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation),
         shape = ShapeDefaults.Large.copy(
             topStart = CornerSize(0.dp),
             topEnd = CornerSize(0.dp),
@@ -191,6 +199,7 @@ private fun TotalContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TotalContent(
                 modifier = Modifier.fillMaxWidth(),
+                elevation = Medium,
                 data = PeriodTotalState.ByType(
                     income = persistentListOf(
                         PeriodTotalState.ByType.Value(
