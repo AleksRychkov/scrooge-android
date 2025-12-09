@@ -3,7 +3,7 @@ package dev.aleksrychkov.scrooge.component.transaction.list.internal.udf
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
-import dev.aleksrychkov.scrooge.core.entity.amountToValue
+import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.resources.categoryIconFromId
 import kotlinx.collections.immutable.ImmutableList
@@ -60,7 +60,7 @@ internal class TransactionsListMapper(
                 TransactionsItemDto(
                     category = t.category,
                     icon = categoryIconFromId(t.categoryIconId),
-                    amount = "$sign${t.amount.amountToValue()} ${t.currency.currencySymbol}",
+                    amount = "$sign${t.amount.amountToStringFormatted()} ${t.currency.currencySymbol}",
                     type = t.type,
                     ref = t,
                     tags = t.tags.joinToString()
@@ -78,7 +78,7 @@ internal class TransactionsListMapper(
                 val total =
                     entry.value.sumOf { it.amount * (if (it.type == TransactionType.Expense) -1 else 1) }
                 val sign = if (total > 0) "+" else ""
-                "$sign${total.amountToValue()} ${entry.key.currencySymbol}"
+                "$sign${total.amountToStringFormatted()} ${entry.key.currencySymbol}"
             }
             .toImmutableList()
     }

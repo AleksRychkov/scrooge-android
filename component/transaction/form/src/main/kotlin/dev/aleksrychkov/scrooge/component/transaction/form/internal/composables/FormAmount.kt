@@ -7,37 +7,36 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import dev.aleksrychkov.scrooge.component.transaction.form.internal.utils.rememberAmountVisualTransformation
+import dev.aleksrychkov.scrooge.component.transaction.form.internal.utils.AmountInputTransformation
+import dev.aleksrychkov.scrooge.component.transaction.form.internal.utils.AmountOutputTransformation
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsInputTextFieldsColors
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
+import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
-import dev.aleksrychkov.scrooge.core.entity.DELIMITER
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Suppress("MagicNumber")
@@ -45,6 +44,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 @Composable
 internal fun FormAmount(
     modifier: Modifier,
+    isEditing: Boolean,
     amount: String,
     currency: String,
     amountChanged: (String) -> Unit,
@@ -58,52 +58,59 @@ internal fun FormAmount(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            val focusRequester = remember { FocusRequester() }
             val focusManager = LocalFocusManager.current
-            val amountFormatter = rememberAmountVisualTransformation(currency = currency)
 
-            var text by remember {
-                mutableStateOf("")
-            }
+            val amountTextFieldState = rememberTextFieldState("")
             LaunchedEffect(key1 = amount) {
-                if (amount != text) {
-                    text = amount
+                if (amount != amountTextFieldState.text.toString()) {
+                    amountTextFieldState.setTextAndPlaceCursorAtEnd(amount)
                 }
             }
-            LaunchedEffect(key1 = Unit) {
-                snapshotFlow { text }
-                    .debounce(300L)
-                    .distinctUntilChanged()
-                    .onEach {
+            LaunchedEffect(amountTextFieldState) {
+                snapshotFlow { amountTextFieldState.text.toString() }
+                    .collectLatest {
                         amountChanged(it)
                     }
-                    .launchIn(this)
             }
-
+            if (!isEditing) {
+                LaunchedEffect(key1 = Unit) {
+                    focusRequester.requestFocus()
+                }
+            }
+            val outputTransformation = remember(key1 = currency) {
+                AmountOutputTransformation(currency)
+            }
+            val inputTransformation = remember {
+                AmountInputTransformation()
+            }
             TextField(
-                modifier = Modifier.weight(weight = 1f, fill = true),
-                value = text,
-                singleLine = true,
+                modifier = Modifier
+                    .weight(weight = 1f, fill = true)
+                    .focusRequester(focusRequester),
+                state = amountTextFieldState,
+                lineLimits = TextFieldLineLimits.SingleLine,
                 label = {
                     Text(text = stringResource(Resources.string.amount))
                 },
                 placeholder = {
-                    val placeholder = text.ifBlank { "$currency 0${DELIMITER}00" }
-                    Text(text = placeholder)
+                    val placeholder = "$currency 0${AMOUNT_DELIMITER}00"
+                    Text(
+                        text = placeholder,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                    )
                 },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Number,
                 ),
-                keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() }
-                ),
-                onValueChange = { value ->
-                    text = value
+                onKeyboardAction = {
+                    focusManager.clearFocus()
                 },
                 colors = DsInputTextFieldsColors(),
-                visualTransformation = amountFormatter,
+                inputTransformation = inputTransformation,
+                outputTransformation = outputTransformation,
             )
-
             TextButton(
                 modifier = Modifier.height(IntrinsicSize.Max),
                 onClick = openCurrencyModal,
@@ -126,6 +133,7 @@ private fun FormContentPreview() {
             FormAmount(
                 modifier = Modifier,
                 amount = "12312,00",
+                isEditing = false,
                 currency = CurrencyEntity.RUB.currencySymbol,
                 amountChanged = {},
                 openCurrencyModal = {},

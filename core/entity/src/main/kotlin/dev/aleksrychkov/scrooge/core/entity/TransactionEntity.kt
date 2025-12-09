@@ -8,7 +8,8 @@ import kotlin.time.Clock
 
 private const val AMOUNT_CHUNK_SIZE = 3
 private const val CENTS = 100L
-const val DELIMITER = ','
+const val AMOUNT_DELIMITER = ','
+const val AMOUNT_DELIMITER_STRING = ","
 
 @Serializable
 data class TransactionEntity(
@@ -41,18 +42,24 @@ data class TransactionEntity(
     }
 }
 
+fun Long.amountToString(): String {
+    val major = this / CENTS
+    val minor = this % CENTS
+    return "$major${AMOUNT_DELIMITER}${minor.toString().padStart(2, '0')}"
+}
+
 // todo: tests?
-fun Long.amountToValue(): String {
+fun Long.amountToStringFormatted(): String {
     val sign = if (this < 0) "-" else ""
     val absValue = abs(this)
     val major = absValue / CENTS
     val minor = absValue % CENTS
-    return "$sign$major${DELIMITER}${minor.toString().padStart(2, '0')}".formatAmount()
+    return "$sign$major${AMOUNT_DELIMITER}${minor.toString().padStart(2, '0')}".formatAmount()
 }
 
-fun String.formatAmount(delimiter: Char = DELIMITER): String {
+private fun String.formatAmount(delimiter: Char = AMOUNT_DELIMITER): String {
     if (this.isBlank()) return this
-    val sign = if (this.contains("-")) "-" else ""
+    val sign = if (this.contains("-")) "- " else " "
 
     val parts = this.replace("-", "").split(delimiter)
 
@@ -64,8 +71,8 @@ fun String.formatAmount(delimiter: Char = DELIMITER): String {
         .reversed()
 
     return if (parts.size > 1) {
-        "$sign $integerPart$delimiter${parts[1]}"
+        "$sign$integerPart$delimiter${parts[1]}"
     } else {
-        "$sign $integerPart"
+        "$sign$integerPart"
     }
 }

@@ -3,7 +3,6 @@ package dev.aleksrychkov.scrooge.component.transaction.form.internal.udf.actors
 import dev.aleksrychkov.scrooge.component.transaction.form.internal.udf.FormCommand
 import dev.aleksrychkov.scrooge.component.transaction.form.internal.udf.FormEvent
 import dev.aleksrychkov.scrooge.component.transaction.form.internal.udf.FormState
-import dev.aleksrychkov.scrooge.core.entity.DELIMITER
 import dev.aleksrychkov.scrooge.feature.transaction.CreateTransactionResult
 import dev.aleksrychkov.scrooge.feature.transaction.CreateTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.EditTransactionResult
@@ -15,9 +14,8 @@ internal class SubmitDelegate(
     private val createUseCase: Lazy<CreateTransactionUseCase>,
     private val editUseCase: Lazy<EditTransactionUseCase>,
 ) {
-
     private companion object {
-        const val CENTS = 100L
+        val amountRegex = Regex("[^0-9,]")
     }
 
     suspend operator fun invoke(cmd: FormCommand.Submit): Flow<FormEvent> {
@@ -44,7 +42,7 @@ internal class SubmitDelegate(
 
     private suspend fun create(state: FormState): Flow<FormEvent> {
         requireNotNull(state.category)
-        val amount: Long = (state.amount.replace(DELIMITER, '.').toDouble() * CENTS).toLong()
+        val amount: Long = state.amount.toCents()
 
         val args = CreateTransactionUseCase.Args(
             amount = amount,
@@ -65,7 +63,8 @@ internal class SubmitDelegate(
     private suspend fun edit(state: FormState): Flow<FormEvent> {
         requireNotNull(state.category)
         requireNotNull(state.transactionId)
-        val amount: Long = (state.amount.replace(DELIMITER, '.').toDouble() * CENTS).toLong()
+
+        val amount: Long = state.amount.toCents()
 
         val args = EditTransactionUseCase.Args(
             transactionId = state.transactionId,
@@ -83,5 +82,20 @@ internal class SubmitDelegate(
             EditTransactionResult.Success -> FormEvent.Internal.SubmitTransactionSuccess
         }
         return flowOf(resultEvent)
+    }
+
+    private fun String.toCents(): Long {
+        val clean = this.replace(amountRegex, "")
+        val parts = clean.split(",")
+
+        val euros = parts.getOrNull(0).orEmpty()
+        val cents = parts.getOrNull(1).orEmpty()
+
+        val centsPadded = when (cents.length) {
+            0 -> "00"
+            1 -> cents + "0"
+            else -> cents.take(2)
+        }
+        return (euros.ifEmpty { "0" } + centsPadded).toLong()
     }
 }

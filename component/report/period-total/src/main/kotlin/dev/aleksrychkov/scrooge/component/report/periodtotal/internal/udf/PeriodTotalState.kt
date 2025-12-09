@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
 
 import dev.aleksrychkov.scrooge.core.entity.ReportAmountForPeriodByTypeAndCodeEntity
-import dev.aleksrychkov.scrooge.core.entity.amountToValue
+import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -28,7 +28,7 @@ internal fun ReportAmountForPeriodByTypeAndCodeEntity.mapToStateValue(): PeriodT
             .map { value ->
                 PeriodTotalState.ByType.Value(
                     currencySymbol = value.currency.currencySymbol,
-                    amount = value.amount.amountToValue(),
+                    amount = value.amount.amountToStringFormatted(),
                 )
             }
             .toImmutableList(),
@@ -36,7 +36,7 @@ internal fun ReportAmountForPeriodByTypeAndCodeEntity.mapToStateValue(): PeriodT
             .map { value ->
                 PeriodTotalState.ByType.Value(
                     currencySymbol = value.currency.currencySymbol,
-                    amount = value.amount.amountToValue(),
+                    amount = value.amount.amountToStringFormatted(),
                 )
             }
             .toImmutableList(),
@@ -44,7 +44,7 @@ internal fun ReportAmountForPeriodByTypeAndCodeEntity.mapToStateValue(): PeriodT
             .map { value ->
                 PeriodTotalState.ByType.Value(
                     currencySymbol = value.currency.currencySymbol,
-                    amount = value.amount.amountToValue(),
+                    amount = value.amount.amountToStringFormatted(),
                 )
             }
             .toImmutableList(),

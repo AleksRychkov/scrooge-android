@@ -1,10 +1,9 @@
 package dev.aleksrychkov.scrooge.component.transaction.form.internal.udf
 
-import dev.aleksrychkov.scrooge.component.transaction.form.internal.utils.AmountFormatter
 import dev.aleksrychkov.scrooge.component.transaction.form.internal.utils.toDateString
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
-import dev.aleksrychkov.scrooge.core.entity.amountToValue
+import dev.aleksrychkov.scrooge.core.entity.amountToString
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
@@ -57,8 +56,8 @@ internal class FormReducer(
 
             is FormEvent.External.SetAmount -> state.reduceWith(event) {
                 state {
-                    val sanitizedAmount = AmountFormatter.sanitizeValue(event.amount)
-                    copy(amount = sanitizedAmount)
+//                    val sanitizedAmount = AmountFormatter.sanitizeValue(event.amount)
+                    copy(amount = event.amount)
                 }
             }
 
@@ -173,14 +172,12 @@ internal class FormReducer(
             }
 
             is FormEvent.Internal.SuccessLoadTransaction -> state.reduceWith(event) {
-                val sanitizedAmount =
-                    AmountFormatter.sanitizeValue(event.entity.amount.amountToValue())
                 val timestamp = Instant.fromEpochMilliseconds(event.entity.timestamp)
                 state {
                     copy(
                         isLoading = false,
                         transactionType = event.entity.type,
-                        amount = sanitizedAmount,
+                        amount = event.entity.amount.amountToString(),
                         timestamp = timestamp,
                         timestampReadable = timestamp.toDateString(),
                         category = CategoryEntity.from(
