@@ -1,6 +1,6 @@
 package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
 
-import dev.aleksrychkov.scrooge.core.entity.ReportAmountForPeriodByTypeAndCodeEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 
 internal sealed interface PeriodTotalEvent {
     sealed interface External : PeriodTotalEvent {
@@ -8,7 +8,7 @@ internal sealed interface PeriodTotalEvent {
     }
 
     sealed interface Internal : PeriodTotalEvent {
-        data class LoadSuccess(val result: ReportAmountForPeriodByTypeAndCodeEntity) : Internal
+        data class LoadSuccess(val result: ReportTotalAmountEntity) : Internal
         data object LoadFailed : Internal
     }
 }

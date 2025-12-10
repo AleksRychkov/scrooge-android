@@ -5,7 +5,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReportAmountForPeriodByTypeAndCodeEntity(
+data class ReportTotalAmountEntity(
     val income: ImmutableList<Value>,
     val expense: ImmutableList<Value>,
     val total: ImmutableList<Value> = persistentListOf(),

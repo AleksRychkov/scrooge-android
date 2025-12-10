@@ -1,6 +1,6 @@
 package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
 
-import dev.aleksrychkov.scrooge.core.entity.ReportAmountForPeriodByTypeAndCodeEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -22,7 +22,7 @@ internal data class PeriodTotalState(
     }
 }
 
-internal fun ReportAmountForPeriodByTypeAndCodeEntity.mapToStateValue(): PeriodTotalState.ByType {
+internal fun ReportTotalAmountEntity.mapToStateValue(): PeriodTotalState.ByType {
     return PeriodTotalState.ByType(
         income = this.income
             .map { value ->

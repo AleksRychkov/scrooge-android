@@ -2,14 +2,13 @@ package dev.aleksrychkov.scrooge.feature.reports.internal
 
 import dev.aleksrychkov.scrooge.core.database.ReportDao
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
-import dev.aleksrychkov.scrooge.core.entity.ReportAmountForPeriodByTypeAndCodeEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalByTypeAndCurrencyResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalByTypeAndCurrencyUseCase
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class DefaultReportTotalByTypeAndCurrencyUseCase(
@@ -23,31 +22,30 @@ internal class DefaultReportTotalByTypeAndCurrencyUseCase(
     ): ReportTotalByTypeAndCurrencyResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
-                val resultFlow = reportDao.value
+                val result = reportDao.value
                     .amountForPeriodByTypeAndCodeEntity(
                         fromTimestamp = fromTimestamp,
                         toTimestamp = toTimestamp,
-                    )
-                    .map(::calculateTotal)
-                ReportTotalByTypeAndCurrencyResult.Success(resultFlow)
+                    ).let(::calculateTotal)
+                ReportTotalByTypeAndCurrencyResult.Success(result)
             }.getOrDefault(ReportTotalByTypeAndCurrencyResult.Failure)
         }
 
     private fun calculateTotal(
-        input: ReportAmountForPeriodByTypeAndCodeEntity,
-    ): ReportAmountForPeriodByTypeAndCodeEntity {
+        input: ReportTotalAmountEntity,
+    ): ReportTotalAmountEntity {
         val currencies = mutableSetOf<CurrencyEntity>()
         input.income.map { it.currency }.forEach(currencies::add)
         input.expense.map { it.currency }.forEach(currencies::add)
 
-        val income = mutableListOf<ReportAmountForPeriodByTypeAndCodeEntity.Value>()
-        val expense = mutableListOf<ReportAmountForPeriodByTypeAndCodeEntity.Value>()
-        val total = mutableListOf<ReportAmountForPeriodByTypeAndCodeEntity.Value>()
+        val income = mutableListOf<ReportTotalAmountEntity.Value>()
+        val expense = mutableListOf<ReportTotalAmountEntity.Value>()
+        val total = mutableListOf<ReportTotalAmountEntity.Value>()
 
         for (cur in currencies) {
             val tmpIncome = input.income.findByCurrencyOrNew(cur)
             val tmpExpense = input.expense.findByCurrencyOrNew(cur)
-            val tmpTotal = ReportAmountForPeriodByTypeAndCodeEntity.Value(
+            val tmpTotal = ReportTotalAmountEntity.Value(
                 currency = cur,
                 amount = tmpIncome.amount - tmpExpense.amount,
             )
@@ -56,18 +54,18 @@ internal class DefaultReportTotalByTypeAndCurrencyUseCase(
             total.add(tmpTotal)
         }
 
-        return ReportAmountForPeriodByTypeAndCodeEntity(
+        return ReportTotalAmountEntity(
             income = income.toImmutableList(),
             expense = expense.toImmutableList(),
             total = total.toImmutableList(),
         )
     }
 
-    private fun ImmutableList<ReportAmountForPeriodByTypeAndCodeEntity.Value>.findByCurrencyOrNew(
+    private fun ImmutableList<ReportTotalAmountEntity.Value>.findByCurrencyOrNew(
         currency: CurrencyEntity,
-    ): ReportAmountForPeriodByTypeAndCodeEntity.Value {
+    ): ReportTotalAmountEntity.Value {
         return this.firstOrNull { it.currency == currency }
-            ?: ReportAmountForPeriodByTypeAndCodeEntity.Value(
+            ?: ReportTotalAmountEntity.Value(
                 currency = currency,
                 amount = 0L,
             )
