@@ -75,7 +75,8 @@ private fun PeriodContent(
     Column(modifier = modifier) {
         YearRow(
             modifier = Modifier.fillMaxWidth(),
-            year = state.selectedYear.toString(),
+            year = state.selectedYear,
+            initialYear = state.initialYear,
             onIncrementYearClicked = onIncrementYearClicked,
             onDecrementYearClicked = onDecrementYearClicked,
         )
@@ -129,7 +130,8 @@ private fun PeriodContent(
 @Composable
 private fun YearRow(
     modifier: Modifier,
-    year: String,
+    year: Int,
+    initialYear: Int,
     onIncrementYearClicked: () -> Unit,
     onDecrementYearClicked: () -> Unit,
 ) {
@@ -152,7 +154,12 @@ private fun YearRow(
         }
         Text(
             modifier = Modifier.padding(Normal),
-            text = year,
+            text = year.toString(),
+            color = if (year == initialYear) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                Color.Unspecified
+            },
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
         )
