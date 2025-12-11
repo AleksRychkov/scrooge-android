@@ -48,31 +48,20 @@ fun Long.amountToString(): String {
     return "$major${AMOUNT_DELIMITER}${minor.toString().padStart(2, '0')}"
 }
 
-// todo: tests?
-fun Long.amountToStringFormatted(): String {
-    val sign = if (this < 0) "-" else ""
+fun Long.amountToStringFormatted(
+    forceSign: String? = null,
+): String {
+    val sign = forceSign ?: if (this < 0) "-" else ""
     val absValue = abs(this)
     val major = absValue / CENTS
     val minor = absValue % CENTS
-    return "$sign$major${AMOUNT_DELIMITER}${minor.toString().padStart(2, '0')}".formatAmount()
-}
 
-private fun String.formatAmount(delimiter: Char = AMOUNT_DELIMITER): String {
-    if (this.isBlank()) return this
-    val sign = if (this.contains("-")) "- " else " "
-
-    val parts = this.replace("-", "").split(delimiter)
-
-    val integerPart = parts[0]
+    val majorFormatted = major.toString()
         .replace("\\s".toRegex(), "")
         .reversed()
         .chunked(AMOUNT_CHUNK_SIZE)
         .joinToString(" ")
         .reversed()
 
-    return if (parts.size > 1) {
-        "$sign$integerPart$delimiter${parts[1]}"
-    } else {
-        "$sign$integerPart"
-    }
+    return "$sign$majorFormatted${AMOUNT_DELIMITER}${minor.toString().padStart(2, '0')}"
 }

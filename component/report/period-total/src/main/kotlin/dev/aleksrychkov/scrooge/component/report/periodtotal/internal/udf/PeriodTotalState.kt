@@ -32,7 +32,7 @@ internal fun ReportTotalAmountEntity.mapToStateValue(): PeriodTotalState.ByType 
             .map { value ->
                 PeriodTotalState.ByType.Value(
                     currencySymbol = value.currency.currencySymbol,
-                    amount = value.amount.amountToStringFormatted(),
+                    amount = value.amount.amountToStringFormatted("+"),
                 )
             }
             .toImmutableList(),
@@ -40,7 +40,7 @@ internal fun ReportTotalAmountEntity.mapToStateValue(): PeriodTotalState.ByType 
             .map { value ->
                 PeriodTotalState.ByType.Value(
                     currencySymbol = value.currency.currencySymbol,
-                    amount = value.amount.amountToStringFormatted(),
+                    amount = value.amount.amountToStringFormatted("-"),
                 )
             }
             .toImmutableList(),

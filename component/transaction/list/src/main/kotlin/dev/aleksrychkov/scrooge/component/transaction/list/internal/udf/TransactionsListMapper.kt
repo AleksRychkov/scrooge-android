@@ -60,7 +60,7 @@ internal class TransactionsListMapper(
                 TransactionsItemDto(
                     category = t.category,
                     icon = categoryIconFromId(t.categoryIconId),
-                    amount = "$sign${t.amount.amountToStringFormatted()} ${t.currency.currencySymbol}",
+                    amount = "${t.amount.amountToStringFormatted(sign)} ${t.currency.currencySymbol}",
                     type = t.type,
                     ref = t,
                     tags = t.tags.joinToString()
@@ -77,8 +77,8 @@ internal class TransactionsListMapper(
             .map { entry ->
                 val total =
                     entry.value.sumOf { it.amount * (if (it.type == TransactionType.Expense) -1 else 1) }
-                val sign = if (total > 0) "+" else ""
-                "$sign${total.amountToStringFormatted()} ${entry.key.currencySymbol}"
+                val sign = if (total > 0) "+" else "-"
+                "${total.amountToStringFormatted(sign)} ${entry.key.currencySymbol}"
             }
             .toImmutableList()
     }
