@@ -1,5 +1,5 @@
 -- Queries
-amountForPeriodByTypeAndCode:
+totalAmount:
 SELECT
 	type,
 	currencyCode,
@@ -7,3 +7,16 @@ SELECT
 FROM TTransaction
 WHERE timestamp >= ? AND timestamp <= ?
 GROUP BY type, currencyCode;
+
+totalAmountMothly:
+WITH monthly AS (
+    SELECT
+        strftime('%m', timestamp/1000, 'unixepoch') AS ym,
+        type,
+        currencyCode,
+        SUM(amount) AS total_amount
+    FROM TTransaction
+    WHERE strftime('%Y', timestamp/1000, 'unixepoch') = ?
+    GROUP BY ym, type, currencyCode
+)
+SELECT * FROM monthly;

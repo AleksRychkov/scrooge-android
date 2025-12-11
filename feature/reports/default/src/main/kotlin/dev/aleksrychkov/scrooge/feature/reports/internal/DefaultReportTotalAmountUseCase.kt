@@ -4,31 +4,31 @@ import dev.aleksrychkov.scrooge.core.database.ReportDao
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
-import dev.aleksrychkov.scrooge.feature.reports.ReportTotalByTypeAndCurrencyResult
-import dev.aleksrychkov.scrooge.feature.reports.ReportTotalByTypeAndCurrencyUseCase
+import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountResult
+import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountUseCase
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-internal class DefaultReportTotalByTypeAndCurrencyUseCase(
+internal class DefaultReportTotalAmountUseCase(
     private val reportDao: Lazy<ReportDao>,
     private val ioDispatcher: CoroutineDispatcher,
-) : ReportTotalByTypeAndCurrencyUseCase {
+) : ReportTotalAmountUseCase {
 
     override suspend fun invoke(
         fromTimestamp: Long,
         toTimestamp: Long
-    ): ReportTotalByTypeAndCurrencyResult =
+    ): ReportTotalAmountResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
                 val result = reportDao.value
-                    .amountForPeriodByTypeAndCodeEntity(
+                    .totalAmount(
                         fromTimestamp = fromTimestamp,
                         toTimestamp = toTimestamp,
                     ).let(::calculateTotal)
-                ReportTotalByTypeAndCurrencyResult.Success(result)
-            }.getOrDefault(ReportTotalByTypeAndCurrencyResult.Failure)
+                ReportTotalAmountResult.Success(result)
+            }.getOrDefault(ReportTotalAmountResult.Failure)
         }
 
     private fun calculateTotal(
