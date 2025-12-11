@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -123,6 +124,10 @@ private fun BottomBar(
     Column(
         modifier = modifier
     ) {
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.1f),
+        )
         NavigationBar(
             modifier = Modifier
                 .fillMaxWidth()
@@ -160,7 +165,7 @@ private fun RowScope.BottomBarItem(
     val color = if (isSelected) {
         MaterialTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.tertiary
+        MaterialTheme.colorScheme.onBackground
     }
     NavigationBarItem(
         selected = isSelected,

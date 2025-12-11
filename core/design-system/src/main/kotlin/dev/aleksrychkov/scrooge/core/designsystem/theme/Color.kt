@@ -24,6 +24,7 @@ internal val LightScheme = lightColorScheme(
 
     surface = Color(0xFFFFFFFF),
     onSurface = Color(0xFF363636),
+    surfaceContainer = Color(0xFFFFFFFF),
     surfaceContainerHighest = Color(0xFFFFFFFF), // Card container color
     surfaceContainerLow = Color(0xFFFFFFFF), // Card container color
 
@@ -50,6 +51,7 @@ internal val DarkScheme = darkColorScheme(
 
     surface = Color(0xFF191919),
     onSurface = Color(0xFFFFFFFF),
+    surfaceContainer = Color(0xFF191919),
     surfaceContainerHighest = Color(0xFF191919), // Card container color
     surfaceContainerLow = Color(0xFF191919), // Card container color
 
