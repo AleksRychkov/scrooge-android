@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 internal class LoadDelegate(
     private val useCase: Lazy<ReportTotalAmountUseCase>,
@@ -19,8 +20,9 @@ internal class LoadDelegate(
             ReportTotalAmountResult.Failure ->
                 flowOf(PeriodTotalEvent.Internal.LoadFailed)
 
-            is ReportTotalAmountResult.Success ->
-                flowOf(PeriodTotalEvent.Internal.LoadSuccess(result.result))
+            is ReportTotalAmountResult.Success -> result.result.map {
+                PeriodTotalEvent.Internal.LoadSuccess(it)
+            }
         }
     }
 }

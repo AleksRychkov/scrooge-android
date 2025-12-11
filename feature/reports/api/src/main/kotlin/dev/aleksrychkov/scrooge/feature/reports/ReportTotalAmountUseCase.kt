@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.feature.reports
 
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
+import kotlinx.coroutines.flow.Flow
 
 fun interface ReportTotalAmountUseCase {
     suspend operator fun invoke(
@@ -10,6 +11,6 @@ fun interface ReportTotalAmountUseCase {
 }
 
 sealed interface ReportTotalAmountResult {
-    data class Success(val result: ReportTotalAmountEntity) : ReportTotalAmountResult
+    data class Success(val result: Flow<ReportTotalAmountEntity>) : ReportTotalAmountResult
     data object Failure : ReportTotalAmountResult
 }

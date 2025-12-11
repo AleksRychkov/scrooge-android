@@ -1,11 +1,15 @@
 package dev.aleksrychkov.scrooge.core.database.internal.dao
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.ReportDao
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.ReportMapper
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class DefaultReportDao(
@@ -19,14 +23,17 @@ internal class DefaultReportDao(
     override suspend fun totalAmount(
         fromTimestamp: Long,
         toTimestamp: Long
-    ): ReportTotalAmountEntity = withContext(readDispatcher) {
-        val res = database.reportQueries
+    ): Flow<ReportTotalAmountEntity> = withContext(readDispatcher) {
+        database.reportQueries
             .totalAmount(
                 timestamp = fromTimestamp,
                 timestamp_ = toTimestamp
             )
-            .executeAsList()
-        ReportMapper.totalAmountToEntity(res)
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list ->
+                ReportMapper.totalAmountToEntity(list)
+            }
     }
 
     override suspend fun totalAmountMonthly(

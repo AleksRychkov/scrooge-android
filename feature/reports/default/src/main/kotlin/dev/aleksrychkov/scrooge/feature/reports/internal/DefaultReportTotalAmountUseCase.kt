@@ -9,6 +9,7 @@ import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountUseCase
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class DefaultReportTotalAmountUseCase(
@@ -26,7 +27,7 @@ internal class DefaultReportTotalAmountUseCase(
                     .totalAmount(
                         fromTimestamp = fromTimestamp,
                         toTimestamp = toTimestamp,
-                    ).let(::calculateTotal)
+                    ).map(::calculateTotal)
                 ReportTotalAmountResult.Success(result)
             }.getOrDefault(ReportTotalAmountResult.Failure)
         }
