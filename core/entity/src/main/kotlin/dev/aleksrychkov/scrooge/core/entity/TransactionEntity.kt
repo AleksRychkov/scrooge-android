@@ -51,7 +51,7 @@ fun Long.amountToString(): String {
 fun Long.amountToStringFormatted(
     forceSign: String? = null,
 ): String {
-    val sign = forceSign ?: if (this < 0) "-" else ""
+    val sign = forceSign ?: if (this < 0) "-" else "+"
     val absValue = abs(this)
     val major = absValue / CENTS
     val minor = absValue % CENTS
