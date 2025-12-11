@@ -45,6 +45,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 internal fun FormAmount(
     modifier: Modifier,
     isEditing: Boolean,
+    isLoading: Boolean,
     amount: String,
     currency: String,
     amountChanged: (String) -> Unit,
@@ -60,6 +61,8 @@ internal fun FormAmount(
         ) {
             val focusRequester = remember { FocusRequester() }
             val focusManager = LocalFocusManager.current
+
+            if (isEditing && isLoading) return@Row
 
             val amountTextFieldState = rememberTextFieldState("")
             LaunchedEffect(key1 = amount) {
@@ -134,6 +137,7 @@ private fun FormContentPreview() {
                 modifier = Modifier,
                 amount = "12312,00",
                 isEditing = false,
+                isLoading = false,
                 currency = CurrencyEntity.RUB.currencySymbol,
                 amountChanged = {},
                 openCurrencyModal = {},

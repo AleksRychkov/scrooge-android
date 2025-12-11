@@ -56,7 +56,6 @@ internal class FormReducer(
 
             is FormEvent.External.SetAmount -> state.reduceWith(event) {
                 state {
-//                    val sanitizedAmount = AmountFormatter.sanitizeValue(event.amount)
                     copy(amount = event.amount)
                 }
             }

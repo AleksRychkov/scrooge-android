@@ -162,6 +162,7 @@ private fun FormContent(
             modifier = Modifier.fillMaxWidth(),
             amount = state.amount,
             isEditing = state.transactionId != null,
+            isLoading = state.isLoading,
             currency = state.currency.currencySymbol,
             amountChanged = amountChanged,
             openCurrencyModal = openCurrencyModal,
