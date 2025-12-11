@@ -162,7 +162,8 @@ private fun IncomeExpenseBlock(
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
         )
         Column(
-            modifier = Modifier,
+            modifier = Modifier
+                .padding(top = HalfNormal),
         ) {
             items.forEach { item ->
                 Row {
@@ -170,7 +171,6 @@ private fun IncomeExpenseBlock(
                         color = color,
                         text = "${item.currencySymbol} ${item.amount}",
                         style = MaterialTheme.typography.titleSmall,
-                        maxLines = 1,
                     )
                 }
             }

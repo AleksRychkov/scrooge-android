@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,6 @@ import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -161,24 +161,26 @@ private fun IncomeExpenseBlock(
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            modifier = Modifier.padding(Normal),
+            modifier = Modifier.padding(vertical = Normal),
             text = title,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
         )
-        Column(
-            modifier = Modifier.padding(horizontal = Large),
-        ) {
+        Column {
             items.forEach { item ->
                 Row {
                     Text(
+                        modifier = Modifier.defaultMinSize(minWidth = Large),
                         color = color,
-                        text = "${item.currencySymbol} ${item.amount}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1,
+                        text = item.currencySymbol,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Text(
+                        color = color,
+                        text = item.amount,
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
             }
