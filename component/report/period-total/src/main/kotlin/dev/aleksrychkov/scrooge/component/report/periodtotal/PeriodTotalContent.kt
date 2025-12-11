@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.PeriodTotalComponentInternal
 import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalState
@@ -181,10 +179,6 @@ private fun IncomeExpenseBlock(
                         text = "${item.currencySymbol} ${item.amount}",
                         style = MaterialTheme.typography.titleMedium,
                         maxLines = 1,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 1.sp,
-                            maxFontSize = 14.sp,
-                        ),
                     )
                 }
             }

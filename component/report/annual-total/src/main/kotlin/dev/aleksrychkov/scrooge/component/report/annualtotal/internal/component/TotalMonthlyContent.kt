@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -121,10 +120,6 @@ private fun TotalByMonth(
                     Text(
                         text = "${value.currencySymbol} ${value.amount}",
                         maxLines = 1,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 1.sp,
-                            maxFontSize = 14.sp,
-                        ),
                     )
                 }
             }
@@ -146,10 +141,6 @@ private fun TotalByMonth(
                         text = "${value.currencySymbol} ${value.amount}",
                         color = IncomeColor,
                         maxLines = 1,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 1.sp,
-                            maxFontSize = 14.sp,
-                        ),
                     )
                 }
             }
@@ -171,10 +162,6 @@ private fun TotalByMonth(
                         text = "${value.currencySymbol} ${value.amount}",
                         color = ExpenseColor,
                         maxLines = 1,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 1.sp,
-                            maxFontSize = 14.sp,
-                        ),
                     )
                 }
             }
