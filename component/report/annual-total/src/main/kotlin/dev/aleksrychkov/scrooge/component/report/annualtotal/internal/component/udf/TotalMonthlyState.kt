@@ -53,7 +53,7 @@ internal fun ReportTotalAmountMonthlyEntity.mapToState(
     this.october?.mapToByMonthState(months[Month.OCTOBER.ordinal])?.let(res::add)
     this.november?.mapToByMonthState(months[Month.NOVEMBER.ordinal])?.let(res::add)
     this.december?.mapToByMonthState(months[Month.DECEMBER.ordinal])?.let(res::add)
-    return res.toImmutableList()
+    return res.reversed().toImmutableList()
 }
 
 private fun ReportTotalAmountEntity.mapToByMonthState(

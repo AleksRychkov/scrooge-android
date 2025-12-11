@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -81,7 +81,9 @@ private fun TotalMonthlyContent(
             key = { it.month }
         ) { byMonth ->
             TotalByMonth(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
+//                    .background(MaterialTheme.colorScheme.secondary)
                 byMonth = byMonth,
             )
         }
@@ -94,73 +96,80 @@ private fun TotalByMonth(
     byMonth: TotalMonthlyState.ByMonth,
 ) {
     Column(
-        modifier = modifier
-            .padding(horizontal = Large),
+        modifier = modifier,
     ) {
         Text(
-            modifier = Modifier.padding(vertical = Normal),
+            modifier = Modifier.padding(vertical = Normal, horizontal = Large),
             text = byMonth.month,
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
         )
 
+        Text(
+            modifier = Modifier
+                .padding(bottom = HalfNormal)
+                .padding(horizontal = Large),
+            text = stringResource(Resources.string.total),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f),
+        )
+
+        byMonth.byType.total.forEach { value ->
+            Text(
+                modifier = Modifier.padding(horizontal = Large),
+                text = "${value.currencySymbol} ${value.amount}",
+                maxLines = 1,
+            )
+        }
+
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Large)
+                .padding(top = Normal),
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    modifier = Modifier.padding(bottom = HalfNormal),
-                    text = stringResource(Resources.string.total),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f),
-                )
-
-                byMonth.byType.total.forEach { value ->
-                    Text(
-                        text = "${value.currencySymbol} ${value.amount}",
-                        maxLines = 1,
-                    )
-                }
-            }
-
-            Column(
+            IncomeExpenseBlock(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(start = Small),
-            ) {
-                Text(
-                    modifier = Modifier.padding(bottom = HalfNormal),
-                    text = stringResource(Resources.string.income),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f),
-                )
+                    .weight(1f),
+                title = stringResource(Resources.string.income),
+                items = byMonth.byType.income,
+                color = IncomeColor,
+            )
 
-                byMonth.byType.income.forEach { value ->
+            IncomeExpenseBlock(
+                modifier = Modifier.weight(1f),
+                title = stringResource(Resources.string.expense),
+                items = byMonth.byType.expense,
+                color = ExpenseColor,
+            )
+        }
+    }
+}
+
+@Composable
+private fun IncomeExpenseBlock(
+    modifier: Modifier,
+    title: String,
+    items: List<TotalMonthlyState.ByType.Value>,
+    color: Color,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Text(
+            modifier = Modifier,
+            text = title,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+        )
+        Column(
+            modifier = Modifier,
+        ) {
+            items.forEach { item ->
+                Row {
                     Text(
-                        text = "${value.currencySymbol} ${value.amount}",
-                        color = IncomeColor,
-                        maxLines = 1,
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = Small),
-            ) {
-                Text(
-                    modifier = Modifier.padding(bottom = HalfNormal),
-                    text = stringResource(Resources.string.expense),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f),
-                )
-
-                byMonth.byType.expense.forEach { value ->
-                    Text(
-                        text = "${value.currencySymbol} ${value.amount}",
-                        color = ExpenseColor,
+                        color = color,
+                        text = "${item.currencySymbol} ${item.amount}",
+                        style = MaterialTheme.typography.titleSmall,
                         maxLines = 1,
                     )
                 }
