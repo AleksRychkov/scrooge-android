@@ -25,8 +25,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.ReportAnnualTotalComponentInternal
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.TotalMonthlyComponent
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.TotalMonthlyContent
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.TotalMonthlyComponent
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.TotalMonthlyContent
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.modal.PeriodModal
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
@@ -71,6 +72,9 @@ private fun ReportAnnualTotalContent(
             periodContentElevation = elevation,
         )
     }
+    PeriodModal(
+        component = component,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

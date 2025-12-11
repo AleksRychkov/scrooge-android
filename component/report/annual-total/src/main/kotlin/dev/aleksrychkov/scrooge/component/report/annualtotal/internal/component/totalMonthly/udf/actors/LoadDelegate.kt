@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.actors
+package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.actors
 
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyCommand
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyEvent
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyCommand
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyEvent
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountMonthlyResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountMonthlyUseCase
 import kotlinx.coroutines.flow.Flow

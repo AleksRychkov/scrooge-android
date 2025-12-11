@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf
+package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf
 
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 

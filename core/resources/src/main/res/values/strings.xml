@@ -105,6 +105,7 @@
     <!-- Form -->
 
     <!-- Reports -->
+    <string name="reports_period_current_year">Current year</string>
     <string-array name="reports_month_names">
         <item>January</item>
         <item>February</item>

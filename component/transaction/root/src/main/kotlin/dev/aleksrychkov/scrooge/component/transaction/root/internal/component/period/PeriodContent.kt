@@ -64,7 +64,7 @@ internal fun PeriodContent(
 }
 
 @Composable
-internal fun PeriodContent(
+private fun PeriodContent(
     modifier: Modifier,
     state: PeriodState,
     onIncrementYearClicked: () -> Unit,

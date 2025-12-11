@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component
+package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyState
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyState
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor

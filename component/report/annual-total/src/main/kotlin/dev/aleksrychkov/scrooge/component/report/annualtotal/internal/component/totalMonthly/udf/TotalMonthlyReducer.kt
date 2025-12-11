@@ -1,6 +1,5 @@
-package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf
+package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf
 
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyCommand.Load
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
@@ -20,7 +19,7 @@ internal class TotalMonthlyReducer(
                     copy(isLoading = true)
                 }
                 command {
-                    listOf(Load(year = event.year))
+                    listOf(TotalMonthlyCommand.Load(year = event.year))
                 }
             }
 

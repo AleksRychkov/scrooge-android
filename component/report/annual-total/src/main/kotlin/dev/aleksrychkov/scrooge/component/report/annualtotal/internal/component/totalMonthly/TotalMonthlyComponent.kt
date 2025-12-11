@@ -1,10 +1,10 @@
-package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component
+package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyActor
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyEvent
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyReducer
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.TotalMonthlyState
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyActor
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyEvent
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyReducer
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyState
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import kotlinx.coroutines.flow.StateFlow

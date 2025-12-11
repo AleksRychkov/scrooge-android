@@ -1,6 +1,6 @@
-package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf
+package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf
 
-import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.udf.actors.LoadDelegate
+import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.actors.LoadDelegate
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.udf.Actor
 import dev.aleksrychkov.scrooge.core.udf.Switcher
