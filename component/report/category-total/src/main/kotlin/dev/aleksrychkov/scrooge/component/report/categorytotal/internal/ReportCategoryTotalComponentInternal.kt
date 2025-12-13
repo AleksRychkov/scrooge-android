@@ -1,0 +1,5 @@
+package dev.aleksrychkov.scrooge.component.report.categorytotal.internal
+
+import dev.aleksrychkov.scrooge.component.report.categorytotal.ReportCategoryTotalComponent
+
+internal interface ReportCategoryTotalComponentInternal : ReportCategoryTotalComponent

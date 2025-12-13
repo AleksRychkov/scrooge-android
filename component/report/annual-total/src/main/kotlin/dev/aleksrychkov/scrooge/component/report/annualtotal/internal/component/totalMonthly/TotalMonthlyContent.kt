@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyState
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
@@ -38,6 +39,7 @@ internal fun TotalMonthlyContent(
     paddingBottom: Dp = 0.dp,
     headerItem: @Composable (() -> Unit)? = null,
     component: TotalMonthlyComponent,
+    openCategoryReport: () -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
@@ -48,17 +50,19 @@ internal fun TotalMonthlyContent(
         paddingTop = paddingTop,
         paddingBottom = paddingBottom,
         state = state,
+        openCategoryReport = openCategoryReport,
     )
 }
 
 @Composable
 private fun TotalMonthlyContent(
     modifier: Modifier,
+    state: TotalMonthlyState,
     listState: LazyListState? = null,
     headerItem: @Composable (() -> Unit)? = null,
     paddingTop: Dp,
     paddingBottom: Dp,
-    state: TotalMonthlyState,
+    openCategoryReport: () -> Unit,
 ) {
     val listState = listState ?: rememberLazyListState()
     LazyColumn(
@@ -82,8 +86,10 @@ private fun TotalMonthlyContent(
         ) { byMonth ->
             TotalByMonth(
                 modifier = Modifier
-                    .fillMaxWidth(),
-//                    .background(MaterialTheme.colorScheme.secondary)
+                    .fillMaxWidth()
+                    .debounceClickable {
+                        openCategoryReport()
+                    },
                 byMonth = byMonth,
             )
         }

@@ -29,6 +29,8 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="month">Month</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
     <!-- Common -->
 
     <!-- Category -->

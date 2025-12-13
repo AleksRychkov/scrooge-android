@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.report.root"
+    namespace = "dev.aleksrychkov.scrooge.component.report.categorytotal"
     buildFeatures {
         compose = true
     }
@@ -13,10 +13,11 @@ android {
 
 dependencies {
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
     implementation(projects.core.resources)
+    implementation(projects.core.udfExtensions)
 
-    implementation(projects.component.report.annualTotal)
-    implementation(projects.component.report.categoryTotal)
+    implementation(projects.feature.reports.api)
 }
 
 dependencies {
@@ -29,6 +30,7 @@ dependencies {
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
 
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.immutable.collections)
 
     debugImplementation(libs.androidx.ui.tooling)

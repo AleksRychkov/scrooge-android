@@ -40,7 +40,7 @@ import kotlin.math.roundToInt
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Suppress("MagicNumber", "LongMethod")
 @Composable
-fun AppTabBar(
+fun DsTabBar(
     modifier: Modifier,
     options: List<String>,
     selectedIndex: Int = 0,

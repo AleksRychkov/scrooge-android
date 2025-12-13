@@ -11,6 +11,5 @@ fun Dp.animateElevation(durationMillis: Int = 300): State<Dp> {
     return animateDpAsState(
         targetValue = this,
         animationSpec = tween(durationMillis = durationMillis),
-        label = "toolbar shadow animation"
     )
 }

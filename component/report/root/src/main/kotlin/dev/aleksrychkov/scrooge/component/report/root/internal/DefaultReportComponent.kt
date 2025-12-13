@@ -4,8 +4,12 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.report.annualtotal.ReportAnnualTotalComponent
+import dev.aleksrychkov.scrooge.component.report.categorytotal.ReportCategoryTotalComponent
+import dev.aleksrychkov.scrooge.component.report.root.internal.ReportComponentInternal.Child.AnnualTotal
+import dev.aleksrychkov.scrooge.component.report.root.internal.ReportComponentInternal.Child.CategoryTotal
 import kotlinx.serialization.Serializable
 
 internal class DefaultReportComponent(
@@ -17,8 +21,8 @@ internal class DefaultReportComponent(
         childStack(
             source = navigation,
             serializer = Configuration.serializer(),
-            initialConfiguration = Configuration.Annual,
-            handleBackButton = false,
+            initialConfiguration = Configuration.AnnualTotal,
+            handleBackButton = true,
             key = "DefaultReportComponentStack",
             childFactory = ::child,
         )
@@ -28,14 +32,25 @@ internal class DefaultReportComponent(
         childComponentContext: ComponentContext
     ): ReportComponentInternal.Child =
         when (configuration) {
-            Configuration.Annual -> ReportComponentInternal.Child.Annual(
+            Configuration.AnnualTotal -> AnnualTotal(
                 component = ReportAnnualTotalComponent(componentContext = childComponentContext)
             )
+
+            Configuration.CategoryTotal -> CategoryTotal(
+                component = ReportCategoryTotalComponent(componentContext = childComponentContext)
+            )
         }
+
+    override fun openCategoryReport() {
+        navigation.pushNew(Configuration.CategoryTotal)
+    }
 
     @Serializable
     private sealed interface Configuration {
         @Serializable
-        data object Annual : Configuration
+        data object AnnualTotal : Configuration
+
+        @Serializable
+        data object CategoryTotal : Configuration
     }
 }

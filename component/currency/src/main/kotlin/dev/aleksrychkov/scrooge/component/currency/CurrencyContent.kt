@@ -46,7 +46,7 @@ import coil3.request.crossfade
 import dev.aleksrychkov.scrooge.component.currency.internal.CurrencyComponentInternal
 import dev.aleksrychkov.scrooge.component.currency.internal.entity.FavoriteCurrencyEntity
 import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyState
-import dev.aleksrychkov.scrooge.core.designsystem.composables.AppTabBar
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
@@ -108,7 +108,7 @@ private fun CurrencyContent(
             .displayCutoutPadding()
             .statusBarsPadding()
     ) {
-        AppTabBar(
+        DsTabBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Normal),

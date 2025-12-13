@@ -37,10 +37,12 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun ReportAnnualTotalContent(
     modifier: Modifier,
     component: ReportAnnualTotalComponent,
+    openCategoryReport: () -> Unit,
 ) {
     ReportAnnualTotalContent(
         modifier = modifier,
         component = component as ReportAnnualTotalComponentInternal,
+        openCategoryReport = openCategoryReport,
     )
 }
 
@@ -48,6 +50,7 @@ fun ReportAnnualTotalContent(
 private fun ReportAnnualTotalContent(
     modifier: Modifier,
     component: ReportAnnualTotalComponentInternal,
+    openCategoryReport: () -> Unit,
 ) {
     val contentListState = rememberLazyListState()
     val elevation = Medium
@@ -68,6 +71,7 @@ private fun ReportAnnualTotalContent(
             component = component,
             contentListState = contentListState,
             periodContentElevation = elevation,
+            openCategoryReport = openCategoryReport,
         )
     }
     PeriodModal(
@@ -95,7 +99,7 @@ private fun ReportAppBar(
     val animatedElevation by headerElevation.animateElevation()
 
     Surface(
-        Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shadowElevation = animatedElevation,
     ) {
         TopAppBar(
@@ -117,6 +121,7 @@ private fun Content(
     component: ReportAnnualTotalComponentInternal,
     contentListState: LazyListState,
     periodContentElevation: Dp,
+    openCategoryReport: () -> Unit,
 ) {
     Content(
         modifier = modifier,
@@ -124,6 +129,7 @@ private fun Content(
         periodContentElevation = periodContentElevation,
         periodTotalComponent = component.periodTotalComponent,
         totalMonthlyComponent = component.totalMonthlyComponent,
+        openCategoryReport = openCategoryReport,
     )
 }
 
@@ -134,6 +140,7 @@ private fun Content(
     periodContentElevation: Dp,
     periodTotalComponent: PeriodTotalComponent,
     totalMonthlyComponent: TotalMonthlyComponent,
+    openCategoryReport: () -> Unit,
 ) {
     Box(modifier = modifier) {
         TotalMonthlyContent(
@@ -150,6 +157,7 @@ private fun Content(
             },
             paddingBottom = Large2X,
             component = totalMonthlyComponent,
+            openCategoryReport = openCategoryReport,
         )
     }
 }
