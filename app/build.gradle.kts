@@ -7,9 +7,21 @@ android {
         buildConfig = true
     }
 
+    signingConfigs {
+        create("_debug") {
+            val keystore =
+                project.layout.projectDirectory.file("debug.jks").asFile
+            storeFile = keystore
+            storePassword = "debug_"
+            keyAlias = "debug_"
+            keyPassword = "debug_"
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
+            signingConfig = signingConfigs.getByName("_debug")
         }
         release {
             isMinifyEnabled = true
@@ -17,6 +29,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("_debug")
         }
     }
 }
