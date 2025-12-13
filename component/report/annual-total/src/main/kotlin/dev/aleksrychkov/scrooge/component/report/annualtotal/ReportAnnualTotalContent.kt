@@ -1,7 +1,5 @@
 package dev.aleksrychkov.scrooge.component.report.annualtotal
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -30,6 +27,7 @@ import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.modal.PeriodModal
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalContent
+import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
@@ -154,13 +152,4 @@ private fun Content(
             component = totalMonthlyComponent,
         )
     }
-}
-
-@Composable
-private fun Dp.animateElevation(durationMillis: Int = 300): State<Dp> {
-    return animateDpAsState(
-        targetValue = this,
-        animationSpec = tween(durationMillis = durationMillis),
-        label = "toolbar shadow animation"
-    )
 }
