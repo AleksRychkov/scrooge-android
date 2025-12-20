@@ -20,3 +20,15 @@ WITH monthly AS (
     GROUP BY ym, type, currencyCode
 )
 SELECT * FROM monthly;
+
+totalByCategory:
+SELECT
+	TTransaction.type,
+	currencyCode,
+	SUM(amount) AS total,
+	name AS categoryName,
+	iconId AS categoryIconId
+FROM TTransaction
+LEFT JOIN Category ON category = name
+WHERE timestamp >= ? AND timestamp <= ?
+GROUP BY TTransaction.type, currencyCode, category;
