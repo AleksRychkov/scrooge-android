@@ -1,10 +1,13 @@
 package dev.aleksrychkov.scrooge.component.report.categorytotal
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -15,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
+import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.ByCategoryContent
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -37,7 +41,12 @@ private fun ReportCategoryTotalContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            ReportAppBar(component = component)
+            ReportAppBar(
+                component = component,
+                onBackClicked = {
+                    throw IllegalStateException("Not implemented yet")
+                }
+            )
         }
     ) { innerPadding ->
         Content(
@@ -53,6 +62,7 @@ private fun ReportCategoryTotalContent(
 @Composable
 internal fun ReportAppBar(
     component: ReportCategoryTotalComponentInternal,
+    onBackClicked: () -> Unit,
 ) {
     val state = remember { component.periodComponent.state }
     Surface(
@@ -62,6 +72,14 @@ internal fun ReportAppBar(
         TopAppBar(
             title = {
                 Text(text = stringResource(Resources.string.category))
+            },
+            navigationIcon = {
+                IconButton(onClick = onBackClicked) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(Resources.string.back),
+                    )
+                }
             },
             actions = {
                 TextButton(
@@ -75,14 +93,12 @@ internal fun ReportAppBar(
 }
 
 @Composable
-@Suppress("UnusedParameter")
 private fun Content(
     modifier: Modifier,
     component: ReportCategoryTotalComponentInternal,
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        Text("Categroy total")
-    }
+    ByCategoryContent(
+        modifier = modifier,
+        component = component.byCategoryComponent,
+    )
 }
