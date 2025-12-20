@@ -1,9 +1,13 @@
 package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory
 
 import com.arkivanov.decompose.ComponentContext
+import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryActor
+import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryEvent
+import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryReducer
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
-import kotlinx.coroutines.flow.MutableStateFlow
+import dev.aleksrychkov.scrooge.core.udf.Store
+import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import kotlinx.coroutines.flow.StateFlow
 
 internal interface ByCategoryComponent {
@@ -25,5 +29,15 @@ private class DefaultByCategoryComponent(
     period: PeriodTimestampEntity
 ) : ByCategoryComponent, ComponentContext by componentContext {
 
-    override val state: StateFlow<ByCategoryState> = MutableStateFlow(ByCategoryState())
+    private val store: Store<ByCategoryState, ByCategoryEvent, Unit> by lazy {
+        instanceKeeper.createStore(
+            initialState = ByCategoryState(period = period),
+            actor = ByCategoryActor(),
+            reducer = ByCategoryReducer(),
+            startEvent = ByCategoryEvent.External.Load(period),
+        )
+    }
+
+    override val state: StateFlow<ByCategoryState>
+        get() = store.state
 }

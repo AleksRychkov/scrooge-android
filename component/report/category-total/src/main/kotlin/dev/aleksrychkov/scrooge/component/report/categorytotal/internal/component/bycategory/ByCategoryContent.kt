@@ -1,4 +1,5 @@
 @file:Suppress("All")
+
 package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory
 
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -117,7 +119,7 @@ private fun ByCurrency(
 
             val rawPageOffset =
                 (pagerState.currentPage - page) +
-                    pagerState.currentPageOffsetFraction
+                        pagerState.currentPageOffsetFraction
 
             val chartWidthMultiplier = 0.7f
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -137,9 +139,9 @@ private fun ByCurrency(
                             .aspectRatio(1f)
                             .graphicsLayer {
                                 val pageOffSet = (
-                                    (pagerState.currentPage - page) + pagerState
-                                        .currentPageOffsetFraction
-                                    ).absoluteValue
+                                        (pagerState.currentPage - page) + pagerState
+                                            .currentPageOffsetFraction
+                                        ).absoluteValue
                                 scaleY = lerp(
                                     start = 0.75f,
                                     stop = 1f,
@@ -178,6 +180,7 @@ private fun ByCategoryContentPreview() {
                 modifier = Modifier.fillMaxWidth(),
                 state = ByCategoryState(
                     isLoading = false,
+                    period = PeriodTimestampEntity(0, 0),
                     byCurrencyExpense = persistentListOf(
                         ByCategoryState.ByCurrency(
                             currency = CurrencyEntity.RUB,
