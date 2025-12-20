@@ -7,6 +7,7 @@ import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 
@@ -56,19 +57,11 @@ internal object ReportMapper {
             return totalAmountToEntity(mapped)
         }
 
-        return ReportTotalAmountMonthlyEntity(
-            january = build(Month.JANUARY.number),
-            february = build(Month.FEBRUARY.number),
-            march = build(Month.MARCH.number),
-            april = build(Month.APRIL.number),
-            may = build(Month.MAY.number),
-            june = build(Month.JUNE.number),
-            july = build(Month.JULY.number),
-            august = build(Month.AUGUST.number),
-            september = build(Month.SEPTEMBER.number),
-            october = build(Month.OCTOBER.number),
-            november = build(Month.NOVEMBER.number),
-            december = build(Month.DECEMBER.number),
-        )
+        return Month.entries
+            .map { month -> month to build(month.number) }
+            .filter { it.second != null }
+            .associate { (month, entity) -> month to entity!! }
+            .toImmutableMap()
+            .let(::ReportTotalAmountMonthlyEntity)
     }
 }

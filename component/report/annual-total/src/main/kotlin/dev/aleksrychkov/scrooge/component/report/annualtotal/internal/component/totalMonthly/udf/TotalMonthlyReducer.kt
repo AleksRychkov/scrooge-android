@@ -16,7 +16,7 @@ internal class TotalMonthlyReducer(
         return when (event) {
             is TotalMonthlyEvent.External.Load -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = true)
+                    copy(isLoading = true, currentYear = event.year)
                 }
                 command {
                     listOf(TotalMonthlyCommand.Load(year = event.year))
@@ -33,7 +33,10 @@ internal class TotalMonthlyReducer(
                 state {
                     copy(
                         isLoading = false,
-                        byMonth = event.res.mapToState(resourceManager),
+                        byMonth = event.res.mapToState(
+                            resourceManager = resourceManager,
+                            year = state.currentYear,
+                        ),
                     )
                 }
             }

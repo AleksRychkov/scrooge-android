@@ -9,6 +9,7 @@ import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountMonthlyResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountMonthlyUseCase
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -21,22 +22,15 @@ internal class DefaultReportTotalAmountMonthlyUseCase(
     ): ReportTotalAmountMonthlyResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
-                val res = reportDao.value.totalAmountMonthly(year)
-                val resWithTotal = ReportTotalAmountMonthlyEntity(
-                    january = res.january?.let(::calculateTotal),
-                    february = res.february?.let(::calculateTotal),
-                    march = res.march?.let(::calculateTotal),
-                    april = res.april?.let(::calculateTotal),
-                    may = res.may?.let(::calculateTotal),
-                    june = res.june?.let(::calculateTotal),
-                    july = res.july?.let(::calculateTotal),
-                    august = res.august?.let(::calculateTotal),
-                    september = res.september?.let(::calculateTotal),
-                    october = res.october?.let(::calculateTotal),
-                    november = res.november?.let(::calculateTotal),
-                    december = res.december?.let(::calculateTotal),
-                )
-                ReportTotalAmountMonthlyResult.Success(resWithTotal)
+                reportDao.value
+                    .totalAmountMonthly(year)
+                    .result
+                    .map { (key, value) -> key to calculateTotal(value) }
+                    .toMap()
+                    .toImmutableMap()
+                    .let {
+                        ReportTotalAmountMonthlyResult.Success(ReportTotalAmountMonthlyEntity(result = it))
+                    }
             }.getOrDefault(ReportTotalAmountMonthlyResult.Failure)
         }
 

@@ -5,11 +5,12 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.report.annualtotal.ReportAnnualTotalComponent
 import dev.aleksrychkov.scrooge.component.report.categorytotal.ReportCategoryTotalComponent
 import dev.aleksrychkov.scrooge.component.report.root.ReportComponent
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 
 internal interface ReportComponentInternal : ReportComponent {
     val stack: Value<ChildStack<*, Child>>
 
-    fun openCategoryReport()
+    fun openCategoryReport(period: PeriodTimestampEntity)
 
     sealed class Child {
         class AnnualTotal(val component: ReportAnnualTotalComponent) : Child()

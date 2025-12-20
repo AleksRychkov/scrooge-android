@@ -31,13 +31,14 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 fun ReportAnnualTotalContent(
     modifier: Modifier,
     component: ReportAnnualTotalComponent,
-    openCategoryReport: () -> Unit,
+    openCategoryReport: (PeriodTimestampEntity) -> Unit,
 ) {
     ReportAnnualTotalContent(
         modifier = modifier,
@@ -50,7 +51,7 @@ fun ReportAnnualTotalContent(
 private fun ReportAnnualTotalContent(
     modifier: Modifier,
     component: ReportAnnualTotalComponentInternal,
-    openCategoryReport: () -> Unit,
+    openCategoryReport: (PeriodTimestampEntity) -> Unit,
 ) {
     val contentListState = rememberLazyListState()
     val elevation = Medium
@@ -121,7 +122,7 @@ private fun Content(
     component: ReportAnnualTotalComponentInternal,
     contentListState: LazyListState,
     periodContentElevation: Dp,
-    openCategoryReport: () -> Unit,
+    openCategoryReport: (PeriodTimestampEntity) -> Unit,
 ) {
     Content(
         modifier = modifier,
@@ -140,7 +141,7 @@ private fun Content(
     periodContentElevation: Dp,
     periodTotalComponent: PeriodTotalComponent,
     totalMonthlyComponent: TotalMonthlyComponent,
-    openCategoryReport: () -> Unit,
+    openCategoryReport: (PeriodTimestampEntity) -> Unit,
 ) {
     Box(modifier = modifier) {
         TotalMonthlyContent(

@@ -10,6 +10,7 @@ import dev.aleksrychkov.scrooge.component.report.annualtotal.ReportAnnualTotalCo
 import dev.aleksrychkov.scrooge.component.report.categorytotal.ReportCategoryTotalComponent
 import dev.aleksrychkov.scrooge.component.report.root.internal.ReportComponentInternal.Child.AnnualTotal
 import dev.aleksrychkov.scrooge.component.report.root.internal.ReportComponentInternal.Child.CategoryTotal
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import kotlinx.serialization.Serializable
 
 internal class DefaultReportComponent(
@@ -36,13 +37,16 @@ internal class DefaultReportComponent(
                 component = ReportAnnualTotalComponent(componentContext = childComponentContext)
             )
 
-            Configuration.CategoryTotal -> CategoryTotal(
-                component = ReportCategoryTotalComponent(componentContext = childComponentContext)
+            is Configuration.CategoryTotal -> CategoryTotal(
+                component = ReportCategoryTotalComponent(
+                    componentContext = childComponentContext,
+                    period = configuration.period,
+                )
             )
         }
 
-    override fun openCategoryReport() {
-        navigation.pushNew(Configuration.CategoryTotal)
+    override fun openCategoryReport(period: PeriodTimestampEntity) {
+        navigation.pushNew(Configuration.CategoryTotal(period))
     }
 
     @Serializable
@@ -51,6 +55,6 @@ internal class DefaultReportComponent(
         data object AnnualTotal : Configuration
 
         @Serializable
-        data object CategoryTotal : Configuration
+        data class CategoryTotal(val period: PeriodTimestampEntity) : Configuration
     }
 }

@@ -28,7 +28,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -39,7 +39,7 @@ internal fun TotalMonthlyContent(
     paddingBottom: Dp = 0.dp,
     headerItem: @Composable (() -> Unit)? = null,
     component: TotalMonthlyComponent,
-    openCategoryReport: () -> Unit,
+    openCategoryReport: (PeriodTimestampEntity) -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
@@ -62,7 +62,7 @@ private fun TotalMonthlyContent(
     headerItem: @Composable (() -> Unit)? = null,
     paddingTop: Dp,
     paddingBottom: Dp,
-    openCategoryReport: () -> Unit,
+    openCategoryReport: (PeriodTimestampEntity) -> Unit,
 ) {
     val listState = listState ?: rememberLazyListState()
     LazyColumn(
@@ -72,7 +72,7 @@ private fun TotalMonthlyContent(
             top = paddingTop,
             bottom = paddingBottom,
         ),
-        verticalArrangement = Arrangement.spacedBy(Normal2X),
+        verticalArrangement = Arrangement.spacedBy(Normal),
     ) {
         if (headerItem != null) {
             item {
@@ -88,7 +88,7 @@ private fun TotalMonthlyContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .debounceClickable {
-                        openCategoryReport()
+                        openCategoryReport(byMonth.periodTimestamp)
                     },
                 byMonth = byMonth,
             )
@@ -102,10 +102,10 @@ private fun TotalByMonth(
     byMonth: TotalMonthlyState.ByMonth,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.padding(vertical = Normal),
     ) {
         Text(
-            modifier = Modifier.padding(vertical = Normal, horizontal = Large),
+            modifier = Modifier.padding(horizontal = Large),
             text = byMonth.month,
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
         )
