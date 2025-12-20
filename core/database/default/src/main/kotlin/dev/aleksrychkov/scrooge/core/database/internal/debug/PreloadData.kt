@@ -96,7 +96,7 @@ internal object PreloadData {
         val tz = TimeZone.currentSystemDefault()
         val now = Clock.System.now().toLocalDateTime(tz)
         val startOfYear =
-            LocalDateTime(year = now.year, 1, 1, 0, 0)
+            LocalDateTime(year = now.year - 1, 1, 1, 0, 0)
                 .toInstant(tz)
                 .toEpochMilliseconds()
         val endOfYear =
