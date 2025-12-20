@@ -8,8 +8,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
@@ -35,7 +37,7 @@ private fun ReportCategoryTotalContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            ReportAppBar()
+            ReportAppBar(component = component)
         }
     ) { innerPadding ->
         Content(
@@ -49,7 +51,10 @@ private fun ReportCategoryTotalContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ReportAppBar() {
+internal fun ReportAppBar(
+    component: ReportCategoryTotalComponentInternal,
+) {
+    val state = remember { component.periodComponent.state }
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shadowElevation = Medium,
@@ -59,6 +64,11 @@ internal fun ReportAppBar() {
                 Text(text = stringResource(Resources.string.category))
             },
             actions = {
+                TextButton(
+                    onClick = component::openPeriodModal,
+                ) {
+                    Text(text = state.name)
+                }
             }
         )
     }

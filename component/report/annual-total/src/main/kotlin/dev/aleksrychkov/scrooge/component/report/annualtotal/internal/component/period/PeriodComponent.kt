@@ -32,12 +32,11 @@ private class DefaultPeriodComponent(
     private val currentYear: Int =
         Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year
 
-    override val state: PeriodState
-        get() = PeriodState(
-            selectedYear = year,
-            allYears = (currentYear - ALL_YEARS_RANGE..currentYear + ALL_YEARS_RANGE)
-                .map { it }
-                .toImmutableList(),
-            currentYear = currentYear,
-        )
+    override val state: PeriodState = PeriodState(
+        selectedYear = year,
+        allYears = (currentYear - ALL_YEARS_RANGE..currentYear + ALL_YEARS_RANGE)
+            .map { it }
+            .toImmutableList(),
+        currentYear = currentYear,
+    )
 }
