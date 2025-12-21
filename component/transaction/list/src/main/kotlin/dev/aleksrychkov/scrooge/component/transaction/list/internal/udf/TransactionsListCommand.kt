@@ -4,4 +4,6 @@ internal sealed interface TransactionsListCommand {
     data class LoadTransactions(
         val period: Pair<Long, Long>,
     ) : TransactionsListCommand
+
+    data object PreloadCategories : TransactionsListCommand
 }

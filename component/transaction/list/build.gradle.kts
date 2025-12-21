@@ -19,6 +19,7 @@ dependencies {
     implementation(projects.core.router)
     implementation(projects.core.udfExtensions)
 
+    implementation(projects.feature.category.api)
     implementation(projects.feature.transaction.api)
 }
 
