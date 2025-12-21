@@ -33,6 +33,7 @@ internal interface CreateCategoryComponent {
 
     fun setName(name: String)
     fun setIcon(icon: CategoryIcon)
+    fun setColor(color: Int)
     fun submit()
 }
 
@@ -70,5 +71,9 @@ private class DefaultCreateCategoryComponent(
 
     override fun submit() {
         store.handle(CreateCategoryEvent.External.Submit)
+    }
+
+    override fun setColor(color: Int) {
+        store.handle(CreateCategoryEvent.External.SetColor(color))
     }
 }

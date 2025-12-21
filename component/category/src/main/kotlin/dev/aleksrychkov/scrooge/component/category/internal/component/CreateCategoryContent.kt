@@ -1,6 +1,9 @@
 package dev.aleksrychkov.scrooge.component.category.internal.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,8 +29,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +45,7 @@ import dev.aleksrychkov.scrooge.component.category.internal.component.udf.Create
 import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
@@ -107,6 +113,7 @@ internal fun CreateCategoryContent(
             state = state,
             setName = component::setName,
             setIcon = component::setIcon,
+            setColor = component::setColor,
             submit = component::submit,
         )
     }
@@ -118,6 +125,7 @@ private fun CreateCategoryContent(
     state: CreateCategoryState,
     setName: (String) -> Unit,
     setIcon: (CategoryIcon) -> Unit,
+    setColor: (Int) -> Unit,
     submit: () -> Unit,
 ) {
     Column(
@@ -126,77 +134,177 @@ private fun CreateCategoryContent(
             .padding(bottom = Normal)
             .animateContentSize()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Max),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            DsTextField(
-                modifier = Modifier
-                    .weight(weight = 1f, fill = true)
-                    .height(IntrinsicSize.Min)
-                    .padding(end = Normal),
-                value = state.name,
-                placeholder = {
-                    if (state.name.isEmpty()) {
-                        Text(
-                            text = stringResource(Resources.string.category_name_placeholder),
-                            color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.25f),
-                        )
-                    }
-                },
-                onValueChanged = { value ->
-                    setName(value)
-                }
-            )
-
-            DsButton(
-                modifier = Modifier.fillMaxHeight(),
-                onClick = submit,
-            ) {
-                Text(text = stringResource(Resources.string.save))
-            }
-        }
-
-        Text(
-            modifier = Modifier.padding(vertical = Normal),
-            text = stringResource(Resources.string.category_select_icon),
-            style = MaterialTheme.typography.bodyLarge,
+        Header(
+            modifier = Modifier.fillMaxWidth(),
+            state = state,
+            setName = setName,
+            submit = submit,
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(CategoryIconSize),
-            verticalArrangement = Arrangement.spacedBy(Small),
-            horizontalArrangement = Arrangement.spacedBy(Small),
+        var tabIndex by remember { mutableIntStateOf(0) }
+        val titles = listOf(
+            stringResource(Resources.string.category_select_icon),
+            stringResource(Resources.string.category_select_color),
+        )
+
+        DsTabBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = Large),
+            options = titles,
+            selectedIndex = tabIndex,
+            onOptionSelected = { tabIndex = it }
+        )
+
+        AnimatedVisibility(
+            visible = tabIndex == 0,
+            enter = fadeIn(),
+            exit = fadeOut(),
         ) {
-            items(items = state.availableIcons) { item ->
-                Box(
-                    modifier = Modifier
-                        .width(IntrinsicSize.Max)
-                        .height(IntrinsicSize.Max),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    val (tintColor, bgColor) = when {
-                        item.id == state.selectedCategoryIcon.id -> Color.White to MaterialTheme.colorScheme.primary
-                        else -> MaterialTheme.colorScheme.onSecondary to MaterialTheme.colorScheme.secondary
-                    }
-                    Icon(
-                        modifier = Modifier
-                            .height(CategoryIconSize)
-                            .width(CategoryIconSize)
-                            .clip(CircleShape)
-                            .debounceClickable {
-                                setIcon(item)
-                            }
-                            .background(bgColor)
-                            .padding(Normal),
-                        tint = tintColor,
-                        imageVector = item.icon,
-                        contentDescription = null,
+            SelectIcon(
+                modifier = Modifier.fillMaxWidth(),
+                state = state,
+                setIcon = setIcon,
+            )
+        }
+        AnimatedVisibility(
+            visible = tabIndex == 1,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+            SelectColor(
+                modifier = Modifier.fillMaxWidth(),
+                state = state,
+                setColor = setColor,
+            )
+        }
+    }
+}
+
+@Composable
+private fun Header(
+    modifier: Modifier,
+    state: CreateCategoryState,
+    setName: (String) -> Unit,
+    submit: () -> Unit,
+) {
+    Row(
+        modifier = modifier.height(IntrinsicSize.Max),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .width(IntrinsicSize.Max)
+                .height(IntrinsicSize.Max),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                modifier = Modifier
+                    .height(CategoryIconSize)
+                    .width(CategoryIconSize)
+                    .clip(CircleShape)
+                    .background(Color(state.selectedCategoryColor))
+                    .padding(Normal),
+                tint = Color.White,
+                imageVector = state.selectedCategoryIcon.icon,
+                contentDescription = null,
+            )
+        }
+
+        DsTextField(
+            modifier = Modifier
+                .weight(weight = 1f, fill = true)
+                .height(IntrinsicSize.Min)
+                .padding(horizontal = Normal),
+            value = state.name,
+            placeholder = {
+                if (state.name.isEmpty()) {
+                    Text(
+                        text = stringResource(Resources.string.category_name_placeholder),
+                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.25f),
                     )
                 }
+            },
+            onValueChanged = { value ->
+                setName(value)
             }
+        )
+
+        DsButton(
+            modifier = Modifier.fillMaxHeight(),
+            onClick = submit,
+        ) {
+            Text(text = stringResource(Resources.string.save))
+        }
+    }
+}
+
+@Composable
+private fun SelectIcon(
+    modifier: Modifier,
+    state: CreateCategoryState,
+    setIcon: (CategoryIcon) -> Unit,
+) {
+    LazyVerticalGrid(
+        modifier = modifier,
+        columns = GridCells.Adaptive(CategoryIconSize),
+        verticalArrangement = Arrangement.spacedBy(Small),
+        horizontalArrangement = Arrangement.spacedBy(Small),
+    ) {
+        items(items = state.availableIcons, key = { it.id }) { item ->
+            Box(
+                modifier = Modifier
+                    .width(IntrinsicSize.Max)
+                    .height(IntrinsicSize.Max),
+                contentAlignment = Alignment.Center,
+            ) {
+                val (tintColor, bgColor) = when {
+                    item.id == state.selectedCategoryIcon.id -> Color.White to MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.onSecondary to MaterialTheme.colorScheme.secondary
+                }
+                Icon(
+                    modifier = Modifier
+                        .height(CategoryIconSize)
+                        .width(CategoryIconSize)
+                        .clip(CircleShape)
+                        .debounceClickable {
+                            setIcon(item)
+                        }
+                        .background(bgColor)
+                        .padding(Normal),
+                    tint = tintColor,
+                    imageVector = item.icon,
+                    contentDescription = null,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SelectColor(
+    modifier: Modifier,
+    state: CreateCategoryState,
+    setColor: (Int) -> Unit,
+) {
+    LazyVerticalGrid(
+        modifier = modifier,
+        columns = GridCells.Adaptive(CategoryIconSize),
+        verticalArrangement = Arrangement.spacedBy(Small),
+        horizontalArrangement = Arrangement.spacedBy(Small),
+    ) {
+        items(items = state.availableColors, key = { it.argb }) { color ->
+            Box(
+                modifier = Modifier
+                    .height(CategoryIconSize)
+                    .width(CategoryIconSize)
+                    .clip(CircleShape)
+                    .debounceClickable {
+                        setColor(color.argb)
+                    }
+                    .background(color.color)
+                    .padding(Normal),
+            )
         }
     }
 }
@@ -216,6 +324,7 @@ private fun FormContentPreview() {
                 ),
                 setName = {},
                 setIcon = {},
+                setColor = {},
                 submit = {},
             )
         }

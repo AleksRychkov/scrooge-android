@@ -67,11 +67,13 @@ internal class DefaultCategoryDao(
         name: String,
         type: TransactionType,
         iconId: String,
+        color: Int,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
         database.categoryQueries.create(
             name = name,
             type = type.type.toLong(),
             iconId = iconId,
+            color = color.toLong(),
         )
     }
 

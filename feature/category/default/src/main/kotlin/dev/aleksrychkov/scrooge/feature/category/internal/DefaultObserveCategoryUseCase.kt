@@ -34,6 +34,7 @@ internal class DefaultObserveCategoryUseCase(
                 name = entity.name,
                 type = TransactionType.Expense,
                 iconId = entity.iconId,
+                color = entity.color,
             )
         }
         defaultCategories.get(TransactionType.Income).forEach { entity ->
@@ -41,6 +42,7 @@ internal class DefaultObserveCategoryUseCase(
                 name = entity.name,
                 type = TransactionType.Income,
                 iconId = entity.iconId,
+                color = entity.color,
             )
         }
         keyValueSource.value.setPreloadDone()

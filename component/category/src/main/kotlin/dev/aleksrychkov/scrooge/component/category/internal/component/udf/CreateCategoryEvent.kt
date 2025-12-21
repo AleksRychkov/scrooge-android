@@ -8,6 +8,7 @@ internal sealed interface CreateCategoryEvent {
         data object Init : CreateCategoryEvent
         data class SetName(val name: String) : CreateCategoryEvent
         data class SetIcon(val icon: CategoryIcon) : CreateCategoryEvent
+        data class SetColor(val color: Int) : CreateCategoryEvent
         data object Submit : CreateCategoryEvent
     }
 

@@ -52,6 +52,7 @@
         <item>Cafe and restaurants</item>
         <item>Transport</item>
         <item>Pharmacy</item>
+        <item>Other</item>
     </string-array>
     <string-array name="expense_categories_icon_ids">
         <item>ShoppingBasket</item>
@@ -61,6 +62,7 @@
         <item>Restaurant</item>
         <item>DirectionsBus</item>
         <item>LocalPharmacy</item>
+        <item>Receipt</item>
     </string-array>
 
     <string name="category_delete">Delete category</string>
@@ -71,7 +73,8 @@
     <string name="category_error_duplicate">Category «%s» already exists</string>
     <string name="category_deleted">Category «%s» deleted</string>
     <string name="category_name_placeholder">Category name</string>
-    <string name="category_select_icon">Select icon</string>
+    <string name="category_select_icon">Icon</string>
+    <string name="category_select_color">Color</string>
     <!-- Category -->
 
     <!-- Transaction -->

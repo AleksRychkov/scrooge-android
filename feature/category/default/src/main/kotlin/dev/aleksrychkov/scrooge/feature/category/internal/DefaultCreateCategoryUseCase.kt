@@ -40,6 +40,7 @@ internal class DefaultCreateCategoryUseCase(
                     name = categoryEntity.name,
                     type = categoryEntity.type,
                     iconId = categoryEntity.iconId,
+                    color = categoryEntity.color,
                 )
                 CreateCategoryResult.Success
             }.getOrDefault(CreateCategoryResult.Failure)

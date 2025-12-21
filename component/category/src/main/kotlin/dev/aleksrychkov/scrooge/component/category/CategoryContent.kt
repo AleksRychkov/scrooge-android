@@ -37,6 +37,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.category.internal.CategoryComponentInternal
@@ -237,9 +238,9 @@ private fun Category(
                 .height(CategoryIconSize)
                 .width(CategoryIconSize)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondary)
+                .background(Color(value.color))
                 .padding(Normal),
-            tint = MaterialTheme.colorScheme.onSecondary,
+            tint = Color.White,
             imageVector = CategoryIcons.find { it.id == value.iconId }?.icon
                 ?: UncategorizedIcon.icon,
             contentDescription = null,

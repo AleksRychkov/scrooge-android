@@ -23,6 +23,7 @@ internal class CreateCategoryActor(
             is CreateCategoryCommand.Submit -> create(
                 name = command.state.name,
                 icon = command.state.selectedCategoryIcon,
+                color = command.state.selectedCategoryColor,
                 transactionType = command.state.transactionType,
             )
         }
@@ -31,6 +32,7 @@ internal class CreateCategoryActor(
     private suspend fun create(
         name: String,
         icon: CategoryIcon,
+        color: Int,
         transactionType: TransactionType,
     ): Flow<CreateCategoryEvent> {
         if (name.isBlank()) {
@@ -42,6 +44,7 @@ internal class CreateCategoryActor(
                 name = name,
                 type = transactionType,
                 iconId = icon.id,
+                color = color,
             )
             when (val result = useCase.value.invoke(categoryEntity = entity)) {
                 is CreateCategoryResult.DuplicateViolation -> {

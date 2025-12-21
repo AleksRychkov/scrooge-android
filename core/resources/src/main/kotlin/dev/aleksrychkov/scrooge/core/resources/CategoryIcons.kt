@@ -19,7 +19,6 @@ import androidx.compose.material.icons.rounded.CardGiftcard
 import androidx.compose.material.icons.rounded.CardMembership
 import androidx.compose.material.icons.rounded.Chalet
 import androidx.compose.material.icons.rounded.Checkroom
-import androidx.compose.material.icons.rounded.CompareArrows
 import androidx.compose.material.icons.rounded.ConfirmationNumber
 import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.CrueltyFree

@@ -1,9 +1,10 @@
 package dev.aleksrychkov.scrooge.component.category.internal.component.udf
 
+import androidx.compose.ui.graphics.toArgb
 import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.resources.CategoryColors
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
-import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
@@ -20,10 +21,12 @@ internal class CreateCategoryReducer(
         return when (event) {
             CreateCategoryEvent.External.Init -> state.reduceWith(event) {
                 state {
-                    val icons = listOf(UncategorizedIcon) + CategoryIcons
                     copy(
                         isLoading = false,
-                        availableIcons = icons.toImmutableList(),
+                        availableIcons = CategoryIcons.toImmutableList(),
+                        availableColors = CategoryColors
+                            .map { CreateCategoryState.ColorWrapper(it, it.toArgb()) }
+                            .toImmutableList()
                     )
                 }
             }
@@ -31,6 +34,12 @@ internal class CreateCategoryReducer(
             is CreateCategoryEvent.External.SetIcon -> state.reduceWith(event) {
                 state {
                     copy(selectedCategoryIcon = event.icon)
+                }
+            }
+
+            is CreateCategoryEvent.External.SetColor -> state.reduceWith(event) {
+                state {
+                    copy(selectedCategoryColor = event.color)
                 }
             }
 
