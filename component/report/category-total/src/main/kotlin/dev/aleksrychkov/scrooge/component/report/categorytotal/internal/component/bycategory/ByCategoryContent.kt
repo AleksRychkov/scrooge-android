@@ -42,14 +42,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
-import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.DonutChart
-import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.DonutChartSegment
+import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.PieChart
+import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.PieChartSegment
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.math.absoluteValue
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -152,7 +153,7 @@ private fun ByCategoryChart(
     page: Int,
     pagerState: PagerState,
     maxWidth: Dp,
-    chartData: ImmutableList<DonutChartSegment>,
+    chartData: ImmutableList<PieChartSegment>,
 ) {
     val rawPageOffset =
         (pagerState.currentPage - page) +
@@ -167,7 +168,7 @@ private fun ByCategoryChart(
             },
         contentAlignment = Alignment.Center
     ) {
-        DonutChart(
+        PieChart(
             modifier = Modifier
                 .width(maxWidth * chartWidthMultiplier)
                 .aspectRatio(1f)
@@ -187,9 +188,8 @@ private fun ByCategoryChart(
                         fraction = 1f - pageOffSet.coerceIn(0f, 1f)
                     )
                 },
-            segments = chartData,
+            segments = if (pagerState.currentPage == page) chartData else persistentListOf(),
             animateOnSegmentChange = true,
-            strokeWidth = 32.dp,
         )
     }
 

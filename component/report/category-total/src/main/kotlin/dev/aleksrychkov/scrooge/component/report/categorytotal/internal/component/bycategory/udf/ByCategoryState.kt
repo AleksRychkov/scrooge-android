@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf
 
 import androidx.compose.runtime.Immutable
-import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.DonutChartSegment
+import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.PieChartSegment
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
@@ -25,7 +25,7 @@ internal data class ByCategoryState(
     @Immutable
     data class ByCurrency(
         val currency: CurrencyEntity,
-        val chartData: ImmutableList<DonutChartSegment>,
+        val chartData: ImmutableList<PieChartSegment>,
         val valueData: ImmutableList<Value>,
     ) {
 
@@ -71,14 +71,15 @@ private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyValueState
 }
 
 private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyChartDataStateList():
-    ImmutableList<DonutChartSegment> {
+    ImmutableList<PieChartSegment> {
     val total = this.sumOf { it.amount }
     return this
         .sortedBy { -it.amount }
         .map { value ->
-            DonutChartSegment(
+            PieChartSegment(
                 percentage = value.amount / total.toFloat(),
                 color = value.category.color,
+                icon = categoryIconFromId(value.category.iconId).icon,
             )
         }
         .toImmutableList()
