@@ -16,7 +16,8 @@ internal class CategoryMapperTest {
             type = TransactionType.Expense.type.toLong(),
             name = "Food",
             isDeleted = 0L,
-            iconId = "iconId"
+            iconId = "iconId",
+            color = 0L,
         )
         // When
         val entity: CategoryEntity = CategoryMapper.toEntity(category)
