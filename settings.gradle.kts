@@ -44,7 +44,7 @@ include(":component:main:root")
 
 include(":component:report:annual-total")
 include(":component:report:category-total")
-include(":component:report:period-total")
+include(":component:report:period-total-embedded")
 include(":component:report:root")
 
 include(":component:transaction:form")
