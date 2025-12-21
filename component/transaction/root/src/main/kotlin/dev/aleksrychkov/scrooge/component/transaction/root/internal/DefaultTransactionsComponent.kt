@@ -36,8 +36,8 @@ internal class DefaultTransactionsComponent(
         PeriodTotalComponent(
             componentContext = childContext("PeriodTotalComponentContext")
         ).also {
-            val startEnd = DateTimeUtils.getMonthStartEndTimestamp(_state.value.selectedPeriod)
-            it.setPeriod(fromTimestamp = startEnd.first, toTimestamp = startEnd.second)
+            val period = DateTimeUtils.getMonthStartEndTimestamp(_state.value.selectedPeriod)
+            it.setPeriod(period = period)
         }
     }
 
@@ -90,11 +90,8 @@ internal class DefaultTransactionsComponent(
 
     override fun setPeriod(instant: Instant) {
         _state.value = TransactionsState(instant)
-        val startEnd = DateTimeUtils.getMonthStartEndTimestamp(instant)
-        _periodTotalComponent.setPeriod(
-            fromTimestamp = startEnd.first,
-            toTimestamp = startEnd.second,
-        )
-        _transactionsListComponent.setPeriod(period = startEnd)
+        val period = DateTimeUtils.getMonthStartEndTimestamp(instant)
+        _periodTotalComponent.setPeriod(period = period)
+        _transactionsListComponent.setPeriod(period = period)
     }
 }

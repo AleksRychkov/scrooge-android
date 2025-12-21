@@ -5,6 +5,7 @@ import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TransactionDao
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TransactionMapper
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
@@ -25,11 +26,10 @@ internal class DefaultTransactionDao(
         get() = db.value
 
     override suspend fun get(
-        fromTimestamp: Long,
-        toTimestamp: Long,
+        period: PeriodTimestampEntity,
     ): Flow<ImmutableList<TransactionEntity>> = withContext(readDispatcher) {
         database.transactionQueries
-            .selectFromTo(fromTimestamp, toTimestamp)
+            .selectFromTo(period.from, period.to)
             .asFlow()
             .mapToList(readDispatcher)
             .map { list ->

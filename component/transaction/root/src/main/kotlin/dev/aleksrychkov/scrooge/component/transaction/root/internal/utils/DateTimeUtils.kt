@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.component.transaction.root.internal.utils
 
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -21,7 +22,7 @@ internal object DateTimeUtils {
             .date
     }
 
-    fun getMonthStartEndTimestamp(instant: Instant): Pair<Long, Long> {
+    fun getMonthStartEndTimestamp(instant: Instant): PeriodTimestampEntity {
         val tz = TimeZone.currentSystemDefault()
         val now = instant.toLocalDateTime(tz)
         val startMillis = LocalDateTime(now.year, now.month.number, 1, 0, 0)
@@ -36,7 +37,7 @@ internal object DateTimeUtils {
             .minus(1, DateTimeUnit.MILLISECOND)
             .toEpochMilliseconds()
 
-        return startMillis to endMillis
+        return PeriodTimestampEntity(from = startMillis, to = endMillis)
     }
 
     fun LocalDate.toInstantAtStartOfDay(

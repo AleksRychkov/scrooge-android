@@ -5,6 +5,7 @@ import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.Period
 import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalEvent
 import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalReducer
 import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalState
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import kotlinx.coroutines.flow.StateFlow
@@ -24,12 +25,7 @@ internal class DefaultPeriodTotalComponent(
     override val state: StateFlow<PeriodTotalState>
         get() = store.state
 
-    override fun setPeriod(fromTimestamp: Long, toTimestamp: Long) {
-        store.handle(
-            PeriodTotalEvent.External.Load(
-                fromTimestamp = fromTimestamp,
-                toTimestamp = toTimestamp,
-            )
-        )
+    override fun setPeriod(period: PeriodTimestampEntity) {
+        store.handle(PeriodTotalEvent.External.Load(period = period))
     }
 }

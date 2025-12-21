@@ -1,5 +1,7 @@
 package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
 
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+
 sealed interface PeriodTotalCommand {
-    data class Load(val fromTimestamp: Long, val toTimestamp: Long) : PeriodTotalCommand
+    data class Load(val period: PeriodTimestampEntity) : PeriodTotalCommand
 }

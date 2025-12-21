@@ -1,13 +1,11 @@
 package dev.aleksrychkov.scrooge.feature.reports
 
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import kotlinx.coroutines.flow.Flow
 
 fun interface ReportTotalAmountUseCase {
-    suspend operator fun invoke(
-        fromTimestamp: Long,
-        toTimestamp: Long,
-    ): ReportTotalAmountResult
+    suspend operator fun invoke(period: PeriodTimestampEntity): ReportTotalAmountResult
 }
 
 sealed interface ReportTotalAmountResult {

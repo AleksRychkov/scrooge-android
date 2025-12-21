@@ -1,17 +1,12 @@
 package dev.aleksrychkov.scrooge.feature.transaction
 
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 fun interface GetTransactionsUseCase {
-
-    suspend operator fun invoke(args: Args): GetTransactionsResult
-
-    data class Args(
-        val fromTimestamp: Long,
-        val toTimestamp: Long,
-    )
+    suspend operator fun invoke(period: PeriodTimestampEntity): GetTransactionsResult
 }
 
 sealed interface GetTransactionsResult {

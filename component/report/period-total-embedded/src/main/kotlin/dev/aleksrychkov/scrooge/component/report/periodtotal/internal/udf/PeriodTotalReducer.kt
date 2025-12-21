@@ -16,12 +16,7 @@ internal class PeriodTotalReducer :
                     copy(isLoading = true)
                 }
                 command {
-                    listOf(
-                        PeriodTotalCommand.Load(
-                            fromTimestamp = event.fromTimestamp,
-                            toTimestamp = event.toTimestamp,
-                        )
-                    )
+                    listOf(PeriodTotalCommand.Load(period = event.period))
                 }
             }
 

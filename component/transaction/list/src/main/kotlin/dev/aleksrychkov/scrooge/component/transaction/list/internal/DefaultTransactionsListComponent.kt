@@ -5,6 +5,7 @@ import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.Transact
 import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListEvent
 import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListReducer
 import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListState
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultTransactionsListComponent(
     private val componentContext: ComponentContext,
-    private val period: Pair<Long, Long>,
+    private val period: PeriodTimestampEntity,
 ) : TransactionsListComponentInternal, ComponentContext by componentContext {
 
     private val router: Router by lazy {
@@ -54,7 +55,7 @@ internal class DefaultTransactionsListComponent(
         )
     }
 
-    override fun setPeriod(period: Pair<Long, Long>) {
+    override fun setPeriod(period: PeriodTimestampEntity) {
         store.handle(TransactionsListEvent.External.SetPeriod(period = period))
     }
 }

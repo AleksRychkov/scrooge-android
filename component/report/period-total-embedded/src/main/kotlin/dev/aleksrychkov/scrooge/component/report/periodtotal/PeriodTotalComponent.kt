@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.component.report.periodtotal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.DefaultPeriodTotalComponent
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 
 interface PeriodTotalComponent {
     companion object {
@@ -10,5 +11,5 @@ interface PeriodTotalComponent {
         }
     }
 
-    fun setPeriod(fromTimestamp: Long, toTimestamp: Long)
+    fun setPeriod(period: PeriodTimestampEntity)
 }

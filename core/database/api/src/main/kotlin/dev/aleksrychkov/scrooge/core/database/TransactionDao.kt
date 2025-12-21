@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.core.database
 
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
@@ -8,8 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionDao {
 
     suspend fun get(
-        fromTimestamp: Long,
-        toTimestamp: Long,
+        period: PeriodTimestampEntity,
     ): Flow<ImmutableList<TransactionEntity>>
 
     suspend fun get(id: Long): TransactionEntity?

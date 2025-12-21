@@ -2,12 +2,13 @@ package dev.aleksrychkov.scrooge.component.transaction.list
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.component.transaction.list.internal.DefaultTransactionsListComponent
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 
 interface TransactionsListComponent {
     companion object {
         operator fun invoke(
             componentContext: ComponentContext,
-            period: Pair<Long, Long>,
+            period: PeriodTimestampEntity,
         ): TransactionsListComponent {
             return DefaultTransactionsListComponent(
                 componentContext = componentContext,
@@ -16,5 +17,5 @@ interface TransactionsListComponent {
         }
     }
 
-    fun setPeriod(period: Pair<Long, Long>)
+    fun setPeriod(period: PeriodTimestampEntity)
 }

@@ -11,6 +11,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.period.PeriodComponent
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.TotalMonthlyComponent
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,8 +42,7 @@ internal class DefaultReportAnnualTotalComponent(
         PeriodTotalComponent(
             componentContext = childContext("ReportAnnualPeriodTotalComponentContext")
         ).also {
-            val startEnd = getStartEndForYear(state.value.selectedYear)
-            it.setPeriod(fromTimestamp = startEnd.first, toTimestamp = startEnd.second)
+            it.setPeriod(period = getStartEndForYear(state.value.selectedYear))
         }
     }
 
@@ -85,16 +85,12 @@ internal class DefaultReportAnnualTotalComponent(
     }
 
     override fun setPeriod(year: Int) {
-        val startEnd = getStartEndForYear(year)
-        _periodTotalComponent.setPeriod(
-            fromTimestamp = startEnd.first,
-            toTimestamp = startEnd.second
-        )
+        _periodTotalComponent.setPeriod(period = getStartEndForYear(year))
         _totalMonthlyComponent.setYear(year)
         _state.value = ReportAnnualTotalState(selectedYear = year)
     }
 
-    private fun getStartEndForYear(year: Int): Pair<Long, Long> {
+    private fun getStartEndForYear(year: Int): PeriodTimestampEntity {
         val tz = TimeZone.currentSystemDefault()
         val startMillis = LocalDateTime(year, 1, 1, 0, 0)
             .toInstant(tz)
@@ -104,6 +100,6 @@ internal class DefaultReportAnnualTotalComponent(
             .minus(1, DateTimeUnit.MILLISECOND)
             .toEpochMilliseconds()
 
-        return startMillis to endMillis
+        return PeriodTimestampEntity(from = startMillis, to = endMillis)
     }
 }
