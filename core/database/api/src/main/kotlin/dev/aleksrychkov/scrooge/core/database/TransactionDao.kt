@@ -19,7 +19,6 @@ interface TransactionDao {
         timestamp: Long,
         type: TransactionType,
         category: String,
-        categoryIconId: String,
         tags: Set<String>?,
         currencyCode: String,
     )
@@ -30,7 +29,6 @@ interface TransactionDao {
         timestamp: Long,
         type: TransactionType,
         category: String,
-        categoryIconId: String,
         tags: Set<String>?,
         currencyCode: String,
     )

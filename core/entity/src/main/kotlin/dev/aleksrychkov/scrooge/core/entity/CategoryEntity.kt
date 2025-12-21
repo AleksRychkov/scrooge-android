@@ -11,11 +11,14 @@ data class CategoryEntity(
     val color: Int,
 ) {
     companion object {
+        // not good but will work
+        const val DEFAULT_ICON_ID = "QuestionMark"
+        const val DEFAULT_COLOR = 0xFF212121.toInt()
         fun from(
             name: String,
             type: TransactionType,
-            iconId: String = "",
-            color: Int = 0xFFFF3B30.toInt(),
+            iconId: String = DEFAULT_ICON_ID,
+            color: Int = DEFAULT_COLOR,
         ): CategoryEntity =
             CategoryEntity(
                 id = 0L,

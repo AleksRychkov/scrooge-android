@@ -1,7 +1,6 @@
 package dev.aleksrychkov.scrooge.component.transaction.form.internal.udf
 
 import dev.aleksrychkov.scrooge.component.transaction.form.internal.utils.toDateString
-import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToString
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
@@ -179,11 +178,7 @@ internal class FormReducer(
                         amount = event.entity.amount.amountToString(),
                         timestamp = timestamp,
                         timestampReadable = timestamp.toDateString(),
-                        category = CategoryEntity.from(
-                            name = event.entity.category,
-                            type = event.entity.type,
-                            iconId = event.entity.categoryIconId,
-                        ),
+                        category = event.entity.category,
                         tags = event.entity.tags.map { TagEntity.from(it) }.toImmutableList(),
                         currency = event.entity.currency,
                     )

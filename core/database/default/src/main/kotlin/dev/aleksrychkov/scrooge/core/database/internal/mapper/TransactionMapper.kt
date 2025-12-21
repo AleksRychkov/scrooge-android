@@ -1,6 +1,8 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
-import dev.aleksrychkov.scrooge.core.database.TTransaction
+import dev.aleksrychkov.scrooge.core.database.SelectById
+import dev.aleksrychkov.scrooge.core.database.SelectFromTo
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -12,21 +14,65 @@ internal object TransactionMapper {
 
     private const val TAGS_SEPARATOR = "|"
 
-    fun toEntity(transaction: TTransaction): TransactionEntity =
+    fun toEntity(value: SelectFromTo): TransactionEntity =
         TransactionEntity(
-            id = transaction.id,
-            amount = transaction.amount,
-            timestamp = transaction.timestamp,
-            type = TransactionType.from(transaction.type.toInt()),
-            category = transaction.category,
-            categoryIconId = transaction.categoryIconId,
-            tags = toTags(transaction.tags),
-            currency = CurrencyEntity.fromCurrencyCode(transaction.currencyCode)!!,
+            id = value.id,
+            amount = value.amount,
+            timestamp = value.timestamp,
+            type = TransactionType.from(value.type.toInt()),
+            category = toCategoryEntity(value),
+            tags = toTags(value.tags),
+            currency = CurrencyEntity.fromCurrencyCode(value.currencyCode)!!,
+        )
+
+    fun toEntity(value: SelectById): TransactionEntity =
+        TransactionEntity(
+            id = value.id,
+            amount = value.amount,
+            timestamp = value.timestamp,
+            type = TransactionType.from(value.type.toInt()),
+            category = toCategoryEntity(value),
+            tags = toTags(value.tags),
+            currency = CurrencyEntity.fromCurrencyCode(value.currencyCode)!!,
         )
 
     fun toDatabaseTags(value: Set<String>?): String? {
         if (value == null || value.isEmpty()) return null
         return value.joinToString(TAGS_SEPARATOR) { it.replace(TAGS_SEPARATOR, " ") }
+    }
+
+    private fun toCategoryEntity(value: SelectFromTo): CategoryEntity {
+        return if (value.categoryId != null) {
+            CategoryEntity(
+                id = value.categoryId,
+                name = value.categoryName!!,
+                type = TransactionType.from(value.categoryType!!.toInt()),
+                iconId = value.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
+                color = value.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
+            )
+        } else {
+            CategoryEntity.from(
+                name = value.category,
+                type = TransactionType.from(value.type.toInt()),
+            )
+        }
+    }
+
+    private fun toCategoryEntity(value: SelectById): CategoryEntity {
+        return if (value.categoryId != null) {
+            CategoryEntity(
+                id = value.categoryId,
+                name = value.categoryName!!,
+                type = TransactionType.from(value.categoryType!!.toInt()),
+                iconId = value.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
+                color = value.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
+            )
+        } else {
+            CategoryEntity.from(
+                name = value.category,
+                type = TransactionType.from(value.type.toInt()),
+            )
+        }
     }
 
     private fun toTags(value: String?): ImmutableSet<String> {

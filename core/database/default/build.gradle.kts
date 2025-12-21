@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "dev.aleksrychkov.scrooge.core.database"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

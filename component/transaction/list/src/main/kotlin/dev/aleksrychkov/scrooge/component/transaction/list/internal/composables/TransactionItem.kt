@@ -65,10 +65,10 @@ internal fun TransactionItem(
                 .height(CategoryIconSize)
                 .width(CategoryIconSize)
                 .clip(CircleShape)
-                .background(transactionColor)
+                .background(Color(transaction.categoryColor))
                 .padding(Normal),
             tint = Color.White,
-            imageVector = transaction.icon.icon,
+            imageVector = transaction.categoryIcon.icon,
             contentDescription = null,
         )
         Column(
@@ -84,7 +84,7 @@ internal fun TransactionItem(
                     modifier = Modifier
                         .weight(weight = 1f)
                         .padding(end = Normal),
-                    text = transaction.category,
+                    text = transaction.categoryName,
                     style = MaterialTheme.typography.titleMedium,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
@@ -137,8 +137,9 @@ private fun FormContentPreview() {
             TransactionItem(
                 modifier = Modifier.fillMaxWidth(),
                 transaction = TransactionsItemDto(
-                    category = TransactionEntity.DUMMY.category,
-                    icon = UncategorizedIcon,
+                    categoryName = TransactionEntity.DUMMY.category.name,
+                    categoryColor = TransactionEntity.DUMMY.category.color,
+                    categoryIcon = UncategorizedIcon,
                     amount = "+123,00 $",
                     type = TransactionType.Income,
                     ref = TransactionEntity.DUMMY,

@@ -58,8 +58,9 @@ internal class TransactionsListMapper(
                     TransactionType.Expense -> "-"
                 }
                 TransactionsItemDto(
-                    category = t.category,
-                    icon = categoryIconFromId(t.categoryIconId),
+                    categoryName = t.category.name,
+                    categoryIcon = categoryIconFromId(t.category.iconId),
+                    categoryColor = t.category.color,
                     amount = "${t.amount.amountToStringFormatted(sign)} ${t.currency.currencySymbol}",
                     type = t.type,
                     ref = t,

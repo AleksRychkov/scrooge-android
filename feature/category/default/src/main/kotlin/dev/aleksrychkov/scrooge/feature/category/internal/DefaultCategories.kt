@@ -24,7 +24,7 @@ class DefaultCategories(
         val colors = intArrayOf(
             0xFFC0CA33.toInt(),
             0xFF00897B.toInt(),
-            0xFFFFA48C.toInt(),
+            0xFF87A861.toInt(),
         )
         return names.mapIndexed { index, name ->
             CategoryEntity.from(

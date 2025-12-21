@@ -5,23 +5,53 @@ CREATE TABLE IF NOT EXISTS TTransaction (
   timestamp INTEGER NOT NULL,
   type INTEGER NOT NULL,
   category TEXT NOT NULL,
-  categoryIconId TEXT NOT NULL,
   tags TEXT,
   currencyCode TEXT NOT NULL
 );
 
 -- Queries
 selectFromTo:
-SELECT * FROM TTransaction WHERE timestamp >= ? AND timestamp <= ? ORDER BY timestamp DESC;
+SELECT
+  TTransaction.id,
+  TTransaction.amount,
+  TTransaction.`timestamp`,
+  TTransaction.category,
+  TTransaction.tags,
+  TTransaction.type,
+  TTransaction.currencyCode,
+  Category.id AS categoryId,
+  Category.name AS categoryName,
+  Category.iconId AS categoryIconId,
+  Category.type AS categoryType,
+  Category.color AS categoryColor
+FROM TTransaction
+LEFT JOIN Category ON TTransaction.category = Category.name
+WHERE TTransaction.`timestamp` >= ? AND TTransaction.`timestamp` <= ?
+ORDER BY TTransaction.`timestamp` DESC;
 
 create:
-INSERT INTO TTransaction (amount, timestamp, type, category, categoryIconId, tags, currencyCode) VALUES (?, ?, ?, ?, ?, ?, ?);
+INSERT INTO TTransaction (amount, timestamp, type, category, tags, currencyCode) VALUES (?, ?, ?,  ?, ?, ?);
 
 update:
-UPDATE TTransaction SET amount = ?, timestamp = ?, type = ?, category = ?, categoryIconId = ?, tags = ?, currencyCode = ? WHERE id = ?;
+UPDATE TTransaction SET amount = ?, timestamp = ?, type = ?, category = ?, tags = ?, currencyCode = ? WHERE id = ?;
 
 selectById:
-SELECT * FROM TTransaction WHERE id = ?;
+SELECT
+  TTransaction.id,
+  TTransaction.amount,
+  TTransaction.`timestamp`,
+  TTransaction.category,
+  TTransaction.tags,
+  TTransaction.type,
+  TTransaction.currencyCode,
+  Category.id AS categoryId,
+  Category.name AS categoryName,
+  Category.iconId AS categoryIconId,
+  Category.type AS categoryType,
+  Category.color AS categoryColor
+FROM TTransaction
+LEFT JOIN Category ON TTransaction.category = Category.name
+WHERE TTransaction.id = ?;
 
 delete:
 DELETE FROM TTransaction WHERE id = ?;

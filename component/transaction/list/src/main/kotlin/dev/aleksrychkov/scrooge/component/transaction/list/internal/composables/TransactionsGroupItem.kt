@@ -82,8 +82,9 @@ private fun FormContentPreview() {
                     totals = persistentListOf("-123,00 $"),
                     transactions = persistentListOf(
                         TransactionsItemDto(
-                            category = TransactionEntity.DUMMY.category,
-                            icon = UncategorizedIcon,
+                            categoryName = TransactionEntity.DUMMY.category.name,
+                            categoryIcon = UncategorizedIcon,
+                            categoryColor = TransactionEntity.DUMMY.category.color,
                             amount = "+123,00 $",
                             type = TransactionType.Expense,
                             ref = TransactionEntity.DUMMY,

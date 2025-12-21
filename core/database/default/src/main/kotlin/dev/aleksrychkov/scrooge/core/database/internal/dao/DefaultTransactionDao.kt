@@ -49,7 +49,6 @@ internal class DefaultTransactionDao(
         timestamp: Long,
         type: TransactionType,
         category: String,
-        categoryIconId: String,
         tags: Set<String>?,
         currencyCode: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
@@ -58,7 +57,6 @@ internal class DefaultTransactionDao(
             timestamp = timestamp,
             type = type.type.toLong(),
             category = category,
-            categoryIconId = categoryIconId,
             tags = TransactionMapper.toDatabaseTags(tags),
             currencyCode = currencyCode,
         )
@@ -70,7 +68,6 @@ internal class DefaultTransactionDao(
         timestamp: Long,
         type: TransactionType,
         category: String,
-        categoryIconId: String,
         tags: Set<String>?,
         currencyCode: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
@@ -79,7 +76,6 @@ internal class DefaultTransactionDao(
             timestamp = timestamp,
             type = type.type.toLong(),
             category = category,
-            categoryIconId = categoryIconId,
             tags = TransactionMapper.toDatabaseTags(tags),
             currencyCode = currencyCode,
             id = id,

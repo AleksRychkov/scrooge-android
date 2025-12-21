@@ -32,6 +32,7 @@ internal object PreloadData {
             "Cafe and restaurants" to "Restaurant",
             "Transport" to "DirectionsBus",
             "Pharmacy" to "LocalPharmacy",
+            "Other" to "Receipt",
         )
     }
     private val currencies: List<String> by lazy {
@@ -71,7 +72,7 @@ internal object PreloadData {
         val currencyCode = currencies.random()
         val query =
             """
-                INSERT INTO TTransaction (amount, timestamp, type, category, categoryIconId, tags, currencyCode) VALUES ($amount, $timestamp, $type, '$category', '$categoryIcon', '$tags', '$currencyCode');
+                INSERT INTO TTransaction (amount, timestamp, type, category, tags, currencyCode) VALUES ($amount, $timestamp, $type, '$category', '$tags', '$currencyCode');
             """.trimIndent()
         db.execSQL(query)
     }
@@ -87,7 +88,7 @@ internal object PreloadData {
         val currencyCode = currencies.random()
         val query =
             """
-                INSERT INTO TTransaction (amount, timestamp, type, category, categoryIconId, tags, currencyCode) VALUES ($amount, $timestamp, $type, '$category', '$categoryIcon', '$tags', '$currencyCode');
+                INSERT INTO TTransaction (amount, timestamp, type, category, tags, currencyCode) VALUES ($amount, $timestamp, $type, '$category', '$tags', '$currencyCode');
             """.trimIndent()
         db.execSQL(query)
     }

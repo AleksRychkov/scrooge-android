@@ -24,8 +24,9 @@ internal data class TransactionsGroupDto(
 
 @Immutable
 internal data class TransactionsItemDto(
-    val category: String,
-    val icon: CategoryIcon,
+    val categoryName: String,
+    val categoryIcon: CategoryIcon,
+    val categoryColor: Int,
     val amount: String,
     val type: TransactionType,
     val ref: TransactionEntity,
