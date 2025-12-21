@@ -137,6 +137,7 @@ private fun ByCurrency(
                     pagerState = pagerState,
                     maxWidth = this@BoxWithConstraints.maxWidth,
                     chartData = byCurrency[page].chartData,
+                    currencySymbol = byCurrency[page].currencySymbol,
                 )
                 ByCategoryList(
                     modifier = Modifier.fillMaxWidth(),
@@ -154,6 +155,7 @@ private fun ByCategoryChart(
     pagerState: PagerState,
     maxWidth: Dp,
     chartData: ImmutableList<PieChartSegment>,
+    currencySymbol: String,
 ) {
     val rawPageOffset =
         (pagerState.currentPage - page) +
@@ -164,9 +166,9 @@ private fun ByCategoryChart(
         modifier = modifier
             .graphicsLayer {
                 val chartWidthPx = size.width * chartWidthMultiplier
-                translationX = rawPageOffset * (chartWidthPx / 1.75f)
+                translationX = rawPageOffset * (chartWidthPx / 1.5f)
             },
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         PieChart(
             modifier = Modifier
@@ -190,6 +192,10 @@ private fun ByCategoryChart(
                 },
             segments = if (pagerState.currentPage == page) chartData else persistentListOf(),
             animateOnSegmentChange = true,
+        )
+        Text(
+            text = currencySymbol,
+            style = MaterialTheme.typography.titleLarge,
         )
     }
 

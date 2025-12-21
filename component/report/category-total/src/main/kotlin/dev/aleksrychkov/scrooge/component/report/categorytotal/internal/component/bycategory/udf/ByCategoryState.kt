@@ -2,7 +2,6 @@ package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.compone
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.PieChartSegment
-import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -24,7 +23,7 @@ internal data class ByCategoryState(
 
     @Immutable
     data class ByCurrency(
-        val currency: CurrencyEntity,
+        val currencySymbol: String,
         val chartData: ImmutableList<PieChartSegment>,
         val valueData: ImmutableList<Value>,
     ) {
@@ -45,7 +44,7 @@ internal fun List<ReportByCategoryEntity.ByCurrency>.toByCurrencyStateList():
     return this
         .map { byCurrency ->
             ByCategoryState.ByCurrency(
-                currency = byCurrency.currency,
+                currencySymbol = byCurrency.currency.currencySymbol,
                 chartData = byCurrency.data.toByCurrencyChartDataStateList(),
                 valueData = byCurrency.data.toByCurrencyValueStateList(byCurrency.currency.currencySymbol)
             )
