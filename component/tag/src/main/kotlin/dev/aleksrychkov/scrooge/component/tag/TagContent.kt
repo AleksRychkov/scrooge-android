@@ -87,7 +87,9 @@ private fun TagContent(
                 .onEach { effect ->
                     when (effect) {
                         is TagEffect.ShowInfoMessage -> {
-                            snackbarHostState.showCountdownSnackbar(message = effect.message)
+                            snackbarHostState.showCountdownSnackbar(
+                                message = effect.message
+                            )
                         }
 
                         is TagEffect.TagDeleted -> {

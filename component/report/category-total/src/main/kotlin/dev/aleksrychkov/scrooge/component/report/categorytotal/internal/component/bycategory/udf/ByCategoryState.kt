@@ -1,14 +1,17 @@
 package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.composables.DonutChartSegment
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.entity.amountToString
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcon
+import dev.aleksrychkov.scrooge.core.resources.categoryIconFromId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Immutable
 internal data class ByCategoryState(
@@ -30,9 +33,53 @@ internal data class ByCategoryState(
         data class Value(
             val categoryName: String,
             val categoryIcon: CategoryIcon,
-            val categoryColor: Color,
+            val categoryColor: Int,
             val currencySymbol: String,
             val amount: String,
         )
     }
+}
+
+internal fun List<ReportByCategoryEntity.ByCurrency>.toByCurrencyStateList():
+    ImmutableList<ByCategoryState.ByCurrency> {
+    return this
+        .map { byCurrency ->
+            ByCategoryState.ByCurrency(
+                currency = byCurrency.currency,
+                chartData = byCurrency.data.toByCurrencyChartDataStateList(),
+                valueData = byCurrency.data.toByCurrencyValueStateList(byCurrency.currency.currencySymbol)
+            )
+        }
+        .toImmutableList()
+}
+
+private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyValueStateList(
+    currencySymbol: String,
+): ImmutableList<ByCategoryState.ByCurrency.Value> {
+    return this
+        .sortedBy { -it.amount }
+        .map { value ->
+            ByCategoryState.ByCurrency.Value(
+                categoryColor = value.category.color,
+                categoryName = value.category.name,
+                categoryIcon = categoryIconFromId(value.category.iconId),
+                currencySymbol = currencySymbol,
+                amount = value.amount.amountToString(),
+            )
+        }
+        .toImmutableList()
+}
+
+private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyChartDataStateList():
+    ImmutableList<DonutChartSegment> {
+    val total = this.sumOf { it.amount }
+    return this
+        .sortedBy { -it.amount }
+        .map { value ->
+            DonutChartSegment(
+                percentage = value.amount / total.toFloat(),
+                color = value.category.color,
+            )
+        }
+        .toImmutableList()
 }

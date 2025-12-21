@@ -21,14 +21,18 @@ WITH monthly AS (
 )
 SELECT * FROM monthly;
 
-totalByCategory:
+byCategory:
 SELECT
 	TTransaction.type,
-	currencyCode,
-	SUM(amount) AS total,
-	name AS categoryName,
-	iconId AS categoryIconId
+	TTransaction.currencyCode,
+	TTransaction.category,
+	SUM(TTransaction.amount) AS total,
+	Category.id AS categoryId,
+    Category.name AS categoryName,
+    Category.iconId AS categoryIconId,
+    Category.type AS categoryType,
+    Category.color AS categoryColor
 FROM TTransaction
-LEFT JOIN Category ON category = name
-WHERE timestamp >= ? AND timestamp <= ?
-GROUP BY TTransaction.type, currencyCode, category;
+LEFT JOIN Category ON TTransaction.category = Category.name
+WHERE TTransaction.`timestamp` >= ? AND TTransaction.`timestamp` <= ?
+GROUP BY TTransaction.type, TTransaction.currencyCode, TTransaction.category;

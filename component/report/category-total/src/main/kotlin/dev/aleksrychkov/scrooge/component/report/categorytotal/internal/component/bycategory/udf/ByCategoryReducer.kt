@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf
 
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
@@ -20,15 +21,25 @@ internal class ByCategoryReducer :
                 }
             }
 
+            is ByCategoryEvent.External.SetType -> state.reduceWith(event) {
+                state {
+                    copy(currentType = TransactionType.from(event.type))
+                }
+            }
+
             ByCategoryEvent.Internal.LoadFailed -> state.reduceWith(event) {
                 state {
                     copy(isLoading = false)
                 }
             }
 
-            ByCategoryEvent.Internal.LoadSuccess -> state.reduceWith(event) {
+            is ByCategoryEvent.Internal.LoadSuccess -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = false)
+                    copy(
+                        isLoading = false,
+                        byCurrencyIncome = event.result.income.toByCurrencyStateList(),
+                        byCurrencyExpense = event.result.expense.toByCurrencyStateList(),
+                    )
                 }
             }
         }

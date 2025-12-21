@@ -185,10 +185,10 @@ private fun DonutArcsNeonBlur(
         var startAngle = -90f
 
         val baseArcRect = Rect(
-            left = -10f,
-            top = 10f,
-            right = size.width + 10f,
-            bottom = size.height + 10f,
+            left = -7f,
+            top = -7f,
+            right = size.width + 7f,
+            bottom = size.height + 7f,
         )
         val baseArcPaint = Paint().apply {
             color = mainGlowColor.toArgb()
@@ -223,6 +223,8 @@ private fun DonutArcsNeonBlur(
             useCenter = false,
             style = baseStroke
         )
+
+        if (segments.isEmpty()) return@Canvas
 
         val rect = Rect(
             left = -5f,
@@ -260,7 +262,7 @@ private fun DonutArcsNeonBlur(
 
             // Draw solid arc on top
             drawArc(
-                color = segment.color,
+                color = Color(segment.color),
                 startAngle = startAngle,
                 sweepAngle = sweep,
                 useCenter = false,
@@ -275,7 +277,7 @@ private fun DonutArcsNeonBlur(
         val drawLastArc by derivedStateOf { segments[0].percentage * 360f >= minimalSweepAngle }
         if (drawLastArc) {
             drawArc(
-                color = segments[0].color,
+                color = Color(segments[0].color),
                 startAngle = startAngle,
                 sweepAngle = minimalSweepAngle,
                 useCenter = false,
@@ -288,7 +290,7 @@ private fun DonutArcsNeonBlur(
 @Immutable
 internal data class DonutChartSegment(
     val percentage: Float,
-    val color: Color,
+    val color: Int,
 )
 
 @Suppress("UnusedPrivateMember")
@@ -298,15 +300,15 @@ private fun DonutChartPreview() {
     AppTheme {
         Box(modifier = Modifier.fillMaxWidth()) {
             val segments = persistentListOf(
-                DonutChartSegment(0.67f, Color(0xFFFFB54B)),
-                DonutChartSegment(0.18f, Color(0xFFE53935)),
-                DonutChartSegment(0.05f, Color(0xFF5E35B1)),
-                DonutChartSegment(0.02f, Color(0xFFFFA48C)),
-                DonutChartSegment(0.02f, Color(0xFFC0CA33)),
-                DonutChartSegment(0.02f, Color(0xFF3949AB)),
-                DonutChartSegment(0.02f, Color(0xFF00ACC1)),
-                DonutChartSegment(0.01f, Color(0xFFFFB300)),
-                DonutChartSegment(0.01f, Color(0xFF00897B)),
+                DonutChartSegment(0.67f, 0xFFFFB54B.toInt()),
+                DonutChartSegment(0.18f, 0xFFE53935.toInt()),
+                DonutChartSegment(0.05f, 0xFF5E35B1.toInt()),
+                DonutChartSegment(0.02f, 0xFFFFA48C.toInt()),
+                DonutChartSegment(0.02f, 0xFFC0CA33.toInt()),
+                DonutChartSegment(0.02f, 0xFF3949AB.toInt()),
+                DonutChartSegment(0.02f, 0xFF00ACC1.toInt()),
+                DonutChartSegment(0.01f, 0xFFFFB300.toInt()),
+                DonutChartSegment(0.01f, 0xFF00897B.toInt()),
             )
 
             DonutChart(

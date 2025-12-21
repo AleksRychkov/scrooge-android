@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf
 
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.actors.LoadDelegate
+import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.udf.Actor
 import kotlinx.coroutines.flow.Flow
 
@@ -10,7 +11,7 @@ internal class ByCategoryActor(
     companion object {
         operator fun invoke(): ByCategoryActor {
             return ByCategoryActor(
-                loadDelegate = LoadDelegate(),
+                loadDelegate = LoadDelegate(useCase = getLazy()),
             )
         }
     }

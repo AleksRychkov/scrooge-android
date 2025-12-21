@@ -83,7 +83,9 @@ internal fun CreateCategoryContent(
                 .onEach { effect ->
                     when (effect) {
                         is CreateCategoryEffect.ShowInfoMessage -> {
-                            snackbarHostState.showCountdownSnackbar(message = effect.message)
+                            snackbarHostState.showCountdownSnackbar(
+                                message = effect.message
+                            )
                         }
                     }
                 }

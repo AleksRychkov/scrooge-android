@@ -2,11 +2,21 @@ package dev.aleksrychkov.scrooge.component.report.categorytotal.internal.compone
 
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryCommand
 import dev.aleksrychkov.scrooge.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryEvent
+import dev.aleksrychkov.scrooge.feature.reports.ReportByCategoryResult
+import dev.aleksrychkov.scrooge.feature.reports.ReportByCategoryUseCase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 
-internal class LoadDelegate {
-    operator fun invoke(cmd: ByCategoryCommand.Load): Flow<ByCategoryEvent> {
-        return emptyFlow()
+internal class LoadDelegate(
+    private val useCase: Lazy<ReportByCategoryUseCase>
+) {
+    suspend operator fun invoke(cmd: ByCategoryCommand.Load): Flow<ByCategoryEvent> {
+        return when (val result = useCase.value.invoke(cmd.period)) {
+            ReportByCategoryResult.Failure ->
+                flowOf(ByCategoryEvent.Internal.LoadFailed)
+
+            is ReportByCategoryResult.Success ->
+                flowOf(ByCategoryEvent.Internal.LoadSuccess(result.result))
+        }
     }
 }

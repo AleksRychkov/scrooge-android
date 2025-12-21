@@ -22,6 +22,8 @@ internal interface ByCategoryComponent {
     }
 
     val state: StateFlow<ByCategoryState>
+
+    fun setTransactionType(type: Int)
 }
 
 private class DefaultByCategoryComponent(
@@ -40,4 +42,8 @@ private class DefaultByCategoryComponent(
 
     override val state: StateFlow<ByCategoryState>
         get() = store.state
+
+    override fun setTransactionType(type: Int) {
+        store.handle(ByCategoryEvent.External.SetType(type))
+    }
 }

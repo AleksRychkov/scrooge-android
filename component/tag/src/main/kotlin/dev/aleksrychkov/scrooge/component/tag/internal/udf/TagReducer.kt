@@ -105,7 +105,9 @@ internal class TagReducer(
                         listOf(
                             TagEffect.TagDeleted(
                                 message = msg,
-                                actionLabel = resourceManager.getString(resources.string.undo),
+                                actionLabel = resourceManager.getString(
+                                    resources.string.undo
+                                ),
                                 tag = event.tag,
                             )
                         )
@@ -117,7 +119,9 @@ internal class TagReducer(
                 state.reduceWith(event) {
                     effects {
                         val msg =
-                            resourceManager.getString(resources.string.tag_error_failed_to_create)
+                            resourceManager.getString(
+                                resources.string.tag_error_failed_to_create
+                            )
                         listOf(TagEffect.ShowInfoMessage(msg))
                     }
                 }
@@ -149,7 +153,9 @@ internal class TagReducer(
                 state.reduceWith(event) {
                     effects {
                         val msg =
-                            resourceManager.getString(resources.string.tag_error_failed_to_delete)
+                            resourceManager.getString(
+                                resources.string.tag_error_failed_to_delete
+                            )
                         listOf(TagEffect.ShowInfoMessage(msg))
                     }
                 }
@@ -159,7 +165,9 @@ internal class TagReducer(
                 state.reduceWith(event) {
                     effects {
                         val msg =
-                            resourceManager.getString(resources.string.tag_error_failed_to_restore)
+                            resourceManager.getString(
+                                resources.string.tag_error_failed_to_restore
+                            )
                         listOf(TagEffect.ShowInfoMessage(msg))
                     }
                 }

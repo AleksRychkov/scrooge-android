@@ -65,7 +65,12 @@ internal class CategoryReducer(
                 state.reduceWith(event) {
                     if (state.searchQuery.isNotBlank()) {
                         command {
-                            listOf(Search(query = state.searchQuery, categories = event.list))
+                            listOf(
+                                Search(
+                                    query = state.searchQuery,
+                                    categories = event.list
+                                )
+                            )
                         }
                     }
                     state {
@@ -86,7 +91,9 @@ internal class CategoryReducer(
                 state.reduceWith(event) {
                     effects {
                         val msg =
-                            resourceManager.getString(resources.string.category_error_failed_to_delete)
+                            resourceManager.getString(
+                                resources.string.category_error_failed_to_delete
+                            )
                         listOf(ShowInfoMessage(msg))
                     }
                 }
@@ -96,7 +103,9 @@ internal class CategoryReducer(
                 state.reduceWith(event) {
                     effects {
                         val msg =
-                            resourceManager.getString(resources.string.category_error_failed_to_restore)
+                            resourceManager.getString(
+                                resources.string.category_error_failed_to_restore
+                            )
                         listOf(ShowInfoMessage(msg))
                     }
                 }
@@ -112,7 +121,9 @@ internal class CategoryReducer(
                         listOf(
                             CategoryEffect.CategoryDeleted(
                                 message = msg,
-                                actionLabel = resourceManager.getString(resources.string.undo),
+                                actionLabel = resourceManager.getString(
+                                    resources.string.undo
+                                ),
                                 category = event.category,
                             )
                         )

@@ -93,7 +93,9 @@ private fun CategoryContent(
                 .onEach { effect ->
                     when (effect) {
                         is CategoryEffect.ShowInfoMessage -> {
-                            snackbarHostState.showCountdownSnackbar(message = effect.message)
+                            snackbarHostState.showCountdownSnackbar(
+                                message = effect.message
+                            )
                         }
 
                         is CategoryEffect.CategoryDeleted -> {

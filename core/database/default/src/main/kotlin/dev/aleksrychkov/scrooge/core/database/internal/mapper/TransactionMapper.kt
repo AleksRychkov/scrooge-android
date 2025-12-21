@@ -45,7 +45,7 @@ internal object TransactionMapper {
         return if (value.categoryId != null) {
             CategoryEntity(
                 id = value.categoryId,
-                name = value.categoryName!!,
+                name = value.categoryName ?: value.category,
                 type = TransactionType.from(value.categoryType!!.toInt()),
                 iconId = value.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
                 color = value.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
@@ -62,7 +62,7 @@ internal object TransactionMapper {
         return if (value.categoryId != null) {
             CategoryEntity(
                 id = value.categoryId,
-                name = value.categoryName!!,
+                name = value.categoryName ?: value.category,
                 type = TransactionType.from(value.categoryType!!.toInt()),
                 iconId = value.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
                 color = value.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,

@@ -1,8 +1,11 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
+import dev.aleksrychkov.scrooge.core.database.ByCategory
 import dev.aleksrychkov.scrooge.core.database.TotalAmount
 import dev.aleksrychkov.scrooge.core.database.TotalAmountMothly
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -63,5 +66,72 @@ internal object ReportMapper {
             .associate { (month, entity) -> month to entity!! }
             .toImmutableMap()
             .let(::ReportTotalAmountMonthlyEntity)
+    }
+
+    fun byCategoryToEntity(
+        list: List<ByCategory>
+    ): ReportByCategoryEntity {
+        val income = mutableListOf<ReportByCategoryEntity.ByCurrency>()
+        val expense = mutableListOf<ReportByCategoryEntity.ByCurrency>()
+        fun ReportByCategoryEntity.ByCurrency.addByType(type: Long) {
+            when (type.toInt()) {
+                TransactionType.Income.type -> {
+                    income.add(this)
+                }
+
+                TransactionType.Expense.type -> {
+                    expense.add(this)
+                }
+            }
+        }
+        list
+            .groupBy { it.type }
+            .forEach { (type, typedList) ->
+                typedList
+                    .groupBy { it.currencyCode }
+                    .forEach { (currencyCode, byCurrencyList) ->
+                        byCurrencyList
+                            .toReportByCategoryEntityByCurrency(currencyCode)
+                            .addByType(type)
+                    }
+            }
+
+        return ReportByCategoryEntity(
+            income = income.toImmutableList(),
+            expense = expense.toImmutableList(),
+        )
+    }
+
+    private fun List<ByCategory>.toReportByCategoryEntityByCurrency(
+        currencyCode: String,
+    ): ReportByCategoryEntity.ByCurrency {
+        return ReportByCategoryEntity.ByCurrency(
+            currency = CurrencyEntity.fromCurrencyCode(currencyCode)!!,
+            data = this.map { it.toReportByCategoryEntityValue() }.toImmutableList(),
+        )
+    }
+
+    private fun ByCategory.toReportByCategoryEntityValue(): ReportByCategoryEntity.ByCurrency.Value {
+        return ReportByCategoryEntity.ByCurrency.Value(
+            category = this.toCategoryEntity(),
+            amount = this.total ?: 0L,
+        )
+    }
+
+    private fun ByCategory.toCategoryEntity(): CategoryEntity {
+        return if (this.categoryId != null) {
+            CategoryEntity(
+                id = this.categoryId,
+                name = this.categoryName ?: this.category,
+                type = TransactionType.from(this.categoryType!!.toInt()),
+                iconId = this.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
+                color = this.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
+            )
+        } else {
+            CategoryEntity.from(
+                name = this.category,
+                type = TransactionType.from(this.type.toInt()),
+            )
+        }
     }
 }

@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.core.database.ReportDao
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.ReportMapper
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,9 +39,21 @@ internal class DefaultReportDao(
     override suspend fun totalAmountMonthly(
         year: Int,
     ): ReportTotalAmountMonthlyEntity = withContext(readDispatcher) {
-        val res = database.reportQueries
+        database.reportQueries
             .totalAmountMothly(value_ = year.toString())
             .executeAsList()
-        ReportMapper.totalAmountMonthlyToEntity(res)
+            .let(ReportMapper::totalAmountMonthlyToEntity)
+    }
+
+    override suspend fun byCategory(
+        period: PeriodTimestampEntity,
+    ): ReportByCategoryEntity = withContext(readDispatcher) {
+        database.reportQueries
+            .byCategory(
+                timestamp = period.from,
+                timestamp_ = period.to,
+            )
+            .executeAsList()
+            .let(ReportMapper::byCategoryToEntity)
     }
 }
