@@ -230,7 +230,7 @@ private fun ByCategoryBottomSheet(
                     targetValue = target,
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessLow,
+                        stiffness = Spring.StiffnessMedium,
                     )
                 )
                 return Velocity.Zero
