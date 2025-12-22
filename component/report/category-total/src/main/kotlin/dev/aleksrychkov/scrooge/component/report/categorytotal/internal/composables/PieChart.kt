@@ -65,7 +65,7 @@ internal fun PieChart(
     textSize: TextUnit = 12.sp,
     textColor: Color = MaterialTheme.colorScheme.onBackground,
     backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
-    backgroundGlowColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+    backgroundGlowColor: Color = Color.Gray.copy(alpha = 0.5f),
 ) {
     val fixedSweepAngles = remember(segments) {
         segments.map { it.percentage * 360 }.toImmutableList()
@@ -389,7 +389,7 @@ internal data class PieChartSegment(
 @Composable
 private fun PieChartPreview() {
     AppTheme(
-        useDarkTheme = false
+        useDarkTheme = true
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             val icon = UncategorizedIcon.icon

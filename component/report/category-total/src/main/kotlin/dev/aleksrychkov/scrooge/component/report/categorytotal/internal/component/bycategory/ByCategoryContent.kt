@@ -74,7 +74,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
@@ -329,7 +328,7 @@ private fun ByCategoryChart(
                         fraction = 1f - pageOffSet.coerceIn(0f, 1f)
                     )
                 },
-            segments = if (pagerState.currentPage == page) chartData else persistentListOf(),
+            segments = chartData,
             animateOnSegmentChange = true,
         )
         Text(
