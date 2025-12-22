@@ -74,9 +74,7 @@ internal fun PieChart(
 
     if (animateOnSegmentChange) {
         val animatedSweeps = remember(segments) {
-            segments.map { segment ->
-                Animatable(segment.percentage * 120f)
-            }
+            segments.map { Animatable(0f) }
         }
         LaunchedEffect(segments) {
             coroutineScope {
