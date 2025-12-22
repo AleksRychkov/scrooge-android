@@ -35,7 +35,6 @@ import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -253,11 +252,13 @@ private fun ByCategoryBottomSheet(
         ) {
             Box(
                 modifier = Modifier
-                    .size(width = 36.dp, height = 4.dp)
-                    .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(2.dp))
+                    .size(width = 32.dp, height = 4.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        shape = MaterialTheme.shapes.extraLarge,
+                    )
             )
         }
-
 
         LaunchedEffect(data) {
             listState.scrollToItem(0)
