@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period
+package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period
 
 import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.flow.MutableStateFlow

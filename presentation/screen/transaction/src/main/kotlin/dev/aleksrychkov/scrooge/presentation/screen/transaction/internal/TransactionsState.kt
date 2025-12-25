@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.root.internal
+package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal
 
 import androidx.compose.runtime.Immutable
 import kotlinx.datetime.TimeZone

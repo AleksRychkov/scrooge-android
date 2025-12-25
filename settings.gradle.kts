@@ -44,7 +44,6 @@ include(":component:report:root")
 
 include(":component:transaction:form")
 include(":component:transaction:list")
-include(":component:transaction:root")
 
 // core
 include(":core:database:api")
@@ -71,3 +70,4 @@ include(":presentation:component")
 include(":presentation:screen:main:root")
 include(":presentation:screen:main:tabs")
 include(":presentation:screen:root")
+include(":presentation:screen:transaction")

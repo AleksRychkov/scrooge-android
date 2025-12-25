@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.root.internal.modal
+package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal
 
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +11,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.TransactionsComponentInternal
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period.PeriodComponent
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period.PeriodContent
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period.PeriodComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period.PeriodContent
 import kotlinx.coroutines.launch
 import kotlin.time.Instant
 

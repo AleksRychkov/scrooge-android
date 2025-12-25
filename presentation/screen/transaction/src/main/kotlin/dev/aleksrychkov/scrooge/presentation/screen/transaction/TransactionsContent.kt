@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.root
+package dev.aleksrychkov.scrooge.presentation.screen.transaction
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -32,14 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.component.transaction.list.TransactionsListContent
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.TransactionsComponentInternal
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.modal.PeriodModal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal.PeriodModal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable

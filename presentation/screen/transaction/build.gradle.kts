@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.transaction.root"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.transaction"
     buildFeatures {
         compose = true
     }

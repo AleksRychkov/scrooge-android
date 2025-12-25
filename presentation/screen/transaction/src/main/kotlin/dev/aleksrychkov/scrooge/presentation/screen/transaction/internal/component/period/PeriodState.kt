@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period
+package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period
 
 import androidx.compose.runtime.Immutable
 import kotlinx.datetime.DateTimeUnit

@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.root.internal
+package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
@@ -10,11 +10,11 @@ import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.component.transaction.list.TransactionsListComponent
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period.PeriodComponent
 import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period.PeriodComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

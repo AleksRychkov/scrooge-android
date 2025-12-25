@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.component.transaction.root
+package dev.aleksrychkov.scrooge.presentation.screen.transaction
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.DefaultTransactionsComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.DefaultTransactionsComponent
 
 interface TransactionsComponent {
     companion object Companion {

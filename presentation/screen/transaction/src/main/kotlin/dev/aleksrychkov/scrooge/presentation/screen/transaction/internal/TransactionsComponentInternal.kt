@@ -1,11 +1,11 @@
-package dev.aleksrychkov.scrooge.component.transaction.root.internal
+package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal
 
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.component.transaction.list.TransactionsListComponent
-import dev.aleksrychkov.scrooge.component.transaction.root.TransactionsComponent
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period.PeriodComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.TransactionsComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period.PeriodComponent
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Instant
 
