@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.list.internal.composables
+package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,8 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsGroupDto
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsItemDto
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
@@ -23,6 +21,8 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsGroupDto
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsItemDto
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable

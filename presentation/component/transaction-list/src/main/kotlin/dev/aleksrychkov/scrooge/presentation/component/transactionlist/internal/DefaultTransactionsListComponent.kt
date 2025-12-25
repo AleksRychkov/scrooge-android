@@ -1,10 +1,6 @@
-package dev.aleksrychkov.scrooge.component.transaction.list.internal
+package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListActor
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListEvent
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListReducer
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListState
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
@@ -12,6 +8,10 @@ import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListActor
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListEvent
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListReducer
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListState
 import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultTransactionsListComponent(

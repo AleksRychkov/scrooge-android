@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.transaction.list"
+    namespace = "dev.aleksrychkov.scrooge.presentation.component.transactionlist"
     buildFeatures {
         compose = true
     }

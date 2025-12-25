@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.transaction.list
+package dev.aleksrychkov.scrooge.presentation.component.transactionlist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.TransactionsListComponentInternal
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.composables.TransactionsGroupItem
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListState
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.TransactionsListComponentInternal
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.composables.TransactionsGroupItem
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListState
 import kotlinx.coroutines.delay
 
 @Composable

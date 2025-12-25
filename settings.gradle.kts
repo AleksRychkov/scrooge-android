@@ -43,7 +43,6 @@ include(":component:report:period-total-embedded")
 include(":component:report:root")
 
 include(":component:transaction:form")
-include(":component:transaction:list")
 
 // core
 include(":core:database:api")
@@ -66,7 +65,7 @@ listOf("category", "currency", "reports", "tag", "transaction").forEach {
 }
 
 // presentation
-include(":presentation:component")
+include(":presentation:component:transaction-list")
 include(":presentation:screen:main:root")
 include(":presentation:screen:main:tabs")
 include(":presentation:screen:root")

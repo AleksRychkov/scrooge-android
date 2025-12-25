@@ -1,8 +1,8 @@
-package dev.aleksrychkov.scrooge.component.transaction.list
+package dev.aleksrychkov.scrooge.presentation.component.transactionlist
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.DefaultTransactionsListComponent
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.DefaultTransactionsListComponent
 
 interface TransactionsListComponent {
     companion object {

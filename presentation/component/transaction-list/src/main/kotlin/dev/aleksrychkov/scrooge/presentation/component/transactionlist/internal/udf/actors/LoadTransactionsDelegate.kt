@@ -1,9 +1,9 @@
-package dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.actors
+package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.actors
 
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListCommand
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListEvent
 import dev.aleksrychkov.scrooge.feature.transaction.GetTransactionsResult
 import dev.aleksrychkov.scrooge.feature.transaction.GetTransactionsUseCase
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListCommand
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

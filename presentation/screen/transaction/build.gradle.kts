@@ -13,7 +13,7 @@ android {
 
 dependencies {
     implementation(projects.component.report.periodTotalEmbedded)
-    implementation(projects.component.transaction.list)
+    implementation(projects.presentation.component.transactionList)
 
     implementation(projects.core.designSystem)
     implementation(projects.core.di)

@@ -1,8 +1,8 @@
-package dev.aleksrychkov.scrooge.component.transaction.list.internal
+package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal
 
-import dev.aleksrychkov.scrooge.component.transaction.list.TransactionsListComponent
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.TransactionsListState
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListComponent
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListState
 import kotlinx.coroutines.flow.StateFlow
 
 internal interface TransactionsListComponentInternal : TransactionsListComponent {

@@ -1,9 +1,9 @@
-package dev.aleksrychkov.scrooge.component.transaction.list.internal.udf
+package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf
 
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.actors.LoadTransactionsDelegate
-import dev.aleksrychkov.scrooge.component.transaction.list.internal.udf.actors.PreloadCategoriesDelegate
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.udf.Actor
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.actors.LoadTransactionsDelegate
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.actors.PreloadCategoriesDelegate
 import kotlinx.coroutines.flow.Flow
 
 internal class TransactionsListActor(
