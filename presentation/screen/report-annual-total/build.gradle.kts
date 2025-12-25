@@ -12,7 +12,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.component.report.periodTotalEmbedded)
+    implementation(projects.presentation.component.periodTotal)
 
     implementation(projects.core.designSystem)
     implementation(projects.core.di)

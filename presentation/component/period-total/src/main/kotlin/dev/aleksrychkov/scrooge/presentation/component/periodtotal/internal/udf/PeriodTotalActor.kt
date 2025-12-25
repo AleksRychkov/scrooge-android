@@ -1,9 +1,9 @@
-package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
+package dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf
 
-import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.actors.LoadDelegate
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.udf.Actor
 import dev.aleksrychkov.scrooge.core.udf.Switcher
+import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.actors.LoadDelegate
 import kotlinx.coroutines.flow.Flow
 
 internal class PeriodTotalActor(

@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
+package dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity

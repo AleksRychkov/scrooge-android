@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.report.periodtotal"
+    namespace = "dev.aleksrychkov.scrooge.presentation.component.periodtotal"
     buildFeatures {
         compose = true
     }

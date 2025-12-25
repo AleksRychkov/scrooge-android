@@ -8,11 +8,11 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
+import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period.PeriodComponent
 import kotlinx.coroutines.flow.MutableStateFlow

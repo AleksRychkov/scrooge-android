@@ -1,8 +1,8 @@
-package dev.aleksrychkov.scrooge.component.report.periodtotal
+package dev.aleksrychkov.scrooge.presentation.component.periodtotal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.DefaultPeriodTotalComponent
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.DefaultPeriodTotalComponent
 
 interface PeriodTotalComponent {
     companion object {

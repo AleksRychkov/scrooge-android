@@ -1,9 +1,9 @@
-package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.actors
+package dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.actors
 
-import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalCommand
-import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalEvent
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountUseCase
+import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.PeriodTotalCommand
+import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.PeriodTotalEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

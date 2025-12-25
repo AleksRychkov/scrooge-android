@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.report.periodtotal
+package dev.aleksrychkov.scrooge.presentation.component.periodtotal
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -25,8 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.PeriodTotalComponentInternal
-import dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf.PeriodTotalState
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
@@ -35,6 +33,8 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
+import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.PeriodTotalComponentInternal
+import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.PeriodTotalState
 import kotlinx.collections.immutable.persistentListOf
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 

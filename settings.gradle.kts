@@ -33,7 +33,6 @@ include(":config:detekt:rules")
 
 // component
 include(":component:settings")
-include(":component:report:period-total-embedded")
 
 // core
 include(":core:database:api")
@@ -56,6 +55,7 @@ listOf("category", "currency", "reports", "tag", "transaction").forEach {
 }
 
 // presentation component
+include(":presentation:component:period-total")
 include(":presentation:component:transaction-category")
 include(":presentation:component:transaction-currency")
 include(":presentation:component:transaction-list")

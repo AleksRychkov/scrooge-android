@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.report.periodtotal.internal.udf
+package dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf
 
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
