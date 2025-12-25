@@ -37,9 +37,6 @@ include(":component:currency")
 include(":component:settings")
 include(":component:tag")
 
-include(":component:main:tabs")
-include(":component:main:root")
-
 include(":component:report:annual-total")
 include(":component:report:category-total")
 include(":component:report:period-total-embedded")
@@ -71,4 +68,6 @@ listOf("category", "currency", "reports", "tag", "transaction").forEach {
 
 // presentation
 include(":presentation:component")
+include(":presentation:screen:main:root")
+include(":presentation:screen:main:tabs")
 include(":presentation:screen:root")

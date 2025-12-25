@@ -1,0 +1,12 @@
+package dev.aleksrychkov.scrooge.presentation.screen.main.tabs
+
+import com.arkivanov.decompose.ComponentContext
+import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal.DefaultMainTabsComponent
+
+interface MainTabsComponent {
+    companion object Companion {
+        operator fun invoke(componentContext: ComponentContext): MainTabsComponent {
+            return DefaultMainTabsComponent(componentContext)
+        }
+    }
+}

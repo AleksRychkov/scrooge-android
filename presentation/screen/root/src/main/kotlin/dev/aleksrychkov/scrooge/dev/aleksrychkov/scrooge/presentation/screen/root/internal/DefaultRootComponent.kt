@@ -5,7 +5,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.component.main.root.MainComponent
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
 import kotlinx.serialization.Serializable
 
 internal class DefaultRootComponent(

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import dev.aleksrychkov.scrooge.component.main.root.MainContent
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainContent
 
 @Composable
 internal fun RootContent(

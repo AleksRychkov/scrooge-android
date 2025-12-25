@@ -5,23 +5,25 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.root"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.main.tabs"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.presentation.screen.main.root)
+    implementation(projects.component.report.root)
+    implementation(projects.component.settings)
+    implementation(projects.component.transaction.root)
 
     implementation(projects.core.designSystem)
+    implementation(projects.core.resources)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
-
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material.icons)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
