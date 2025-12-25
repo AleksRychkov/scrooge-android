@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ReportDao {
     suspend fun totalAmount(period: PeriodTimestampEntity): Flow<ReportTotalAmountEntity>
-    suspend fun totalAmountMonthly(year: Int): ReportTotalAmountMonthlyEntity
+    suspend fun totalAmountMonthly(period: PeriodTimestampEntity): ReportTotalAmountMonthlyEntity
     suspend fun byCategory(period: PeriodTimestampEntity): ReportByCategoryEntity
 }

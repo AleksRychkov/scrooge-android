@@ -16,7 +16,7 @@ WITH monthly AS (
         currencyCode,
         SUM(amount) AS total_amount
     FROM TTransaction
-    WHERE strftime('%Y', timestamp/1000, 'unixepoch') = ?
+    WHERE timestamp >= ? AND timestamp <= ?
     GROUP BY ym, type, currencyCode
 )
 SELECT * FROM monthly;

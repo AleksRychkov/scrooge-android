@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component
 
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyCommand
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyEvent
+import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountMonthlyResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountMonthlyUseCase
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +12,7 @@ internal class LoadDelegate(
     private val useCase: Lazy<ReportTotalAmountMonthlyUseCase>,
 ) {
     suspend operator fun invoke(cmd: TotalMonthlyCommand.Load): Flow<TotalMonthlyEvent> {
-        return when (val result = useCase.value(year = cmd.year)) {
+        return when (val result = useCase.value(startEndOfYear(cmd.year))) {
             ReportTotalAmountMonthlyResult.Failure ->
                 flowOf(TotalMonthlyEvent.Internal.FailedToLoad)
 

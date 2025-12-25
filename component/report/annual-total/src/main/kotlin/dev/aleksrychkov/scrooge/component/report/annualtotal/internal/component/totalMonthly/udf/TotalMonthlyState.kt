@@ -5,17 +5,12 @@ import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
+import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
-import kotlinx.datetime.number
-import kotlinx.datetime.toInstant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Immutable
@@ -102,21 +97,4 @@ private fun ReportTotalAmountEntity.mapToStateValue(): TotalMonthlyState.ByType 
             }
             .toImmutableList(),
     )
-}
-
-private fun startEndOfMonth(month: Month, year: Int): PeriodTimestampEntity {
-    val tz = TimeZone.currentSystemDefault()
-    val startMillis = LocalDateTime(year, month.number, 1, 0, 0)
-        .toInstant(tz)
-        .toEpochMilliseconds()
-    val endMillis = if (month.number == Month.DECEMBER.number) {
-        LocalDateTime(year + 1, 1, 1, 0, 0)
-    } else {
-        LocalDateTime(year, month.number + 1, 1, 0, 0)
-    }
-        .toInstant(tz)
-        .minus(1, DateTimeUnit.MILLISECOND)
-        .toEpochMilliseconds()
-
-    return PeriodTimestampEntity(from = startMillis, to = endMillis)
 }

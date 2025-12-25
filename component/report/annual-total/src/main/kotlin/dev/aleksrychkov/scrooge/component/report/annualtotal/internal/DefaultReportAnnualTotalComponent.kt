@@ -11,15 +11,11 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.period.PeriodComponent
 import dev.aleksrychkov.scrooge.component.report.annualtotal.internal.component.totalMonthly.TotalMonthlyComponent
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
@@ -42,7 +38,7 @@ internal class DefaultReportAnnualTotalComponent(
         PeriodTotalComponent(
             componentContext = childContext("ReportAnnualPeriodTotalComponentContext")
         ).also {
-            it.setPeriod(period = getStartEndForYear(state.value.selectedYear))
+            it.setPeriod(period = startEndOfYear(state.value.selectedYear))
         }
     }
 
@@ -85,21 +81,8 @@ internal class DefaultReportAnnualTotalComponent(
     }
 
     override fun setPeriod(year: Int) {
-        _periodTotalComponent.setPeriod(period = getStartEndForYear(year))
+        _periodTotalComponent.setPeriod(period = startEndOfYear(year))
         _totalMonthlyComponent.setYear(year)
         _state.value = ReportAnnualTotalState(selectedYear = year)
-    }
-
-    private fun getStartEndForYear(year: Int): PeriodTimestampEntity {
-        val tz = TimeZone.currentSystemDefault()
-        val startMillis = LocalDateTime(year, 1, 1, 0, 0)
-            .toInstant(tz)
-            .toEpochMilliseconds()
-        val endMillis = LocalDateTime(year + 1, 1, 1, 0, 0)
-            .toInstant(tz)
-            .minus(1, DateTimeUnit.MILLISECOND)
-            .toEpochMilliseconds()
-
-        return PeriodTimestampEntity(from = startMillis, to = endMillis)
     }
 }

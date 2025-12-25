@@ -37,10 +37,13 @@ internal class DefaultReportDao(
         }
 
     override suspend fun totalAmountMonthly(
-        year: Int,
+        period: PeriodTimestampEntity,
     ): ReportTotalAmountMonthlyEntity = withContext(readDispatcher) {
         database.reportQueries
-            .totalAmountMothly(value_ = year.toString())
+            .totalAmountMothly(
+                timestamp = period.from,
+                timestamp_ = period.to,
+            )
             .executeAsList()
             .let(ReportMapper::totalAmountMonthlyToEntity)
     }

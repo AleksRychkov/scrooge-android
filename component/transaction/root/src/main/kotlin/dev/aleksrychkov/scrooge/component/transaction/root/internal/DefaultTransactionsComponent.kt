@@ -11,7 +11,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.component.report.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.component.transaction.list.TransactionsListComponent
 import dev.aleksrychkov.scrooge.component.transaction.root.internal.component.period.PeriodComponent
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.utils.DateTimeUtils
+import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
@@ -36,17 +36,17 @@ internal class DefaultTransactionsComponent(
         PeriodTotalComponent(
             componentContext = childContext("PeriodTotalComponentContext")
         ).also {
-            val period = DateTimeUtils.getMonthStartEndTimestamp(_state.value.selectedPeriod)
+            val period = startEndOfMonth(_state.value.selectedPeriod)
             it.setPeriod(period = period)
         }
     }
 
     private val _transactionsListComponent: TransactionsListComponent by lazy {
-        val period = state.value.selectedPeriod
-        val startEnd = DateTimeUtils.getMonthStartEndTimestamp(period)
+        val instant = state.value.selectedPeriod
+        val period = startEndOfMonth(instant)
         TransactionsListComponent(
             componentContext = childContext("TransactionsListComponent"),
-            period = startEnd,
+            period = period,
         )
     }
 
@@ -90,7 +90,7 @@ internal class DefaultTransactionsComponent(
 
     override fun setPeriod(instant: Instant) {
         _state.value = TransactionsState(instant)
-        val period = DateTimeUtils.getMonthStartEndTimestamp(instant)
+        val period = startEndOfMonth(instant)
         _periodTotalComponent.setPeriod(period = period)
         _transactionsListComponent.setPeriod(period = period)
     }
