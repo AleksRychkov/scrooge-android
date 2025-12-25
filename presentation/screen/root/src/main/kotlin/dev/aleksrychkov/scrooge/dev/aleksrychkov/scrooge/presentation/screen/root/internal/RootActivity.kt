@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.root.internal
+package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -1,7 +1,8 @@
 package dev.aleksrychkov.scrooge.component.transaction.root.internal
 
 import androidx.compose.runtime.Immutable
-import dev.aleksrychkov.scrooge.component.transaction.root.internal.utils.DateTimeUtils
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -12,7 +13,7 @@ internal data class TransactionsState(
 ) {
     companion object {
         operator fun invoke(instant: Instant = Clock.System.now()): TransactionsState {
-            val dateTime = DateTimeUtils.getDate(instant)
+            val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
             val monthName = dateTime.month.name.lowercase().replaceFirstChar { it.uppercase() }
 
             return TransactionsState(

@@ -39,7 +39,7 @@ dependencies {
 }
 
 dependencies {
-    implementation(projects.component.root)
+    implementation(projects.presentation.screen.root)
 
     implementation(projects.core.database.di)
     implementation(projects.core.resources)

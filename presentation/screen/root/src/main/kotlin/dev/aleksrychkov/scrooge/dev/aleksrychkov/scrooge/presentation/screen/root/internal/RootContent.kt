@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.root.internal
+package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

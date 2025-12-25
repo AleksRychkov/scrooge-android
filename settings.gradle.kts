@@ -32,8 +32,6 @@ include(":app")
 include(":config:detekt:rules")
 
 // component
-include(":component:root")
-
 include(":component:category")
 include(":component:currency")
 include(":component:settings")
@@ -70,3 +68,7 @@ listOf("category", "currency", "reports", "tag", "transaction").forEach {
     include(":feature:$it:default")
     include(":feature:$it:di")
 }
+
+// presentation
+include(":presentation:component")
+include(":presentation:screen:root")

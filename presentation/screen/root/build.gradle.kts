@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.root"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.root"
     buildFeatures {
         compose = true
     }

@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".internal.RootActivity"
+            android:name="dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootActivity"
             android:exported="true"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan">
