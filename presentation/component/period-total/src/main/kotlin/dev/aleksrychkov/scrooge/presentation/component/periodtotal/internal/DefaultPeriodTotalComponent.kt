@@ -2,6 +2,9 @@ package dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
+import dev.aleksrychkov.scrooge.core.router.Router
+import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.PeriodTotalActor
@@ -13,6 +16,10 @@ import kotlinx.coroutines.flow.StateFlow
 internal class DefaultPeriodTotalComponent(
     componentContext: ComponentContext,
 ) : PeriodTotalComponentInternal, ComponentContext by componentContext {
+
+    private val router: Router by lazy {
+        (componentContext as RouterComponentContext).router
+    }
 
     private val store: Store<PeriodTotalState, PeriodTotalEvent, Unit> by lazy {
         instanceKeeper.createStore(
@@ -27,5 +34,9 @@ internal class DefaultPeriodTotalComponent(
 
     override fun setPeriod(period: PeriodTimestampEntity) {
         store.handle(PeriodTotalEvent.External.Load(period = period))
+    }
+
+    override fun openCategoryTotal() {
+        router.open(DestinationReportCategoryTotal(state.value.period))
     }
 }

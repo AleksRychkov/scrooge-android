@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal interface PeriodTotalComponentInternal : PeriodTotalComponent {
     val state: StateFlow<PeriodTotalState>
+
+    fun openCategoryTotal()
 }

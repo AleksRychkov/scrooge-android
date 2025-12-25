@@ -13,7 +13,7 @@ internal class PeriodTotalReducer :
         return when (event) {
             is PeriodTotalEvent.External.Load -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = true)
+                    copy(isLoading = true, period = event.period)
                 }
                 command {
                     listOf(PeriodTotalCommand.Load(period = event.period))

@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf
 
 import androidx.compose.runtime.Immutable
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import kotlinx.collections.immutable.ImmutableList
@@ -11,6 +12,7 @@ import kotlinx.collections.immutable.toImmutableList
 internal data class PeriodTotalState(
     val isLoading: Boolean = true,
     val data: ByType = ByType(),
+    val period: PeriodTimestampEntity = PeriodTimestampEntity(0, 0),
 ) {
     @Immutable
     data class ByType(

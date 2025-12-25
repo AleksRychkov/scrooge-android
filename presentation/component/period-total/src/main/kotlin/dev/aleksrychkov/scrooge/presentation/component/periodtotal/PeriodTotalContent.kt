@@ -4,10 +4,12 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
@@ -25,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
@@ -63,6 +66,7 @@ private fun PeriodTotalContent(
         modifier = modifier,
         state = state,
         elevation = elevation,
+        openCategoryTotal = component::openCategoryTotal,
     )
 }
 
@@ -71,11 +75,13 @@ private fun Content(
     modifier: Modifier,
     state: PeriodTotalState,
     elevation: Dp,
+    openCategoryTotal: () -> Unit,
 ) {
     TotalContent(
         modifier = modifier,
         data = state.data,
         elevation = elevation,
+        openCategoryTotal = openCategoryTotal,
     )
 }
 
@@ -84,6 +90,7 @@ private fun TotalContent(
     modifier: Modifier,
     data: PeriodTotalState.ByType,
     elevation: Dp,
+    openCategoryTotal: () -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -96,7 +103,12 @@ private fun TotalContent(
         ),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max)
+                .debounceClickable {
+                    openCategoryTotal()
+                }
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = Large),
@@ -197,6 +209,7 @@ private fun TotalContentPreview() {
             TotalContent(
                 modifier = Modifier.fillMaxWidth(),
                 elevation = Medium,
+                openCategoryTotal = {},
                 data = PeriodTotalState.ByType(
                     income = persistentListOf(
                         PeriodTotalState.ByType.Value(
