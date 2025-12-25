@@ -11,9 +11,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
-import dev.aleksrychkov.scrooge.component.tag.TagComponent
-import dev.aleksrychkov.scrooge.component.tag.TagContent
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagComponent
+import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagContent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 import kotlinx.coroutines.launch
 

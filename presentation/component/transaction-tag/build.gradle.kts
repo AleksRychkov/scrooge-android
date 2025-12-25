@@ -5,42 +5,33 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.transactionform"
+    namespace = "dev.aleksrychkov.scrooge.presentation.component.transactiontag"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.presentation.component.transactionCategory)
-    implementation(projects.presentation.component.transactionCurrency)
-    implementation(projects.presentation.component.transactionTag)
-
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
     implementation(projects.core.entity)
     implementation(projects.core.resources)
-    implementation(projects.core.router)
     implementation(projects.core.udfExtensions)
 
-    implementation(projects.feature.currency.api)
-    implementation(projects.feature.transaction.api)
+    implementation(projects.feature.tag.api)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
-    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
 
-    implementation(libs.kotlinx.datetime)
-
-    debugImplementation(libs.androidx.ui.tooling)
-
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
 
     testRuntimeOnly(libs.junit.platform.launcher)
 }

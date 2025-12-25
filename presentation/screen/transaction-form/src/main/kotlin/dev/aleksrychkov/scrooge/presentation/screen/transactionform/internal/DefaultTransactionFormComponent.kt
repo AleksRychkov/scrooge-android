@@ -7,7 +7,6 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.component.tag.TagComponent
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
@@ -19,6 +18,7 @@ import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.CurrencyComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.CategoryComponent
+import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormActor
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEvent
