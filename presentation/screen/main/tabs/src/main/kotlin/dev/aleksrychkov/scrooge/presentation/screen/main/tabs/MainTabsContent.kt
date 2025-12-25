@@ -28,9 +28,9 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
-import dev.aleksrychkov.scrooge.component.report.root.ReportContent
 import dev.aleksrychkov.scrooge.component.settings.SettingsContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal.MainTabsComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.TransactionsContent
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -82,7 +82,7 @@ private fun Tabs(
                 component = child.component,
             )
 
-            is MainTabsComponentInternal.Child.Report -> ReportContent(
+            is MainTabsComponentInternal.Child.Report -> ReportAnnualTotalContent(
                 modifier = Modifier.fillMaxSize(),
                 component = child.component,
             )

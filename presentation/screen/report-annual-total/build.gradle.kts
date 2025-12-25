@@ -5,26 +5,35 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.main.tabs"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.component.settings)
-    implementation(projects.presentation.screen.reportAnnualTotal)
-    implementation(projects.presentation.screen.transaction)
+    implementation(projects.component.report.periodTotalEmbedded)
 
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
     implementation(projects.core.resources)
+    implementation(projects.core.udfExtensions)
+
+    implementation(projects.feature.reports.api)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.immutable.collections)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

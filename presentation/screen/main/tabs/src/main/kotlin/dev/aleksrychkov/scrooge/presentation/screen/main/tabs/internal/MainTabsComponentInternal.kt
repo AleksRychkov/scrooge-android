@@ -2,9 +2,9 @@ package dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal
 
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.component.report.root.ReportComponent
 import dev.aleksrychkov.scrooge.component.settings.SettingsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
+import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.TransactionsComponent
 
 internal interface MainTabsComponentInternal : MainTabsComponent {
@@ -16,7 +16,7 @@ internal interface MainTabsComponentInternal : MainTabsComponent {
 
     sealed class Child {
         class Transactions(val component: TransactionsComponent) : Child()
-        class Report(val component: ReportComponent) : Child()
+        class Report(val component: ReportAnnualTotalComponent) : Child()
         class Settings(val component: SettingsComponent) : Child()
     }
 }
