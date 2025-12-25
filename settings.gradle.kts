@@ -33,8 +33,6 @@ include(":config:detekt:rules")
 
 // component
 include(":component:settings")
-
-include(":component:report:category-total")
 include(":component:report:period-total-embedded")
 
 // core
@@ -67,6 +65,7 @@ include(":presentation:component:transaction-tag")
 include(":presentation:screen:main:root")
 include(":presentation:screen:main:tabs")
 include(":presentation:screen:report-annual-total")
+include(":presentation:screen:report-category-total")
 include(":presentation:screen:root")
 include(":presentation:screen:transaction")
 include(":presentation:screen:transaction-form")
