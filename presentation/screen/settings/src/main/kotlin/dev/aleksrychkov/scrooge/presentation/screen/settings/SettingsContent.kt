@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.settings
+package dev.aleksrychkov.scrooge.presentation.screen.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.displayCutoutPadding
@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.aleksrychkov.scrooge.component.settings.internal.SettingsComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.settings.internal.SettingsComponentInternal
 
 @Composable
 fun SettingsContent(

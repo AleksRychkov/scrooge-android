@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.settings.internal
+package dev.aleksrychkov.scrooge.presentation.screen.settings.internal
 
 import com.arkivanov.decompose.ComponentContext
 

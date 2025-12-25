@@ -31,9 +31,6 @@ include(":app")
 // detekt
 include(":config:detekt:rules")
 
-// component
-include(":component:settings")
-
 // core
 include(":core:database:api")
 include(":core:database:default")
@@ -67,5 +64,6 @@ include(":presentation:screen:main:tabs")
 include(":presentation:screen:report-annual-total")
 include(":presentation:screen:report-category-total")
 include(":presentation:screen:root")
+include(":presentation:screen:settings")
 include(":presentation:screen:transaction")
 include(":presentation:screen:transaction-form")
