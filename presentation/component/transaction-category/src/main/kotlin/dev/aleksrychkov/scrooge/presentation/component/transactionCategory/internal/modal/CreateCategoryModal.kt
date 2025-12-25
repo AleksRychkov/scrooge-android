@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal
+package dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.modal
 
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,30 +11,27 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
-import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
-import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.CategoryComponent
-import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.CategoryContent
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
+import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.CategoryComponentInternal
+import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.component.CreateCategoryComponent
+import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.component.CreateCategoryContent
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun CategoryModal(
-    component: TransactionFormComponentInternal,
+internal fun CreateCategoryModal(
+    component: CategoryComponentInternal
 ) {
-    val categorySlot = component.categoryModal.subscribeAsState().value
-    CategoryModal(
-        slot = categorySlot,
-        close = component::closeCategoryModal,
-        select = component::setCategory,
+    val slot = component.createCategoryModal.subscribeAsState().value
+    CreateCategoryModal(
+        slot = slot,
+        close = component::closeAddCategoryModal,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CategoryModal(
-    slot: ChildSlot<*, CategoryComponent>,
+private fun CreateCategoryModal(
+    slot: ChildSlot<*, CreateCategoryComponent>,
     close: () -> Unit,
-    select: (CategoryEntity) -> Unit,
 ) {
     slot.child?.instance?.also { component ->
         val scope = rememberCoroutineScope()
@@ -47,11 +44,10 @@ private fun CategoryModal(
                 .statusBarsPadding(),
             sheetState = modalBottomSheetState,
         ) {
-            CategoryContent(
+            CreateCategoryContent(
                 modifier = Modifier.fillMaxSize(),
                 component = component,
-                callback = { categoryEntity ->
-                    categoryEntity?.let(select)
+                onCloseCallback = {
                     scope.launch {
                         modalBottomSheetState.hide()
                     }.invokeOnCompletion {
