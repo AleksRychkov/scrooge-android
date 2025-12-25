@@ -13,8 +13,10 @@ android {
 
 dependencies {
     implementation(projects.presentation.screen.main.tabs)
+    implementation(projects.presentation.screen.reportCategoryTotal)
     implementation(projects.presentation.screen.transactionForm)
 
+    implementation(projects.core.entity)
     implementation(projects.core.router)
 }
 

@@ -6,6 +6,10 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
+import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.ReportCategoryTotalComponent
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.MainTabs
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.ReportCategoryTotal
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.TransactionForm
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainRouter
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
@@ -35,12 +39,19 @@ internal class DefaultMainComponent(
         val routerComponentContext = RouterComponentContext(componentContext, router)
         return when (config) {
             MainNavigationConfig.MainTabs ->
-                MainComponentInternal.Child.MainTabs(MainTabsComponent(componentContext = routerComponentContext))
+                MainTabs(MainTabsComponent(componentContext = routerComponentContext))
 
-            is MainNavigationConfig.TransactionForm -> MainComponentInternal.Child.TransactionForm(
+            is MainNavigationConfig.TransactionForm -> TransactionForm(
                 TransactionFormComponent(
                     componentContext = routerComponentContext,
                     destination = config.destination,
+                )
+            )
+
+            is MainNavigationConfig.ReportCategoryTotal -> ReportCategoryTotal(
+                ReportCategoryTotalComponent(
+                    componentContext = routerComponentContext,
+                    period = config.destination.period,
                 )
             )
         }

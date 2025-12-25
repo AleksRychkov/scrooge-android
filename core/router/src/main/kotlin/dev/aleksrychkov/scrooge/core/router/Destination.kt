@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.core.router
 
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.serialization.Serializable
 
@@ -34,3 +35,8 @@ data class DestinationTransactionForm(
             )
     }
 }
+
+@Serializable
+data class DestinationReportCategoryTotal(
+    val period: PeriodTimestampEntity,
+) : Destination
