@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.currency.internal.udf
+package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf
 
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 

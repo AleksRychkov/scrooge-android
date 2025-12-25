@@ -1,14 +1,14 @@
-package dev.aleksrychkov.scrooge.component.currency.internal
+package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyActor
-import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyEffect
-import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyEvent
-import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyReducer
-import dev.aleksrychkov.scrooge.component.currency.internal.udf.CurrencyState
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyActor
+import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyEffect
+import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyEvent
+import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyReducer
+import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyState
 import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultCurrencyComponent(
@@ -18,7 +18,7 @@ internal class DefaultCurrencyComponent(
     private val store: Store<CurrencyState, CurrencyEvent, CurrencyEffect> by lazy {
         instanceKeeper.createStore(
             initialState = CurrencyState(),
-            actor = CurrencyActor(),
+            actor = CurrencyActor.Companion(),
             reducer = CurrencyReducer(),
             startEvent = CurrencyEvent.External.Init,
         )

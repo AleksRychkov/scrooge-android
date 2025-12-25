@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.component.currency.internal.entity
+package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.entity
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity

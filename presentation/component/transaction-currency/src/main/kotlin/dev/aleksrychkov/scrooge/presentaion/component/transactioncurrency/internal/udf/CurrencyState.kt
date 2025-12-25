@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.component.currency.internal.udf
+package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf
 
 import androidx.compose.runtime.Immutable
-import dev.aleksrychkov.scrooge.component.currency.internal.entity.FavoriteCurrencyEntity
+import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.entity.FavoriteCurrencyEntity
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable

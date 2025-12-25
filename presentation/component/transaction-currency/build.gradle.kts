@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.component.currency"
+    namespace = "dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency"
     buildFeatures {
         compose = true
     }

@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.component.currency.internal.udf
+package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf
 
-import dev.aleksrychkov.scrooge.component.currency.internal.entity.FavoriteCurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.entity.FavoriteCurrencyEntity
 import kotlinx.collections.immutable.ImmutableList
 
 internal sealed interface CurrencyEvent {

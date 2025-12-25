@@ -13,7 +13,7 @@ android {
 
 dependencies {
     implementation(projects.presentation.component.transactionCategory)
-    implementation(projects.component.currency)
+    implementation(projects.presentation.component.transactionCurrency)
     implementation(projects.component.tag)
 
     implementation(projects.core.designSystem)
