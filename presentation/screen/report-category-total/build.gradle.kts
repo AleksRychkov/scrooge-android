@@ -15,6 +15,7 @@ dependencies {
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
     implementation(projects.core.resources)
+    implementation(projects.core.router)
     implementation(projects.core.udfExtensions)
 
     implementation(projects.feature.reports.api)

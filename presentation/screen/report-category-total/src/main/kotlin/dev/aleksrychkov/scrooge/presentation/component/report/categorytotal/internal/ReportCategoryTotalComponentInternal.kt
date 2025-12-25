@@ -10,4 +10,5 @@ internal interface ReportCategoryTotalComponentInternal : ReportCategoryTotalCom
 
     fun openPeriodModal()
     fun closePeriodModal()
+    fun onBackClicked()
 }

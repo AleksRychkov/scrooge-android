@@ -6,6 +6,8 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.dismiss
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.router.Router
+import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.ByCategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.period.PeriodComponent
 
@@ -15,6 +17,10 @@ internal class DefaultReportCategoryTotalComponent(
     private val period: PeriodTimestampEntity,
 ) : ReportCategoryTotalComponentInternal, ComponentContext by componentContext {
     private val periodNavigation = SlotNavigation<Unit>()
+
+    private val router: Router by lazy {
+        (componentContext as RouterComponentContext).router
+    }
 
     private val _periodComponent: PeriodComponent by lazy {
         PeriodComponent.Companion(
@@ -42,5 +48,9 @@ internal class DefaultReportCategoryTotalComponent(
 
     override fun closePeriodModal() {
         periodNavigation.dismiss()
+    }
+
+    override fun onBackClicked() {
+        router.close()
     }
 }

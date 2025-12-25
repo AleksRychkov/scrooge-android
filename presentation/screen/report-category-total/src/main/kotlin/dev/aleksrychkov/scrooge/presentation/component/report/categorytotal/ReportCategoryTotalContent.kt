@@ -43,9 +43,6 @@ private fun ReportCategoryTotalContent(
         topBar = {
             ReportAppBar(
                 component = component,
-                onBackClicked = {
-                    throw IllegalStateException("Not implemented yet")
-                }
             )
         }
     ) { innerPadding ->
@@ -62,7 +59,6 @@ private fun ReportCategoryTotalContent(
 @Composable
 internal fun ReportAppBar(
     component: ReportCategoryTotalComponentInternal,
-    onBackClicked: () -> Unit,
 ) {
     val state = remember { component.periodComponent.state }
     Surface(
@@ -74,7 +70,7 @@ internal fun ReportAppBar(
                 Text(text = stringResource(Resources.string.category))
             },
             navigationIcon = {
-                IconButton(onClick = onBackClicked) {
+                IconButton(onClick = component::onBackClicked) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(Resources.string.back),

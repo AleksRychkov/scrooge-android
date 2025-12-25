@@ -8,7 +8,11 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
+import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
+import dev.aleksrychkov.scrooge.core.router.Router
+import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.period.PeriodComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.TotalMonthlyComponent
@@ -33,6 +37,10 @@ internal class DefaultReportAnnualTotalComponent(
             selectedYear = currentYear
         )
     )
+
+    private val router: Router by lazy {
+        (componentContext as RouterComponentContext).router
+    }
 
     private val _periodTotalComponent: PeriodTotalComponent by lazy {
         PeriodTotalComponent(
@@ -84,5 +92,9 @@ internal class DefaultReportAnnualTotalComponent(
         _periodTotalComponent.setPeriod(period = startEndOfYear(year))
         _totalMonthlyComponent.setYear(year)
         _state.value = ReportAnnualTotalState(selectedYear = year)
+    }
+
+    override fun openCategoryTotal(period: PeriodTimestampEntity) {
+        router.open(DestinationReportCategoryTotal(period = period))
     }
 }

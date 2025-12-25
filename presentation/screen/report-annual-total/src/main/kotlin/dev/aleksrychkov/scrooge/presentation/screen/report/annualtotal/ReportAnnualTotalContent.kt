@@ -42,7 +42,6 @@ fun ReportAnnualTotalContent(
     ReportAnnualTotalContent(
         modifier = modifier,
         component = component as ReportAnnualTotalComponentInternal,
-        openCategoryReport = {},
     )
 }
 
@@ -50,7 +49,6 @@ fun ReportAnnualTotalContent(
 private fun ReportAnnualTotalContent(
     modifier: Modifier,
     component: ReportAnnualTotalComponentInternal,
-    openCategoryReport: (PeriodTimestampEntity) -> Unit,
 ) {
     val contentListState = rememberLazyListState()
     val elevation = Medium
@@ -71,7 +69,7 @@ private fun ReportAnnualTotalContent(
             component = component,
             contentListState = contentListState,
             periodContentElevation = elevation,
-            openCategoryReport = openCategoryReport,
+            openCategoryReport = component::openCategoryTotal,
         )
     }
     PeriodModal(
