@@ -13,7 +13,7 @@ android {
 
 dependencies {
     implementation(projects.presentation.screen.main.tabs)
-    implementation(projects.component.transaction.form)
+    implementation(projects.presentation.screen.transactionForm)
 
     implementation(projects.core.router)
 }

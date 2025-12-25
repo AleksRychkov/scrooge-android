@@ -42,8 +42,6 @@ include(":component:report:category-total")
 include(":component:report:period-total-embedded")
 include(":component:report:root")
 
-include(":component:transaction:form")
-
 // core
 include(":core:database:api")
 include(":core:database:default")
@@ -70,3 +68,4 @@ include(":presentation:screen:main:root")
 include(":presentation:screen:main:tabs")
 include(":presentation:screen:root")
 include(":presentation:screen:transaction")
+include(":presentation:screen:transaction-form")

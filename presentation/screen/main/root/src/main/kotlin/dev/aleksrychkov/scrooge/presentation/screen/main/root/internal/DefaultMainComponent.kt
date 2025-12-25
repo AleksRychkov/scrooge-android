@@ -5,11 +5,11 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.component.transaction.form.TransactionFormComponent
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainRouter
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.TransactionFormComponent
 
 internal class DefaultMainComponent(
     componentContext: ComponentContext,
