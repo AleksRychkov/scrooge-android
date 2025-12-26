@@ -39,6 +39,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal.FiltersModal
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal.PeriodModal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -80,6 +81,7 @@ private fun TransactionsContent(
         )
     }
     PeriodModal(component = component)
+    FiltersModal(component = component)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

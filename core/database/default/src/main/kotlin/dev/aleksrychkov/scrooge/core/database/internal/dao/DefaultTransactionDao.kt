@@ -85,4 +85,10 @@ internal class DefaultTransactionDao(
     override suspend fun delete(id: Long): Unit = withContext(writeDispatcher + NonCancellable) {
         database.transactionQueries.delete(id)
     }
+
+    override suspend fun getMinMaxTimestamp(): PeriodTimestampEntity? {
+        val minMax = database.transactionQueries.minMaxTimestamp().executeAsOneOrNull()
+        if (minMax == null || minMax.minTimestamp == null || minMax.maxTimestamp == null) return null
+        return PeriodTimestampEntity(from = minMax.minTimestamp, to = minMax.maxTimestamp)
+    }
 }

@@ -34,4 +34,6 @@ interface TransactionDao {
     )
 
     suspend fun delete(id: Long)
+
+    suspend fun getMinMaxTimestamp(): PeriodTimestampEntity?
 }

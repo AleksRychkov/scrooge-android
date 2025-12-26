@@ -24,4 +24,8 @@ internal class DefaultFiltersComponent(
 
     override val state: StateFlow<FiltersState>
         get() = store.state
+
+    override fun onDateClicked(year: Int, month: Int, day: Int) {
+        store.handle(FiltersEvent.External.DateClicked(year = year, month = month, day = day))
+    }
 }

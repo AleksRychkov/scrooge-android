@@ -55,3 +55,9 @@ WHERE TTransaction.id = ?;
 
 delete:
 DELETE FROM TTransaction WHERE id = ?;
+
+minMaxTimestamp:
+SELECT
+    min(timestamp) AS minTimestamp,
+    max(timestamp) AS maxTimestamp
+FROM TTransaction;

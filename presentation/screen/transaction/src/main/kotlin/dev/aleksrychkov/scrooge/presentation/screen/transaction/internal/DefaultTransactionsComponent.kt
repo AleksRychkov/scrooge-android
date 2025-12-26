@@ -12,6 +12,7 @@ import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.component.period.PeriodComponent
@@ -25,6 +26,7 @@ internal class DefaultTransactionsComponent(
 ) : TransactionsComponentInternal, ComponentContext by componentContext {
 
     private val periodNavigation = SlotNavigation<Instant>()
+    private val filtersNavigation = SlotNavigation<Unit>()
 
     private val router: Router by lazy {
         (componentContext as RouterComponentContext).router
@@ -32,9 +34,15 @@ internal class DefaultTransactionsComponent(
 
     private val _state = MutableStateFlow(TransactionsState())
 
+    private val _filtersComponent: FiltersComponent by lazy {
+        FiltersComponent(
+            componentContext = childContext("TransactionsComponentFiltersChildContext")
+        )
+    }
+
     private val _periodTotalComponent: PeriodTotalComponent by lazy {
         PeriodTotalComponent(
-            componentContext = childContext("PeriodTotalComponentContext")
+            componentContext = childContext("TransactionsComponentPeriodTotalChildContext")
         ).also {
             val period = startEndOfMonth(_state.value.selectedPeriod)
             it.setPeriod(period = period)
@@ -45,7 +53,7 @@ internal class DefaultTransactionsComponent(
         val instant = state.value.selectedPeriod
         val period = startEndOfMonth(instant)
         TransactionsListComponent(
-            componentContext = childContext("TransactionsListComponent"),
+            componentContext = childContext("TransactionsComponentTransactionsListChildContenxt"),
             period = period,
         )
     }
@@ -57,9 +65,21 @@ internal class DefaultTransactionsComponent(
             handleBackButton = true,
             key = "PeriodModalSlot",
         ) { instant, childComponentContext ->
-            PeriodComponent.Companion(
+            PeriodComponent(
                 componentContext = childComponentContext,
                 instant = instant,
+            )
+        }
+
+    override val filtersModal: Value<ChildSlot<*, FiltersComponent>> =
+        childSlot(
+            source = filtersNavigation,
+            serializer = null,
+            handleBackButton = true,
+            key = "FiltersModalSlot",
+        ) { _, childComponentContext ->
+            FiltersComponent(
+                componentContext = childComponentContext,
             )
         }
 
@@ -72,6 +92,9 @@ internal class DefaultTransactionsComponent(
     override val transactionsListComponent: TransactionsListComponent
         get() = _transactionsListComponent
 
+    override val filtersComponent: FiltersComponent
+        get() = _filtersComponent
+
     override fun addIncome() {
         DestinationTransactionForm.addIncome().let(router::open)
     }
@@ -81,11 +104,13 @@ internal class DefaultTransactionsComponent(
     }
 
     override fun openPeriodModal(instant: Instant) {
-        periodNavigation.activate(instant)
+//        periodNavigation.activate(instant)
+        filtersNavigation.activate(Unit)
     }
 
     override fun closePeriodModal() {
-        periodNavigation.dismiss()
+//        periodNavigation.dismiss()
+        filtersNavigation.dismiss()
     }
 
     override fun setPeriod(instant: Instant) {

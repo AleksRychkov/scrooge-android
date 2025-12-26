@@ -14,9 +14,10 @@ android {
 dependencies {
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
-    implementation(projects.core.entity)
     implementation(projects.core.resources)
     implementation(projects.core.udfExtensions)
+
+    implementation(projects.feature.transaction.api)
 }
 
 dependencies {
