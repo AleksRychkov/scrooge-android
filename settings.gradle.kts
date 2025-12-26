@@ -52,6 +52,7 @@ listOf("category", "currency", "reports", "tag", "transaction").forEach {
 }
 
 // presentation component
+include(":presentation:component:filters")
 include(":presentation:component:period-total")
 include(":presentation:component:transaction-category")
 include(":presentation:component:transaction-currency")
