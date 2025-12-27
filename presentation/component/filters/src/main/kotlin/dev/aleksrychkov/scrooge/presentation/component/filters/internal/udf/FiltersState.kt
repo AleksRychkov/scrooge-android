@@ -7,26 +7,11 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class FiltersState(
-    val startSelection: SelectionDate? = null,
-    val endSelection: SelectionDate? = null,
-    val initialScrollIndex: Int = 0,
-    val grid: ImmutableList<GridItem> = persistentListOf(),
     val filter: FilterEntity = FilterEntity(),
-) {
+    val filterReadable: String = "",
 
-    @Immutable
-    data class GridItem(
-        val title: String,
-        val year: Int,
-        val month: Int,
-        val padStart: Int,
-        val endDay: Int,
-    )
-
-    @Immutable
-    data class SelectionDate(
-        val year: Int,
-        val month: Int,
-        val day: Int,
-    )
-}
+    val allYears: ImmutableList<Int> = persistentListOf(),
+    val selectedYear: Int = 0,
+    val allMonths: ImmutableList<String> = persistentListOf(),
+    val selectedMonthNumber: Int = 1,
+)

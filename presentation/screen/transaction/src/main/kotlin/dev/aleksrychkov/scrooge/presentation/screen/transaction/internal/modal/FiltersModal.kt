@@ -29,7 +29,6 @@ internal fun FiltersModal(
     )
 }
 
-@Suppress("UnusedParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FiltersModal(
@@ -39,9 +38,7 @@ private fun FiltersModal(
 ) {
     slot.child?.instance?.also { component ->
         val scope = rememberCoroutineScope()
-        val modalBottomSheetState = rememberModalBottomSheetState(
-            skipPartiallyExpanded = true,
-        )
+        val modalBottomSheetState = rememberModalBottomSheetState()
         ModalBottomSheet(
             onDismissRequest = close,
             modifier = Modifier

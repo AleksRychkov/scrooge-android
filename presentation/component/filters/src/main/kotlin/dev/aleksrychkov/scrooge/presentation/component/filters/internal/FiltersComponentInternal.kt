@@ -7,5 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 internal interface FiltersComponentInternal : FiltersComponent {
     val state: StateFlow<FiltersState>
 
-    fun onDateClicked(year: Int, month: Int, day: Int)
+    fun onYearClicked(year: Int)
+    fun onMonthClicked(month: Int)
 }
