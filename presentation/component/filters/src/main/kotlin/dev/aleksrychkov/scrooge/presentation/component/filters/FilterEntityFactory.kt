@@ -18,6 +18,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 object FilterEntityFactory {
 
     private var _months: Array<String>? = null
+    private var _shortMonths: Array<String>? = null
 
     fun currentMonth(
         resourceManager: ResourceManager,
@@ -40,6 +41,7 @@ object FilterEntityFactory {
         tags: ImmutableSet<String> = persistentSetOf(),
     ): FilterEntity {
         val months = getMonths(resourceManager)
+        val shortMonths = getShortMonths(resourceManager)
         val tz = TimeZone.currentSystemDefault()
         val startDate = Instant
             .fromEpochMilliseconds(period.from)
@@ -85,13 +87,12 @@ object FilterEntityFactory {
 
             // same year
             startDate.year == endDate.year -> {
-                @Suppress("MagicNumber")
                 FilterEntity(
                     readableName = "${startDate.day} " +
-                        months[startDate.month.ordinal].take(3).padEnd(4, '.') +
+                        shortMonths[startDate.month.ordinal] +
                         " - " +
                         "${endDate.day} " +
-                        months[endDate.month.ordinal].take(3).padEnd(4, '.') +
+                        shortMonths[endDate.month.ordinal] +
                         " " +
                         "${startDate.year}",
                     period = period,
@@ -112,9 +113,16 @@ object FilterEntityFactory {
 
     private fun getMonths(resourceManager: ResourceManager): Array<String> {
         if (_months == null) {
-            _months = resourceManager.getStringArray(Resources.array.reports_month_names)
+            _months = resourceManager.getStringArray(Resources.array.month_names)
         }
         return _months!!
+    }
+
+    private fun getShortMonths(resourceManager: ResourceManager): Array<String> {
+        if (_shortMonths == null) {
+            _shortMonths = resourceManager.getStringArray(Resources.array.short_month_names)
+        }
+        return _shortMonths!!
     }
 
     private fun Int.toDateString(): String = this.toString().padStart(2, '0')

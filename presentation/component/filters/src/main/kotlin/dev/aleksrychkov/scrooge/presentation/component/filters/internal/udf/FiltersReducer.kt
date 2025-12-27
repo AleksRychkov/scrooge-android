@@ -71,7 +71,7 @@ internal class FiltersReducer(
             is FiltersEvent.Internal.SetMinMaxYearsPeriod -> state.reduceWith(event) {
                 val gridItems = mutableListOf<FiltersState.GridItem>()
                 val months =
-                    resourceManager.value.getStringArray(Resources.array.reports_month_names)
+                    resourceManager.value.getStringArray(Resources.array.month_names)
                 var initialScrollIndex = 0
                 val scrollDateNumber = if (state.startSelection != null) {
                     comparableDate(

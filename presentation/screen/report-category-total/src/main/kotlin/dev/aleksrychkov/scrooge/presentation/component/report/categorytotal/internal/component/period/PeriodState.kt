@@ -32,7 +32,7 @@ internal data class PeriodState(
 private fun PeriodTimestampEntity.toReadableName(
     resourceManager: ResourceManager,
 ): String {
-    val months = resourceManager.getStringArray(Resources.array.reports_month_names)
+    val months = resourceManager.getStringArray(Resources.array.month_names)
     fun sameYear(
         year: Int,
         startMonth: Month,

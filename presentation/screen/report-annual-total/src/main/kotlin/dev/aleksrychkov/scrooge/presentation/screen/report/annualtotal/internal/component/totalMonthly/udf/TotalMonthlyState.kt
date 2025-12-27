@@ -44,7 +44,7 @@ internal fun ReportTotalAmountMonthlyEntity.mapToState(
     resourceManager: ResourceManager,
     year: Int,
 ): ImmutableList<TotalMonthlyState.ByMonth> {
-    val months = resourceManager.getStringArray(Resources.array.reports_month_names)
+    val months = resourceManager.getStringArray(Resources.array.month_names)
     return this.result
         .map { (month, value) ->
             value.mapToByMonthState(
