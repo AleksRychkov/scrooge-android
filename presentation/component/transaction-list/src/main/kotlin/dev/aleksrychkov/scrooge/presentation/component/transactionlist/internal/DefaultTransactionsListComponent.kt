@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultTransactionsListComponent(
     private val componentContext: ComponentContext,
-    private val period: PeriodTimestampEntity,
 ) : TransactionsListComponentInternal, ComponentContext by componentContext {
 
     private val router: Router by lazy {
@@ -28,7 +27,6 @@ internal class DefaultTransactionsListComponent(
             initialState = TransactionsListState(),
             actor = TransactionsListActor.Companion(),
             reducer = TransactionsListReducer(),
-            startEvent = TransactionsListEvent.External.Initial(period = period),
         )
     }
 
@@ -55,7 +53,8 @@ internal class DefaultTransactionsListComponent(
         )
     }
 
-    override fun setPeriod(period: PeriodTimestampEntity) {
-        store.handle(TransactionsListEvent.External.SetPeriod(period = period))
+    override fun setFilters(filterEntity: FilterEntity) {
+        // todo
+        store.handle(TransactionsListEvent.External.SetPeriod(period = filterEntity.period))
     }
 }

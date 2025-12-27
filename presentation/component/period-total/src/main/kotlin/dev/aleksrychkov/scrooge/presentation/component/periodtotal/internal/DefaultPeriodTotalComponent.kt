@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
@@ -32,8 +32,9 @@ internal class DefaultPeriodTotalComponent(
     override val state: StateFlow<PeriodTotalState>
         get() = store.state
 
-    override fun setPeriod(period: PeriodTimestampEntity) {
-        store.handle(PeriodTotalEvent.External.Load(period = period))
+    override fun setFilters(filterEntity: FilterEntity) {
+        // todo
+        store.handle(PeriodTotalEvent.External.Load(period = filterEntity.period))
     }
 
     override fun openCategoryTotal() {

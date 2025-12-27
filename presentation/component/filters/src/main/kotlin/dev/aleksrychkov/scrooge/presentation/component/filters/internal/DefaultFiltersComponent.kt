@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal
 
 import com.arkivanov.decompose.ComponentContext
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersActor
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultFiltersComponent(
     componentContext: ComponentContext,
+    filter: FilterEntity,
 ) : FiltersComponentInternal, ComponentContext by componentContext {
 
     private val store: Store<FiltersState, FiltersEvent, Unit> by lazy {
@@ -18,7 +20,7 @@ internal class DefaultFiltersComponent(
             initialState = FiltersState(),
             actor = FiltersActor(),
             reducer = FiltersReducer(),
-            startEvent = FiltersEvent.External.Init,
+            startEvent = FiltersEvent.External.Init(filter = filter),
         )
     }
 

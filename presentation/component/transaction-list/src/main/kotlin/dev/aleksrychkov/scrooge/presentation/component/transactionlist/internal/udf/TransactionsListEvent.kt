@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 internal sealed interface TransactionsListEvent {
     sealed interface External : TransactionsListEvent {
-        data class Initial(val period: PeriodTimestampEntity) : External
+        data object Initial : External
         data class SetPeriod(val period: PeriodTimestampEntity) : External
         data class SetListState(val index: Int, val offset: Int) : External
     }

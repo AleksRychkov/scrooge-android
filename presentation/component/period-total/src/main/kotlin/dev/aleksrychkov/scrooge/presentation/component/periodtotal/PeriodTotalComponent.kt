@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.periodtotal
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.DefaultPeriodTotalComponent
 
 interface PeriodTotalComponent {
@@ -11,5 +11,5 @@ interface PeriodTotalComponent {
         }
     }
 
-    fun setPeriod(period: PeriodTimestampEntity)
+    fun setFilters(filterEntity: FilterEntity)
 }

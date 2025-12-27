@@ -1,8 +1,10 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+
 internal sealed interface FiltersEvent {
     sealed interface External : FiltersEvent {
-        data object Init : External
+        data class Init(val filter: FilterEntity) : External
         data class DateClicked(val year: Int, val month: Int, val day: Int) : External
     }
 

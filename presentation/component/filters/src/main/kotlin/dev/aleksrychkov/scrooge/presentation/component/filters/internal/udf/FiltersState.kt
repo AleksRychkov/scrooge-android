@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 
 import androidx.compose.runtime.Immutable
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -8,7 +9,9 @@ import kotlinx.collections.immutable.persistentListOf
 internal data class FiltersState(
     val startSelection: SelectionDate? = null,
     val endSelection: SelectionDate? = null,
+    val initialScrollIndex: Int = 0,
     val grid: ImmutableList<GridItem> = persistentListOf(),
+    val filter: FilterEntity = FilterEntity(),
 ) {
 
     @Immutable

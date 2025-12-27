@@ -40,7 +40,6 @@ import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalCo
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal.FiltersModal
-import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal.PeriodModal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -80,7 +79,6 @@ private fun TransactionsContent(
             periodContentElevation = elevation,
         )
     }
-    PeriodModal(component = component)
     FiltersModal(component = component)
 }
 
@@ -114,10 +112,10 @@ private fun TransactionsAppBar(
             actions = {
                 TextButton(
                     onClick = {
-                        component.openPeriodModal(state.selectedPeriod)
+                        component.openFiltersModal()
                     },
                 ) {
-                    Text(text = state.selectedPeriodReadable)
+                    Text(text = state.filtersName)
                 }
             }
         )

@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +56,7 @@ fun FiltersContent(
     FiltersContent(
         modifier = modifier,
         component = component as FiltersComponentInternal,
+        callback = callback,
     )
 }
 
@@ -61,6 +64,7 @@ fun FiltersContent(
 private fun FiltersContent(
     modifier: Modifier,
     component: FiltersComponentInternal,
+    callback: (FilterEntity) -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
@@ -68,6 +72,9 @@ private fun FiltersContent(
         modifier = modifier,
         state = state,
         onDateClicked = component::onDateClicked,
+        onSubmitClicked = {
+            callback(state.filter)
+        },
     )
 }
 
@@ -76,12 +83,14 @@ private fun FiltersContent(
     modifier: Modifier,
     state: FiltersState,
     onDateClicked: (Int, Int, Int) -> Unit,
+    onSubmitClicked: () -> Unit,
 ) {
     Column(modifier = modifier) {
         PeriodGrid(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
+            initialScrollIndex = state.initialScrollIndex,
             startSelection = state.startSelection,
             endSelection = state.endSelection,
             grid = state.grid,
@@ -92,8 +101,9 @@ private fun FiltersContent(
                 .fillMaxWidth()
                 .padding(horizontal = Large)
                 .padding(bottom = Large2X),
-            onClick = { },
-        ) {
+            onClick = onSubmitClicked,
+
+            ) {
             Text(stringResource(Resources.string.submit))
         }
     }
@@ -102,13 +112,21 @@ private fun FiltersContent(
 @Composable
 private fun PeriodGrid(
     modifier: Modifier,
+    initialScrollIndex: Int,
     startSelection: FiltersState.SelectionDate?,
     endSelection: FiltersState.SelectionDate?,
     grid: ImmutableList<FiltersState.GridItem>,
     onDateClicked: (Int, Int, Int) -> Unit,
 ) {
+    val state = rememberLazyGridState()
+
+    LaunchedEffect(initialScrollIndex) {
+        state.scrollToItem(initialScrollIndex)
+    }
+
     LazyVerticalGrid(
         modifier = modifier.padding(horizontal = Large),
+        state = state,
         columns = GridCells.Fixed(count = 7),
         contentPadding = PaddingValues(bottom = Large2X),
         verticalArrangement = Arrangement.spacedBy(Small),
@@ -179,6 +197,7 @@ private fun Modifier.gridSelection(selection: Int?): Modifier {
         )
 
         0 -> this.background(color = MaterialTheme.colorScheme.primary)
+
         else -> this
     }
 }
@@ -259,6 +278,7 @@ private fun FormContentPreview() {
                     )
                 ),
                 onDateClicked = { _, _, _ -> },
+                onSubmitClicked = {},
             )
         }
     }

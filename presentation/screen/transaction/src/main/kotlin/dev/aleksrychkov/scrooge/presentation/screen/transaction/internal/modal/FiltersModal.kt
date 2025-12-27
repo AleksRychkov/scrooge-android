@@ -11,11 +11,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
 import kotlinx.coroutines.launch
-import kotlin.time.Instant
 
 @Composable
 internal fun FiltersModal(
@@ -24,8 +24,8 @@ internal fun FiltersModal(
     val periodSlot = component.filtersModal.subscribeAsState().value
     FiltersModal(
         slot = periodSlot,
-        close = component::closePeriodModal,
-        setPeriod = component::setPeriod,
+        close = component::closeFiltersModal,
+        setFilter = component::setFilter,
     )
 }
 
@@ -35,7 +35,7 @@ internal fun FiltersModal(
 private fun FiltersModal(
     slot: ChildSlot<*, FiltersComponent>,
     close: () -> Unit,
-    setPeriod: (Instant) -> Unit,
+    setFilter: (FilterEntity) -> Unit,
 ) {
     slot.child?.instance?.also { component ->
         val scope = rememberCoroutineScope()
@@ -53,8 +53,8 @@ private fun FiltersModal(
             FiltersContent(
                 modifier = Modifier.fillMaxSize(),
                 component = component,
-                callback = { instant ->
-//                    setPeriod(instant)
+                callback = { filter ->
+                    setFilter(filter)
                     scope.launch {
                         modalBottomSheetState.hide()
                     }.invokeOnCompletion {

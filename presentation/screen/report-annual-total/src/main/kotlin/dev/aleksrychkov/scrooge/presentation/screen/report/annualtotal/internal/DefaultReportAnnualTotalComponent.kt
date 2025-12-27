@@ -9,7 +9,6 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
-import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
 import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
@@ -45,9 +44,7 @@ internal class DefaultReportAnnualTotalComponent(
     private val _periodTotalComponent: PeriodTotalComponent by lazy {
         PeriodTotalComponent(
             componentContext = childContext("ReportAnnualPeriodTotalComponentContext")
-        ).also {
-            it.setPeriod(period = startEndOfYear(state.value.selectedYear))
-        }
+        )
     }
 
     private val _totalMonthlyComponent: TotalMonthlyComponent by lazy {
@@ -89,7 +86,7 @@ internal class DefaultReportAnnualTotalComponent(
     }
 
     override fun setPeriod(year: Int) {
-        _periodTotalComponent.setPeriod(period = startEndOfYear(year))
+//        _periodTotalComponent.setPeriod(period = startEndOfYear(year))
         _totalMonthlyComponent.setYear(year)
         _state.value = ReportAnnualTotalState(selectedYear = year)
     }
