@@ -11,29 +11,30 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersContent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.ReportAnnualTotalComponentInternal
-import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.period.PeriodComponent
-import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.period.PeriodContent
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun PeriodModal(
+internal fun FiltersModal(
     component: ReportAnnualTotalComponentInternal,
 ) {
-    val periodSlot = component.periodModal.subscribeAsState().value
-    PeriodModal(
+    val periodSlot = component.filtersModal.subscribeAsState().value
+    FiltersModal(
         slot = periodSlot,
-        close = component::closePeriodModal,
-        setPeriod = component::setPeriod,
+        close = component::closeFiltersModal,
+        setFilter = component::setFilter,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PeriodModal(
-    slot: ChildSlot<*, PeriodComponent>,
+private fun FiltersModal(
+    slot: ChildSlot<*, FiltersComponent>,
     close: () -> Unit,
-    setPeriod: (Int) -> Unit,
+    setFilter: (FilterEntity) -> Unit,
 ) {
     slot.child?.instance?.also { component ->
         val scope = rememberCoroutineScope()
@@ -46,11 +47,11 @@ private fun PeriodModal(
                 .statusBarsPadding(),
             sheetState = modalBottomSheetState,
         ) {
-            PeriodContent(
+            FiltersContent(
                 modifier = Modifier.fillMaxSize(),
                 component = component,
-                callback = { year ->
-                    setPeriod(year)
+                callback = { filter ->
+                    setFilter(filter)
                     scope.launch {
                         modalBottomSheetState.hide()
                     }.invokeOnCompletion {

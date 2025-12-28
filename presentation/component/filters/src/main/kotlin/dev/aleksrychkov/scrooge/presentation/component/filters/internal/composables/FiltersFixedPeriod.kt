@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -30,14 +32,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Month
+import java.util.EnumSet
 
 @Composable
 internal fun FiltersFixedPeriod(
     modifier: Modifier,
+    settings: EnumSet<FiltersSettings>,
     allYears: ImmutableList<Int>,
     selectedYear: Int,
     allMonths: ImmutableList<String>,
@@ -49,20 +54,24 @@ internal fun FiltersFixedPeriod(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Years(
-            modifier = Modifier.wrapContentWidth(),
-            allYears = allYears,
-            selectedYear = selectedYear,
-            onYearClicked = onYearClicked,
-        )
+        if (settings.contains(FiltersSettings.Years)) {
+            Years(
+                modifier = Modifier.wrapContentWidth(),
+                allYears = allYears,
+                selectedYear = selectedYear,
+                onYearClicked = onYearClicked,
+            )
+        }
 
-        Spacer(modifier = Modifier.height(Normal))
+        if (settings.contains(FiltersSettings.Months)) {
+            Spacer(modifier = Modifier.height(Normal))
 
-        Months(
-            allMonths = allMonths,
-            selectedMonth = selectedMonth,
-            onMonthClicked = onMonthClicked,
-        )
+            Months(
+                allMonths = allMonths,
+                selectedMonth = selectedMonth,
+                onMonthClicked = onMonthClicked,
+            )
+        }
     }
 }
 
@@ -79,36 +88,46 @@ private fun Years(
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = selectedItemIndex,
     )
-    LazyRow(
-        modifier = modifier,
-        state = listState,
-        contentPadding = PaddingValues(
-            start = Large,
-            end = Large,
-        ),
-        horizontalArrangement = Arrangement.spacedBy(Normal),
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = Large)
+            .background(
+                color = MaterialTheme.colorScheme.secondary,
+                shape = CardDefaults.shape,
+            ),
+        contentAlignment = Alignment.Center,
     ) {
-        items(
-            items = allYears,
-            key = { it }
-        ) { year ->
-            OutlinedButton(
-                modifier = Modifier.padding(),
-                onClick = {
-                    onYearClicked(year)
+        LazyRow(
+            state = listState,
+            contentPadding = PaddingValues(
+                start = Large,
+                end = Large,
+            ),
+            horizontalArrangement = Arrangement.spacedBy(Normal),
+        ) {
+            items(
+                items = allYears,
+                key = { it }
+            ) { year ->
+                OutlinedButton(
+                    modifier = Modifier.padding(),
+                    onClick = {
+                        onYearClicked(year)
+                    }
+                ) {
+                    val color = if (year == selectedYear) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        Color.Unspecified
+                    }
+                    Text(
+                        color = color,
+                        text = year.toString(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
                 }
-            ) {
-                val color = if (year == selectedYear) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    Color.Unspecified
-                }
-                Text(
-                    color = color,
-                    text = year.toString(),
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                )
             }
         }
     }
@@ -217,6 +236,7 @@ private fun ContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             FiltersFixedPeriod(
                 modifier = Modifier,
+                settings = EnumSet.allOf(FiltersSettings::class.java),
                 allYears = persistentListOf(2024, 2025, 2026),
                 selectedYear = 2025,
                 allMonths = Month.entries.map { it.name }.toImmutableList(),

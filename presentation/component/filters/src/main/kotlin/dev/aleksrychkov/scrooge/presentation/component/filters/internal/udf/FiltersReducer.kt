@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
+import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
@@ -46,6 +47,7 @@ internal class FiltersReducer(
                             -1
                         }
                     copy(
+                        settings = event.settings,
                         filter = event.filter,
                         filterReadable = event.filter.readableName,
                         selectedYear = selectedYear,
@@ -78,7 +80,10 @@ internal class FiltersReducer(
             }
 
             is FiltersEvent.External.YearClicked -> state.reduceWith(event) {
-                val period = startEndOfMonth(month = Month(state.selectedMonthNumber), event.year)
+                val period = when (state.selectedMonthNumber) {
+                    -1 -> startEndOfYear(event.year)
+                    else -> startEndOfMonth(month = Month(state.selectedMonthNumber), event.year)
+                }
                 val filter = FilterEntityFactory.fromPeriod(period, resourceManager.value)
                 state {
                     copy(

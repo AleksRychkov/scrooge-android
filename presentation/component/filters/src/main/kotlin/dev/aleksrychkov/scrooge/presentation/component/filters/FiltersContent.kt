@@ -92,6 +92,7 @@ private fun FiltersContent(
 
         FiltersFixedPeriod(
             modifier = Modifier.fillMaxSize(),
+            settings = state.settings,
             allYears = state.allYears,
             allMonths = state.allMonths,
             selectedYear = state.selectedYear,

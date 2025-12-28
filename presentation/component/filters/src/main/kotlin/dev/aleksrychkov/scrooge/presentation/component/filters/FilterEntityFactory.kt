@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.presentation.component.filters
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
+import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.daysInMonth
 import kotlinx.collections.immutable.ImmutableSet
@@ -33,6 +34,15 @@ object FilterEntityFactory {
             period = period,
             tags = tags,
         )
+    }
+
+    fun currentYear(
+        resourceManager: ResourceManager,
+        tags: ImmutableSet<String> = persistentSetOf(),
+    ): FilterEntity {
+        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val period = startEndOfYear(year = today.year)
+        return fromPeriod(period = period, resourceManager = resourceManager, tags = tags)
     }
 
     fun fromPeriod(

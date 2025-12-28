@@ -32,9 +32,9 @@ internal class DefaultPeriodTotalComponent(
     override val state: StateFlow<PeriodTotalState>
         get() = store.state
 
-    override fun setFilters(filterEntity: FilterEntity) {
+    override fun setFilters(filter: FilterEntity) {
         // todo
-        store.handle(PeriodTotalEvent.External.Load(period = filterEntity.period))
+        store.handle(PeriodTotalEvent.External.Load(period = filter.period))
     }
 
     override fun openCategoryTotal() {

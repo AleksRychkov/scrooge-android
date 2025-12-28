@@ -31,7 +31,7 @@ import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalCo
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.ReportAnnualTotalComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.TotalMonthlyComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.TotalMonthlyContent
-import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.modal.PeriodModal
+import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.modal.FiltersModal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -72,7 +72,7 @@ private fun ReportAnnualTotalContent(
             openCategoryReport = component::openCategoryTotal,
         )
     }
-    PeriodModal(
+    FiltersModal(
         component = component,
     )
 }
@@ -105,8 +105,8 @@ private fun ReportAppBar(
                 Text(text = stringResource(Resources.string.reports))
             },
             actions = {
-                TextButton(onClick = component::openPeriodModal) {
-                    Text(text = state.selectedYear.toString())
+                TextButton(onClick = component::openFiltersModal) {
+                    Text(text = state.filtersName)
                 }
             }
         )

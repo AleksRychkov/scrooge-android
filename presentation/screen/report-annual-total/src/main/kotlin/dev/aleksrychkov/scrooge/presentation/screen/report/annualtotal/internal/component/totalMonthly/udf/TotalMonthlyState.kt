@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf
 
 import androidx.compose.runtime.Immutable
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
@@ -17,6 +18,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 internal data class TotalMonthlyState(
     val isLoading: Boolean = false,
     val byMonth: ImmutableList<ByMonth> = persistentListOf(),
+    val filter: FilterEntity = FilterEntity(),
     val currentYear: Int = 0,
 ) {
     @Immutable

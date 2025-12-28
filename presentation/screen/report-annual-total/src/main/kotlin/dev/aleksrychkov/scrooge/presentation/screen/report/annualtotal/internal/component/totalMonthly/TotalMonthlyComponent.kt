@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly
 
 import com.arkivanov.decompose.ComponentContext
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyActor
@@ -17,7 +18,7 @@ internal interface TotalMonthlyComponent {
     }
 
     val state: StateFlow<TotalMonthlyState>
-    fun setYear(year: Int)
+    fun setFilters(filter: FilterEntity)
 }
 
 private class DefaultTotalMonthlyComponent(
@@ -34,7 +35,7 @@ private class DefaultTotalMonthlyComponent(
     override val state: StateFlow<TotalMonthlyState>
         get() = store.state
 
-    override fun setYear(year: Int) {
-        store.handle(TotalMonthlyEvent.External.Load(year = year))
+    override fun setFilters(filter: FilterEntity) {
+        store.handle(TotalMonthlyEvent.External.Load(filter = filter))
     }
 }

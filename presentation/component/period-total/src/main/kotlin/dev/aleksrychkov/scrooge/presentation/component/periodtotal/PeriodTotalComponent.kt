@@ -11,5 +11,5 @@ interface PeriodTotalComponent {
         }
     }
 
-    fun setFilters(filterEntity: FilterEntity)
+    fun setFilters(filter: FilterEntity)
 }

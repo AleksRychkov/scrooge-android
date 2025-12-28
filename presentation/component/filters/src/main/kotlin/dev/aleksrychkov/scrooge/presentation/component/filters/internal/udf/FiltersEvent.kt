@@ -1,10 +1,12 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
+import java.util.EnumSet
 
 internal sealed interface FiltersEvent {
     sealed interface External : FiltersEvent {
-        data class Init(val filter: FilterEntity) : External
+        data class Init(val filter: FilterEntity, val settings: EnumSet<FiltersSettings>) : External
         data class YearClicked(val year: Int) : External
         data class MonthClicked(val month: Int) : External
     }
