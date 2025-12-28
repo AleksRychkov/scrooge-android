@@ -27,6 +27,7 @@ internal class DefaultTransactionsListComponent(
             initialState = TransactionsListState(),
             actor = TransactionsListActor.Companion(),
             reducer = TransactionsListReducer(),
+            startEvent = TransactionsListEvent.External.Initial,
         )
     }
 
