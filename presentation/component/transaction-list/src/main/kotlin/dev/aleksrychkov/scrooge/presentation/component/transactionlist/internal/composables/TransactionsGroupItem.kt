@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -35,7 +34,7 @@ internal fun TransactionsGroupItem(
         modifier = modifier,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = Large, vertical = Normal),
+            modifier = Modifier.padding(horizontal = Large),
             verticalAlignment = Alignment.Top,
         ) {
             Text(

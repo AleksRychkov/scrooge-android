@@ -30,6 +30,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyState
@@ -76,7 +77,7 @@ private fun TotalMonthlyContent(
             top = paddingTop,
             bottom = paddingBottom,
         ),
-        verticalArrangement = Arrangement.spacedBy(Normal),
+        verticalArrangement = Arrangement.spacedBy(Normal2X),
     ) {
         if (headerItem != null) {
             item {
@@ -122,7 +123,7 @@ private fun TotalByMonth(
     byMonth: TotalMonthlyState.ByMonth,
 ) {
     Column(
-        modifier = modifier.padding(vertical = Normal),
+        modifier = modifier.padding(),
     ) {
         Text(
             modifier = Modifier.padding(horizontal = Large),
