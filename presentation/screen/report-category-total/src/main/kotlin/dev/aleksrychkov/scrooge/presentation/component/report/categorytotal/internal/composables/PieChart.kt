@@ -302,16 +302,18 @@ private fun DrawScope.drawSegmentCapsAndIcons(
         )
 
         // Draw icon
-        val iconSize = min(size.width, size.height) * 0.08f // example size
-        val topLeft = capCenter - Offset(iconSize / 2, iconSize / 2)
-        with(painters[i]) {
-            withTransform({
-                translate(left = topLeft.x, top = topLeft.y)
-            }) {
-                draw(
-                    size = Size(iconSize, iconSize),
-                    colorFilter = ColorFilter.tint(Color.White),
-                )
+        if (segments[i].percentage > 0.01f) {
+            val iconSize = min(size.width, size.height) * 0.08f // example size
+            val topLeft = capCenter - Offset(iconSize / 2, iconSize / 2)
+            with(painters[i]) {
+                withTransform({
+                    translate(left = topLeft.x, top = topLeft.y)
+                }) {
+                    draw(
+                        size = Size(iconSize, iconSize),
+                        colorFilter = ColorFilter.tint(Color.White),
+                    )
+                }
             }
         }
     }
@@ -361,6 +363,8 @@ private fun DrawScope.drawSegmentLabels(
     }
 
     segments.forEachIndexed { i, segment ->
+        if (segment.percentage <= 0.01) return@forEachIndexed
+
         val midAngle = startAngles[i] + sweepAngles[i] / 2f
         val angleRad = Math.toRadians(midAngle.toDouble())
         val x = center.x + cos(angleRad).toFloat() * radius
@@ -402,7 +406,17 @@ private fun PieChartPreview() {
                 PieChartSegment(0.02f, 0xFF3949AB.toInt(), icon),
                 PieChartSegment(0.02f, 0xFF00ACC1.toInt(), icon),
                 PieChartSegment(0.01f, 0xFFFFB300.toInt(), icon),
-                PieChartSegment(0.01f, 0xFF00897B.toInt(), icon),
+                //
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
+                PieChartSegment(0.001f, 0xFF00897B.toInt(), icon),
             )
             PieChart(
                 segments = segments,
