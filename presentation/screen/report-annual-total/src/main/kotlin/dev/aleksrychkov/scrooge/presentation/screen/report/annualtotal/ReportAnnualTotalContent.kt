@@ -24,7 +24,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
@@ -146,9 +145,7 @@ private fun Content(
             listState = contentListState,
             headerItem = {
                 PeriodTotalContent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Normal),
+                    modifier = Modifier.fillMaxWidth(),
                     elevation = periodContentElevation,
                     component = periodTotalComponent,
                 )

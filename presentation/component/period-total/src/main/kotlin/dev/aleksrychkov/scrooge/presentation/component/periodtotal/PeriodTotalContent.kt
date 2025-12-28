@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.PeriodTotalComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.PeriodTotalState
 import kotlinx.collections.immutable.persistentListOf
@@ -82,12 +84,14 @@ private fun Content(
         data = state.data,
         elevation = elevation,
         openCategoryTotal = openCategoryTotal,
+        isLoading = state.isLoading,
     )
 }
 
 @Composable
 private fun TotalContent(
     modifier: Modifier,
+    isLoading: Boolean,
     data: PeriodTotalState.ByType,
     elevation: Dp,
     openCategoryTotal: () -> Unit,
@@ -110,8 +114,22 @@ private fun TotalContent(
                     openCategoryTotal()
                 }
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(Small)
+                    .padding(horizontal = Large)
+            ) {
+                if (isLoading) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
             Text(
-                modifier = Modifier.padding(horizontal = Large),
+                modifier = Modifier
+                    .padding(horizontal = Large)
+                    .padding(top = Small),
                 text = stringResource(Resources.string.total),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
@@ -210,6 +228,7 @@ private fun TotalContentPreview() {
                 modifier = Modifier.fillMaxWidth(),
                 elevation = Medium,
                 openCategoryTotal = {},
+                isLoading = true,
                 data = PeriodTotalState.ByType(
                     income = persistentListOf(
                         PeriodTotalState.ByType.Value(

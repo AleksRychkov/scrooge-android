@@ -35,7 +35,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
@@ -135,9 +134,7 @@ private fun Content(
             listState = contentListState,
             headerItem = {
                 PeriodTotalContent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Normal),
+                    modifier = Modifier.fillMaxWidth(),
                     elevation = periodContentElevation,
                     component = component.periodTotalComponent,
                 )
