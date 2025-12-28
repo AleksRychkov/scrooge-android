@@ -218,23 +218,24 @@ private fun ByCategoryBottomSheet(
                 return Offset.Zero
             }
 
-            override suspend fun onPreFling(available: Velocity): Velocity {
-                val target = when {
-                    available.y < -1000f -> 0f
-                    available.y > 1000f -> maxOffset
-                    sheetOffset.value < maxOffset / 2f -> 0f
-                    else -> maxOffset
-                }
-
-                sheetOffset.animateTo(
-                    targetValue = target,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium,
-                    )
-                )
-                return Velocity.Zero
-            }
+            // todo: broken
+//            override suspend fun onPreFling(available: Velocity): Velocity {
+//                val target = when {
+//                    available.y < -1000f -> 0f
+//                    available.y > 1000f -> maxOffset
+//                    sheetOffset.value < maxOffset / 2f -> 0f
+//                    else -> maxOffset
+//                }
+//
+//                sheetOffset.animateTo(
+//                    targetValue = target,
+//                    animationSpec = spring(
+//                        dampingRatio = Spring.DampingRatioNoBouncy,
+//                        stiffness = Spring.StiffnessMedium,
+//                    )
+//                )
+//                return Velocity.Zero
+//            }
         }
     }
 
