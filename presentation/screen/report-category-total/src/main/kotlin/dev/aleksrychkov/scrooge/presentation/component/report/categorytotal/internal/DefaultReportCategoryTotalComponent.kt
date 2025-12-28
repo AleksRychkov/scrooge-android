@@ -2,52 +2,83 @@ package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.int
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.ByCategoryComponent
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.period.PeriodComponent
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import java.util.EnumSet
 
 @Suppress("UnusedPrivateProperty")
 internal class DefaultReportCategoryTotalComponent(
     componentContext: ComponentContext,
-    private val period: PeriodTimestampEntity,
+    private val filter: FilterEntity,
 ) : ReportCategoryTotalComponentInternal, ComponentContext by componentContext {
-    private val periodNavigation = SlotNavigation<Unit>()
+
+    private val filtersNavigation = SlotNavigation<FilterEntity>()
 
     private val router: Router by lazy {
         (componentContext as RouterComponentContext).router
     }
 
-    private val _periodComponent: PeriodComponent by lazy {
-        PeriodComponent.Companion(
-            componentContext = childContext("ReportCategoryTotalPeriodComponent"),
-            period = period,
-        )
-    }
-
     private val _byCategoryComponent: ByCategoryComponent by lazy {
         ByCategoryComponent.Companion(
             componentContext = childContext("ReportCategoryTotalCategoryComponent"),
-            period = period,
+            filter = filter,
         )
     }
 
-    override val periodComponent: PeriodComponent
-        get() = _periodComponent
+    private val _state = MutableStateFlow(
+        ReportCategoryState(
+            filter = filter,
+            filtersName = filter.readableName,
+        )
+    )
+
+    override val filtersModal: Value<ChildSlot<*, FiltersComponent>> =
+        childSlot(
+            source = filtersNavigation,
+            serializer = null,
+            handleBackButton = true,
+            key = "ReportCategoryTotalFiltersModalSlot",
+        ) { filter, childComponentContext ->
+            FiltersComponent(
+                componentContext = childComponentContext,
+                filter = filter,
+                settings = EnumSet.of(FiltersSettings.Years, FiltersSettings.Months),
+            )
+        }
+
+    override val state: StateFlow<ReportCategoryState>
+        get() = _state.asStateFlow()
 
     override val byCategoryComponent: ByCategoryComponent
         get() = _byCategoryComponent
 
-    override fun openPeriodModal() {
-        periodNavigation.activate(Unit)
+    override fun openFiltersModal() {
+        filtersNavigation.activate(state.value.filter)
     }
 
-    override fun closePeriodModal() {
-        periodNavigation.dismiss()
+    override fun closeFiltersModal() {
+        filtersNavigation.dismiss()
+    }
+
+    override fun setFilter(filter: FilterEntity) {
+        _state.value = _state.value.copy(
+            filter = filter,
+            filtersName = filter.readableName,
+        )
+        _byCategoryComponent.setFilter(filter)
     }
 
     override fun onBackClicked() {

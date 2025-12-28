@@ -30,7 +30,7 @@ import java.util.EnumSet
 
 internal class DefaultReportAnnualTotalComponent(
     componentContext: ComponentContext,
-    resourceManager: Lazy<ResourceManager> = getLazy(),
+    private val resourceManager: Lazy<ResourceManager> = getLazy(),
 ) : ReportAnnualTotalComponentInternal, ComponentContext by componentContext {
 
     private val filtersNavigation = SlotNavigation<FilterEntity>()
@@ -106,6 +106,14 @@ internal class DefaultReportAnnualTotalComponent(
     }
 
     override fun openCategoryTotal(period: PeriodTimestampEntity) {
-        router.open(DestinationReportCategoryTotal(period = period))
+        router.open(
+            DestinationReportCategoryTotal(
+                FilterEntityFactory.fromPeriod(
+                    period = period,
+                    resourceManager = resourceManager.value,
+                    tags = state.value.filter.tags
+                )
+            )
+        )
     }
 }

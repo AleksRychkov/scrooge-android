@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf
 
 import androidx.compose.runtime.Immutable
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.entity.amountToString
@@ -15,7 +15,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Immutable
 internal data class ByCategoryState(
     val isLoading: Boolean = false,
-    val period: PeriodTimestampEntity,
+    val filter: FilterEntity,
     val currentType: TransactionType = TransactionType.Expense,
     val byCurrencyIncome: ImmutableList<ByCurrency> = persistentListOf(),
     val byCurrencyExpense: ImmutableList<ByCurrency> = persistentListOf(),

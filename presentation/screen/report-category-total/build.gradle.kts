@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
     implementation(projects.core.resources)
@@ -19,6 +20,8 @@ dependencies {
     implementation(projects.core.udfExtensions)
 
     implementation(projects.feature.reports.api)
+
+    implementation(projects.presentation.component.filters)
 }
 
 dependencies {

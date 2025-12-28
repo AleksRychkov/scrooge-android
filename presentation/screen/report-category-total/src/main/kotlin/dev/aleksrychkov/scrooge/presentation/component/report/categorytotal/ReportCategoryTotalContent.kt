@@ -14,12 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.ByCategoryContent
+import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.modal.FiltersModal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -53,6 +55,9 @@ private fun ReportCategoryTotalContent(
             component = component,
         )
     }
+    FiltersModal(
+        component = component,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +65,8 @@ private fun ReportCategoryTotalContent(
 internal fun ReportAppBar(
     component: ReportCategoryTotalComponentInternal,
 ) {
-    val state = remember { component.periodComponent.state }
+    val state by component.state.collectAsStateWithLifecycle()
+
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shadowElevation = Medium,
@@ -79,9 +85,9 @@ internal fun ReportAppBar(
             },
             actions = {
                 TextButton(
-                    onClick = component::openPeriodModal,
+                    onClick = component::openFiltersModal,
                 ) {
-                    Text(text = state.name)
+                    Text(text = state.filtersName)
                 }
             }
         )

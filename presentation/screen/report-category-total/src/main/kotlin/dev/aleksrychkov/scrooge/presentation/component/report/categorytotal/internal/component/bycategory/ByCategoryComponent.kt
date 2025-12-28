@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryActor
@@ -14,29 +14,30 @@ internal interface ByCategoryComponent {
     companion object Companion {
         operator fun invoke(
             componentContext: ComponentContext,
-            period: PeriodTimestampEntity,
+            filter: FilterEntity,
         ): ByCategoryComponent = DefaultByCategoryComponent(
             componentContext = componentContext,
-            period = period,
+            filter = filter,
         )
     }
 
     val state: StateFlow<ByCategoryState>
 
     fun setTransactionType(type: Int)
+    fun setFilter(filter: FilterEntity)
 }
 
 private class DefaultByCategoryComponent(
     componentContext: ComponentContext,
-    period: PeriodTimestampEntity
+    filter: FilterEntity,
 ) : ByCategoryComponent, ComponentContext by componentContext {
 
     private val store: Store<ByCategoryState, ByCategoryEvent, Unit> by lazy {
         instanceKeeper.createStore(
-            initialState = ByCategoryState(period = period),
+            initialState = ByCategoryState(filter = filter),
             actor = ByCategoryActor.Companion(),
             reducer = ByCategoryReducer(),
-            startEvent = ByCategoryEvent.External.Load(period),
+            startEvent = ByCategoryEvent.External.Load(filter),
         )
     }
 
@@ -45,5 +46,9 @@ private class DefaultByCategoryComponent(
 
     override fun setTransactionType(type: Int) {
         store.handle(ByCategoryEvent.External.SetType(type))
+    }
+
+    override fun setFilter(filter: FilterEntity) {
+        store.handle(ByCategoryEvent.External.Load(filter))
     }
 }

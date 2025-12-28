@@ -14,10 +14,10 @@ internal class ByCategoryReducer :
         return when (event) {
             is ByCategoryEvent.External.Load -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = true, period = event.period)
+                    copy(isLoading = true, filter = event.filter)
                 }
                 command {
-                    listOf(ByCategoryCommand.Load(event.period))
+                    listOf(ByCategoryCommand.Load(event.filter))
                 }
             }
 

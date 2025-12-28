@@ -51,7 +51,7 @@ internal class DefaultMainComponent(
             is MainNavigationConfig.ReportCategoryTotal -> ReportCategoryTotal(
                 ReportCategoryTotalComponent(
                     componentContext = routerComponentContext,
-                    period = config.destination.period,
+                    filter = config.destination.filter,
                 )
             )
         }

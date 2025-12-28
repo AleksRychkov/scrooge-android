@@ -1,11 +1,11 @@
 package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf
 
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 
 internal sealed interface ByCategoryEvent {
     sealed interface External : ByCategoryEvent {
-        data class Load(val period: PeriodTimestampEntity) : External
+        data class Load(val filter: FilterEntity) : External
         data class SetType(val type: Int) : External
     }
 

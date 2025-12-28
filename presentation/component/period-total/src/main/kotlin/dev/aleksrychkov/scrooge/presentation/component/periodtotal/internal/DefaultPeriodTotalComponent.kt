@@ -33,11 +33,10 @@ internal class DefaultPeriodTotalComponent(
         get() = store.state
 
     override fun setFilters(filter: FilterEntity) {
-        // todo
-        store.handle(PeriodTotalEvent.External.Load(period = filter.period))
+        store.handle(PeriodTotalEvent.External.Load(filter = filter))
     }
 
     override fun openCategoryTotal() {
-        router.open(DestinationReportCategoryTotal(state.value.period))
+        router.open(DestinationReportCategoryTotal(state.value.filter))
     }
 }
