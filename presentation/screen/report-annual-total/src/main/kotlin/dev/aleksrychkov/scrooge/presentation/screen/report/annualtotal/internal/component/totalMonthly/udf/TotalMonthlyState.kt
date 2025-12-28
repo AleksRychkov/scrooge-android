@@ -19,11 +19,10 @@ internal data class TotalMonthlyState(
     val isLoading: Boolean = false,
     val byMonth: ImmutableList<ByMonth> = persistentListOf(),
     val filter: FilterEntity = FilterEntity(),
-    val currentYear: Int = 0,
 ) {
     @Immutable
     data class ByMonth(
-        val month: String,
+        val title: String,
         val byType: ByType,
         val periodTimestamp: PeriodTimestampEntity,
     )
@@ -44,15 +43,14 @@ internal data class TotalMonthlyState(
 
 internal fun ReportTotalAmountMonthlyEntity.mapToState(
     resourceManager: ResourceManager,
-    year: Int,
 ): ImmutableList<TotalMonthlyState.ByMonth> {
     val months = resourceManager.getStringArray(Resources.array.month_names)
     return this.result
-        .map { (month, value) ->
+        .map { (date, value) ->
             value.mapToByMonthState(
-                month = month,
+                month = date.month,
                 months = months,
-                year = year,
+                year = date.year,
             )
         }
         .reversed()
@@ -66,7 +64,7 @@ private fun ReportTotalAmountEntity.mapToByMonthState(
 ): TotalMonthlyState.ByMonth {
     val monthName = months[month.ordinal]
     return TotalMonthlyState.ByMonth(
-        month = monthName,
+        title = "$monthName $year",
         byType = this.mapToStateValue(),
         periodTimestamp = startEndOfMonth(month, year),
     )

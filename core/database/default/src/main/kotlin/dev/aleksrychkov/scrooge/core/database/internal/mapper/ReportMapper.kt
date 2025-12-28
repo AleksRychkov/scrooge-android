@@ -11,6 +11,7 @@ import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 
@@ -45,10 +46,10 @@ internal object ReportMapper {
     fun totalAmountMonthlyToEntity(
         list: List<TotalAmountMothly>
     ): ReportTotalAmountMonthlyEntity {
-        val byMonth: Map<Int, List<TotalAmountMothly>> =
-            list.groupBy { it.ym.toInt() }
-
-        fun build(month: Int): ReportTotalAmountEntity? {
+        fun build(
+            month: Int,
+            byMonth: Map<Int, List<TotalAmountMothly>>,
+        ): ReportTotalAmountEntity? {
             val data = byMonth[month] ?: return null
             val mapped = data.map {
                 TotalAmount(
@@ -60,10 +61,17 @@ internal object ReportMapper {
             return totalAmountToEntity(mapped)
         }
 
-        return Month.entries
-            .map { month -> month to build(month.number) }
-            .filter { it.second != null }
-            .associate { (month, entity) -> month to entity!! }
+        return list
+            .groupBy { it.year.toInt() }
+            .map { (year, list) ->
+                val byMonth = list.groupBy { it.month.toInt() }
+                Month.entries
+                    .map { month -> month to build(month.number, byMonth) }
+                    .filter { it.second != null }
+                    .associate { (month, entity) -> LocalDate(year, month, 1) to entity!! }
+            }
+            .flatMap { map -> map.entries }
+            .associate { entry -> entry.key to entry.value }
             .toImmutableMap()
             .let(::ReportTotalAmountMonthlyEntity)
     }

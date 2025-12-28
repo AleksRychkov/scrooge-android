@@ -5,9 +5,6 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Instant
 
 internal class TotalMonthlyReducer(
     private val resourceManager: ResourceManager = get(),
@@ -18,12 +15,8 @@ internal class TotalMonthlyReducer(
     ): ReducerResult<TotalMonthlyState, TotalMonthlyCommand, Unit> {
         return when (event) {
             is TotalMonthlyEvent.External.Load -> state.reduceWith(event) {
-                val year = Instant
-                    .fromEpochMilliseconds(event.filter.period.to)
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                    .year
                 state {
-                    copy(isLoading = true, filter = event.filter, currentYear = year)
+                    copy(isLoading = true, filter = event.filter)
                 }
                 command {
                     listOf(TotalMonthlyCommand.Load(filter = filter))
@@ -42,7 +35,6 @@ internal class TotalMonthlyReducer(
                         isLoading = false,
                         byMonth = event.res.mapToState(
                             resourceManager = resourceManager,
-                            year = state.currentYear,
                         ),
                     )
                 }

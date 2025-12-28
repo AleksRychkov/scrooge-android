@@ -103,7 +103,7 @@ private fun TotalMonthlyContent(
 
         items(
             items = state.byMonth,
-            key = { it.month }
+            key = { it.title }
         ) { byMonth ->
             TotalByMonth(
                 modifier = Modifier
@@ -127,7 +127,7 @@ private fun TotalByMonth(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = Large),
-            text = byMonth.month,
+            text = byMonth.title,
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
         )
 
