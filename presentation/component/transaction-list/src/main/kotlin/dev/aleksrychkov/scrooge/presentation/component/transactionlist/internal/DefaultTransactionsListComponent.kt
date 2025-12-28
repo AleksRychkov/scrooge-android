@@ -53,8 +53,7 @@ internal class DefaultTransactionsListComponent(
         )
     }
 
-    override fun setFilters(filterEntity: FilterEntity) {
-        // todo
-        store.handle(TransactionsListEvent.External.SetPeriod(period = filterEntity.period))
+    override fun setFilters(filter: FilterEntity) {
+        store.handle(TransactionsListEvent.External.SetFilter(filter = filter))
     }
 }

@@ -11,7 +11,7 @@ internal class LoadDelegate(
     private val useCase: Lazy<ReportTotalAmountMonthlyUseCase>,
 ) {
     suspend operator fun invoke(cmd: TotalMonthlyCommand.Load): Flow<TotalMonthlyEvent> {
-        return when (val result = useCase.value(cmd.filter.period)) {
+        return when (val result = useCase.value(filter = cmd.filter)) {
             ReportTotalAmountMonthlyResult.Failure ->
                 flowOf(TotalMonthlyEvent.Internal.FailedToLoad)
 

@@ -25,9 +25,9 @@ internal class TransactionsListReducer :
                 }
             }
 
-            is TransactionsListEvent.External.SetPeriod -> state.reduceWith(event) {
+            is TransactionsListEvent.External.SetFilter -> state.reduceWith(event) {
                 command {
-                    listOf(TransactionsListCommand.LoadTransactions(period = event.period))
+                    listOf(TransactionsListCommand.LoadTransactions(filter = event.filter))
                 }
                 state {
                     copy(isLoading = true)

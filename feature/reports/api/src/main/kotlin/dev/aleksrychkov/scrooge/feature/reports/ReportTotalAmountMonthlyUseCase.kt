@@ -1,10 +1,10 @@
 package dev.aleksrychkov.scrooge.feature.reports
 
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 
 fun interface ReportTotalAmountMonthlyUseCase {
-    suspend operator fun invoke(period: PeriodTimestampEntity): ReportTotalAmountMonthlyResult
+    suspend operator fun invoke(filter: FilterEntity): ReportTotalAmountMonthlyResult
 }
 
 sealed interface ReportTotalAmountMonthlyResult {

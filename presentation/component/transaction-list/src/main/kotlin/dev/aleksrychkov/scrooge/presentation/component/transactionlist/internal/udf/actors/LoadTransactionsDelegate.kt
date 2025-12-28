@@ -14,7 +14,7 @@ internal class LoadTransactionsDelegate(
     suspend operator fun invoke(
         cmd: TransactionsListCommand.LoadTransactions,
     ): Flow<TransactionsListEvent> {
-        return when (val res: GetTransactionsResult = useCase.value.invoke(period = cmd.period)) {
+        return when (val res: GetTransactionsResult = useCase.value.invoke(filter = cmd.filter)) {
             GetTransactionsResult.Failure -> flowOf(TransactionsListEvent.Internal.FailedToLoadTransactions)
             is GetTransactionsResult.Success -> res.result.map {
                 TransactionsListEvent.Internal.SuccessToLoadTransactions(it)

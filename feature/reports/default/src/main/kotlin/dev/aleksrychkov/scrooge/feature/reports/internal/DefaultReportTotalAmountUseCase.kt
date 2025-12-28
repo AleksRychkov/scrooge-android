@@ -2,7 +2,7 @@ package dev.aleksrychkov.scrooge.feature.reports.internal
 
 import dev.aleksrychkov.scrooge.core.database.ReportDao
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.reports.ReportTotalAmountResult
@@ -18,11 +18,11 @@ internal class DefaultReportTotalAmountUseCase(
     private val ioDispatcher: CoroutineDispatcher,
 ) : ReportTotalAmountUseCase {
 
-    override suspend fun invoke(period: PeriodTimestampEntity): ReportTotalAmountResult =
+    override suspend fun invoke(filter: FilterEntity): ReportTotalAmountResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
                 val result = reportDao.value
-                    .totalAmount(period = period)
+                    .totalAmount(filter = filter)
                     .map(::calculateTotal)
                 ReportTotalAmountResult.Success(result)
             }.getOrDefault(ReportTotalAmountResult.Failure)
