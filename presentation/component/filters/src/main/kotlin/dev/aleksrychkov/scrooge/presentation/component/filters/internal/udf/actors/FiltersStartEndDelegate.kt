@@ -15,11 +15,11 @@ internal class FiltersStartEndDelegate(
     suspend operator fun invoke(cmd: FiltersCommand.GetFiltersStartEndYears): Flow<FiltersEvent> {
         var period = useCase.value.invoke()
         if (period == null) {
-            val currentYear = Datestamp.now().toLocalDate().year
+            val currentYear = Datestamp.now().date.year
             period = startEndOfYear(currentYear)
         }
-        val fromDate = period.from.toLocalDate()
-        val toDate = period.to.toLocalDate()
+        val fromDate = period.from.date
+        val toDate = period.to.date
         return flowOf(
             FiltersEvent.Internal.SetMinMaxYearsPeriod(
                 startYear = fromDate.year,

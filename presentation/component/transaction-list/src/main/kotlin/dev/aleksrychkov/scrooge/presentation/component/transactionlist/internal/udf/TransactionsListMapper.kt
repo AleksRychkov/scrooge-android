@@ -20,10 +20,10 @@ internal class TransactionsListMapper(
     fun transactionsToDayTransactions(
         transactions: List<TransactionEntity>,
     ): ImmutableList<TransactionsGroupDto> {
-        val today = Datestamp.now().toLocalDate()
+        val today = Datestamp.now().date
         return transactions
             .groupBy { transaction ->
-                transaction.datestamp.toLocalDate()
+                transaction.datestamp.date
             }
             .map { entry ->
                 val diff = today.minus(entry.key)

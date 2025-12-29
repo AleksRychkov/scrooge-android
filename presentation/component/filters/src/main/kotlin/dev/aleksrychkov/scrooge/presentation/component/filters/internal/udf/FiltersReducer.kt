@@ -29,8 +29,8 @@ internal class FiltersReducer(
                 }
                 state {
                     val period = event.filter.period
-                    val startDate = period.from.toLocalDate()
-                    val endDate = period.to.toLocalDate()
+                    val startDate = period.from.date
+                    val endDate = period.to.date
                     val selectedYear = if (startDate.year == endDate.year) {
                         startDate.year
                     } else {

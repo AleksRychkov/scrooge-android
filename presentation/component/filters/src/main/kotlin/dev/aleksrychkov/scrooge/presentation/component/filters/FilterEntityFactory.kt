@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters
 
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
@@ -9,10 +10,7 @@ import dev.aleksrychkov.scrooge.presentation.component.filters.internal.daysInMo
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 object FilterEntityFactory {
@@ -24,7 +22,7 @@ object FilterEntityFactory {
         resourceManager: ResourceManager,
         tags: ImmutableSet<String> = persistentSetOf(),
     ): FilterEntity {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val today = Datestamp.now().date
         val period = startEndOfMonth(month = today.month, year = today.year)
         val months = getMonths(resourceManager)
 
@@ -39,7 +37,7 @@ object FilterEntityFactory {
         resourceManager: ResourceManager,
         tags: ImmutableSet<String> = persistentSetOf(),
     ): FilterEntity {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val today = Datestamp.now().date
         val period = startEndOfYear(year = today.year)
         return fromPeriod(period = period, resourceManager = resourceManager, tags = tags)
     }
@@ -51,8 +49,8 @@ object FilterEntityFactory {
     ): FilterEntity {
         val months = getMonths(resourceManager)
         val shortMonths = getShortMonths(resourceManager)
-        val startDate = period.from.toLocalDate()
-        val endDate = period.to.toLocalDate()
+        val startDate = period.from.date
+        val endDate = period.to.date
 
         return when {
             // same day, month, year

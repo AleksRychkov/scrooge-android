@@ -34,17 +34,18 @@ value class Datestamp(val value: Long) {
         }
     }
 
-    fun toLocalDate(): LocalDate {
-        val year = (value / YEAR_MULTIPLIER).toInt()
-        val month = ((value / MONTH_MULTIPLIER) % MONTH_MULTIPLIER).toInt()
-        val day = (value % MONTH_MULTIPLIER).toInt()
-        return LocalDate(year = year, month = month, day = day)
-    }
+    val date: LocalDate
+        get() {
+            val year = (value / YEAR_MULTIPLIER).toInt()
+            val month = ((value / MONTH_MULTIPLIER) % MONTH_MULTIPLIER).toInt()
+            val day = (value % MONTH_MULTIPLIER).toInt()
+            return LocalDate(year = year, month = month, day = day)
+        }
 
     fun toInstant(timeZone: TimeZone = TimeZone.UTC): Instant =
-        toLocalDate().atStartOfDayIn(timeZone = timeZone)
+        date.atStartOfDayIn(timeZone = timeZone)
 
-    fun readableName(): String = toLocalDate()
+    fun readableName(): String = date
         .format(
             LocalDate.Format {
                 day()
