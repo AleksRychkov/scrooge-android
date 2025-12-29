@@ -11,7 +11,9 @@ import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -91,12 +93,22 @@ internal class DefaultTransactionDao(
         database.transactionQueries.delete(id)
     }
 
-    override suspend fun getMinMaxDatestamp(): PeriodDatestampEntity? {
-        val minMax = database.transactionQueries.minMaxDatestamp().executeAsOneOrNull()
-        if (minMax == null || minMax.minDatestamp == null || minMax.maxDatestamp == null) return null
-        return PeriodDatestampEntity(
-            from = Datestamp(minMax.minDatestamp),
-            to = Datestamp(minMax.maxDatestamp),
-        )
+    override suspend fun getMinMaxDatestamp(): PeriodDatestampEntity? =
+        withContext(readDispatcher) {
+            val minMax = database.transactionQueries.minMaxDatestamp().executeAsOneOrNull()
+            if (minMax == null || minMax.minDatestamp == null || minMax.maxDatestamp == null) return@withContext null
+            PeriodDatestampEntity(
+                from = Datestamp(minMax.minDatestamp),
+                to = Datestamp(minMax.maxDatestamp),
+            )
+        }
+
+    override suspend fun getAllTags(): ImmutableSet<String> = withContext(readDispatcher) {
+        database.transactionQueries.allTags()
+            .executeAsList()
+            .map { it.tags }
+            .map(TransactionMapper::toTags)
+            .flatMap { it }
+            .toImmutableSet()
     }
 }

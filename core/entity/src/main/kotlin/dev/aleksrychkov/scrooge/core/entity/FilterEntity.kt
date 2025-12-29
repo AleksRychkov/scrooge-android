@@ -6,7 +6,20 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FilterEntity(
-    val readableName: String = "",
     val period: PeriodDatestampEntity = PeriodDatestampEntity(Datestamp.ZERO, Datestamp.ZERO),
     val tags: ImmutableSet<String> = persistentSetOf(),
-)
+) {
+    companion object {
+        fun currentMonth(): FilterEntity {
+            val today = Datestamp.now().date
+            val period = startEndOfMonth(month = today.month, year = today.year)
+            return FilterEntity(period = period)
+        }
+
+        fun currentYear(): FilterEntity {
+            val today = Datestamp.now().date
+            val period = startEndOfYear(year = today.year)
+            return FilterEntity(period = period)
+        }
+    }
+}

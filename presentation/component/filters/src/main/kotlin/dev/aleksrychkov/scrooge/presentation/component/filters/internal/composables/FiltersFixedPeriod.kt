@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,7 +19,11 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.InputChip
+import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -27,17 +32,23 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Month
 import java.util.EnumSet
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 internal fun FiltersFixedPeriod(
@@ -47,8 +58,11 @@ internal fun FiltersFixedPeriod(
     selectedYear: Int,
     allMonths: ImmutableList<String>,
     selectedMonth: Int,
+    allTags: ImmutableSet<String>,
+    selectedTags: ImmutableSet<String>,
     onYearClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
+    toggleTag: (String) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -63,13 +77,25 @@ internal fun FiltersFixedPeriod(
             )
         }
 
-        if (settings.contains(FiltersSettings.Months)) {
+        if (settings.contains(FiltersSettings.Months) && allMonths.isNotEmpty()) {
             Spacer(modifier = Modifier.height(Normal))
 
             Months(
+                modifier = Modifier.fillMaxWidth(),
                 allMonths = allMonths,
                 selectedMonth = selectedMonth,
                 onMonthClicked = onMonthClicked,
+            )
+        }
+
+        if (settings.contains(FiltersSettings.Tags) && allTags.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(Normal))
+
+            Tags(
+                modifier = Modifier.fillMaxWidth(),
+                tags = allTags,
+                selectedTags = selectedTags,
+                toggleTag = toggleTag,
             )
         }
     }
@@ -100,10 +126,7 @@ private fun Years(
     ) {
         LazyRow(
             state = listState,
-            contentPadding = PaddingValues(
-                start = Large,
-                end = Large,
-            ),
+            contentPadding = PaddingValues(Normal),
             horizontalArrangement = Arrangement.spacedBy(Normal),
         ) {
             items(
@@ -140,43 +163,53 @@ private fun Years(
 @Suppress("MagicNumber")
 @Composable
 private fun Months(
+    modifier: Modifier,
     allMonths: ImmutableList<String>,
     selectedMonth: Int,
     onMonthClicked: (Int) -> Unit,
 ) {
-    if (allMonths.isEmpty()) return
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = Large)
+            .background(
+                color = MaterialTheme.colorScheme.secondary,
+                shape = CardDefaults.shape,
+            )
+            .padding(vertical = Normal),
+    ) {
+        MonthRow(
+            modifier = Modifier.fillMaxWidth(),
+            selectedMonth = selectedMonth,
+            months = allMonths.take(3).toImmutableList(),
+            monthsPad = 0,
+            onMonthClicked = onMonthClicked,
+        )
 
-    MonthRow(
-        modifier = Modifier.fillMaxWidth(),
-        selectedMonth = selectedMonth,
-        months = allMonths.take(3).toImmutableList(),
-        monthsPad = 0,
-        onMonthClicked = onMonthClicked,
-    )
+        MonthRow(
+            modifier = Modifier.fillMaxWidth(),
+            selectedMonth = selectedMonth,
+            months = allMonths.subList(3, 6),
+            monthsPad = 3,
+            onMonthClicked = onMonthClicked,
+        )
 
-    MonthRow(
-        modifier = Modifier.fillMaxWidth(),
-        selectedMonth = selectedMonth,
-        months = allMonths.subList(3, 6),
-        monthsPad = 3,
-        onMonthClicked = onMonthClicked,
-    )
+        MonthRow(
+            modifier = Modifier.fillMaxWidth(),
+            selectedMonth = selectedMonth,
+            months = allMonths.subList(6, 9),
+            monthsPad = 6,
+            onMonthClicked = onMonthClicked,
+        )
 
-    MonthRow(
-        modifier = Modifier.fillMaxWidth(),
-        selectedMonth = selectedMonth,
-        months = allMonths.subList(6, 9),
-        monthsPad = 6,
-        onMonthClicked = onMonthClicked,
-    )
-
-    MonthRow(
-        modifier = Modifier.fillMaxWidth(),
-        selectedMonth = selectedMonth,
-        months = allMonths.subList(9, 12),
-        monthsPad = 9,
-        onMonthClicked = onMonthClicked,
-    )
+        MonthRow(
+            modifier = Modifier.fillMaxWidth(),
+            selectedMonth = selectedMonth,
+            months = allMonths.subList(9, 12),
+            monthsPad = 9,
+            onMonthClicked = onMonthClicked,
+        )
+    }
 }
 
 @Composable
@@ -218,6 +251,53 @@ private fun MonthRow(
     }
 }
 
+@Composable
+private fun Tags(
+    modifier: Modifier,
+    tags: ImmutableSet<String>,
+    selectedTags: ImmutableSet<String>,
+    toggleTag: (String) -> Unit,
+) {
+    FlowRow(
+        modifier = modifier
+            .padding(horizontal = Large)
+            .background(
+                color = MaterialTheme.colorScheme.secondary,
+                shape = CardDefaults.shape,
+            )
+            .padding(Normal),
+        horizontalArrangement = Arrangement.spacedBy(space = Normal),
+        itemVerticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            modifier = Modifier,
+            imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onBackground,
+        )
+
+        tags.forEach { tag ->
+            val isSelected = selectedTags.contains(tag)
+            InputChip(
+                modifier = Modifier,
+                selected = isSelected,
+                colors = InputChipDefaults.inputChipColors().copy(
+                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                ),
+                label = {
+                    Text(
+                        modifier = Modifier,
+                        text = tag,
+                    )
+                },
+                shape = RoundedCornerShape(Normal2X),
+                onClick = { toggleTag(tag) },
+            )
+        }
+    }
+}
+
 private suspend fun LazyListState.animateScrollAndCentralizeItem(index: Int) {
     animateScrollToItem(index, -layoutInfo.viewportEndOffset / 2)
     val itemInfo = layoutInfo.visibleItemsInfo.firstOrNull { it.index == index } ?: return
@@ -237,12 +317,15 @@ private fun ContentPreview() {
             FiltersFixedPeriod(
                 modifier = Modifier,
                 settings = EnumSet.allOf(FiltersSettings::class.java),
-                allYears = persistentListOf(2024, 2025, 2026),
+                allYears = persistentListOf(2024, 2025, 2026, 2027, 2028, 2029),
                 selectedYear = 2025,
                 allMonths = Month.entries.map { it.name }.toImmutableList(),
                 selectedMonth = 12,
+                allTags = persistentSetOf("Tag 1", "Tag 2"),
+                selectedTags = persistentSetOf("Tag 1"),
                 onYearClicked = {},
                 onMonthClicked = {},
+                toggleTag = { _ -> },
             )
         }
     }

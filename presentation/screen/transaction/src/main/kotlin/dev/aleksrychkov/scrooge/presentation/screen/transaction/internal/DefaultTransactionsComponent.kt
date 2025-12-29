@@ -8,14 +8,11 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
-import dev.aleksrychkov.scrooge.presentation.component.filters.FilterEntityFactory
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListComponent
@@ -27,7 +24,6 @@ import kotlinx.coroutines.launch
 
 internal class DefaultTransactionsComponent(
     private val componentContext: ComponentContext,
-    private val resourceManager: Lazy<ResourceManager> = getLazy(),
 ) : TransactionsComponentInternal, ComponentContext by componentContext {
     private val filtersNavigation = SlotNavigation<FilterEntity>()
 
@@ -51,9 +47,9 @@ internal class DefaultTransactionsComponent(
 
     init {
         retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
-            val initialFilters = FilterEntityFactory.currentMonth(resourceManager.value)
+            val initialFilters = FilterEntity.currentMonth()
             _state.value = _state.value.copy(
-                filtersName = initialFilters.readableName,
+                filtersName = "TODO",
                 filter = initialFilters
             )
             _periodTotalComponent.setFilters(initialFilters)
@@ -100,7 +96,7 @@ internal class DefaultTransactionsComponent(
     }
 
     override fun setFilter(filter: FilterEntity) {
-        _state.value = _state.value.copy(filtersName = filter.readableName, filter = filter)
+        _state.value = _state.value.copy(filtersName = "TODO", filter = filter)
         _periodTotalComponent.setFilters(filter)
         _transactionsListComponent.setFilters(filter)
     }

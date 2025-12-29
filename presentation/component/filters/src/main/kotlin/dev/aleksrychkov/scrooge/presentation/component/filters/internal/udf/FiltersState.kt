@@ -4,7 +4,9 @@ import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import java.util.EnumSet
 
 @Immutable
@@ -18,4 +20,7 @@ internal data class FiltersState(
     val selectedYear: Int = 0,
     val allMonths: ImmutableList<String> = persistentListOf(),
     val selectedMonthNumber: Int = -1,
+
+    val allTags: ImmutableSet<String> = persistentSetOf(),
+    val selectedTags: ImmutableSet<String> = persistentSetOf(),
 )

@@ -7,8 +7,10 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import dev.aleksrychkov.scrooge.presentation.component.filters.FilterEntityFactory
+import dev.aleksrychkov.scrooge.presentation.component.filters.internal.utils.FiltersReadableNameHelper
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -16,6 +18,10 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 internal class FiltersReducer(
     private val resourceManager: Lazy<ResourceManager> = getLazy()
 ) : Reducer<FiltersState, FiltersEvent, FiltersCommand, Unit> {
+
+    private val readableNameHelper: FiltersReadableNameHelper by lazy {
+        FiltersReadableNameHelper(resourceManager = resourceManager.value)
+    }
 
     @Suppress("LongMethod")
     override fun reduce(
@@ -25,7 +31,7 @@ internal class FiltersReducer(
         return when (event) {
             is FiltersEvent.External.Init -> state.reduceWith(event) {
                 command {
-                    listOf(FiltersCommand.GetFiltersStartEndYears)
+                    listOf(FiltersCommand.GetFiltersStartEndYears, FiltersCommand.GetAvailableTags)
                 }
                 state {
                     val period = event.filter.period
@@ -45,7 +51,7 @@ internal class FiltersReducer(
                     copy(
                         settings = event.settings,
                         filter = event.filter,
-                        filterReadable = event.filter.readableName,
+                        filterReadable = readableNameHelper.getName(filter = event.filter),
                         selectedYear = selectedYear,
                         selectedMonthNumber = selectedMonth,
                     )
@@ -57,7 +63,7 @@ internal class FiltersReducer(
                     copy(
                         allYears = (event.startYear..event.endYear).toImmutableList(),
                         allMonths = resourceManager.value
-                            .getStringArray(Resources.array.month_names)
+                            .getStringArray(Resources.array.short_month_names)
                             .toImmutableList(),
                     )
                 }
@@ -65,12 +71,12 @@ internal class FiltersReducer(
 
             is FiltersEvent.External.MonthClicked -> state.reduceWith(event) {
                 val period = startEndOfMonth(month = Month(event.month), state.selectedYear)
-                val filter = FilterEntityFactory.fromPeriod(period, resourceManager.value)
+                val filter = state.filter.copy(period = period)
                 state {
                     copy(
                         selectedMonthNumber = event.month,
                         filter = filter,
-                        filterReadable = filter.readableName,
+                        filterReadable = readableNameHelper.getName(filter = filter),
                     )
                 }
             }
@@ -80,12 +86,34 @@ internal class FiltersReducer(
                     -1 -> startEndOfYear(event.year)
                     else -> startEndOfMonth(month = Month(state.selectedMonthNumber), event.year)
                 }
-                val filter = FilterEntityFactory.fromPeriod(period, resourceManager.value)
+                val filter = state.filter.copy(period = period)
                 state {
                     copy(
                         selectedYear = event.year,
                         filter = filter,
-                        filterReadable = filter.readableName,
+                        filterReadable = readableNameHelper.getName(filter = filter),
+                    )
+                }
+            }
+
+            is FiltersEvent.Internal.AvailableTags -> state.reduceWith(event) {
+                state {
+                    copy(allTags = event.tags, selectedTags = persistentSetOf())
+                }
+            }
+
+            is FiltersEvent.External.ToggleTag -> state.reduceWith(event) {
+                val selectedTags = state.selectedTags.toMutableSet()
+                if (selectedTags.contains(event.tag)) {
+                    selectedTags.remove(event.tag)
+                } else {
+                    selectedTags.add(event.tag)
+                }
+                val res = selectedTags.toImmutableSet()
+                state {
+                    copy(
+                        selectedTags = res,
+                        filter = filter.copy(tags = res)
                     )
                 }
             }

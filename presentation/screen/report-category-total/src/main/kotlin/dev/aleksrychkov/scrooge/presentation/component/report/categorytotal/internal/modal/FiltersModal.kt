@@ -1,21 +1,13 @@
 package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.modal
 
-import androidx.compose.foundation.layout.displayCutoutPadding
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersBottomSheetModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
-import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersContent
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun FiltersModal(
@@ -37,28 +29,10 @@ private fun FiltersModal(
     setFilter: (FilterEntity) -> Unit,
 ) {
     slot.child?.instance?.also { component ->
-        val scope = rememberCoroutineScope()
-        val modalBottomSheetState = rememberModalBottomSheetState()
-        ModalBottomSheet(
-            onDismissRequest = close,
-            modifier = Modifier
-                .fillMaxSize()
-                .displayCutoutPadding()
-                .statusBarsPadding(),
-            sheetState = modalBottomSheetState,
-        ) {
-            FiltersContent(
-                modifier = Modifier.fillMaxSize(),
-                component = component,
-                callback = { filter ->
-                    setFilter(filter)
-                    scope.launch {
-                        modalBottomSheetState.hide()
-                    }.invokeOnCompletion {
-                        if (!modalBottomSheetState.isVisible) close()
-                    }
-                }
-            )
-        }
+        FiltersBottomSheetModal(
+            component = component,
+            close = close,
+            setFilter = setFilter,
+        )
     }
 }

@@ -61,3 +61,6 @@ SELECT
     min(datestamp) AS minDatestamp,
     max(datestamp) AS maxDatestamp
 FROM TTransaction;
+
+allTags:
+SELECT DISTINCT TTransaction.tags FROM TTransaction;

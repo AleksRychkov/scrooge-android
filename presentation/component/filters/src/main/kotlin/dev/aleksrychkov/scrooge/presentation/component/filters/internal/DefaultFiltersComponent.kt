@@ -37,4 +37,8 @@ internal class DefaultFiltersComponent(
     override fun onMonthClicked(month: Int) {
         store.handle(FiltersEvent.External.MonthClicked(month = month))
     }
+
+    override fun toggleTag(tag: String) {
+        store.handle(FiltersEvent.External.ToggleTag(tag = tag))
+    }
 }

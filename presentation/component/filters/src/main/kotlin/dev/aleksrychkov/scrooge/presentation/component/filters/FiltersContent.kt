@@ -55,6 +55,7 @@ private fun FiltersContent(
         state = state,
         onYearClicked = component::onYearClicked,
         onMonthClicked = component::onMonthClicked,
+        toggleTag = component::toggleTag,
         onSubmitClicked = {
             callback(state.filter)
         },
@@ -68,6 +69,7 @@ private fun FiltersContent(
     onYearClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
     onSubmitClicked: () -> Unit,
+    toggleTag: (String) -> Unit,
 ) {
     Column(modifier = modifier) {
 
@@ -97,8 +99,11 @@ private fun FiltersContent(
             allMonths = state.allMonths,
             selectedYear = state.selectedYear,
             selectedMonth = state.selectedMonthNumber,
+            allTags = state.allTags,
+            selectedTags = state.selectedTags,
             onYearClicked = onYearClicked,
             onMonthClicked = onMonthClicked,
+            toggleTag = toggleTag,
         )
     }
 }
@@ -118,6 +123,7 @@ private fun FormContentPreview() {
                 onYearClicked = { _ -> },
                 onMonthClicked = { _ -> },
                 onSubmitClicked = {},
+                toggleTag = { _ -> },
             )
         }
     }

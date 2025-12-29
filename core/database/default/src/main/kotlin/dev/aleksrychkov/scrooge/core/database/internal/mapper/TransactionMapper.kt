@@ -76,7 +76,7 @@ internal object TransactionMapper {
         }
     }
 
-    private fun toTags(value: String?): ImmutableSet<String> {
+    fun toTags(value: String?): ImmutableSet<String> {
         if (value == null) return persistentSetOf()
         return value.split(TAGS_SEPARATOR).toImmutableSet()
     }

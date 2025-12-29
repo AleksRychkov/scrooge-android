@@ -9,7 +9,7 @@ import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.Filt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-internal class FiltersStartEndDelegate(
+internal class StartEndDelegate(
     private val useCase: Lazy<GetMinMaxTimestampUseCase> = getLazy(),
 ) {
     suspend operator fun invoke(cmd: FiltersCommand.GetFiltersStartEndYears): Flow<FiltersEvent> {

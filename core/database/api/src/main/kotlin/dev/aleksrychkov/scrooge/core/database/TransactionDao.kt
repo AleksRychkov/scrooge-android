@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.flow.Flow
 
 interface TransactionDao {
@@ -38,4 +39,6 @@ interface TransactionDao {
     suspend fun delete(id: Long)
 
     suspend fun getMinMaxDatestamp(): PeriodDatestampEntity?
+
+    suspend fun getAllTags(): ImmutableSet<String>
 }

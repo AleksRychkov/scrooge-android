@@ -41,7 +41,7 @@ internal class DefaultReportCategoryTotalComponent(
     private val _state = MutableStateFlow(
         ReportCategoryState(
             filter = filter,
-            filtersName = filter.readableName,
+            filtersName = "TODO",
         )
     )
 
@@ -76,7 +76,7 @@ internal class DefaultReportCategoryTotalComponent(
     override fun setFilter(filter: FilterEntity) {
         _state.value = _state.value.copy(
             filter = filter,
-            filtersName = filter.readableName,
+            filtersName = "TODO",
         )
         _byCategoryComponent.setFilter(filter)
     }

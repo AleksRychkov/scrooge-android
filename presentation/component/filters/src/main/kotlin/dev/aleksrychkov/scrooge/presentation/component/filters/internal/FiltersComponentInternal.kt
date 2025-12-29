@@ -9,4 +9,5 @@ internal interface FiltersComponentInternal : FiltersComponent {
 
     fun onYearClicked(year: Int)
     fun onMonthClicked(month: Int)
+    fun toggleTag(tag: String)
 }
