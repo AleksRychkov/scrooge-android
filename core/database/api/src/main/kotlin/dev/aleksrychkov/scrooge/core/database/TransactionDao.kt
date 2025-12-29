@@ -1,7 +1,8 @@
 package dev.aleksrychkov.scrooge.core.database
 
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
@@ -17,7 +18,7 @@ interface TransactionDao {
 
     suspend fun create(
         amount: Long,
-        timestamp: Long,
+        datestamp: Datestamp,
         type: TransactionType,
         category: String,
         tags: Set<String>?,
@@ -27,7 +28,7 @@ interface TransactionDao {
     suspend fun update(
         id: Long,
         amount: Long,
-        timestamp: Long,
+        datestamp: Datestamp,
         type: TransactionType,
         category: String,
         tags: Set<String>?,
@@ -36,5 +37,5 @@ interface TransactionDao {
 
     suspend fun delete(id: Long)
 
-    suspend fun getMinMaxTimestamp(): PeriodTimestampEntity?
+    suspend fun getMinMaxDatestamp(): PeriodDatestampEntity?
 }

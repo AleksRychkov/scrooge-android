@@ -26,8 +26,8 @@ internal class DefaultReportDao(
         withContext(readDispatcher) {
             database.reportQueries
                 .totalAmount(
-                    timestamp = filter.period.from,
-                    timestamp_ = filter.period.to,
+                    datestamp = filter.period.from.value,
+                    datestamp_ = filter.period.to.value,
                 )
                 .asFlow()
                 .mapToList(readDispatcher)
@@ -41,8 +41,8 @@ internal class DefaultReportDao(
     ): ReportTotalAmountMonthlyEntity = withContext(readDispatcher) {
         database.reportQueries
             .totalAmountMothly(
-                timestamp = filter.period.from,
-                timestamp_ = filter.period.to,
+                datestamp = filter.period.from.value,
+                datestamp_ = filter.period.to.value,
             )
             .executeAsList()
             .let(ReportMapper::totalAmountMonthlyToEntity)
@@ -53,8 +53,8 @@ internal class DefaultReportDao(
     ): ReportByCategoryEntity = withContext(readDispatcher) {
         database.reportQueries
             .byCategory(
-                timestamp = filter.period.from,
-                timestamp_ = filter.period.to,
+                datestamp = filter.period.from.value,
+                datestamp_ = filter.period.to.value,
             )
             .executeAsList()
             .let(ReportMapper::byCategoryToEntity)

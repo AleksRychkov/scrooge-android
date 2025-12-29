@@ -1,12 +1,12 @@
 package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf
 
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToString
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.utils.toDateString
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Instant
@@ -68,10 +68,7 @@ internal class FormReducer(
             is FormEvent.External.SetDate -> state.reduceWith(event) {
                 state {
                     val instant = Instant.fromEpochMilliseconds(event.timestamp)
-                    copy(
-                        timestamp = instant,
-                        timestampReadable = instant.toDateString(),
-                    )
+                    copy(datestamp = Datestamp.from(instant))
                 }
             }
 
@@ -170,14 +167,12 @@ internal class FormReducer(
             }
 
             is FormEvent.Internal.SuccessLoadTransaction -> state.reduceWith(event) {
-                val timestamp = Instant.fromEpochMilliseconds(event.entity.timestamp)
                 state {
                     copy(
                         isLoading = false,
                         transactionType = event.entity.type,
                         amount = event.entity.amount.amountToString(),
-                        timestamp = timestamp,
-                        timestampReadable = timestamp.toDateString(),
+                        datestamp = event.entity.datestamp,
                         category = event.entity.category,
                         tags = event.entity.tags.map { TagEntity.from(it) }.toImmutableList(),
                         currency = event.entity.currency,

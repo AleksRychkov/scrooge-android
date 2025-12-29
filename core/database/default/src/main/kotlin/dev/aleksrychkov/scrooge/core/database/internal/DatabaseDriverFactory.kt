@@ -12,12 +12,10 @@ import dev.aleksrychkov.scrooge.core.database.internal.debug.PreloadData
 internal fun createDriver(context: Context): SqlDriver {
     val ctx = context.applicationContext
     return AndroidSqliteDriver(
-        schema = Scrooge.Companion.Schema.synchronous(),
+        schema = Scrooge.Schema.synchronous(),
         context = ctx,
         name = "Scrooge.db",
-        callback = object :
-            AndroidSqliteDriver.Callback(Scrooge.Companion.Schema.synchronous()) {
-
+        callback = object : AndroidSqliteDriver.Callback(Scrooge.Schema.synchronous()) {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 if (BuildConfig.DEBUG) {

@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FilterEntity(
     val readableName: String = "",
-    val period: PeriodTimestampEntity = PeriodTimestampEntity(0, 0),
+    val period: PeriodDatestampEntity = PeriodDatestampEntity(Datestamp.ZERO, Datestamp.ZERO),
     val tags: ImmutableSet<String> = persistentSetOf(),
 )

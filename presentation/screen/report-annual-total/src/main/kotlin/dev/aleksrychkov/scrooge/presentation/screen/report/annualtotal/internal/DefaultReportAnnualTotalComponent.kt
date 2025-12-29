@@ -10,7 +10,7 @@ import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
 import dev.aleksrychkov.scrooge.core.router.Router
@@ -105,7 +105,7 @@ internal class DefaultReportAnnualTotalComponent(
         )
     }
 
-    override fun openCategoryTotal(period: PeriodTimestampEntity) {
+    override fun openCategoryTotal(period: PeriodDatestampEntity) {
         router.open(
             DestinationReportCategoryTotal(
                 FilterEntityFactory.fromPeriod(

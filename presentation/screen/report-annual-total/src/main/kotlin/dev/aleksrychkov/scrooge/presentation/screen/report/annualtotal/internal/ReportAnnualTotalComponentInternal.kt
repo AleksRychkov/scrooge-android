@@ -3,7 +3,7 @@ package dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalComponent
@@ -22,5 +22,5 @@ internal interface ReportAnnualTotalComponentInternal : ReportAnnualTotalCompone
     fun closeFiltersModal()
     fun setFilter(filter: FilterEntity)
 
-    fun openCategoryTotal(period: PeriodTimestampEntity)
+    fun openCategoryTotal(period: PeriodDatestampEntity)
 }

@@ -2,7 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
@@ -24,7 +24,7 @@ internal data class TotalMonthlyState(
     data class ByMonth(
         val title: String,
         val byType: ByType,
-        val periodTimestamp: PeriodTimestampEntity,
+        val periodTimestamp: PeriodDatestampEntity,
     )
 
     @Immutable

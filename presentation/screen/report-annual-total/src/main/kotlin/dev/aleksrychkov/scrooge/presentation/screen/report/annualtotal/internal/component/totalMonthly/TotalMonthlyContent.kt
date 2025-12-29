@@ -32,7 +32,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyState
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -44,7 +44,7 @@ internal fun TotalMonthlyContent(
     paddingBottom: Dp = 0.dp,
     headerItem: @Composable (() -> Unit)? = null,
     component: TotalMonthlyComponent,
-    openCategoryReport: (PeriodTimestampEntity) -> Unit,
+    openCategoryReport: (PeriodDatestampEntity) -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
@@ -67,7 +67,7 @@ private fun TotalMonthlyContent(
     headerItem: @Composable (() -> Unit)? = null,
     paddingTop: Dp,
     paddingBottom: Dp,
-    openCategoryReport: (PeriodTimestampEntity) -> Unit,
+    openCategoryReport: (PeriodDatestampEntity) -> Unit,
 ) {
     val listState = listState ?: rememberLazyListState()
     LazyColumn(

@@ -16,7 +16,7 @@ internal class DefaultCreateTransactionUseCase(
             runSuspendCatching {
                 transactionDao.value.create(
                     amount = args.amount,
-                    timestamp = args.timestamp,
+                    datestamp = args.datestamp,
                     type = args.transactionType,
                     category = args.category.name,
                     tags = args.tags?.map { it.name }?.toSet(),

@@ -1,0 +1,57 @@
+package dev.aleksrychkov.scrooge.core.entity
+
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.format
+import kotlinx.datetime.format.char
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.Serializable
+import kotlin.time.Clock
+import kotlin.time.Instant
+
+@JvmInline
+@Serializable
+value class Datestamp(val value: Long) {
+    companion object Companion {
+        private const val YEAR_MULTIPLIER = 10_000L
+        private const val MONTH_MULTIPLIER = 100L
+
+        val ZERO = Datestamp(0)
+
+        fun from(date: LocalDate): Datestamp {
+            val date = date.year * YEAR_MULTIPLIER + date.month.number * MONTH_MULTIPLIER + date.day
+            return Datestamp(value = date)
+        }
+
+        fun from(instant: Instant, timeZone: TimeZone = TimeZone.UTC): Datestamp {
+            return from(date = instant.toLocalDateTime(timeZone = timeZone).date)
+        }
+
+        fun now(): Datestamp {
+            return from(instant = Clock.System.now())
+        }
+    }
+
+    fun toLocalDate(): LocalDate {
+        val year = (value / YEAR_MULTIPLIER).toInt()
+        val month = ((value / MONTH_MULTIPLIER) % MONTH_MULTIPLIER).toInt()
+        val day = (value % MONTH_MULTIPLIER).toInt()
+        return LocalDate(year = year, month = month, day = day)
+    }
+
+    fun toInstant(timeZone: TimeZone = TimeZone.UTC): Instant =
+        toLocalDate().atStartOfDayIn(timeZone = timeZone)
+
+    fun readableName(): String = toLocalDate()
+        .format(
+            LocalDate.Format {
+                day()
+                char('.')
+                monthNumber()
+                char('.')
+                year()
+            }
+        )
+}

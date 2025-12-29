@@ -5,8 +5,9 @@ import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TransactionDao
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TransactionMapper
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
@@ -31,8 +32,8 @@ internal class DefaultTransactionDao(
     ): Flow<ImmutableList<TransactionEntity>> = withContext(readDispatcher) {
         database.transactionQueries
             .selectFromTo(
-                timestamp = filter.period.from,
-                timestamp_ = filter.period.to,
+                datestamp = filter.period.from.value,
+                datestamp_ = filter.period.to.value,
             )
             .asFlow()
             .mapToList(readDispatcher)
@@ -50,7 +51,7 @@ internal class DefaultTransactionDao(
 
     override suspend fun create(
         amount: Long,
-        timestamp: Long,
+        datestamp: Datestamp,
         type: TransactionType,
         category: String,
         tags: Set<String>?,
@@ -58,7 +59,7 @@ internal class DefaultTransactionDao(
     ): Unit = withContext(writeDispatcher + NonCancellable) {
         database.transactionQueries.create(
             amount = amount,
-            timestamp = timestamp,
+            datestamp = datestamp.value,
             type = type.type.toLong(),
             category = category,
             tags = TransactionMapper.toDatabaseTags(tags),
@@ -69,7 +70,7 @@ internal class DefaultTransactionDao(
     override suspend fun update(
         id: Long,
         amount: Long,
-        timestamp: Long,
+        datestamp: Datestamp,
         type: TransactionType,
         category: String,
         tags: Set<String>?,
@@ -77,7 +78,7 @@ internal class DefaultTransactionDao(
     ): Unit = withContext(writeDispatcher + NonCancellable) {
         database.transactionQueries.update(
             amount = amount,
-            timestamp = timestamp,
+            datestamp = datestamp.value,
             type = type.type.toLong(),
             category = category,
             tags = TransactionMapper.toDatabaseTags(tags),
@@ -90,9 +91,12 @@ internal class DefaultTransactionDao(
         database.transactionQueries.delete(id)
     }
 
-    override suspend fun getMinMaxTimestamp(): PeriodTimestampEntity? {
-        val minMax = database.transactionQueries.minMaxTimestamp().executeAsOneOrNull()
-        if (minMax == null || minMax.minTimestamp == null || minMax.maxTimestamp == null) return null
-        return PeriodTimestampEntity(from = minMax.minTimestamp, to = minMax.maxTimestamp)
+    override suspend fun getMinMaxDatestamp(): PeriodDatestampEntity? {
+        val minMax = database.transactionQueries.minMaxDatestamp().executeAsOneOrNull()
+        if (minMax == null || minMax.minDatestamp == null || minMax.maxDatestamp == null) return null
+        return PeriodDatestampEntity(
+            from = Datestamp(minMax.minDatestamp),
+            to = Datestamp(minMax.maxDatestamp),
+        )
     }
 }

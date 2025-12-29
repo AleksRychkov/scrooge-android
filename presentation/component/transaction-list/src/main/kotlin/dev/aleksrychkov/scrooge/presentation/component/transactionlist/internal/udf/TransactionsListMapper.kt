@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf
 
 import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
@@ -8,12 +9,8 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.resources.categoryIconFromId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.number
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
-import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 internal class TransactionsListMapper(
@@ -23,12 +20,10 @@ internal class TransactionsListMapper(
     fun transactionsToDayTransactions(
         transactions: List<TransactionEntity>,
     ): ImmutableList<TransactionsGroupDto> {
-        val timeZone = TimeZone.currentSystemDefault()
-        val today = Clock.System.now().toLocalDateTime(timeZone).date
+        val today = Datestamp.now().toLocalDate()
         return transactions
             .groupBy { transaction ->
-                val instant = Instant.fromEpochMilliseconds(transaction.timestamp)
-                instant.toLocalDateTime(timeZone).date
+                transaction.datestamp.toLocalDate()
             }
             .map { entry ->
                 val diff = today.minus(entry.key)

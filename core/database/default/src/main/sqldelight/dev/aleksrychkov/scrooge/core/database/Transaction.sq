@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS TTransaction (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   amount INTEGER NOT NULL,
-  timestamp INTEGER NOT NULL,
+  datestamp INTEGER NOT NULL,
   type INTEGER NOT NULL,
   category TEXT NOT NULL,
   tags TEXT,
@@ -14,7 +14,7 @@ selectFromTo:
 SELECT
   TTransaction.id,
   TTransaction.amount,
-  TTransaction.`timestamp`,
+  TTransaction.datestamp,
   TTransaction.category,
   TTransaction.tags,
   TTransaction.type,
@@ -26,20 +26,20 @@ SELECT
   Category.color AS categoryColor
 FROM TTransaction
 LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.`timestamp` >= ? AND TTransaction.`timestamp` <= ?
-ORDER BY TTransaction.`timestamp` DESC;
+WHERE TTransaction.datestamp >= ? AND TTransaction.datestamp <= ?
+ORDER BY TTransaction.datestamp DESC, TTransaction.id DESC;
 
 create:
-INSERT INTO TTransaction (amount, timestamp, type, category, tags, currencyCode) VALUES (?, ?, ?,  ?, ?, ?);
+INSERT INTO TTransaction (amount, datestamp, type, category, tags, currencyCode) VALUES (?, ?, ?,  ?, ?, ?);
 
 update:
-UPDATE TTransaction SET amount = ?, timestamp = ?, type = ?, category = ?, tags = ?, currencyCode = ? WHERE id = ?;
+UPDATE TTransaction SET amount = ?, datestamp = ?, type = ?, category = ?, tags = ?, currencyCode = ? WHERE id = ?;
 
 selectById:
 SELECT
   TTransaction.id,
   TTransaction.amount,
-  TTransaction.`timestamp`,
+  TTransaction.datestamp,
   TTransaction.category,
   TTransaction.tags,
   TTransaction.type,
@@ -56,8 +56,8 @@ WHERE TTransaction.id = ?;
 delete:
 DELETE FROM TTransaction WHERE id = ?;
 
-minMaxTimestamp:
+minMaxDatestamp:
 SELECT
-    min(timestamp) AS minTimestamp,
-    max(timestamp) AS maxTimestamp
+    min(datestamp) AS minDatestamp,
+    max(datestamp) AS maxDatestamp
 FROM TTransaction;

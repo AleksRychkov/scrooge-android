@@ -5,19 +5,19 @@ SELECT
 	currencyCode,
 	sum(amount)
 FROM TTransaction
-WHERE timestamp >= ? AND timestamp <= ?
+WHERE datestamp >= ? AND datestamp <= ?
 GROUP BY type, currencyCode;
 
 totalAmountMothly:
 WITH monthly AS (
     SELECT
-        strftime('%m', timestamp/1000, 'unixepoch') AS month,
-        strftime('%Y', timestamp/1000, 'unixepoch') AS year,
+        ((datestamp / 100) % 100) AS month,
+        (datestamp / 10000) AS year,
         type,
         currencyCode,
         SUM(amount) AS total_amount
     FROM TTransaction
-    WHERE timestamp >= ? AND timestamp <= ?
+    WHERE datestamp >= ? AND datestamp <= ?
     GROUP BY year, month, type, currencyCode
 )
 SELECT * FROM monthly;
@@ -35,5 +35,5 @@ SELECT
     Category.color AS categoryColor
 FROM TTransaction
 LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.`timestamp` >= ? AND TTransaction.`timestamp` <= ?
+WHERE TTransaction.datestamp >= ? AND TTransaction.datestamp <= ?
 GROUP BY TTransaction.type, TTransaction.currencyCode, TTransaction.category;

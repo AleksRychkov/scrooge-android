@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.feature.transaction
 
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 
@@ -15,7 +16,7 @@ fun interface CreateTransactionUseCase {
         val category: CategoryEntity,
         val tags: Set<TagEntity>? = null,
         val currency: CurrencyEntity,
-        val timestamp: Long,
+        val datestamp: Datestamp,
     )
 }
 

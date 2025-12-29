@@ -50,7 +50,7 @@ internal class SubmitDelegate(
             category = state.category,
             tags = state.tags.toSet(),
             currency = state.currency,
-            timestamp = state.timestamp.toEpochMilliseconds()
+            datestamp = state.datestamp,
         )
         val result = createUseCase.value.invoke(args = args)
         val resultEvent = when (result) {
@@ -73,7 +73,7 @@ internal class SubmitDelegate(
             category = state.category,
             tags = state.tags.toSet(),
             currency = state.currency,
-            timestamp = state.timestamp.toEpochMilliseconds()
+            datestamp = state.datestamp,
         )
 
         val result = editUseCase.value.invoke(args = args)

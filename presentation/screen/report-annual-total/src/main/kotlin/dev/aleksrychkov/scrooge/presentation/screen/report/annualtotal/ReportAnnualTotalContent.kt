@@ -24,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.ReportAnnualTotalComponentInternal
@@ -118,7 +118,7 @@ private fun Content(
     component: ReportAnnualTotalComponentInternal,
     contentListState: LazyListState,
     periodContentElevation: Dp,
-    openCategoryReport: (PeriodTimestampEntity) -> Unit,
+    openCategoryReport: (PeriodDatestampEntity) -> Unit,
 ) {
     Content(
         modifier = modifier,
@@ -137,7 +137,7 @@ private fun Content(
     periodContentElevation: Dp,
     periodTotalComponent: PeriodTotalComponent,
     totalMonthlyComponent: TotalMonthlyComponent,
-    openCategoryReport: (PeriodTimestampEntity) -> Unit,
+    openCategoryReport: (PeriodDatestampEntity) -> Unit,
 ) {
     Box(modifier = modifier) {
         TotalMonthlyContent(

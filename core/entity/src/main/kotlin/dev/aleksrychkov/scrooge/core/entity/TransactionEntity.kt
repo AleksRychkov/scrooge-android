@@ -4,7 +4,6 @@ import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.serialization.Serializable
 import kotlin.math.abs
-import kotlin.time.Clock
 
 private const val AMOUNT_CHUNK_SIZE = 3
 private const val CENTS = 100L
@@ -15,7 +14,7 @@ const val AMOUNT_DELIMITER_STRING = ","
 data class TransactionEntity(
     val id: Long,
     val amount: Long,
-    val timestamp: Long,
+    val datestamp: Datestamp,
     val type: TransactionType,
     val category: CategoryEntity,
     val tags: ImmutableSet<String>,
@@ -25,7 +24,7 @@ data class TransactionEntity(
         val DUMMY: TransactionEntity = TransactionEntity(
             id = 0,
             amount = 125,
-            timestamp = Clock.System.now().toEpochMilliseconds(),
+            datestamp = Datestamp.now(),
             type = TransactionType.Income,
             category = CategoryEntity.from("Category", TransactionType.Income),
             tags = persistentSetOf(

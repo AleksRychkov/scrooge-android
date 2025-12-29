@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters
 
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.PeriodTimestampEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
 import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
@@ -13,7 +13,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
-import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 object FilterEntityFactory {
@@ -46,21 +45,14 @@ object FilterEntityFactory {
     }
 
     fun fromPeriod(
-        period: PeriodTimestampEntity,
+        period: PeriodDatestampEntity,
         resourceManager: ResourceManager,
         tags: ImmutableSet<String> = persistentSetOf(),
     ): FilterEntity {
         val months = getMonths(resourceManager)
         val shortMonths = getShortMonths(resourceManager)
-        val tz = TimeZone.currentSystemDefault()
-        val startDate = Instant
-            .fromEpochMilliseconds(period.from)
-            .toLocalDateTime(tz)
-            .date
-        val endDate = Instant
-            .fromEpochMilliseconds(period.to)
-            .toLocalDateTime(tz)
-            .date
+        val startDate = period.from.toLocalDate()
+        val endDate = period.to.toLocalDate()
 
         return when {
             // same day, month, year

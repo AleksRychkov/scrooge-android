@@ -180,8 +180,7 @@ private fun FormContent(
 
         FormDate(
             modifier = Modifier.fillMaxWidth(),
-            timestamp = state.timestamp,
-            date = state.timestampReadable,
+            datestamp = state.datestamp,
             onDateSelected = onDateSelected,
         )
 

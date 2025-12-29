@@ -4,6 +4,7 @@ import dev.aleksrychkov.scrooge.core.database.SelectById
 import dev.aleksrychkov.scrooge.core.database.SelectFromTo
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableSet
@@ -18,7 +19,7 @@ internal object TransactionMapper {
         TransactionEntity(
             id = value.id,
             amount = value.amount,
-            timestamp = value.timestamp,
+            datestamp = Datestamp(value.datestamp),
             type = TransactionType.from(value.type.toInt()),
             category = toCategoryEntity(value),
             tags = toTags(value.tags),
@@ -29,7 +30,7 @@ internal object TransactionMapper {
         TransactionEntity(
             id = value.id,
             amount = value.amount,
-            timestamp = value.timestamp,
+            datestamp = Datestamp(value.datestamp),
             type = TransactionType.from(value.type.toInt()),
             category = toCategoryEntity(value),
             tags = toTags(value.tags),
@@ -38,7 +39,7 @@ internal object TransactionMapper {
 
     fun toDatabaseTags(value: Set<String>?): String? {
         if (value == null || value.isEmpty()) return null
-        return value.joinToString(TAGS_SEPARATOR) { it.replace(TAGS_SEPARATOR, " ") }
+        return value.sorted().joinToString(TAGS_SEPARATOR) { it.replace(TAGS_SEPARATOR, " ") }
     }
 
     private fun toCategoryEntity(value: SelectFromTo): CategoryEntity {

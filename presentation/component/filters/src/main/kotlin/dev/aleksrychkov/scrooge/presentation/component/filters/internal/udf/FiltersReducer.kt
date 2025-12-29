@@ -9,12 +9,8 @@ import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.component.filters.FilterEntityFactory
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 internal class FiltersReducer(
@@ -33,8 +29,8 @@ internal class FiltersReducer(
                 }
                 state {
                     val period = event.filter.period
-                    val startDate = period.from.timestampToDate()
-                    val endDate = period.to.timestampToDate()
+                    val startDate = period.from.toLocalDate()
+                    val endDate = period.to.toLocalDate()
                     val selectedYear = if (startDate.year == endDate.year) {
                         startDate.year
                     } else {
@@ -96,9 +92,3 @@ internal class FiltersReducer(
         }
     }
 }
-
-private fun Long.timestampToDate(tz: TimeZone = TimeZone.currentSystemDefault()): LocalDate =
-    Instant
-        .fromEpochMilliseconds(this)
-        .toLocalDateTime(tz)
-        .date

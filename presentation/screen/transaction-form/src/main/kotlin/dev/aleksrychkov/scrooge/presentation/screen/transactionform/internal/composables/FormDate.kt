@@ -23,22 +23,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsInputTextFieldsColors
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.DatePickerModal
-import kotlin.time.Clock
-import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 internal fun FormDate(
     modifier: Modifier,
-    timestamp: Instant,
-    date: String,
+    datestamp: Datestamp,
     onDateSelected: (Long?) -> Unit,
 ) {
     var showModal by remember { mutableStateOf(false) }
     DsSecondaryCard(
         modifier.height(intrinsicSize = IntrinsicSize.Max)
     ) {
+        val date = remember(datestamp) { datestamp.readableName() }
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -63,6 +62,7 @@ internal fun FormDate(
     }
 
     if (showModal) {
+        val timestamp = remember(datestamp) { datestamp.toInstant() }
         DatePickerModal(
             timestamp = timestamp,
             onDateSelected = onDateSelected,
@@ -79,8 +79,7 @@ private fun FormContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             FormDate(
                 modifier = Modifier.fillMaxWidth(),
-                timestamp = Clock.System.now(),
-                date = "22.12.2025",
+                datestamp = Datestamp.now(),
                 onDateSelected = {},
             )
         }
