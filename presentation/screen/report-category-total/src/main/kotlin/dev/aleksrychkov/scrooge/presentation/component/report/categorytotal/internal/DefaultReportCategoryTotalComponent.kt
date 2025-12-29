@@ -39,10 +39,7 @@ internal class DefaultReportCategoryTotalComponent(
     }
 
     private val _state = MutableStateFlow(
-        ReportCategoryState(
-            filter = filter,
-            filtersName = "TODO",
-        )
+        ReportCategoryState(filter = filter)
     )
 
     override val filtersModal: Value<ChildSlot<*, FiltersComponent>> =
@@ -74,10 +71,7 @@ internal class DefaultReportCategoryTotalComponent(
     }
 
     override fun setFilter(filter: FilterEntity) {
-        _state.value = _state.value.copy(
-            filter = filter,
-            filtersName = "TODO",
-        )
+        _state.value = _state.value.copy(filter = filter)
         _byCategoryComponent.setFilter(filter)
     }
 

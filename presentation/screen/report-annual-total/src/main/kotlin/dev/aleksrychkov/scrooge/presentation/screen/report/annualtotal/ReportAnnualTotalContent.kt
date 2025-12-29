@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -20,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
@@ -83,7 +85,6 @@ private fun ReportAppBar(
     contentListState: LazyListState,
     elevation: Dp,
 ) {
-    val state by component.state.collectAsStateWithLifecycle()
     val headerElevation by remember {
         derivedStateOf {
             if (contentListState.firstVisibleItemIndex > 0) {
@@ -104,8 +105,11 @@ private fun ReportAppBar(
                 Text(text = stringResource(Resources.string.reports))
             },
             actions = {
-                TextButton(onClick = component::openFiltersModal) {
-                    Text(text = state.filtersName)
+                IconButton(onClick = component::openFiltersModal) {
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        contentDescription = stringResource(Resources.string.filters),
+                    )
                 }
             }
         )

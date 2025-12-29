@@ -5,19 +5,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.ByCategoryContent
@@ -65,8 +63,6 @@ private fun ReportCategoryTotalContent(
 internal fun ReportAppBar(
     component: ReportCategoryTotalComponentInternal,
 ) {
-    val state by component.state.collectAsStateWithLifecycle()
-
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shadowElevation = Medium,
@@ -84,10 +80,11 @@ internal fun ReportAppBar(
                 }
             },
             actions = {
-                TextButton(
-                    onClick = component::openFiltersModal,
-                ) {
-                    Text(text = state.filtersName)
+                IconButton(onClick = component::openFiltersModal) {
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        contentDescription = stringResource(Resources.string.filters),
+                    )
                 }
             }
         )

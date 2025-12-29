@@ -48,10 +48,7 @@ internal class DefaultTransactionsComponent(
     init {
         retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
             val initialFilters = FilterEntity.currentMonth()
-            _state.value = _state.value.copy(
-                filtersName = "TODO",
-                filter = initialFilters
-            )
+            _state.value = _state.value.copy(filter = initialFilters)
             _periodTotalComponent.setFilters(initialFilters)
             _transactionsListComponent.setFilters(initialFilters)
         }
@@ -96,7 +93,7 @@ internal class DefaultTransactionsComponent(
     }
 
     override fun setFilter(filter: FilterEntity) {
-        _state.value = _state.value.copy(filtersName = "TODO", filter = filter)
+        _state.value = _state.value.copy(filter = filter)
         _periodTotalComponent.setFilters(filter)
         _transactionsListComponent.setFilters(filter)
     }
