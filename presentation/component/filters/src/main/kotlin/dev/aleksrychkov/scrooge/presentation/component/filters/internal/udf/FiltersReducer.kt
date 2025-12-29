@@ -8,7 +8,6 @@ import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.utils.FiltersReadableNameHelper
-import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.datetime.Month
@@ -54,6 +53,7 @@ internal class FiltersReducer(
                         filterReadable = readableNameHelper.getName(filter = event.filter),
                         selectedYear = selectedYear,
                         selectedMonthNumber = selectedMonth,
+                        selectedTags = event.filter.tags,
                     )
                 }
             }
@@ -98,7 +98,7 @@ internal class FiltersReducer(
 
             is FiltersEvent.Internal.AvailableTags -> state.reduceWith(event) {
                 state {
-                    copy(allTags = event.tags, selectedTags = persistentSetOf())
+                    copy(allTags = event.tags)
                 }
             }
 

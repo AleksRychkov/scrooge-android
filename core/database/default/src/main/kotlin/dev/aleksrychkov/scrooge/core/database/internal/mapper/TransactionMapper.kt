@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
 import dev.aleksrychkov.scrooge.core.database.SelectById
 import dev.aleksrychkov.scrooge.core.database.SelectFromTo
+import dev.aleksrychkov.scrooge.core.database.SelectFromToAndTags
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
@@ -16,6 +17,17 @@ internal object TransactionMapper {
     private const val TAGS_SEPARATOR = "|"
 
     fun toEntity(value: SelectFromTo): TransactionEntity =
+        TransactionEntity(
+            id = value.id,
+            amount = value.amount,
+            datestamp = Datestamp(value.datestamp),
+            type = TransactionType.from(value.type.toInt()),
+            category = toCategoryEntity(value),
+            tags = toTags(value.tags),
+            currency = CurrencyEntity.fromCurrencyCode(value.currencyCode)!!,
+        )
+
+    fun toEntity(value: SelectFromToAndTags): TransactionEntity =
         TransactionEntity(
             id = value.id,
             amount = value.amount,
@@ -60,6 +72,23 @@ internal object TransactionMapper {
     }
 
     private fun toCategoryEntity(value: SelectById): CategoryEntity {
+        return if (value.categoryId != null) {
+            CategoryEntity(
+                id = value.categoryId,
+                name = value.categoryName ?: value.category,
+                type = TransactionType.from(value.categoryType!!.toInt()),
+                iconId = value.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
+                color = value.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
+            )
+        } else {
+            CategoryEntity.from(
+                name = value.category,
+                type = TransactionType.from(value.type.toInt()),
+            )
+        }
+    }
+
+    private fun toCategoryEntity(value: SelectFromToAndTags): CategoryEntity {
         return if (value.categoryId != null) {
             CategoryEntity(
                 id = value.categoryId,

@@ -32,16 +32,31 @@ internal class DefaultTransactionDao(
     override suspend fun get(
         filter: FilterEntity,
     ): Flow<ImmutableList<TransactionEntity>> = withContext(readDispatcher) {
-        database.transactionQueries
-            .selectFromTo(
-                datestamp = filter.period.from.value,
-                datestamp_ = filter.period.to.value,
-            )
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list ->
-                list.map(TransactionMapper::toEntity).toImmutableList()
-            }
+        val tags = TransactionMapper.toDatabaseTags(filter.tags)
+        if (tags == null) {
+            database.transactionQueries
+                .selectFromTo(
+                    datestamp = filter.period.from.value,
+                    datestamp_ = filter.period.to.value,
+                )
+                .asFlow()
+                .mapToList(readDispatcher)
+                .map { list ->
+                    list.map(TransactionMapper::toEntity).toImmutableList()
+                }
+        } else {
+            database.transactionQueries
+                .selectFromToAndTags(
+                    datestamp = filter.period.from.value,
+                    datestamp_ = filter.period.to.value,
+                    tags = "%$tags%",
+                )
+                .asFlow()
+                .mapToList(readDispatcher)
+                .map { list ->
+                    list.map(TransactionMapper::toEntity).toImmutableList()
+                }
+        }
     }
 
     override suspend fun get(id: Long): TransactionEntity? = withContext(readDispatcher) {
