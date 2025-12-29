@@ -26,26 +26,7 @@ SELECT
   Category.color AS categoryColor
 FROM TTransaction
 LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.datestamp >= ? AND TTransaction.datestamp <= ?
-ORDER BY TTransaction.datestamp DESC, TTransaction.id DESC;
-
-selectFromToAndTags:
-SELECT
-  TTransaction.id,
-  TTransaction.amount,
-  TTransaction.datestamp,
-  TTransaction.category,
-  TTransaction.tags,
-  TTransaction.type,
-  TTransaction.currencyCode,
-  Category.id AS categoryId,
-  Category.name AS categoryName,
-  Category.iconId AS categoryIconId,
-  Category.type AS categoryType,
-  Category.color AS categoryColor
-FROM TTransaction
-LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.datestamp >= ? AND TTransaction.datestamp <= ? AND TTransaction.tags LIKE ?
+WHERE TTransaction.datestamp >= :fromDatestamp AND TTransaction.datestamp <= :toDatestamp AND (:tags IS NULL OR TTransaction.tags LIKE :tags)
 ORDER BY TTransaction.datestamp DESC, TTransaction.id DESC;
 
 create:
