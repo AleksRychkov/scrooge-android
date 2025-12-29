@@ -5,7 +5,7 @@ SELECT
 	currencyCode,
 	sum(amount)
 FROM TTransaction
-WHERE datestamp >= ? AND datestamp <= ?
+WHERE datestamp >= :fromDatestamp AND datestamp <= :toDatestamp AND (:tags IS NULL OR tags LIKE :tags)
 GROUP BY type, currencyCode;
 
 totalAmountMothly:
@@ -17,7 +17,7 @@ WITH monthly AS (
         currencyCode,
         SUM(amount) AS total_amount
     FROM TTransaction
-    WHERE datestamp >= ? AND datestamp <= ?
+    WHERE datestamp >= :fromDatestamp AND datestamp <= :toDatestamp AND (:tags IS NULL OR tags LIKE :tags)
     GROUP BY year, month, type, currencyCode
 )
 SELECT * FROM monthly;
@@ -35,5 +35,5 @@ SELECT
     Category.color AS categoryColor
 FROM TTransaction
 LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.datestamp >= ? AND TTransaction.datestamp <= ?
+WHERE datestamp >= :fromDatestamp AND datestamp <= :toDatestamp AND (:tags IS NULL OR tags LIKE :tags)
 GROUP BY TTransaction.type, TTransaction.currencyCode, TTransaction.category;

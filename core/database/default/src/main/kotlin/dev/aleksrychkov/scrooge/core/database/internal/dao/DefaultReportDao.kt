@@ -5,6 +5,7 @@ import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.ReportDao
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.ReportMapper
+import dev.aleksrychkov.scrooge.core.database.internal.mapper.TransactionMapper
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
@@ -24,10 +25,13 @@ internal class DefaultReportDao(
 
     override suspend fun totalAmount(filter: FilterEntity): Flow<ReportTotalAmountEntity> =
         withContext(readDispatcher) {
+            val tags = TransactionMapper.toDatabaseTags(filter.tags)
+            val tagsLike = if (tags == null) null else "%$tags%"
             database.reportQueries
                 .totalAmount(
-                    datestamp = filter.period.from.value,
-                    datestamp_ = filter.period.to.value,
+                    fromDatestamp = filter.period.from.value,
+                    toDatestamp = filter.period.to.value,
+                    tags = tagsLike,
                 )
                 .asFlow()
                 .mapToList(readDispatcher)
@@ -39,10 +43,13 @@ internal class DefaultReportDao(
     override suspend fun totalAmountMonthly(
         filter: FilterEntity,
     ): ReportTotalAmountMonthlyEntity = withContext(readDispatcher) {
+        val tags = TransactionMapper.toDatabaseTags(filter.tags)
+        val tagsLike = if (tags == null) null else "%$tags%"
         database.reportQueries
             .totalAmountMothly(
-                datestamp = filter.period.from.value,
-                datestamp_ = filter.period.to.value,
+                fromDatestamp = filter.period.from.value,
+                toDatestamp = filter.period.to.value,
+                tags = tagsLike,
             )
             .executeAsList()
             .let(ReportMapper::totalAmountMonthlyToEntity)
@@ -51,10 +58,13 @@ internal class DefaultReportDao(
     override suspend fun byCategory(
         filter: FilterEntity,
     ): ReportByCategoryEntity = withContext(readDispatcher) {
+        val tags = TransactionMapper.toDatabaseTags(filter.tags)
+        val tagsLike = if (tags == null) null else "%$tags%"
         database.reportQueries
             .byCategory(
-                datestamp = filter.period.from.value,
-                datestamp_ = filter.period.to.value,
+                fromDatestamp = filter.period.from.value,
+                toDatestamp = filter.period.to.value,
+                tags = tagsLike,
             )
             .executeAsList()
             .let(ReportMapper::byCategoryToEntity)

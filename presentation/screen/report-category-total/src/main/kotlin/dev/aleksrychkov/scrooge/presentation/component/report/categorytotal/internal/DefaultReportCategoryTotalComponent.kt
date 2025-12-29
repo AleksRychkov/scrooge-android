@@ -55,7 +55,7 @@ internal class DefaultReportCategoryTotalComponent(
             FiltersComponent(
                 componentContext = childComponentContext,
                 filter = filter,
-                settings = EnumSet.of(FiltersSettings.Years, FiltersSettings.Months),
+                settings = EnumSet.allOf(FiltersSettings::class.java),
             )
         }
 

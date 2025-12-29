@@ -80,7 +80,7 @@ internal class DefaultReportAnnualTotalComponent(
             FiltersComponent(
                 componentContext = childComponentContext,
                 filter = filter,
-                settings = EnumSet.of(FiltersSettings.Years),
+                settings = EnumSet.of(FiltersSettings.Years, FiltersSettings.Tags),
             )
         }
 
