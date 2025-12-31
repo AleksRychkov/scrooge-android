@@ -249,7 +249,7 @@ private fun ScrollUpThumb(
         FloatingActionButton(
             onClick = {
                 scope.launch {
-                    contentListState.animateScrollToItem(0)
+                    contentListState.scrollToItem(0)
                 }
             }
         ) {
