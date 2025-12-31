@@ -16,7 +16,7 @@ internal class CreateTagDelegate(
 ) {
     private val createMutex: Mutex by lazy { Mutex() }
 
-    suspend operator fun invoke(cmd: TagCommand.CreateNewTag): Flow<TagEvent> {
+    suspend operator fun invoke(cmd: TagCommand.Create): Flow<TagEvent> {
         if (cmd.name.isBlank()) {
             return flowOf(TagEvent.Internal.FailedToCreateNewTagEmptyName)
         }

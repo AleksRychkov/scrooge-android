@@ -20,7 +20,7 @@ internal class DefaultCreateTagUseCase(
                 if (duplicateTag != null) {
                     CreateTagResult.DuplicateViolation(duplicateTag)
                 } else {
-                    tagDao.value.create(tagEntity.name, tagEntity.colorHex)
+                    tagDao.value.create(tagEntity.name)
                     CreateTagResult.Success
                 }
             }.getOrDefault(CreateTagResult.Failure)

@@ -21,7 +21,7 @@ internal class TagReducer(
                 state.reduceWith(event) {
                     command {
                         listOf(
-                            TagCommand.CreateNewTag(
+                            TagCommand.Create(
                                 name = state.searchQuery,
                             )
                         )
@@ -37,18 +37,10 @@ internal class TagReducer(
                 }
             }
 
-            is TagEvent.External.Restore -> {
-                state.reduceWith(event) {
-                    command {
-                        listOf(TagCommand.Restore(tag = event.tag))
-                    }
-                }
-            }
-
             TagEvent.External.Init -> {
                 state.reduceWith(event) {
                     command {
-                        listOf(TagCommand.ObserveTags)
+                        listOf(TagCommand.Observe)
                     }
                 }
             }
@@ -95,26 +87,6 @@ internal class TagReducer(
                 }
             }
 
-            is TagEvent.Internal.DeletedTag -> {
-                state.reduceWith(event) {
-                    effects {
-                        val msg = String.format(
-                            resourceManager.getString(resources.string.tag_deleted),
-                            event.tag.name
-                        )
-                        listOf(
-                            TagEffect.TagDeleted(
-                                message = msg,
-                                actionLabel = resourceManager.getString(
-                                    resources.string.undo
-                                ),
-                                tag = event.tag,
-                            )
-                        )
-                    }
-                }
-            }
-
             TagEvent.Internal.FailedToCreateNewTag -> {
                 state.reduceWith(event) {
                     effects {
@@ -152,22 +124,9 @@ internal class TagReducer(
             TagEvent.Internal.FailedToDeleteTag -> {
                 state.reduceWith(event) {
                     effects {
-                        val msg =
-                            resourceManager.getString(
-                                resources.string.tag_error_failed_to_delete
-                            )
-                        listOf(TagEffect.ShowInfoMessage(msg))
-                    }
-                }
-            }
-
-            TagEvent.Internal.FailedToRestoreTag -> {
-                state.reduceWith(event) {
-                    effects {
-                        val msg =
-                            resourceManager.getString(
-                                resources.string.tag_error_failed_to_restore
-                            )
+                        val msg = resourceManager.getString(
+                            resources.string.tag_error_failed_to_delete
+                        )
                         listOf(TagEffect.ShowInfoMessage(msg))
                     }
                 }

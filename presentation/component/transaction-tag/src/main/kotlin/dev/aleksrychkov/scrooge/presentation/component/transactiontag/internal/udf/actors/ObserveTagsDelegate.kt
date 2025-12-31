@@ -11,8 +11,7 @@ internal class ObserveTagsDelegate(
     private val observeTagsUseCase: Lazy<ObserveTagsUseCase>,
 ) {
     suspend operator fun invoke(): Flow<TagEvent> {
-        val result = observeTagsUseCase.value()
-        return when (result) {
+        return when (val result = observeTagsUseCase.value()) {
             ObserveTagsUseCaseResult.Failure -> flowOf(TagEvent.Internal.FailedToObserveTags)
             is ObserveTagsUseCaseResult.Success -> result.tags.map { TagEvent.Internal.Tags(it) }
         }

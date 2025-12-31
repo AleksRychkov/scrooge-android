@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactiontag
 
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,29 +23,28 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
-import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
-import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
@@ -79,28 +79,14 @@ private fun TagContent(
 ) {
     val state by component.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-
-    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
     DisposableEffect(component) {
         val job = scope.launch {
             component.effects
                 .onEach { effect ->
                     when (effect) {
                         is TagEffect.ShowInfoMessage -> {
-                            snackbarHostState.showCountdownSnackbar(
-                                message = effect.message
-                            )
-                        }
-
-                        is TagEffect.TagDeleted -> {
-                            val result = snackbarHostState.showCountdownSnackbar(
-                                message = effect.message,
-                                actionLabel = effect.actionLabel,
-                                useCountDown = true,
-                            )
-                            if (result == SnackbarResult.ActionPerformed) {
-                                component.restoreTag(tag = effect.tag)
-                            }
+                            Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -113,14 +99,6 @@ private fun TagContent(
     Scaffold(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        snackbarHost = {
-            DialogSnackbarHost(
-                snackbarHostState = snackbarHostState,
-                snackbar = { data ->
-                    CountdownSnackbar(data)
-                },
-            )
-        },
     ) { innerPadding ->
         TagContent(
             modifier = Modifier
@@ -194,7 +172,7 @@ private fun TagsList(
             ) { tag ->
                 Tag(
                     modifier = Modifier.animateItem(),
-                    value = tag,
+                    entity = tag,
                     selectTag = selectTag,
                     deleteTag = deleteTag,
                 )
@@ -210,7 +188,7 @@ private fun TagsList(
 @Composable
 private fun Tag(
     modifier: Modifier = Modifier,
-    value: TagEntity,
+    entity: TagEntity,
     selectTag: (TagEntity) -> Unit,
     deleteTag: (TagEntity) -> Unit,
 ) {
@@ -219,25 +197,27 @@ private fun Tag(
             .fillMaxWidth()
             .defaultMinSize(minHeight = ListItemHeight)
             .clickable {
-                selectTag(value)
+                selectTag(entity)
             }
             .padding(start = Large),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            modifier = Modifier
-                .weight(weight = 1f, fill = true),
-            text = value.name,
+            modifier = Modifier.weight(weight = 1f, fill = true),
+            text = entity.name,
         )
 
+        val isConfirmationAlertVisible = remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
                 .height(ListItemHeight)
                 .padding(Normal)
                 .aspectRatio(1f)
                 .clip(CircleShape)
-                .debounceClickable { deleteTag(value) }
+                .debounceClickable {
+                    isConfirmationAlertVisible.value = true
+                }
                 .padding(Medium),
             contentAlignment = Alignment.Center,
         ) {
@@ -247,6 +227,37 @@ private fun Tag(
                 contentDescription = stringResource(Resources.string.tag_delete),
             )
         }
+        if (!isConfirmationAlertVisible.value) return
+        AlertDialog(
+            onDismissRequest = {
+                isConfirmationAlertVisible.value = false
+            },
+            title = {
+                Text(text = entity.name)
+            },
+            text = {
+                Text(text = stringResource(Resources.string.tag_delete_confirmation_text))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        isConfirmationAlertVisible.value = false
+                        deleteTag(entity)
+                    }
+                ) {
+                    Text(text = stringResource(Resources.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        isConfirmationAlertVisible.value = false
+                    }
+                ) {
+                    Text(text = stringResource(Resources.string.dismiss))
+                }
+            },
+        )
     }
 }
 

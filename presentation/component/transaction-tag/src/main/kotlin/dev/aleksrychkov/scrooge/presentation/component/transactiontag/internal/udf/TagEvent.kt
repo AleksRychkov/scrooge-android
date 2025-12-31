@@ -8,7 +8,6 @@ internal sealed interface TagEvent {
         data object Init : External
         data class Search(val query: String) : External
         data class Delete(val tag: TagEntity) : External
-        data class Restore(val tag: TagEntity) : External
         data object AddNewTag : External
     }
 
@@ -20,7 +19,5 @@ internal sealed interface TagEvent {
         data class FailedToCreateNewTagDuplicate(val tag: TagEntity) : Internal
         data object FailedToCreateNewTagEmptyName : Internal
         data object FailedToDeleteTag : Internal
-        data object FailedToRestoreTag : Internal
-        data class DeletedTag(val tag: TagEntity) : Internal
     }
 }

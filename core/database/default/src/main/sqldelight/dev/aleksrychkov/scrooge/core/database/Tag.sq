@@ -1,29 +1,33 @@
--- Table
+-- Tables
 CREATE TABLE IF NOT EXISTS Tag (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  name TEXT NOT NULL UNIQUE,
-  colorHex TEXT,
-  isDeleted  INTEGER NOT NULL
+  name TEXT NOT NULL UNIQUE
 );
+
+CREATE TABLE IF NOT EXISTS TransactionTag (
+  transactionId INTEGER NOT NULL,
+  tagId INTEGER NOT NULL,
+  PRIMARY KEY (transactionId, tagId),
+  FOREIGN KEY (transactionId) REFERENCES TTransaction(id) ON DELETE CASCADE,
+  FOREIGN KEY (tagId) REFERENCES Tag(id) ON DELETE CASCADE
+);
+
+-- Indexes
+CREATE INDEX idx_tag_name ON Tag(name);
+CREATE INDEX idx_tag_id ON Tag(id);
 
 -- Queries
 selectAll:
-SELECT * FROM Tag WHERE isDeleted = 0;
+SELECT * FROM Tag;
 
 selectByName:
-SELECT * FROM Tag WHERE name = ? AND isDeleted = 0 LIMIT 1;
+SELECT * FROM Tag WHERE name = ? LIMIT 1;
 
 selectById:
 SELECT * FROM Tag WHERE id = ? LIMIT 1;
 
 create:
-INSERT INTO Tag (name, colorHex, isDeleted) VALUES (?, ?, 0);
+INSERT INTO Tag (name) VALUES (?);
 
 delete:
-UPDATE Tag SET isDeleted = 1, name = ? WHERE id = ?;
-
-restore:
-UPDATE Tag SET isDeleted = 0, name = ? WHERE id = ?;
-
-cleanup:
-DELETE FROM Tag WHERE isDeleted = 1;
+DELETE FROM Tag WHERE id = ?;

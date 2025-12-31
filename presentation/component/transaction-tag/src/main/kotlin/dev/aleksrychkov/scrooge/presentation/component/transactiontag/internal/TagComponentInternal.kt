@@ -12,7 +12,6 @@ internal interface TagComponentInternal : TagComponent {
     val effects: Flow<TagEffect>
 
     fun deleteTag(tag: TagEntity)
-    fun restoreTag(tag: TagEntity)
     fun setSearchQuery(query: String)
     fun addNewTag()
 }

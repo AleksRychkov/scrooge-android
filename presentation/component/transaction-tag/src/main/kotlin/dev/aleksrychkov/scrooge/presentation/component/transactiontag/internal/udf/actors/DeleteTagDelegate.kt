@@ -5,6 +5,7 @@ import dev.aleksrychkov.scrooge.feature.tag.DeleteTagUseCase
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagCommand
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagEvent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 internal class DeleteTagDelegate(
@@ -14,7 +15,7 @@ internal class DeleteTagDelegate(
         val result = deleteTagUseCase.value.invoke(cmd.tag)
         return when (result) {
             DeleteTagResult.Failure -> flowOf(TagEvent.Internal.FailedToDeleteTag)
-            DeleteTagResult.Success -> flowOf(TagEvent.Internal.DeletedTag(tag = cmd.tag))
+            DeleteTagResult.Success -> emptyFlow()
         }
     }
 }

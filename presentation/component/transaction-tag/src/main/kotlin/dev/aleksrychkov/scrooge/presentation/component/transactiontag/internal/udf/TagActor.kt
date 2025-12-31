@@ -5,7 +5,6 @@ import dev.aleksrychkov.scrooge.core.udf.Actor
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.CreateTagDelegate
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.DeleteTagDelegate
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.ObserveTagsDelegate
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.RestoreTagDelegate
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.SearchTagsDelegate
 import kotlinx.coroutines.flow.Flow
 
@@ -14,7 +13,6 @@ internal class TagActor(
     private val deleteTag: DeleteTagDelegate,
     private val observeTags: ObserveTagsDelegate,
     private val searchTags: SearchTagsDelegate,
-    private val restoreTag: RestoreTagDelegate,
 ) : Actor<TagCommand, TagEvent> {
 
     companion object {
@@ -24,17 +22,15 @@ internal class TagActor(
                 deleteTag = DeleteTagDelegate(deleteTagUseCase = getLazy()),
                 observeTags = ObserveTagsDelegate(observeTagsUseCase = getLazy()),
                 searchTags = SearchTagsDelegate(),
-                restoreTag = RestoreTagDelegate(restoreTagUseCase = getLazy()),
             )
         }
     }
 
     override suspend fun process(command: TagCommand): Flow<TagEvent> {
         return when (command) {
-            is TagCommand.CreateNewTag -> createTag(command)
+            is TagCommand.Create -> createTag(command)
             is TagCommand.Delete -> deleteTag(command)
-            TagCommand.ObserveTags -> observeTags()
-            is TagCommand.Restore -> restoreTag(command)
+            TagCommand.Observe -> observeTags()
             is TagCommand.Search -> searchTags(command)
         }
     }

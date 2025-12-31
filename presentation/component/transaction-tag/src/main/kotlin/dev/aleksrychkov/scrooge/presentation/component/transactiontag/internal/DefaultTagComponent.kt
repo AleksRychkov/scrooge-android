@@ -35,10 +35,6 @@ internal class DefaultTagComponent(
         store.handle(TagEvent.External.Delete(tag = tag))
     }
 
-    override fun restoreTag(tag: TagEntity) {
-        store.handle(TagEvent.External.Restore(tag = tag))
-    }
-
     override fun setSearchQuery(query: String) {
         store.handle(TagEvent.External.Search(query = query))
     }
