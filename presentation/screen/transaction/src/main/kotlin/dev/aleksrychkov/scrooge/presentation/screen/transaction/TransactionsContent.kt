@@ -1,7 +1,12 @@
 package dev.aleksrychkov.scrooge.presentation.screen.transaction
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -24,6 +31,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -40,6 +48,7 @@ import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalCo
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal.FiltersModal
+import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -127,6 +136,10 @@ private fun Content(
     periodContentElevation: Dp,
     component: TransactionsComponentInternal
 ) {
+    val isAddIncomeExpenseVisible by remember {
+        derivedStateOf { contentListState.firstVisibleItemIndex == 0 }
+    }
+
     Box(modifier = modifier) {
         TransactionsListContent(
             modifier = Modifier.fillMaxWidth(),
@@ -142,12 +155,33 @@ private fun Content(
             component = component.transactionsListComponent,
         )
 
-        AddIncomeExpense(
+        AnimatedVisibility(
+            visible = isAddIncomeExpenseVisible,
+            enter = slideInVertically { it } + fadeIn(),
+            exit = slideOutVertically { it } + fadeOut(),
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter),
-            component = component,
-        )
+                .align(Alignment.BottomCenter)
+        ) {
+            AddIncomeExpense(
+                modifier = Modifier.fillMaxWidth(),
+                component = component,
+            )
+        }
+
+        AnimatedVisibility(
+            visible = !isAddIncomeExpenseVisible,
+            enter = slideInVertically { it } + fadeIn(),
+            exit = slideOutVertically { it } + fadeOut(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        ) {
+            ScrollUpThumb(
+                modifier = Modifier.fillMaxWidth(),
+                contentListState = contentListState,
+            )
+        }
     }
 }
 
@@ -195,6 +229,33 @@ private fun AddIncomeExpense(
                     )
                 },
                 text = { Text(text = stringResource(Resources.string.add_expense)) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ScrollUpThumb(
+    modifier: Modifier,
+    contentListState: LazyListState,
+) {
+    Box(
+        modifier = modifier
+            .padding(bottom = Large2X)
+            .padding(end = Large),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        val scope = rememberCoroutineScope()
+        FloatingActionButton(
+            onClick = {
+                scope.launch {
+                    contentListState.animateScrollToItem(0)
+                }
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowUpward,
+                contentDescription = null,
             )
         }
     }
