@@ -23,9 +23,6 @@ SELECT * FROM Tag;
 selectByName:
 SELECT * FROM Tag WHERE name = ? LIMIT 1;
 
-selectById:
-SELECT * FROM Tag WHERE id = ? LIMIT 1;
-
 create:
 INSERT INTO Tag (name) VALUES (?);
 
