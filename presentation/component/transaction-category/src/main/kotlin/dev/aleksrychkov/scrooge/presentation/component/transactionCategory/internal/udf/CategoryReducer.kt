@@ -26,14 +26,6 @@ internal class CategoryReducer(
                 }
             }
 
-            is CategoryEvent.External.Restore -> {
-                state.reduceWith(event) {
-                    command {
-                        listOf(CategoryCommand.Restore(category = event.category))
-                    }
-                }
-            }
-
             is CategoryEvent.External.Init -> {
                 state.reduceWith(event) {
                     command {
@@ -98,40 +90,6 @@ internal class CategoryReducer(
                     }
                 }
             }
-
-            CategoryEvent.Internal.FailedToRestoreCategory -> {
-                state.reduceWith(event) {
-                    effects {
-                        val msg =
-                            resourceManager.getString(
-                                resources.string.category_error_failed_to_restore
-                            )
-                        listOf(CategoryEffect.ShowInfoMessage(msg))
-                    }
-                }
-            }
-
-            is CategoryEvent.Internal.DeletedCategory -> {
-                state.reduceWith(event) {
-                    effects {
-                        val msg = String.format(
-                            resourceManager.getString(resources.string.category_deleted),
-                            event.category.name
-                        )
-                        listOf(
-                            CategoryEffect.CategoryDeleted(
-                                message = msg,
-                                actionLabel = resourceManager.getString(
-                                    resources.string.undo
-                                ),
-                                category = event.category,
-                            )
-                        )
-                    }
-                }
-            }
-
-            CategoryEvent.Internal.FailedToObserveCategories -> TODO()
         }
     }
 }

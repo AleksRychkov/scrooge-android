@@ -10,5 +10,4 @@ interface CategoryDao {
     suspend fun getByName(name: String, type: TransactionType): CategoryEntity?
     suspend fun create(name: String, type: TransactionType, iconId: String, color: Int)
     suspend fun delete(id: Long)
-    suspend fun restore(id: Long)
 }

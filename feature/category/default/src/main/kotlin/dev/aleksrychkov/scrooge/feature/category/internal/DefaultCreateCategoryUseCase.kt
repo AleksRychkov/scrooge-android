@@ -34,6 +34,7 @@ internal class DefaultCreateCategoryUseCase(
                     color = categoryEntity.color,
                 )
                 CreateCategoryResult.Success
-            }.getOrDefault(CreateCategoryResult.Failure)
+            }
+                .getOrDefault(CreateCategoryResult.Failure)
         }
 }

@@ -10,33 +10,18 @@ import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@OptIn(DelicateCoroutinesApi::class)
 internal class DefaultCategoryDao(
     private val db: Lazy<Scrooge>,
     private val readDispatcher: CoroutineDispatcher,
     private val writeDispatcher: CoroutineDispatcher,
 ) : CategoryDao {
 
-    private companion object {
-        const val DELETED_NAME_SUFFIX = "_de1eted"
-    }
-
-    private val database: Scrooge
-        get() = db.value
-
-    init {
-        GlobalScope.launch {
-            deleteCategoriesPermanently()
-        }
-    }
+    private val database: Scrooge by lazy { db.value }
 
     override suspend fun get(
         type: TransactionType,
@@ -80,20 +65,6 @@ internal class DefaultCategoryDao(
     override suspend fun delete(
         id: Long,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
-        val category = database.categoryQueries.getById(id).executeAsOne()
-        database.categoryQueries.delete(name = category.name + DELETED_NAME_SUFFIX, id = id)
+        database.categoryQueries.delete(id = id)
     }
-
-    override suspend fun restore(id: Long): Unit = withContext(writeDispatcher + NonCancellable) {
-        val category = database.categoryQueries.getById(id).executeAsOne()
-        val name = category.name.replace(DELETED_NAME_SUFFIX, "")
-        database.categoryQueries.restore(name = name, id = id)
-    }
-
-    private suspend fun deleteCategoriesPermanently(): Unit =
-        withContext(writeDispatcher + NonCancellable) {
-            runCatching {
-                database.categoryQueries.cleanup()
-            }
-        }
 }

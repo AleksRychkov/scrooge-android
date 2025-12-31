@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionCategory
 
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,30 +24,29 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
-import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
-import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
@@ -85,28 +85,15 @@ private fun CategoryContent(
 ) {
     val state by component.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    val snackbarHostState = remember { SnackbarHostState() }
     DisposableEffect(component) {
         val job = scope.launch {
             component.effects
                 .onEach { effect ->
                     when (effect) {
                         is CategoryEffect.ShowInfoMessage -> {
-                            snackbarHostState.showCountdownSnackbar(
-                                message = effect.message
-                            )
-                        }
-
-                        is CategoryEffect.CategoryDeleted -> {
-                            val result = snackbarHostState.showCountdownSnackbar(
-                                message = effect.message,
-                                actionLabel = effect.actionLabel,
-                                useCountDown = true,
-                            )
-                            if (result == SnackbarResult.ActionPerformed) {
-                                component.restoreCategory(category = effect.category)
-                            }
+                            Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -120,14 +107,6 @@ private fun CategoryContent(
     Scaffold(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        snackbarHost = {
-            DialogSnackbarHost(
-                snackbarHostState = snackbarHostState,
-                snackbar = { data ->
-                    CountdownSnackbar(data)
-                },
-            )
-        },
     ) { innerPadding ->
         CategoryContent(
             modifier = Modifier
@@ -204,7 +183,7 @@ private fun CategoryList(
             ) { category ->
                 Category(
                     modifier = Modifier.animateItem(),
-                    value = category,
+                    entity = category,
                     selectCategory = selectCategory,
                     deleteCategory = deleteCategory,
                 )
@@ -220,7 +199,7 @@ private fun CategoryList(
 @Composable
 private fun Category(
     modifier: Modifier = Modifier,
-    value: CategoryEntity,
+    entity: CategoryEntity,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
 ) {
@@ -229,7 +208,7 @@ private fun Category(
             .fillMaxWidth()
             .defaultMinSize(minHeight = ListItemHeight)
             .debounceClickable {
-                selectCategory(value)
+                selectCategory(entity)
             }
             .padding(start = Large),
         horizontalArrangement = Arrangement.Start,
@@ -240,10 +219,10 @@ private fun Category(
                 .height(CategoryIconSize)
                 .width(CategoryIconSize)
                 .clip(CircleShape)
-                .background(Color(value.color))
+                .background(Color(entity.color))
                 .padding(Normal),
             tint = Color.White,
-            imageVector = CategoryIcons.find { it.id == value.iconId }?.icon
+            imageVector = CategoryIcons.find { it.id == entity.iconId }?.icon
                 ?: UncategorizedIcon.icon,
             contentDescription = null,
         )
@@ -252,9 +231,10 @@ private fun Category(
             modifier = Modifier
                 .weight(weight = 1f, fill = true)
                 .padding(start = Normal),
-            text = value.name,
+            text = entity.name,
         )
 
+        val isConfirmationAlertVisible = remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
                 .height(ListItemHeight)
@@ -262,7 +242,7 @@ private fun Category(
                 .aspectRatio(1f)
                 .clip(CircleShape)
                 .debounceClickable {
-                    deleteCategory(value)
+                    isConfirmationAlertVisible.value = true
                 }
                 .padding(Medium),
             contentAlignment = Alignment.Center,
@@ -273,6 +253,38 @@ private fun Category(
                 contentDescription = stringResource(Resources.string.category_delete),
             )
         }
+
+        if (!isConfirmationAlertVisible.value) return
+        AlertDialog(
+            onDismissRequest = {
+                isConfirmationAlertVisible.value = false
+            },
+            title = {
+                Text(text = entity.name)
+            },
+            text = {
+                Text(text = stringResource(Resources.string.category_delete_confirmation_text))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        isConfirmationAlertVisible.value = false
+                        deleteCategory(entity)
+                    }
+                ) {
+                    Text(text = stringResource(Resources.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        isConfirmationAlertVisible.value = false
+                    }
+                ) {
+                    Text(text = stringResource(Resources.string.dismiss))
+                }
+            },
+        )
     }
 }
 

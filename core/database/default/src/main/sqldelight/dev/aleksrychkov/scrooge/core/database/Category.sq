@@ -3,29 +3,22 @@ CREATE TABLE IF NOT EXISTS Category (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name TEXT NOT NULL UNIQUE,
   type INTEGER NOT NULL,
-  isDeleted  INTEGER NOT NULL,
   iconId TEXT NOT NULL,
   color INTEGER NOT NULL
 );
 
 -- Queries
 selectAllByType:
-SELECT * FROM Category WHERE type = ? AND isDeleted = 0;
+SELECT * FROM Category WHERE type = :type;
 
 create:
-INSERT INTO Category (name, type, isDeleted, iconId, color) VALUES (?, ?, 0, ?, ?);
+INSERT INTO Category (name, type, iconId, color) VALUES (?, ?, ?, ?);
 
 getByNameAndType:
-SELECT * FROM Category WHERE name = ? AND type = ? AND isDeleted = 0;
+SELECT * FROM Category WHERE name = :name AND type = :type;
 
 getById:
-SELECT * FROM Category WHERE id = ? LIMIT 1;
+SELECT * FROM Category WHERE id = :id LIMIT 1;
 
 delete:
-UPDATE Category SET isDeleted = 1, name = ? WHERE id = ?;
-
-restore:
-UPDATE Category SET isDeleted = 0, name = ? WHERE id = ?;
-
-cleanup:
-DELETE FROM Category WHERE isDeleted = 1;
+DELETE FROM Category WHERE id = :id;
