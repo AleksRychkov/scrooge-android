@@ -1,9 +1,15 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf
 
+import androidx.paging.PagingData
+import androidx.paging.insertSeparators
+import androidx.paging.map
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
+import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 internal class TransactionsListReducer :
     Reducer<TransactionsListState, TransactionsListEvent, TransactionsListCommand, Unit> {
@@ -40,17 +46,46 @@ internal class TransactionsListReducer :
                 }
             }
 
-            TransactionsListEvent.Internal.FailedToLoadTransactions -> state.reduceWith(event) {
-                state {
-                    copy(isLoading = false, transactions = persistentListOf())
-                }
-            }
+            is TransactionsListEvent.Internal.PagedTransactions -> state.reduceWith(event) {
+                val today = Datestamp.now().date
+                val pagedTransactions: Flow<PagingData<TransactionsItem>> = event.data
+                    .map { pagingData: PagingData<TransactionEntity> ->
+                        val transactions = mutableMapOf<String, MutableList<TransactionEntity>>()
+                        pagingData
+                            .map { entity ->
+                                val itemDate = mapper.transactionDate(entity, today)
+                                val map = transactions[itemDate] ?: mutableListOf()
+                                map.add(entity)
+                                transactions[itemDate] = map
 
-            is TransactionsListEvent.Internal.SuccessToLoadTransactions -> state.reduceWith(event) {
+                                mapper.transactionToUiItem(entity = entity, date = itemDate)
+                            }
+                            .insertSeparators { before, after ->
+                                when {
+                                    before == null && after != null ->
+                                        TransactionsItem.Group(
+                                            date = after.date,
+                                            totals = mapper.calculateTotals(
+                                                transactions[after.date] ?: emptyList()
+                                            ),
+                                        )
+
+                                    before != null && after != null && before.date != after.date ->
+                                        TransactionsItem.Group(
+                                            date = after.date,
+                                            totals = mapper.calculateTotals(
+                                                transactions[after.date] ?: emptyList()
+                                            ),
+                                        )
+
+                                    else -> null
+                                }
+                            }
+                    }
                 state {
                     copy(
                         isLoading = false,
-                        transactions = mapper.transactionsToDayTransactions(event.transactions),
+                        pagedTransactions = pagedTransactions,
                         scrollIndex = 0,
                         scrollOffset = 0,
                     )

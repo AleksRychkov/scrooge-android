@@ -1,32 +1,23 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
-import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
+import androidx.paging.compose.collectAsLazyPagingItems
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.TransactionsListComponentInternal
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.composables.TransactionItem
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.composables.TransactionsGroupItem
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsItem
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListState
-import kotlinx.coroutines.delay
 
 @Composable
 fun TransactionsListContent(
@@ -65,11 +56,9 @@ private fun Content(
         paddingBottom = paddingBottom,
         state = state,
         onTransactionClicked = component::onTransactionClicked,
-        onListStateChanged = component::onListStateChanged,
     )
 }
 
-@Suppress("MagicNumber")
 @Composable
 private fun Content(
     modifier: Modifier,
@@ -78,26 +67,11 @@ private fun Content(
     paddingTop: Dp,
     paddingBottom: Dp,
     state: TransactionsListState,
-    onTransactionClicked: (TransactionEntity) -> Unit,
-    onListStateChanged: (Pair<Int, Int>) -> Unit,
+    onTransactionClicked: (Long, TransactionType) -> Unit,
 ) {
+    val items = state.pagedTransactions.collectAsLazyPagingItems()
     val listState = listState ?: rememberLazyListState()
-    LaunchedEffect(state.transactions) {
-        // todo: without it not working
-        delay(100)
-        listState.scrollToItem(
-            state.scrollIndex,
-            state.scrollOffset
-        )
-    }
-    LaunchedEffect(listState) {
-        snapshotFlow {
-            listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
-        }.collect { (index, offset) ->
-            if (index == 0 && offset == 0 && state.scrollIndex != 0) return@collect
-            onListStateChanged(index to offset)
-        }
-    }
+
     LazyColumn(
         modifier = modifier,
         state = listState,
@@ -105,7 +79,6 @@ private fun Content(
             top = paddingTop,
             bottom = paddingBottom,
         ),
-        verticalArrangement = Arrangement.spacedBy(Normal2X),
     ) {
         if (headerItem != null) {
             item {
@@ -113,31 +86,20 @@ private fun Content(
             }
         }
 
-        stickyHeader {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Small)
-            ) {
-                if (state.isLoading) {
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = Large)
-                    )
-                }
-            }
-        }
+        items(count = items.itemCount) { index ->
+            val item = items[index] ?: return@items
+            when (item) {
+                is TransactionsItem.Group -> TransactionsGroupItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    group = item,
+                )
 
-        items(
-            items = state.transactions,
-            key = { t -> t.date }
-        ) { group ->
-            TransactionsGroupItem(
-                modifier = Modifier.fillMaxWidth(),
-                group = group,
-                onTransactionClicked = onTransactionClicked,
-            )
+                is TransactionsItem.Item -> TransactionItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    transaction = item,
+                    onTransactionClicked = onTransactionClicked,
+                )
+            }
         }
     }
 }

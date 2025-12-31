@@ -1,7 +1,9 @@
 package dev.aleksrychkov.scrooge.core.database.internal.dao
 
+import app.cash.paging.PagingSource
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.paging3.QueryPagingSource
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TransactionDao
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TransactionMapper
@@ -39,19 +41,46 @@ internal class DefaultTransactionDao(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
                 tags = tagsLike,
+                mapper = TransactionMapper::transactionEntityMapper,
             )
             .asFlow()
             .mapToList(readDispatcher)
-            .map { list ->
-                list.map(TransactionMapper::toEntity).toImmutableList()
+            .map { list -> list.toImmutableList() }
+    }
+
+    override fun getPaged(filter: FilterEntity): PagingSource<Long, TransactionEntity> {
+        val tags = TransactionMapper.toDatabaseTags(filter.tags)
+        val tagsLike = if (tags == null) null else "%$tags%"
+        val boundariesQuery = { _: Long?, _: Long ->
+            database.transactionQueries.selectFromToKeydBoundaries(
+                fromDatestamp = filter.period.from.value,
+                toDatestamp = filter.period.to.value,
+                tags = tagsLike,
+            )
+        }
+        return QueryPagingSource(
+            transacter = database.transactionQueries,
+            context = readDispatcher,
+            pageBoundariesProvider = boundariesQuery,
+            queryProvider = { from, to ->
+                database.transactionQueries
+                    .selectFromToKeyd(
+                        fromDatestamp = from,
+                        toDatestamp = to ?: (filter.period.from.value - 1),
+                        tags = tagsLike,
+                        mapper = TransactionMapper::transactionEntityMapper,
+                    )
             }
+        )
     }
 
     override suspend fun get(id: Long): TransactionEntity? = withContext(readDispatcher) {
         database.transactionQueries
-            .selectById(id)
+            .selectById(
+                id = id,
+                mapper = TransactionMapper::transactionEntityMapper,
+            )
             .executeAsOneOrNull()
-            ?.let(TransactionMapper::toEntity)
     }
 
     override suspend fun create(

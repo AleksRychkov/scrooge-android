@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.core.database
 
+import androidx.paging.PagingSource
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
@@ -11,9 +12,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface TransactionDao {
 
-    suspend fun get(
-        filter: FilterEntity,
-    ): Flow<ImmutableList<TransactionEntity>>
+    suspend fun get(filter: FilterEntity): Flow<ImmutableList<TransactionEntity>>
+
+    fun getPaged(filter: FilterEntity): PagingSource<Long, TransactionEntity>
 
     suspend fun get(id: Long): TransactionEntity?
 

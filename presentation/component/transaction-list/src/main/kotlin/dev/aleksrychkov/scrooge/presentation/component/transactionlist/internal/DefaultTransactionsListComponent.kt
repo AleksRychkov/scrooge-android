@@ -2,7 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
@@ -25,7 +25,7 @@ internal class DefaultTransactionsListComponent(
     private val store: Store<TransactionsListState, TransactionsListEvent, Unit> by lazy {
         instanceKeeper.createStore(
             initialState = TransactionsListState(),
-            actor = TransactionsListActor.Companion(),
+            actor = TransactionsListActor(),
             reducer = TransactionsListReducer(),
             startEvent = TransactionsListEvent.External.Initial,
         )
@@ -38,10 +38,10 @@ internal class DefaultTransactionsListComponent(
         router.close()
     }
 
-    override fun onTransactionClicked(transaction: TransactionEntity) {
+    override fun onTransactionClicked(id: Long, type: TransactionType) {
         DestinationTransactionForm.edit(
-            transactionId = transaction.id,
-            type = transaction.type,
+            transactionId = id,
+            type = type,
         ).let(router::open)
     }
 

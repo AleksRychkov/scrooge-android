@@ -8,6 +8,8 @@ dependencies {
 }
 
 dependencies {
+    implementation(libs.androidx.paging.common)
+
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.immutable.collections)
 }

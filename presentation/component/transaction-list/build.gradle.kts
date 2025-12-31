@@ -28,6 +28,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
     implementation(libs.androidx.ui.tooling.preview.android)
+    implementation(libs.androidx.paging)
+    implementation(libs.androidx.paging.compose)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)

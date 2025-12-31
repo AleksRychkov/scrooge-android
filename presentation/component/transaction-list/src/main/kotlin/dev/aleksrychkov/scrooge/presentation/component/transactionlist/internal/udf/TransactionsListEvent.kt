@@ -1,8 +1,9 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf
 
+import androidx.paging.PagingData
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
-import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.Flow
 
 internal sealed interface TransactionsListEvent {
     sealed interface External : TransactionsListEvent {
@@ -12,9 +13,8 @@ internal sealed interface TransactionsListEvent {
     }
 
     sealed interface Internal : TransactionsListEvent {
-        data object FailedToLoadTransactions : TransactionsListEvent
-        data class SuccessToLoadTransactions(
-            val transactions: ImmutableList<TransactionEntity>,
+        data class PagedTransactions(
+            val data: Flow<PagingData<TransactionEntity>>
         ) : TransactionsListEvent
     }
 }

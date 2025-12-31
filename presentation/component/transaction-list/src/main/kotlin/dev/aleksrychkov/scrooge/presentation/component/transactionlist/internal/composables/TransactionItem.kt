@@ -1,7 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.composables
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,32 +27,33 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
-import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsItemDto
+import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsItem
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 internal fun TransactionItem(
     modifier: Modifier,
-    transaction: TransactionsItemDto,
-    onTransactionClicked: (TransactionEntity) -> Unit,
+    transaction: TransactionsItem.Item,
+    onTransactionClicked: (Long, TransactionType) -> Unit,
 ) {
     Row(
         modifier = modifier
-            .clickable {
-                onTransactionClicked(transaction.ref)
+            .debounceClickable {
+                onTransactionClicked(transaction.id, transaction.type)
             }
-            .padding(horizontal = Large)
-            .padding(vertical = Normal),
+            .padding(horizontal = Large, vertical = Medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val transactionColor = when (transaction.type) {
@@ -136,16 +136,17 @@ private fun FormContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TransactionItem(
                 modifier = Modifier.fillMaxWidth(),
-                transaction = TransactionsItemDto(
+                transaction = TransactionsItem.Item(
+                    id = 0L,
                     categoryName = TransactionEntity.DUMMY.category.name,
                     categoryColor = TransactionEntity.DUMMY.category.color,
                     categoryIcon = UncategorizedIcon,
                     amount = "+123,00 $",
                     type = TransactionType.Income,
-                    ref = TransactionEntity.DUMMY,
                     tags = TransactionEntity.DUMMY.tags.joinToString(),
+                    date = "12.02.2025",
                 ),
-                onTransactionClicked = {},
+                onTransactionClicked = { _, _ -> },
             )
         }
     }

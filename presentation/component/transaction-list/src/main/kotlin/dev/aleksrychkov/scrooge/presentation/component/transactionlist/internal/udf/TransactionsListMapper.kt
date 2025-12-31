@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal
 
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
+import dev.aleksrychkov.scrooge.core.entity.Datestamp.Companion.readableName
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
@@ -9,6 +10,8 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.resources.categoryIconFromId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.number
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -47,25 +50,66 @@ internal class TransactionsListMapper(
 
     private fun transactionToItemDto(transactions: List<TransactionEntity>): ImmutableList<TransactionsItemDto> {
         return transactions
-            .map { t ->
-                val sign = when (t.type) {
-                    TransactionType.Income -> "+"
-                    TransactionType.Expense -> "-"
-                }
-                TransactionsItemDto(
-                    categoryName = t.category.name,
-                    categoryIcon = categoryIconFromId(t.category.iconId),
-                    categoryColor = t.category.color,
-                    amount = "${t.amount.amountToStringFormatted(sign)} ${t.currency.currencySymbol}",
-                    type = t.type,
-                    ref = t,
-                    tags = t.tags.joinToString()
-                )
-            }
+            .map(::transactionToItemDto)
             .toImmutableList()
     }
 
-    private fun calculateTotals(transactions: List<TransactionEntity>): ImmutableList<String> {
+    fun transactionToItemDto(entity: TransactionEntity): TransactionsItemDto {
+        val sign = when (entity.type) {
+            TransactionType.Income -> "+"
+            TransactionType.Expense -> "-"
+        }
+        return TransactionsItemDto(
+            categoryName = entity.category.name,
+            categoryIcon = categoryIconFromId(entity.category.iconId),
+            categoryColor = entity.category.color,
+            amount = "${entity.amount.amountToStringFormatted(sign)} " +
+                entity.currency.currencySymbol,
+            type = entity.type,
+            ref = entity,
+            tags = entity.tags.joinToString(),
+            date = entity.datestamp.readableName(),
+        )
+    }
+
+    fun transactionToUiItem(
+        entity: TransactionEntity,
+        date: String,
+    ): TransactionsItem.Item {
+        val sign = when (entity.type) {
+            TransactionType.Income -> "+"
+            TransactionType.Expense -> "-"
+        }
+
+        return TransactionsItem.Item(
+            categoryName = entity.category.name,
+            categoryIcon = categoryIconFromId(entity.category.iconId),
+            categoryColor = entity.category.color,
+            amount = "${entity.amount.amountToStringFormatted(sign)} " +
+                entity.currency.currencySymbol,
+            type = entity.type,
+            tags = entity.tags.joinToString(),
+            id = entity.id,
+            date = date,
+        )
+    }
+
+    fun transactionDate(
+        entity: TransactionEntity,
+        today: LocalDate,
+    ): String {
+        return when (val date = entity.datestamp.date) {
+            today ->
+                resourceManager.getString(Resources.string.today)
+
+            today.minus(1, DateTimeUnit.DAY) ->
+                resourceManager.getString(Resources.string.yesterday)
+
+            else -> date.readableName()
+        }
+    }
+
+    fun calculateTotals(transactions: List<TransactionEntity>): ImmutableList<String> {
         return transactions
             .groupBy {
                 it.currency

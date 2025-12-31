@@ -15,6 +15,8 @@ dependencies {
 }
 
 dependencies {
+    implementation(libs.androidx.paging)
+
     implementation(libs.kotlinx.coroutines.core)
 
     testImplementation(libs.junit)

@@ -18,6 +18,8 @@ dependencies {
 }
 
 dependencies {
+    implementation(libs.androidx.paging)
+
     implementation(libs.bundles.sqldelight)
 
     implementation(libs.kotlinx.coroutines.core)

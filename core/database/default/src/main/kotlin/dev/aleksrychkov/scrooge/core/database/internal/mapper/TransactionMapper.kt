@@ -1,7 +1,5 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
-import dev.aleksrychkov.scrooge.core.database.SelectById
-import dev.aleksrychkov.scrooge.core.database.SelectFromTo
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
@@ -15,65 +13,48 @@ internal object TransactionMapper {
 
     private const val TAGS_SEPARATOR = "|"
 
-    fun toEntity(value: SelectFromTo): TransactionEntity =
-        TransactionEntity(
-            id = value.id,
-            amount = value.amount,
-            datestamp = Datestamp(value.datestamp),
-            type = TransactionType.from(value.type.toInt()),
-            category = toCategoryEntity(value),
-            tags = toTags(value.tags),
-            currency = CurrencyEntity.fromCurrencyCode(value.currencyCode)!!,
+    @Suppress("LongParameterList")
+    fun transactionEntityMapper(
+        id: Long,
+        amount: Long,
+        datestamp: Long,
+        category: String,
+        tags: String?,
+        type: Long,
+        currencyCode: String,
+        categoryId: Long?,
+        categoryName: String?,
+        categoryIconId: String?,
+        categoryType: Long?,
+        categoryColor: Long?,
+    ): TransactionEntity {
+        return TransactionEntity(
+            id = id,
+            amount = amount,
+            datestamp = Datestamp(datestamp),
+            type = TransactionType.from(type.toInt()),
+            category = if (categoryId != null) {
+                CategoryEntity(
+                    id = categoryId,
+                    name = categoryName ?: category,
+                    type = TransactionType.from(categoryType!!.toInt()),
+                    iconId = categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
+                    color = categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
+                )
+            } else {
+                CategoryEntity.from(
+                    name = category,
+                    type = TransactionType.from(type.toInt()),
+                )
+            },
+            tags = tags?.split(TAGS_SEPARATOR)?.toImmutableSet() ?: persistentSetOf(),
+            currency = CurrencyEntity.fromCurrencyCode(currencyCode)!!,
         )
-
-    fun toEntity(value: SelectById): TransactionEntity =
-        TransactionEntity(
-            id = value.id,
-            amount = value.amount,
-            datestamp = Datestamp(value.datestamp),
-            type = TransactionType.from(value.type.toInt()),
-            category = toCategoryEntity(value),
-            tags = toTags(value.tags),
-            currency = CurrencyEntity.fromCurrencyCode(value.currencyCode)!!,
-        )
+    }
 
     fun toDatabaseTags(value: Set<String>?): String? {
         if (value == null || value.isEmpty()) return null
         return value.sorted().joinToString(TAGS_SEPARATOR) { it.replace(TAGS_SEPARATOR, " ") }
-    }
-
-    private fun toCategoryEntity(value: SelectFromTo): CategoryEntity {
-        return if (value.categoryId != null) {
-            CategoryEntity(
-                id = value.categoryId,
-                name = value.categoryName ?: value.category,
-                type = TransactionType.from(value.categoryType!!.toInt()),
-                iconId = value.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
-                color = value.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
-            )
-        } else {
-            CategoryEntity.from(
-                name = value.category,
-                type = TransactionType.from(value.type.toInt()),
-            )
-        }
-    }
-
-    private fun toCategoryEntity(value: SelectById): CategoryEntity {
-        return if (value.categoryId != null) {
-            CategoryEntity(
-                id = value.categoryId,
-                name = value.categoryName ?: value.category,
-                type = TransactionType.from(value.categoryType!!.toInt()),
-                iconId = value.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
-                color = value.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
-            )
-        } else {
-            CategoryEntity.from(
-                name = value.category,
-                type = TransactionType.from(value.type.toInt()),
-            )
-        }
     }
 
     fun toTags(value: String?): ImmutableSet<String> {

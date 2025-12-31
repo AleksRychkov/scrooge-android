@@ -32,6 +32,17 @@ value class Datestamp(val value: Long) {
         fun now(): Datestamp {
             return from(instant = Clock.System.now())
         }
+
+        fun LocalDate.readableName(): String =
+            this.format(
+                LocalDate.Format {
+                    day()
+                    char('.')
+                    monthNumber()
+                    char('.')
+                    year()
+                }
+            )
     }
 
     val date: LocalDate
@@ -45,14 +56,5 @@ value class Datestamp(val value: Long) {
     fun toInstant(timeZone: TimeZone = TimeZone.UTC): Instant =
         date.atStartOfDayIn(timeZone = timeZone)
 
-    fun readableName(): String = date
-        .format(
-            LocalDate.Format {
-                day()
-                char('.')
-                monthNumber()
-                char('.')
-                year()
-            }
-        )
+    fun readableName(): String = date.readableName()
 }
