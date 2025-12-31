@@ -40,7 +40,7 @@ internal class DefaultTagDao(
     override suspend fun create(
         name: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
-        database.tagQueries.create(name = name.replace(TAG_DELIMITER, ""))
+        database.tagQueries.create(name = name.replace(TAG_DELIMITER, " ").trim())
     }
 
     override suspend fun delete(
