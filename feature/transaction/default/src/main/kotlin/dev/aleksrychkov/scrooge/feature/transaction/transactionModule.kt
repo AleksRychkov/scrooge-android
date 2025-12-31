@@ -11,7 +11,6 @@ import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultDeleteTransa
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultEditTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetMinMaxTimestampUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetPagedTransactionsUseCase
-import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetTransactionTagsUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetTransactionsUseCase
 import kotlinx.coroutines.Dispatchers
@@ -50,12 +49,6 @@ fun buildTransactionModule(): NaiveModule {
         }
         factory<GetMinMaxTimestampUseCase> {
             DefaultGetMinMaxTimestampUseCase(
-                transactionDao = getLazy(),
-                ioDispatcher = Dispatchers.IO,
-            )
-        }
-        factory<GetTransactionTagsUseCase> {
-            DefaultGetTransactionTagsUseCase(
                 transactionDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )

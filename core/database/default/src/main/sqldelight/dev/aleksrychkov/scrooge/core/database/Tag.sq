@@ -31,3 +31,9 @@ INSERT INTO Tag (name) VALUES (?);
 
 delete:
 DELETE FROM Tag WHERE id = ?;
+
+createTransactioTag:
+INSERT INTO TransactionTag (transactionId, tagId) VALUES (:transactionId, :tagId);
+
+deleteTransactioTag:
+DELETE FROM TransactionTag WHERE transactionId = :transactionId;

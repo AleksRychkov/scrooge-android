@@ -14,12 +14,7 @@ internal class DefaultGetTransactionUseCase(
     override suspend fun invoke(id: Long): GetTransactionResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
-                val entity = transactionDao.value.get(id)
-                if (entity == null) {
-                    GetTransactionResult.NotFound
-                } else {
-                    GetTransactionResult.Success(transaction = entity)
-                }
+                GetTransactionResult.Success(transactionFlow = transactionDao.value.get(id))
             }.getOrDefault(GetTransactionResult.Failure)
         }
 }

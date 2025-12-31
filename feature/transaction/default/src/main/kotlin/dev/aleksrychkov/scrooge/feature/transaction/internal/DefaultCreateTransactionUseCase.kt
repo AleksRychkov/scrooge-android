@@ -19,7 +19,7 @@ internal class DefaultCreateTransactionUseCase(
                     datestamp = args.datestamp,
                     type = args.transactionType,
                     category = args.category.name,
-                    tags = args.tags?.map { it.name }?.toSet(),
+                    tagIds = args.tags?.map { it.id }?.toSet(),
                     currencyCode = args.currency.currencyCode,
                 )
                 CreateTransactionResult.Success

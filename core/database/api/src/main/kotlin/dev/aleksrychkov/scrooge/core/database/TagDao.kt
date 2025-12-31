@@ -5,6 +5,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 interface TagDao {
+    companion object {
+        const val TAG_DELIMITER = "!"
+    }
+
     suspend fun get(): Flow<ImmutableList<TagEntity>>
     suspend fun getByName(name: String): TagEntity?
     suspend fun create(name: String)

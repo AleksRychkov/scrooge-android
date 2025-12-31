@@ -8,8 +8,8 @@ import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlin.time.ExperimentalTime
 
 @Immutable
@@ -20,6 +20,6 @@ internal data class FormState(
     val amount: String = "",
     val datestamp: Datestamp = Datestamp.now(),
     val category: CategoryEntity? = null,
-    val tags: ImmutableList<TagEntity> = persistentListOf(),
+    val tags: ImmutableSet<TagEntity> = persistentSetOf(),
     val currency: CurrencyEntity = CurrencyEntity.RUB,
 )

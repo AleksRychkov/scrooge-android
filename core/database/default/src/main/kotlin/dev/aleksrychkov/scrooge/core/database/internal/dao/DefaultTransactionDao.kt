@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.core.database.internal.dao
 import app.cash.paging.PagingSource
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TransactionDao
@@ -13,9 +14,7 @@ import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -34,13 +33,10 @@ internal class DefaultTransactionDao(
     override suspend fun get(
         filter: FilterEntity,
     ): Flow<ImmutableList<TransactionEntity>> = withContext(readDispatcher) {
-        val tags = TransactionMapper.toDatabaseTags(filter.tags)
-        val tagsLike = if (tags == null) null else "%$tags%"
         database.transactionQueries
             .selectFromTo(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
-                tags = tagsLike,
                 mapper = TransactionMapper::transactionEntityMapper,
             )
             .asFlow()
@@ -49,13 +45,10 @@ internal class DefaultTransactionDao(
     }
 
     override fun getPaged(filter: FilterEntity): PagingSource<Long, TransactionEntity> {
-        val tags = TransactionMapper.toDatabaseTags(filter.tags)
-        val tagsLike = if (tags == null) null else "%$tags%"
         val boundariesQuery = { _: Long?, _: Long ->
             database.transactionQueries.selectFromToKeydBoundaries(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
-                tags = tagsLike,
             )
         }
         return QueryPagingSource(
@@ -67,20 +60,20 @@ internal class DefaultTransactionDao(
                     .selectFromToKeyd(
                         fromDatestamp = from,
                         toDatestamp = to ?: (filter.period.from.value - 1),
-                        tags = tagsLike,
                         mapper = TransactionMapper::transactionEntityMapper,
                     )
             }
         )
     }
 
-    override suspend fun get(id: Long): TransactionEntity? = withContext(readDispatcher) {
+    override suspend fun get(id: Long): Flow<TransactionEntity?> = withContext(readDispatcher) {
         database.transactionQueries
             .selectById(
                 id = id,
                 mapper = TransactionMapper::transactionEntityMapper,
             )
-            .executeAsOneOrNull()
+            .asFlow()
+            .mapToOneOrNull(readDispatcher)
     }
 
     override suspend fun create(
@@ -88,17 +81,21 @@ internal class DefaultTransactionDao(
         datestamp: Datestamp,
         type: TransactionType,
         category: String,
-        tags: Set<String>?,
+        tagIds: Set<Long>?,
         currencyCode: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
-        database.transactionQueries.create(
-            amount = amount,
-            datestamp = datestamp.value,
-            type = type.type.toLong(),
-            category = category,
-            tags = TransactionMapper.toDatabaseTags(tags),
-            currencyCode = currencyCode,
-        )
+        database.transactionQueries.transaction {
+            val id = database.transactionQueries.create(
+                amount = amount,
+                datestamp = datestamp.value,
+                type = type.type.toLong(),
+                category = category,
+                currencyCode = currencyCode,
+            )
+            tagIds?.forEach { tagId ->
+                database.tagQueries.createTransactioTag(transactionId = id, tagId = tagId)
+            }
+        }
     }
 
     override suspend fun update(
@@ -107,18 +104,23 @@ internal class DefaultTransactionDao(
         datestamp: Datestamp,
         type: TransactionType,
         category: String,
-        tags: Set<String>?,
+        tagIds: Set<Long>?,
         currencyCode: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
-        database.transactionQueries.update(
-            amount = amount,
-            datestamp = datestamp.value,
-            type = type.type.toLong(),
-            category = category,
-            tags = TransactionMapper.toDatabaseTags(tags),
-            currencyCode = currencyCode,
-            id = id,
-        )
+        database.transactionQueries.transaction {
+            database.transactionQueries.update(
+                amount = amount,
+                datestamp = datestamp.value,
+                type = type.type.toLong(),
+                category = category,
+                currencyCode = currencyCode,
+                id = id,
+            )
+            database.tagQueries.deleteTransactioTag(transactionId = id)
+            tagIds?.forEach { tagId ->
+                database.tagQueries.createTransactioTag(transactionId = id, tagId = tagId)
+            }
+        }
     }
 
     override suspend fun delete(id: Long): Unit = withContext(writeDispatcher + NonCancellable) {
@@ -134,13 +136,4 @@ internal class DefaultTransactionDao(
                 to = Datestamp(minMax.maxDatestamp),
             )
         }
-
-    override suspend fun getAllTags(): ImmutableSet<String> = withContext(readDispatcher) {
-        database.transactionQueries.allTags()
-            .executeAsList()
-            .map { it.tags }
-            .map(TransactionMapper::toTags)
-            .flatMap { it }
-            .toImmutableSet()
-    }
 }

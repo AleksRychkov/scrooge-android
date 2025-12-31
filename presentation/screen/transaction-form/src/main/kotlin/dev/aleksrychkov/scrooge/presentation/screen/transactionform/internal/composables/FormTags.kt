@@ -22,14 +22,14 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 internal fun FormTags(
     modifier: Modifier,
-    tags: ImmutableList<TagEntity>,
+    tags: ImmutableSet<TagEntity>,
     openTagModal: () -> Unit,
     removeTag: (TagEntity) -> Unit,
 ) {
@@ -89,7 +89,7 @@ private fun FormContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             FormTags(
                 modifier = Modifier.fillMaxWidth(),
-                tags = persistentListOf(
+                tags = persistentSetOf(
                     TagEntity.from("tag 1"),
                     TagEntity.from("tag 2"),
                     TagEntity.from("tag 3"),

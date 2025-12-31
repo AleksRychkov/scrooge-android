@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS TTransaction (
   datestamp INTEGER NOT NULL,
   type INTEGER NOT NULL,
   category TEXT NOT NULL,
-  tags TEXT,
   currencyCode TEXT NOT NULL
 );
 
@@ -25,72 +24,84 @@ ON TTransaction(category);
 -- Queries
 selectFromTo:
 SELECT
-  TTransaction.id,
-  TTransaction.amount,
-  TTransaction.datestamp,
-  TTransaction.category,
-  TTransaction.tags,
-  TTransaction.type,
-  TTransaction.currencyCode,
+  t.id,
+  t.amount,
+  t.datestamp,
+  t.category,
+  t.type,
+  t.currencyCode,
   Category.id AS categoryId,
   Category.name AS categoryName,
   Category.iconId AS categoryIconId,
   Category.type AS categoryType,
-  Category.color AS categoryColor
-FROM TTransaction
-LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.datestamp >= :fromDatestamp AND TTransaction.datestamp <= :toDatestamp AND (:tags IS NULL OR TTransaction.tags LIKE :tags)
-ORDER BY TTransaction.datestamp DESC, TTransaction.id DESC;
+  Category.color AS categoryColor,
+  GROUP_CONCAT(tag.name, '!') AS tags,
+  GROUP_CONCAT(tag.id, '!') AS tagIds
+FROM TTransaction t
+LEFT JOIN Category ON t.category = Category.name
+LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
+LEFT JOIN Tag tag ON tt.tagId = tag.id
+WHERE t.datestamp >= :fromDatestamp AND t.datestamp <= :toDatestamp
+GROUP BY t.id
+ORDER BY t.datestamp DESC, t.id DESC;
 
 selectFromToKeydBoundaries:
 SELECT
   DISTINCT TTransaction.datestamp
 FROM TTransaction
-WHERE TTransaction.datestamp >= :fromDatestamp AND TTransaction.datestamp <= :toDatestamp AND (:tags IS NULL OR TTransaction.tags LIKE :tags)
+WHERE TTransaction.datestamp >= :fromDatestamp AND TTransaction.datestamp <= :toDatestamp
 ORDER BY TTransaction.datestamp DESC;
 
 selectFromToKeyd:
 SELECT
-  TTransaction.id,
-  TTransaction.amount,
-  TTransaction.datestamp,
-  TTransaction.category,
-  TTransaction.tags,
-  TTransaction.type,
-  TTransaction.currencyCode,
+  t.id,
+  t.amount,
+  t.datestamp,
+  t.category,
+  t.type,
+  t.currencyCode,
   Category.id AS categoryId,
   Category.name AS categoryName,
   Category.iconId AS categoryIconId,
   Category.type AS categoryType,
-  Category.color AS categoryColor
-FROM TTransaction
-LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.datestamp <= :fromDatestamp AND TTransaction.datestamp > :toDatestamp AND (:tags IS NULL OR TTransaction.tags LIKE :tags)
-ORDER BY TTransaction.datestamp DESC, TTransaction.id DESC;
+  Category.color AS categoryColor,
+  GROUP_CONCAT(tag.name, '!') AS tags,
+  GROUP_CONCAT(tag.id, '!') AS tagIds
+FROM TTransaction t
+LEFT JOIN Category ON t.category = Category.name
+LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
+LEFT JOIN Tag tag ON tt.tagId = tag.id
+WHERE t.datestamp <= :fromDatestamp AND t.datestamp > :toDatestamp
+GROUP BY t.id
+ORDER BY t.datestamp DESC, t.id DESC;
 
 create:
-INSERT INTO TTransaction (amount, datestamp, type, category, tags, currencyCode) VALUES (?, ?, ?,  ?, ?, ?);
+INSERT INTO TTransaction (amount, datestamp, type, category, currencyCode) VALUES (?, ?, ?,  ?, ?);
 
 update:
-UPDATE TTransaction SET amount = ?, datestamp = ?, type = ?, category = ?, tags = ?, currencyCode = ? WHERE id = ?;
+UPDATE TTransaction SET amount = ?, datestamp = ?, type = ?, category = ?, currencyCode = ? WHERE id = ?;
 
 selectById:
 SELECT
-  TTransaction.id,
-  TTransaction.amount,
-  TTransaction.datestamp,
-  TTransaction.category,
-  TTransaction.tags,
-  TTransaction.type,
-  TTransaction.currencyCode,
+  t.id,
+  t.amount,
+  t.datestamp,
+  t.category,
+  t.type,
+  t.currencyCode,
   Category.id AS categoryId,
   Category.name AS categoryName,
   Category.iconId AS categoryIconId,
   Category.type AS categoryType,
-  Category.color AS categoryColor
-FROM TTransaction
-LEFT JOIN Category ON TTransaction.category = Category.name
-WHERE TTransaction.id = ?;
+  Category.color AS categoryColor,
+  GROUP_CONCAT(tag.name, '!') AS tags,
+  GROUP_CONCAT(tag.id, '!') AS tagIds
+FROM TTransaction t
+LEFT JOIN Category ON t.category = Category.name
+LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
+LEFT JOIN Tag tag ON tt.tagId = tag.id
+WHERE t.id = ?
+GROUP BY t.id;
 
 delete:
 DELETE FROM TTransaction WHERE id = ?;
@@ -100,6 +111,3 @@ SELECT
     min(datestamp) AS minDatestamp,
     max(datestamp) AS maxDatestamp
 FROM TTransaction;
-
-allTags:
-SELECT DISTINCT TTransaction.tags FROM TTransaction;

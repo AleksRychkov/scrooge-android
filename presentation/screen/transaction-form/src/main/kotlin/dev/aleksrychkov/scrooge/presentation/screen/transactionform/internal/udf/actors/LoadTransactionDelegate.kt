@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 internal class LoadTransactionDelegate(
     private val useCase: Lazy<GetTransactionUseCase>,
@@ -13,7 +14,13 @@ internal class LoadTransactionDelegate(
     suspend operator fun invoke(cmd: FormCommand.LoadTransaction): Flow<FormEvent> {
         return when (val result = useCase.value.invoke(cmd.transactionId)) {
             is GetTransactionResult.Success -> {
-                flowOf(FormEvent.Internal.SuccessLoadTransaction(entity = result.transaction))
+                result.transactionFlow.map { entity ->
+                    if (entity == null) {
+                        FormEvent.Internal.FailedLoadTransaction
+                    } else {
+                        FormEvent.Internal.SuccessLoadTransaction(entity = entity)
+                    }
+                }
             }
 
             else -> {

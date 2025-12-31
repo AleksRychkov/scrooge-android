@@ -88,7 +88,7 @@ internal class TransactionsListMapper(
             amount = "${entity.amount.amountToStringFormatted(sign)} " +
                 entity.currency.currencySymbol,
             type = entity.type,
-            tags = entity.tags.joinToString(),
+            tags = entity.tags.joinToString { it.name },
             id = entity.id,
             date = date,
         )

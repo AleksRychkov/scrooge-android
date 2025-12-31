@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TagDao
+import dev.aleksrychkov.scrooge.core.database.TagDao.Companion.TAG_DELIMITER
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TagMapper
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import kotlinx.collections.immutable.ImmutableList
@@ -39,7 +40,7 @@ internal class DefaultTagDao(
     override suspend fun create(
         name: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
-        database.tagQueries.create(name = name)
+        database.tagQueries.create(name = name.replace(TAG_DELIMITER, ""))
     }
 
     override suspend fun delete(

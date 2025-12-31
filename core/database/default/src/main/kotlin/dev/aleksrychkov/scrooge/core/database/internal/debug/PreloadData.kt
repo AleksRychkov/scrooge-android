@@ -72,18 +72,11 @@ internal object PreloadData {
         val type = TransactionType.Income.type
         val category = incomeCategories.random()
         val currencyCode = currencies.random()
-        if (Random.nextFloat() > 0.1) {
-            val query =
-                """
+        val query =
+            """
                 INSERT INTO TTransaction (amount, datestamp, type, category, currencyCode) VALUES ($amount, $datestamp, $type, '$category', '$currencyCode');
-                """.trimIndent()
-            db.execSQL(query)
-        } else {
-            val query =
-                """
-                INSERT INTO TTransaction (amount, datestamp, type, category, currencyCode, tags) VALUES ($amount, $datestamp, $type, '$category', '$currencyCode', 'Tag income');
-                """.trimIndent()
-        }
+            """.trimIndent()
+        db.execSQL(query)
     }
 
     private fun insertExpense(
@@ -94,19 +87,11 @@ internal object PreloadData {
         val type = TransactionType.Expense.type
         val category = expenseCategories.random()
         val currencyCode = currencies.random()
-        if (Random.nextFloat() > 0.1) {
-            val query =
-                """
+        val query =
+            """
                 INSERT INTO TTransaction (amount, datestamp, type, category, currencyCode) VALUES ($amount, $datestamp, $type, '$category', '$currencyCode');
-                """.trimIndent()
-            db.execSQL(query)
-        } else {
-            val query =
-                """
-                INSERT INTO TTransaction (amount, datestamp, type, category, currencyCode, tags) VALUES ($amount, $datestamp, $type, '$category', '$currencyCode', 'Tag expense');
-                """.trimIndent()
-            db.execSQL(query)
-        }
+            """.trimIndent()
+        db.execSQL(query)
     }
 
     private fun getFromToTimestamp(): Pair<Long, Long> {

@@ -1,14 +1,12 @@
 package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf
 
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
-import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToString
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -41,7 +39,7 @@ internal class FormReducer(
                 state {
                     val tmp = tags.toMutableSet()
                     tmp.add(event.tag)
-                    copy(tags = tmp.toPersistentList())
+                    copy(tags = tmp.toImmutableSet())
                 }
             }
 
@@ -49,7 +47,7 @@ internal class FormReducer(
                 state {
                     val tmp = tags.toMutableSet()
                     tmp.remove(event.tag)
-                    copy(tags = tmp.toPersistentList())
+                    copy(tags = tmp.toImmutableSet())
                 }
             }
 
@@ -174,7 +172,7 @@ internal class FormReducer(
                         amount = event.entity.amount.amountToString(),
                         datestamp = event.entity.datestamp,
                         category = event.entity.category,
-                        tags = event.entity.tags.map { TagEntity.from(it) }.toImmutableList(),
+                        tags = event.entity.tags,
                         currency = event.entity.currency,
                     )
                 }

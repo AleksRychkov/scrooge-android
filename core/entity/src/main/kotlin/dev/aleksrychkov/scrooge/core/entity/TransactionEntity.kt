@@ -17,7 +17,7 @@ data class TransactionEntity(
     val datestamp: Datestamp,
     val type: TransactionType,
     val category: CategoryEntity,
-    val tags: ImmutableSet<String>,
+    val tags: ImmutableSet<TagEntity> = persistentSetOf(),
     val currency: CurrencyEntity,
 ) {
     companion object {
@@ -27,12 +27,7 @@ data class TransactionEntity(
             datestamp = Datestamp.now(),
             type = TransactionType.Income,
             category = CategoryEntity.from("Category", TransactionType.Income),
-            tags = persistentSetOf(
-                "tag1",
-                "tag2",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" +
-                    " incididunt ut labore et dolore magna aliqua"
-            ),
+            tags = persistentSetOf(TagEntity(0L, "tag1")),
             currency = CurrencyEntity.RUB,
         )
     }
