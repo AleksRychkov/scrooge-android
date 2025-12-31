@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.
 
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 
 internal sealed interface TagEvent {
     sealed interface External : TagEvent {
@@ -12,8 +13,7 @@ internal sealed interface TagEvent {
     }
 
     sealed interface Internal : TagEvent {
-        data class Tags(val list: ImmutableList<TagEntity>) : Internal
-        data object FailedToObserveTags : Internal
+        data class Tags(val set: ImmutableSet<TagEntity>) : Internal
         data class Filtered(val list: ImmutableList<TagEntity>) : Internal
         data object FailedToCreateNewTag : Internal
         data class FailedToCreateNewTagDuplicate(val tag: TagEntity) : Internal

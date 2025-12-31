@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -21,6 +22,6 @@ internal data class FiltersState(
     val allMonths: ImmutableList<String> = persistentListOf(),
     val selectedMonthNumber: Int = -1,
 
-    val allTags: ImmutableSet<String> = persistentSetOf(),
-    val selectedTags: ImmutableSet<String> = persistentSetOf(),
+    val allTags: ImmutableSet<TagEntity> = persistentSetOf(),
+    val selectedTags: ImmutableSet<TagEntity> = persistentSetOf(),
 )

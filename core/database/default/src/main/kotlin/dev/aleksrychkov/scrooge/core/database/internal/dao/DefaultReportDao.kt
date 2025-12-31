@@ -28,6 +28,7 @@ internal class DefaultReportDao(
                 .totalAmount(
                     fromDatestamp = filter.period.from.value,
                     toDatestamp = filter.period.to.value,
+                    tagIds = filter.tags.map { it.id }.joinToString("!"),
                 )
                 .asFlow()
                 .mapToList(readDispatcher)
@@ -43,6 +44,7 @@ internal class DefaultReportDao(
             .totalAmountMothly(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
+                tagIds = filter.tags.map { it.id }.joinToString("!"),
             )
             .executeAsList()
             .let(ReportMapper::totalAmountMonthlyToEntity)
@@ -55,6 +57,7 @@ internal class DefaultReportDao(
             .byCategory(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
+                tagIds = filter.tags.map { it.id }.joinToString("!"),
             )
             .executeAsList()
             .let(ReportMapper::byCategoryToEntity)

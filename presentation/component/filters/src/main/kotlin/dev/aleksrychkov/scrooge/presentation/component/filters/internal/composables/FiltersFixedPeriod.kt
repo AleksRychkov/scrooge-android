@@ -42,6 +42,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -60,11 +61,11 @@ internal fun FiltersFixedPeriod(
     selectedYear: Int,
     allMonths: ImmutableList<String>,
     selectedMonth: Int,
-    allTags: ImmutableSet<String>,
-    selectedTags: ImmutableSet<String>,
+    allTags: ImmutableSet<TagEntity>,
+    selectedTags: ImmutableSet<TagEntity>,
     onYearClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
-    toggleTag: (String) -> Unit,
+    toggleTag: (TagEntity) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -256,9 +257,9 @@ private fun MonthRow(
 @Composable
 private fun Tags(
     modifier: Modifier,
-    tags: ImmutableSet<String>,
-    selectedTags: ImmutableSet<String>,
-    toggleTag: (String) -> Unit,
+    tags: ImmutableSet<TagEntity>,
+    selectedTags: ImmutableSet<TagEntity>,
+    toggleTag: (TagEntity) -> Unit,
 ) {
     FlowRow(
         modifier = modifier
@@ -291,7 +292,7 @@ private fun Tags(
                 label = {
                     Text(
                         modifier = Modifier,
-                        text = tag,
+                        text = tag.name,
                     )
                 },
                 shape = RoundedCornerShape(Normal2X),
@@ -324,8 +325,8 @@ private fun ContentPreview() {
                 selectedYear = 2025,
                 allMonths = Month.entries.map { it.name }.toImmutableList(),
                 selectedMonth = 12,
-                allTags = persistentSetOf("Tag 1", "Tag 2"),
-                selectedTags = persistentSetOf("Tag 1"),
+                allTags = persistentSetOf(TagEntity.from("Tag 1"), TagEntity.from("Tag 2")),
+                selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
                 onYearClicked = {},
                 onMonthClicked = {},
                 toggleTag = { _ -> },

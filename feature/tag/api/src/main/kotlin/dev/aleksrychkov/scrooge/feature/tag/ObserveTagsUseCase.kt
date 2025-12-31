@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.feature.tag
 
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
-import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.flow.Flow
 
 fun interface ObserveTagsUseCase {
@@ -9,6 +9,6 @@ fun interface ObserveTagsUseCase {
 }
 
 sealed interface ObserveTagsUseCaseResult {
-    data class Success(val tags: Flow<ImmutableList<TagEntity>>) : ObserveTagsUseCaseResult
+    data class Success(val tags: Flow<ImmutableSet<TagEntity>>) : ObserveTagsUseCaseResult
     data object Failure : ObserveTagsUseCaseResult
 }

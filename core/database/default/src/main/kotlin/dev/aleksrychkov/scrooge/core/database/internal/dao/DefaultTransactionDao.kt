@@ -37,6 +37,7 @@ internal class DefaultTransactionDao(
             .selectFromTo(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
+                tagIds = filter.tags.map { it.id }.joinToString("!"),
                 mapper = TransactionMapper::transactionEntityMapper,
             )
             .asFlow()
@@ -49,6 +50,7 @@ internal class DefaultTransactionDao(
             database.transactionQueries.selectFromToKeydBoundaries(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
+                tagIds = filter.tags.map { it.id }.joinToString("!"),
             )
         }
         return QueryPagingSource(
@@ -60,6 +62,7 @@ internal class DefaultTransactionDao(
                     .selectFromToKeyd(
                         fromDatestamp = from,
                         toDatestamp = to ?: (filter.period.from.value - 1),
+                        tagIds = filter.tags.map { it.id }.joinToString("!"),
                         mapper = TransactionMapper::transactionEntityMapper,
                     )
             }
@@ -85,15 +88,19 @@ internal class DefaultTransactionDao(
         currencyCode: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
         database.transactionQueries.transaction {
-            val id = database.transactionQueries.create(
+            database.transactionQueries.create(
                 amount = amount,
                 datestamp = datestamp.value,
                 type = type.type.toLong(),
                 category = category,
                 currencyCode = currencyCode,
             )
+            val transactionId = database.transactionQueries.getLastInsertId().executeAsOne()
             tagIds?.forEach { tagId ->
-                database.tagQueries.createTransactioTag(transactionId = id, tagId = tagId)
+                database.tagQueries.createTransactioTag(
+                    transactionId = transactionId,
+                    tagId = tagId,
+                )
             }
         }
     }

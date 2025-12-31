@@ -15,9 +15,7 @@ internal class DefaultObserveTagsUseCase(
     override suspend fun invoke(): ObserveTagsUseCaseResult =
         withContext(ioDispatcher) {
             runSuspendCatching {
-                tagDao.value.get().let {
-                    ObserveTagsUseCaseResult.Success(it)
-                }
+                ObserveTagsUseCaseResult.Success(tagDao.value.get())
             }.getOrDefault(ObserveTagsUseCaseResult.Failure)
         }
 }

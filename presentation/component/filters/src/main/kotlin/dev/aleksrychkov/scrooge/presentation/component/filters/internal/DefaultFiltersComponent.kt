@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.filters.internal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
@@ -38,7 +39,7 @@ internal class DefaultFiltersComponent(
         store.handle(FiltersEvent.External.MonthClicked(month = month))
     }
 
-    override fun toggleTag(tag: String) {
+    override fun toggleTag(tag: TagEntity) {
         store.handle(FiltersEvent.External.ToggleTag(tag = tag))
     }
 }

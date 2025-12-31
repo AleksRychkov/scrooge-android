@@ -21,6 +21,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.FiltersComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables.FiltersFixedPeriod
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
@@ -69,7 +70,7 @@ private fun FiltersContent(
     onYearClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
     onSubmitClicked: () -> Unit,
-    toggleTag: (String) -> Unit,
+    toggleTag: (TagEntity) -> Unit,
 ) {
     Column(modifier = modifier) {
 

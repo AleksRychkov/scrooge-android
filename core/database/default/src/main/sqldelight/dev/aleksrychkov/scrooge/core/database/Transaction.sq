@@ -41,16 +41,46 @@ FROM TTransaction t
 LEFT JOIN Category ON t.category = Category.name
 LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
 LEFT JOIN Tag tag ON tt.tagId = tag.id
-WHERE t.datestamp >= :fromDatestamp AND t.datestamp <= :toDatestamp
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND (
+      :tagIds = ''
+        OR EXISTS (
+          SELECT 1
+          FROM TransactionTag tt2
+          WHERE tt2.transactionId = t.id
+            AND instr(
+                  '!' || :tagIds || '!',
+                  '!' || CAST(tt2.tagId AS TEXT) || '!'
+                ) > 0
+        )
+    )
 GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
 
 selectFromToKeydBoundaries:
 SELECT
-  DISTINCT TTransaction.datestamp
-FROM TTransaction
-WHERE TTransaction.datestamp >= :fromDatestamp AND TTransaction.datestamp <= :toDatestamp
-ORDER BY TTransaction.datestamp DESC;
+  DISTINCT t.datestamp
+FROM TTransaction t
+LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
+LEFT JOIN Tag tag ON tt.tagId = tag.id
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND (
+      :tagIds = ''
+        OR EXISTS (
+          SELECT 1
+          FROM TransactionTag tt2
+          WHERE tt2.transactionId = t.id
+            AND instr(
+                  '!' || :tagIds || '!',
+                  '!' || CAST(tt2.tagId AS TEXT) || '!'
+                ) > 0
+        )
+    )
+ORDER BY t.datestamp DESC;
 
 selectFromToKeyd:
 SELECT
@@ -71,9 +101,26 @@ FROM TTransaction t
 LEFT JOIN Category ON t.category = Category.name
 LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
 LEFT JOIN Tag tag ON tt.tagId = tag.id
-WHERE t.datestamp <= :fromDatestamp AND t.datestamp > :toDatestamp
+WHERE
+  t.datestamp <= :fromDatestamp
+  AND t.datestamp > :toDatestamp
+  AND (
+    :tagIds = ''
+      OR EXISTS (
+        SELECT 1
+        FROM TransactionTag tt2
+        WHERE tt2.transactionId = t.id
+          AND instr(
+                '!' || :tagIds || '!',
+                '!' || CAST(tt2.tagId AS TEXT) || '!'
+              ) > 0
+      )
+  )
 GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
+
+getLastInsertId:
+SELECT last_insert_rowid();
 
 create:
 INSERT INTO TTransaction (amount, datestamp, type, category, currencyCode) VALUES (?, ?, ?,  ?, ?);

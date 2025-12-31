@@ -7,8 +7,8 @@ import dev.aleksrychkov.scrooge.core.database.TagDao
 import dev.aleksrychkov.scrooge.core.database.TagDao.Companion.TAG_DELIMITER
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TagMapper
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -23,12 +23,12 @@ internal class DefaultTagDao(
 
     private val database: Scrooge by lazy { db.value }
 
-    override suspend fun get(): Flow<ImmutableList<TagEntity>> = withContext(readDispatcher) {
+    override suspend fun get(): Flow<ImmutableSet<TagEntity>> = withContext(readDispatcher) {
         database.tagQueries
             .selectAll(mapper = TagMapper::toEntity)
             .asFlow()
             .mapToList(readDispatcher)
-            .map { list -> list.toImmutableList() }
+            .map { list -> list.toImmutableSet() }
     }
 
     override suspend fun getByName(name: String): TagEntity? = withContext(readDispatcher) {

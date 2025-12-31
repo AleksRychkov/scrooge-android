@@ -13,8 +13,9 @@ CREATE TABLE IF NOT EXISTS TransactionTag (
 );
 
 -- Indexes
-CREATE INDEX idx_tag_name ON Tag(name);
-CREATE INDEX idx_tag_id ON Tag(id);
+CREATE INDEX IF NOT EXISTS idx_tag_name ON Tag(name);
+CREATE INDEX IF NOT EXISTS idx_tag_id ON Tag(id);
+CREATE INDEX IF NOT EXISTS idx_transactiontag_tagId_transactionId ON TransactionTag(tagId, transactionId);
 
 -- Queries
 selectAll:
