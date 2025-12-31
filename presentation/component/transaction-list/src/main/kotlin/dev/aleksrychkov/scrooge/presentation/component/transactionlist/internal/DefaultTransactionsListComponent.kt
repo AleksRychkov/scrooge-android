@@ -8,6 +8,7 @@ import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListActor
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListEvent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListReducer
@@ -26,7 +27,7 @@ internal class DefaultTransactionsListComponent(
         instanceKeeper.createStore(
             initialState = TransactionsListState(),
             actor = TransactionsListActor(),
-            reducer = TransactionsListReducer(),
+            reducer = TransactionsListReducer(retainedCoroutineScope()),
             startEvent = TransactionsListEvent.External.Initial,
         )
     }

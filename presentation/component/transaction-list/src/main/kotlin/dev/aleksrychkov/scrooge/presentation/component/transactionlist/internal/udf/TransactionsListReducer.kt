@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf
 
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
@@ -8,10 +9,13 @@ import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class TransactionsListReducer :
+internal class TransactionsListReducer(
+    private val scope: CoroutineScope,
+) :
     Reducer<TransactionsListState, TransactionsListEvent, TransactionsListCommand, Unit> {
 
     private val mapper: TransactionsListMapper by lazy {
@@ -85,7 +89,7 @@ internal class TransactionsListReducer :
                 state {
                     copy(
                         isLoading = false,
-                        pagedTransactions = pagedTransactions,
+                        pagedTransactions = pagedTransactions.cachedIn(scope),
                         scrollIndex = 0,
                         scrollOffset = 0,
                     )
