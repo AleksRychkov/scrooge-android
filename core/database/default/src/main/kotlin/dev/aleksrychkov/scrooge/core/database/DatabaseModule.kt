@@ -42,6 +42,7 @@ fun buildDatabaseModule(context: Context): NaiveModule {
             DefaultReportDao(
                 db = getLazy(),
                 readDispatcher = readDispatcher,
+                writeDispatcher = writeDispatcher,
             )
         }
     }

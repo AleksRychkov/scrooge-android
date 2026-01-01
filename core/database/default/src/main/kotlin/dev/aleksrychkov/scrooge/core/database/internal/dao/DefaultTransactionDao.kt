@@ -33,11 +33,11 @@ internal class DefaultTransactionDao(
     override suspend fun get(
         filter: FilterEntity,
     ): Flow<ImmutableList<TransactionEntity>> = withContext(readDispatcher) {
+        prepareTagFilter(filter)
         database.transactionQueries
             .selectFromTo(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
-                tagIds = filter.tags.map { it.id }.joinToString("!"),
                 mapper = TransactionMapper::transactionEntityMapper,
             )
             .asFlow()
@@ -45,12 +45,21 @@ internal class DefaultTransactionDao(
             .map { list -> list.toImmutableList() }
     }
 
+    override suspend fun prepareTagFilter(filter: FilterEntity) =
+        withContext(writeDispatcher + NonCancellable) {
+            database.tagQueries.transaction {
+                database.tagQueries.clearFilterTags()
+                filter.tags.forEach {
+                    database.tagQueries.insertFilterTag(it.id)
+                }
+            }
+        }
+
     override fun getPaged(filter: FilterEntity): PagingSource<Long, TransactionEntity> {
         val boundariesQuery = { _: Long?, _: Long ->
             database.transactionQueries.selectFromToKeydBoundaries(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
-                tagIds = filter.tags.map { it.id }.joinToString("!"),
             )
         }
         return QueryPagingSource(
@@ -62,7 +71,6 @@ internal class DefaultTransactionDao(
                     .selectFromToKeyd(
                         fromDatestamp = from,
                         toDatestamp = to ?: (filter.period.from.value - 1),
-                        tagIds = filter.tags.map { it.id }.joinToString("!"),
                         mapper = TransactionMapper::transactionEntityMapper,
                     )
             }

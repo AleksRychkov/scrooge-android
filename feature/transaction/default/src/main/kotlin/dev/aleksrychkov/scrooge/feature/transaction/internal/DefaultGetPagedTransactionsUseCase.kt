@@ -21,6 +21,7 @@ internal class DefaultGetPagedTransactionsUseCase(
     }
 
     override suspend fun invoke(filter: FilterEntity): Flow<PagingData<TransactionEntity>> {
+        transactionDao.value.prepareTagFilter(filter)
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,

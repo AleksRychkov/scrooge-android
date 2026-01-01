@@ -13,6 +13,8 @@ interface TransactionDao {
 
     suspend fun get(filter: FilterEntity): Flow<ImmutableList<TransactionEntity>>
 
+    suspend fun prepareTagFilter(filter: FilterEntity)
+
     fun getPaged(filter: FilterEntity): PagingSource<Long, TransactionEntity>
 
     suspend fun get(id: Long): Flow<TransactionEntity?>

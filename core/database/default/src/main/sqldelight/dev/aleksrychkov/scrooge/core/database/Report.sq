@@ -9,15 +9,12 @@ WHERE
   t.datestamp >= :fromDatestamp
   AND t.datestamp <= :toDatestamp
   AND (
-        :tagIds = ''
+          NOT EXISTS (SELECT 1 FROM FilterTag)
           OR EXISTS (
             SELECT 1
             FROM TransactionTag tt2
+            JOIN FilterTag ft ON ft.tagId = tt2.tagId
             WHERE tt2.transactionId = t.id
-              AND instr(
-                    '!' || :tagIds || '!',
-                    '!' || CAST(tt2.tagId AS TEXT) || '!'
-                  ) > 0
           )
       )
 GROUP BY t.type, t.currencyCode;
@@ -35,15 +32,12 @@ WITH monthly AS (
       t.datestamp >= :fromDatestamp
       AND t.datestamp <= :toDatestamp
       AND (
-            :tagIds = ''
+              NOT EXISTS (SELECT 1 FROM FilterTag)
               OR EXISTS (
                 SELECT 1
                 FROM TransactionTag tt2
+                JOIN FilterTag ft ON ft.tagId = tt2.tagId
                 WHERE tt2.transactionId = t.id
-                  AND instr(
-                        '!' || :tagIds || '!',
-                        '!' || CAST(tt2.tagId AS TEXT) || '!'
-                      ) > 0
               )
           )
     GROUP BY year, month, t.type, t.currencyCode
@@ -66,15 +60,12 @@ WHERE
   t.datestamp >= :fromDatestamp
   AND t.datestamp <= :toDatestamp
   AND (
-        :tagIds = ''
+          NOT EXISTS (SELECT 1 FROM FilterTag)
           OR EXISTS (
             SELECT 1
             FROM TransactionTag tt2
+            JOIN FilterTag ft ON ft.tagId = tt2.tagId
             WHERE tt2.transactionId = t.id
-              AND instr(
-                    '!' || :tagIds || '!',
-                    '!' || CAST(tt2.tagId AS TEXT) || '!'
-                  ) > 0
           )
       )
 GROUP BY t.type, t.currencyCode, t.categoryId;

@@ -11,6 +11,9 @@ CREATE TABLE IF NOT EXISTS TransactionTag (
   FOREIGN KEY (transactionId) REFERENCES TTransaction(id) ON DELETE CASCADE,
   FOREIGN KEY (tagId) REFERENCES Tag(id) ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS FilterTag (
+  tagId INTEGER NOT NULL PRIMARY KEY
+);
 
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_tag_name ON Tag(name);
@@ -34,3 +37,9 @@ INSERT INTO TransactionTag (transactionId, tagId) VALUES (:transactionId, :tagId
 
 deleteTransactioTag:
 DELETE FROM TransactionTag WHERE transactionId = :transactionId;
+
+clearFilterTags:
+DELETE FROM FilterTag;
+
+insertFilterTag:
+INSERT OR IGNORE INTO FilterTag(tagId) VALUES (?);
