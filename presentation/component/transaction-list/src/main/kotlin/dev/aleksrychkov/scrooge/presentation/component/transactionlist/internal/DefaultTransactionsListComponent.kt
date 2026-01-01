@@ -46,15 +46,6 @@ internal class DefaultTransactionsListComponent(
         ).let(router::open)
     }
 
-    override fun onListStateChanged(position: Pair<Int, Int>) {
-        store.handle(
-            TransactionsListEvent.External.SetListState(
-                index = position.first,
-                offset = position.second,
-            )
-        )
-    }
-
     override fun setFilters(filter: FilterEntity) {
         store.handle(TransactionsListEvent.External.SetFilter(filter = filter))
     }

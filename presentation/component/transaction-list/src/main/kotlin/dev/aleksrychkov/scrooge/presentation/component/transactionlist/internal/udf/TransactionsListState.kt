@@ -14,10 +14,7 @@ import kotlinx.coroutines.flow.emptyFlow
 internal data class TransactionsListState(
     val isLoading: Boolean = false,
     val transactions: ImmutableList<TransactionsGroupDto> = persistentListOf(),
-//    val pagedTransactions: Flow<PagingData<TransactionsItemDto>> = emptyFlow(),
     val pagedTransactions: Flow<PagingData<TransactionsItem>> = emptyFlow(),
-    val scrollIndex: Int = 0,
-    val scrollOffset: Int = 0,
 )
 
 @Immutable

@@ -49,10 +49,8 @@ ORDER BY t.datestamp DESC, t.id DESC;
 
 selectFromToKeydBoundaries:
 SELECT
-  DISTINCT t.datestamp
+  DISTINCT COALESCE(MAX(t.datestamp), :fromDatestamp) AS datestamp
 FROM TTransaction t
-LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
-LEFT JOIN Tag tag ON tt.tagId = tag.id
 WHERE
   t.datestamp >= :fromDatestamp
   AND t.datestamp <= :toDatestamp

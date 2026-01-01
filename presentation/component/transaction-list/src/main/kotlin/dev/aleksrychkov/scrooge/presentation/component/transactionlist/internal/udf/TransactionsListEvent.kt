@@ -9,7 +9,6 @@ internal sealed interface TransactionsListEvent {
     sealed interface External : TransactionsListEvent {
         data object Initial : External
         data class SetFilter(val filter: FilterEntity) : External
-        data class SetListState(val index: Int, val offset: Int) : External
     }
 
     sealed interface Internal : TransactionsListEvent {

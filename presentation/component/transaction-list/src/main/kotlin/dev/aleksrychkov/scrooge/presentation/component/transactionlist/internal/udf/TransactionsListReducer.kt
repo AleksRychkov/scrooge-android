@@ -44,12 +44,6 @@ internal class TransactionsListReducer(
                 }
             }
 
-            is TransactionsListEvent.External.SetListState -> state.reduceWith(event) {
-                state {
-                    copy(scrollIndex = event.index, scrollOffset = event.offset)
-                }
-            }
-
             is TransactionsListEvent.Internal.PagedTransactions -> state.reduceWith(event) {
                 val today = Datestamp.now().date
                 val pagedTransactions: Flow<PagingData<TransactionsItem>> = event.data
@@ -90,8 +84,6 @@ internal class TransactionsListReducer(
                     copy(
                         isLoading = false,
                         pagedTransactions = pagedTransactions.cachedIn(scope),
-                        scrollIndex = 0,
-                        scrollOffset = 0,
                     )
                 }
             }
