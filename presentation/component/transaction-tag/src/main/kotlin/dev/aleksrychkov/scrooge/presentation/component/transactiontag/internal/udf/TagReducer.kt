@@ -27,6 +27,9 @@ internal class TagReducer(
                             )
                         )
                     }
+                    state {
+                        copy(searchQuery = state.searchQuery.trim())
+                    }
                 }
             }
 

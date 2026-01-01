@@ -19,7 +19,7 @@ internal class DefaultTagComponent(
     private val store: Store<TagState, TagEvent, TagEffect> by lazy {
         instanceKeeper.createStore(
             initialState = TagState(),
-            actor = TagActor.Companion(),
+            actor = TagActor(),
             reducer = TagReducer(),
             startEvent = TagEvent.External.Init,
         )

@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors
 
+import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.feature.tag.CreateTagResult
 import dev.aleksrychkov.scrooge.feature.tag.CreateTagUseCase
@@ -12,7 +13,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 internal class CreateTagDelegate(
-    private val createTagUseCase: Lazy<CreateTagUseCase>,
+    private val createTagUseCase: Lazy<CreateTagUseCase> = getLazy(),
 ) {
     private val createMutex: Mutex by lazy { Mutex() }
 
@@ -23,8 +24,7 @@ internal class CreateTagDelegate(
 
         return createMutex.withLock {
             val entity = TagEntity.from(name = cmd.name)
-            val result = createTagUseCase.value.invoke(entity)
-            when (result) {
+            when (val result = createTagUseCase.value.invoke(entity)) {
                 is CreateTagResult.DuplicateViolation -> {
                     flowOf(
                         TagEvent.Internal.FailedToCreateNewTagDuplicate(

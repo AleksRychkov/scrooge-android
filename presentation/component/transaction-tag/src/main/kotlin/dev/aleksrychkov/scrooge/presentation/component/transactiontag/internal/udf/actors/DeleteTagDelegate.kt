@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors
 
+import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.tag.DeleteTagResult
 import dev.aleksrychkov.scrooge.feature.tag.DeleteTagUseCase
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagCommand
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 internal class DeleteTagDelegate(
-    private val deleteTagUseCase: Lazy<DeleteTagUseCase>,
+    private val deleteTagUseCase: Lazy<DeleteTagUseCase> = getLazy(),
 ) {
     suspend operator fun invoke(cmd: TagCommand.Delete): Flow<TagEvent> {
         val result = deleteTagUseCase.value.invoke(cmd.tag)
