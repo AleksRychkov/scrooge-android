@@ -6,11 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,13 +16,17 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
+import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.ReportAnnualTotalComponentInternal
@@ -95,6 +95,7 @@ private fun ReportAppBar(
         }
     }
     val animatedElevation by headerElevation.animateElevation()
+    val state by component.state.collectAsStateWithLifecycle()
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -105,12 +106,14 @@ private fun ReportAppBar(
                 Text(text = stringResource(Resources.string.reports))
             },
             actions = {
-                IconButton(onClick = component::openFiltersModal) {
-                    Icon(
-                        imageVector = Icons.Default.Tune,
-                        contentDescription = stringResource(Resources.string.filters),
-                    )
-                }
+                val months = stringArrayResource(Resources.array.month_names)
+                val shortMonths = stringArrayResource(Resources.array.short_month_names)
+                val name = state.filter.readableName(months = months, shortMonths = shortMonths)
+                DsFilterAction(
+                    name = name,
+                    showTagIcon = state.filter.tags.isNotEmpty(),
+                    openFiltersModal = component::openFiltersModal,
+                )
             }
         )
     }

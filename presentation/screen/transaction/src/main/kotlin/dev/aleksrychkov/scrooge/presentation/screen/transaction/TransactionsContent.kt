@@ -16,12 +16,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,15 +33,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
+import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
@@ -108,6 +110,7 @@ private fun TransactionsAppBar(
         }
     }
     val animatedElevation by headerElevation.animateElevation()
+    val state by component.state.collectAsStateWithLifecycle()
 
     Surface(
         Modifier.fillMaxWidth(),
@@ -118,12 +121,14 @@ private fun TransactionsAppBar(
                 Text(text = stringResource(Resources.string.transactions))
             },
             actions = {
-                IconButton(onClick = component::openFiltersModal) {
-                    Icon(
-                        imageVector = Icons.Default.Tune,
-                        contentDescription = stringResource(Resources.string.filters),
-                    )
-                }
+                val months = stringArrayResource(Resources.array.month_names)
+                val shortMonths = stringArrayResource(Resources.array.short_month_names)
+                val name = state.filter.readableName(months = months, shortMonths = shortMonths)
+                DsFilterAction(
+                    name = name,
+                    showTagIcon = state.filter.tags.isNotEmpty(),
+                    openFiltersModal = component::openFiltersModal,
+                )
             }
         )
     }
