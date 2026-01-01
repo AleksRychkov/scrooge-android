@@ -48,13 +48,17 @@ GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
 
 selectFromToKeydBoundaries:
-SELECT
-  DISTINCT COALESCE(MAX(t.datestamp), :fromDatestamp) AS datestamp
-FROM TTransaction t
-WHERE
-  t.datestamp >= :fromDatestamp
-  AND t.datestamp <= :toDatestamp
-ORDER BY t.datestamp DESC;
+SELECT DISTINCT datestamp
+FROM (
+  SELECT t.datestamp AS datestamp FROM TTransaction t
+  UNION ALL
+  SELECT :fromDatestamp AS datestamp
+  UNION ALL
+  SELECT :toDatestamp AS datestamp
+)
+WHERE datestamp >= :fromDatestamp
+  AND datestamp <= :toDatestamp
+ORDER BY datestamp DESC;
 
 selectFromToKeyd:
 SELECT
