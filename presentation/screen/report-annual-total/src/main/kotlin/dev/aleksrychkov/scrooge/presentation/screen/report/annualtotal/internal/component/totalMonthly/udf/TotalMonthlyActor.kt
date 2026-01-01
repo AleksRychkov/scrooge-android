@@ -1,22 +1,13 @@
 package dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf
 
-import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.udf.Actor
 import dev.aleksrychkov.scrooge.core.udf.Switcher
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf.actors.LoadDelegate
 import kotlinx.coroutines.flow.Flow
 
 internal class TotalMonthlyActor(
-    private val loadDelegate: LoadDelegate,
+    private val loadDelegate: LoadDelegate = LoadDelegate(),
 ) : Actor<TotalMonthlyCommand, TotalMonthlyEvent> {
-
-    companion object {
-        operator fun invoke(): TotalMonthlyActor {
-            return TotalMonthlyActor(
-                loadDelegate = LoadDelegate(useCase = getLazy()),
-            )
-        }
-    }
 
     private val loadSwitcher: Switcher by lazy { Switcher() }
 

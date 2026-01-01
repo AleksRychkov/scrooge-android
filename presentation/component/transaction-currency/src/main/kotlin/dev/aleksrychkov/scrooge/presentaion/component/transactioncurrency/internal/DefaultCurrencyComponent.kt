@@ -18,7 +18,7 @@ internal class DefaultCurrencyComponent(
     private val store: Store<CurrencyState, CurrencyEvent, CurrencyEffect> by lazy {
         instanceKeeper.createStore(
             initialState = CurrencyState(),
-            actor = CurrencyActor.Companion(),
+            actor = CurrencyActor(),
             reducer = CurrencyReducer(),
             startEvent = CurrencyEvent.External.Init,
         )

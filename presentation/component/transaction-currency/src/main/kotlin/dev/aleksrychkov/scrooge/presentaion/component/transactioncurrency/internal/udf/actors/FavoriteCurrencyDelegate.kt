@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.actors
 
+import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.currency.AddToFavoriteCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.RemoveFromFavoriteCurrencyUseCase
 import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyCommand
@@ -8,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 internal class FavoriteCurrencyDelegate(
-    private val addUseCase: Lazy<AddToFavoriteCurrencyUseCase>,
-    private val removeUseCase: Lazy<RemoveFromFavoriteCurrencyUseCase>,
+    private val addUseCase: Lazy<AddToFavoriteCurrencyUseCase> = getLazy(),
+    private val removeUseCase: Lazy<RemoveFromFavoriteCurrencyUseCase> = getLazy(),
 ) {
 
     suspend fun addToFavorite(cmd: CurrencyCommand.AddToFavorite): Flow<CurrencyEvent> {

@@ -27,7 +27,7 @@ private class DefaultTotalMonthlyComponent(
     private val store: Store<TotalMonthlyState, TotalMonthlyEvent, Unit> by lazy {
         instanceKeeper.createStore(
             initialState = TotalMonthlyState(),
-            actor = TotalMonthlyActor.Companion(),
+            actor = TotalMonthlyActor(),
             reducer = TotalMonthlyReducer(),
         )
     }

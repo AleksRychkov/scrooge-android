@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.actors
 
+import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.reports.ReportByCategoryResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportByCategoryUseCase
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryCommand
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 internal class LoadDelegate(
-    private val useCase: Lazy<ReportByCategoryUseCase>
+    private val useCase: Lazy<ReportByCategoryUseCase> = getLazy(),
 ) {
     suspend operator fun invoke(cmd: ByCategoryCommand.Load): Flow<ByCategoryEvent> {
         return when (val result = useCase.value.invoke(filter = cmd.filter)) {

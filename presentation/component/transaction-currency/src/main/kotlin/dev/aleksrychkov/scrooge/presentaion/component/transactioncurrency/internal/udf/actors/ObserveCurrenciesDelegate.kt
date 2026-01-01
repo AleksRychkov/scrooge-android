@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.actors
 
+import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.feature.currency.GetCurrenciesUseCase
 import dev.aleksrychkov.scrooge.feature.currency.ObserveFavoriteCurrencyResult
@@ -14,8 +15,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 internal class ObserveCurrenciesDelegate(
-    private val getAllUseCase: Lazy<GetCurrenciesUseCase>,
-    private val observeFavoriteUseCase: Lazy<ObserveFavoriteCurrencyUseCase>,
+    private val getAllUseCase: Lazy<GetCurrenciesUseCase> = getLazy(),
+    private val observeFavoriteUseCase: Lazy<ObserveFavoriteCurrencyUseCase> = getLazy(),
 ) {
 
     @Volatile

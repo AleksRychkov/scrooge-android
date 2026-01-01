@@ -35,7 +35,7 @@ private class DefaultByCategoryComponent(
     private val store: Store<ByCategoryState, ByCategoryEvent, Unit> by lazy {
         instanceKeeper.createStore(
             initialState = ByCategoryState(filter = filter),
-            actor = ByCategoryActor.Companion(),
+            actor = ByCategoryActor(),
             reducer = ByCategoryReducer(),
             startEvent = ByCategoryEvent.External.Load(filter),
         )
