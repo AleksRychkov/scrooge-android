@@ -53,6 +53,7 @@ internal class DefaultReportCategoryTotalComponent(
                 componentContext = childComponentContext,
                 filter = filter,
                 settings = EnumSet.allOf(FiltersSettings::class.java),
+                resetFilter = { this.filter }
             )
         }
 

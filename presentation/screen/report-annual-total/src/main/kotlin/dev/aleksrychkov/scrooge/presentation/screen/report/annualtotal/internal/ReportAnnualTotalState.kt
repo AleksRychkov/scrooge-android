@@ -6,4 +6,5 @@ import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 @Immutable
 internal data class ReportAnnualTotalState(
     val filter: FilterEntity = FilterEntity(),
+    val initialFilters: FilterEntity = FilterEntity(),
 )

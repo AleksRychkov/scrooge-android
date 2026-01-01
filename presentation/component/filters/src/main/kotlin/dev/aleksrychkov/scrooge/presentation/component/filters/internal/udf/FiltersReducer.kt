@@ -16,17 +16,17 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 internal class FiltersReducer(
     private val resourceManager: Lazy<ResourceManager> = getLazy()
-) : Reducer<FiltersState, FiltersEvent, FiltersCommand, Unit> {
+) : Reducer<FiltersState, FiltersEvent, FiltersCommand, FiltersEffect> {
 
     private val readableNameHelper: FiltersReadableNameHelper by lazy {
         FiltersReadableNameHelper(resourceManager = resourceManager.value)
     }
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun reduce(
         event: FiltersEvent,
         state: FiltersState
-    ): ReducerResult<FiltersState, FiltersCommand, Unit> {
+    ): ReducerResult<FiltersState, FiltersCommand, FiltersEffect> {
         return when (event) {
             is FiltersEvent.External.Init -> state.reduceWith(event) {
                 command {
@@ -50,6 +50,7 @@ internal class FiltersReducer(
                     copy(
                         settings = event.settings,
                         filter = event.filter,
+                        initialFilter = event.filter.copy(),
                         filterReadable = readableNameHelper.getName(filter = event.filter),
                         selectedYear = selectedYear,
                         selectedMonthNumber = selectedMonth,
@@ -114,6 +115,36 @@ internal class FiltersReducer(
                     copy(
                         selectedTags = res,
                         filter = filter.copy(tags = res)
+                    )
+                }
+            }
+
+            is FiltersEvent.External.Reset -> state.reduceWith(event) {
+                effects {
+                    listOf(FiltersEffect.SubmitFilters(event.filter))
+                }
+                state {
+                    val filter = event.filter
+                    val period = filter.period
+                    val startDate = period.from.date
+                    val endDate = period.to.date
+                    val selectedYear = if (startDate.year == endDate.year) {
+                        startDate.year
+                    } else {
+                        -1
+                    }
+                    val selectedMonth =
+                        if (startDate.year == endDate.year && startDate.month == endDate.month) {
+                            startDate.month.number
+                        } else {
+                            -1
+                        }
+                    copy(
+                        filter = filter,
+                        filterReadable = readableNameHelper.getName(filter = filter),
+                        selectedYear = selectedYear,
+                        selectedMonthNumber = selectedMonth,
+                        selectedTags = filter.tags,
                     )
                 }
             }

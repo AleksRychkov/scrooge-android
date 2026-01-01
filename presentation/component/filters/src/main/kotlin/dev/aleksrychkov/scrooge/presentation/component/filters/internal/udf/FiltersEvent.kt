@@ -12,6 +12,7 @@ internal sealed interface FiltersEvent {
         data class YearClicked(val year: Int) : External
         data class MonthClicked(val month: Int) : External
         data class ToggleTag(val tag: TagEntity) : External
+        data class Reset(val filter: FilterEntity) : External
     }
 
     sealed interface Internal : FiltersEvent {

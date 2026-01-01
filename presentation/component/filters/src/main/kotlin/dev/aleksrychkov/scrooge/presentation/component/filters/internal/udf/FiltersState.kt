@@ -14,6 +14,7 @@ import java.util.EnumSet
 internal data class FiltersState(
     val settings: EnumSet<FiltersSettings> = EnumSet.allOf(FiltersSettings::class.java),
 
+    val initialFilter: FilterEntity = FilterEntity(),
     val filter: FilterEntity = FilterEntity(),
     val filterReadable: String = "",
 

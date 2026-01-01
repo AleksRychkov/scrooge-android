@@ -10,11 +10,13 @@ interface FiltersComponent {
         operator fun invoke(
             componentContext: ComponentContext,
             filter: FilterEntity,
+            resetFilter: () -> FilterEntity,
             settings: EnumSet<FiltersSettings> = EnumSet.allOf(FiltersSettings::class.java),
         ): FiltersComponent = DefaultFiltersComponent(
             componentContext = componentContext,
             filter = filter,
             settings = settings,
+            resetFilter = resetFilter,
         )
     }
 }

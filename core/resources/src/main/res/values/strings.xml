@@ -33,6 +33,7 @@
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
     <string name="filters">Filters</string>
+    <string name="reset">Reset</string>
     <string-array name="month_names">
         <item>January</item>
         <item>February</item>
