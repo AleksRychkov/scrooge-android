@@ -7,6 +7,10 @@ CREATE TABLE IF NOT EXISTS Category (
   color INTEGER NOT NULL
 );
 
+-- Indexes
+CREATE INDEX idx_category_type ON Category(type);
+CREATE INDEX idx_category_name_type ON Category(name, type);
+
 -- Queries
 selectAllByType:
 SELECT * FROM Category WHERE type = :type;

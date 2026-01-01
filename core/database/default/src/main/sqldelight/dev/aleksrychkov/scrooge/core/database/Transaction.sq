@@ -10,12 +10,8 @@ CREATE TABLE IF NOT EXISTS TTransaction (
 
 -- Indexes
 CREATE INDEX idx_transaction_datestamp_id ON TTransaction(datestamp DESC, id DESC);
-
 CREATE INDEX idx_transaction_datestamp_type_currency ON TTransaction(datestamp, type, currencyCode);
-
-CREATE INDEX idx_transaction_category_type_currency ON TTransaction(categoryId, type, currencyCode);
-
-CREATE INDEX idx_transaction_category ON TTransaction(categoryId);
+CREATE INDEX idx_transaction_datestamp_category_type_currency ON TTransaction(datestamp, categoryId, type, currencyCode);
 
 -- Queries
 selectFromTo:
