@@ -83,7 +83,7 @@ internal class DefaultTransactionDao(
         amount: Long,
         datestamp: Datestamp,
         type: TransactionType,
-        category: String,
+        categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
@@ -92,7 +92,7 @@ internal class DefaultTransactionDao(
                 amount = amount,
                 datestamp = datestamp.value,
                 type = type.type.toLong(),
-                category = category,
+                categoryId = categoryId,
                 currencyCode = currencyCode,
             )
             val transactionId = database.transactionQueries.getLastInsertId().executeAsOne()
@@ -110,7 +110,7 @@ internal class DefaultTransactionDao(
         amount: Long,
         datestamp: Datestamp,
         type: TransactionType,
-        category: String,
+        categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
@@ -119,7 +119,7 @@ internal class DefaultTransactionDao(
                 amount = amount,
                 datestamp = datestamp.value,
                 type = type.type.toLong(),
-                category = category,
+                categoryId = categoryId,
                 currencyCode = currencyCode,
                 id = id,
             )

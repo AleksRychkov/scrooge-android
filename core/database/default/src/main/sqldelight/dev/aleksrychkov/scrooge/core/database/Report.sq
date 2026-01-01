@@ -54,7 +54,6 @@ byCategory:
 SELECT
   t.type,
   t.currencyCode,
-  t.category,
   SUM(t.amount) AS total,
   Category.id AS categoryId,
   Category.name AS categoryName,
@@ -62,7 +61,7 @@ SELECT
   Category.type AS categoryType,
   Category.color AS categoryColor
 FROM TTransaction t
-LEFT JOIN Category ON t.category = Category.name
+LEFT JOIN Category ON t.categoryId = Category.id
 WHERE
   t.datestamp >= :fromDatestamp
   AND t.datestamp <= :toDatestamp
@@ -78,4 +77,4 @@ WHERE
                   ) > 0
           )
       )
-GROUP BY t.type, t.currencyCode, t.category;
+GROUP BY t.type, t.currencyCode, t.categoryId;

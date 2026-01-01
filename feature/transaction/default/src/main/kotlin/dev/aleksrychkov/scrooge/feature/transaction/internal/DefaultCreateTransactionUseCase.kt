@@ -18,7 +18,7 @@ internal class DefaultCreateTransactionUseCase(
                     amount = args.amount,
                     datestamp = args.datestamp,
                     type = args.transactionType,
-                    category = args.category.name,
+                    categoryId = args.category.id,
                     tagIds = args.tags?.map { it.id }?.toSet(),
                     currencyCode = args.currency.currencyCode,
                 )

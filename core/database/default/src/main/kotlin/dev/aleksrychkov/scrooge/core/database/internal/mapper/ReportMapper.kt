@@ -130,14 +130,14 @@ internal object ReportMapper {
         return if (this.categoryId != null) {
             CategoryEntity(
                 id = this.categoryId,
-                name = this.categoryName ?: this.category,
+                name = this.categoryName!!,
                 type = TransactionType.from(this.categoryType!!.toInt()),
                 iconId = this.categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
                 color = this.categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
             )
         } else {
             CategoryEntity.from(
-                name = this.category,
+                name = "Deleted",
                 type = TransactionType.from(this.type.toInt()),
             )
         }

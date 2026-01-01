@@ -4,22 +4,18 @@ CREATE TABLE IF NOT EXISTS TTransaction (
   amount INTEGER NOT NULL,
   datestamp INTEGER NOT NULL,
   type INTEGER NOT NULL,
-  category TEXT NOT NULL,
+  categoryId INTEGER NOT NULL,
   currencyCode TEXT NOT NULL
 );
 
 -- Indexes
-CREATE INDEX idx_transaction_datestamp_id
-ON TTransaction(datestamp DESC, id DESC);
+CREATE INDEX idx_transaction_datestamp_id ON TTransaction(datestamp DESC, id DESC);
 
-CREATE INDEX idx_transaction_datestamp_type_currency
-ON TTransaction(datestamp, type, currencyCode);
+CREATE INDEX idx_transaction_datestamp_type_currency ON TTransaction(datestamp, type, currencyCode);
 
-CREATE INDEX idx_transaction_category_type_currency
-ON TTransaction(category, type, currencyCode);
+CREATE INDEX idx_transaction_category_type_currency ON TTransaction(categoryId, type, currencyCode);
 
-CREATE INDEX idx_transaction_category
-ON TTransaction(category);
+CREATE INDEX idx_transaction_category ON TTransaction(categoryId);
 
 -- Queries
 selectFromTo:
@@ -27,7 +23,6 @@ SELECT
   t.id,
   t.amount,
   t.datestamp,
-  t.category,
   t.type,
   t.currencyCode,
   Category.id AS categoryId,
@@ -38,7 +33,7 @@ SELECT
   GROUP_CONCAT(tag.name, '!') AS tags,
   GROUP_CONCAT(tag.id, '!') AS tagIds
 FROM TTransaction t
-LEFT JOIN Category ON t.category = Category.name
+LEFT JOIN Category ON t.categoryId = Category.id
 LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
 LEFT JOIN Tag tag ON tt.tagId = tag.id
 WHERE
@@ -87,7 +82,6 @@ SELECT
   t.id,
   t.amount,
   t.datestamp,
-  t.category,
   t.type,
   t.currencyCode,
   Category.id AS categoryId,
@@ -98,7 +92,7 @@ SELECT
   GROUP_CONCAT(tag.name, '!') AS tags,
   GROUP_CONCAT(tag.id, '!') AS tagIds
 FROM TTransaction t
-LEFT JOIN Category ON t.category = Category.name
+LEFT JOIN Category ON t.categoryId = Category.id
 LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
 LEFT JOIN Tag tag ON tt.tagId = tag.id
 WHERE
@@ -123,17 +117,16 @@ getLastInsertId:
 SELECT last_insert_rowid();
 
 create:
-INSERT INTO TTransaction (amount, datestamp, type, category, currencyCode) VALUES (?, ?, ?,  ?, ?);
+INSERT INTO TTransaction (amount, datestamp, type, categoryId, currencyCode) VALUES (?, ?, ?,  ?, ?);
 
 update:
-UPDATE TTransaction SET amount = ?, datestamp = ?, type = ?, category = ?, currencyCode = ? WHERE id = ?;
+UPDATE TTransaction SET amount = ?, datestamp = ?, type = ?, categoryId = ?, currencyCode = ? WHERE id = ?;
 
 selectById:
 SELECT
   t.id,
   t.amount,
   t.datestamp,
-  t.category,
   t.type,
   t.currencyCode,
   Category.id AS categoryId,
@@ -144,7 +137,7 @@ SELECT
   GROUP_CONCAT(tag.name, '!') AS tags,
   GROUP_CONCAT(tag.id, '!') AS tagIds
 FROM TTransaction t
-LEFT JOIN Category ON t.category = Category.name
+LEFT JOIN Category ON t.categoryId = Category.id
 LEFT JOIN TransactionTag tt ON t.id = tt.transactionId
 LEFT JOIN Tag tag ON tt.tagId = tag.id
 WHERE t.id = ?

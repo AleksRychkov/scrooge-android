@@ -21,7 +21,7 @@ interface TransactionDao {
         amount: Long,
         datestamp: Datestamp,
         type: TransactionType,
-        category: String,
+        categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
     )
@@ -31,7 +31,7 @@ interface TransactionDao {
         amount: Long,
         datestamp: Datestamp,
         type: TransactionType,
-        category: String,
+        categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
     )

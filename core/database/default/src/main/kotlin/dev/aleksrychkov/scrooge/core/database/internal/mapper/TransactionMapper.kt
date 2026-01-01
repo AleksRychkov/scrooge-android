@@ -18,7 +18,6 @@ internal object TransactionMapper {
         id: Long,
         amount: Long,
         datestamp: Long,
-        category: String,
         type: Long,
         currencyCode: String,
         categoryId: Long?,
@@ -58,14 +57,14 @@ internal object TransactionMapper {
             category = if (categoryId != null) {
                 CategoryEntity(
                     id = categoryId,
-                    name = categoryName ?: category,
+                    name = categoryName!!,
                     type = TransactionType.from(categoryType!!.toInt()),
                     iconId = categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
                     color = categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
                 )
             } else {
                 CategoryEntity.from(
-                    name = category,
+                    name = "Deleted", // todo: locale based??
                     type = TransactionType.from(type.toInt()),
                 )
             },
