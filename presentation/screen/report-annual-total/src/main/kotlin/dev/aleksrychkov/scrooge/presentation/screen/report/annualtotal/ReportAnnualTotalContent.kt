@@ -103,7 +103,7 @@ private fun ReportAppBar(
     ) {
         TopAppBar(
             title = {
-                Text(text = stringResource(Resources.string.reports))
+                Text(text = stringResource(Resources.string.totals))
             },
             actions = {
                 val months = stringArrayResource(Resources.array.month_names)
