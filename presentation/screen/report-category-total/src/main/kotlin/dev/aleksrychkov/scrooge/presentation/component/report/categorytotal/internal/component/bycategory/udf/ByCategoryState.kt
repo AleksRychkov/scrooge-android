@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
-import dev.aleksrychkov.scrooge.core.entity.amountToString
+import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcon
 import dev.aleksrychkov.scrooge.core.resources.categoryIconFromId
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChartSegment
@@ -63,7 +63,7 @@ private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyValueState
                 categoryName = value.category.name,
                 categoryIcon = categoryIconFromId(value.category.iconId),
                 currencySymbol = currencySymbol,
-                amount = value.amount.amountToString(),
+                amount = value.amount.amountToStringFormatted(""),
             )
         }
         .toImmutableList()
