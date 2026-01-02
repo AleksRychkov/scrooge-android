@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.rounded.AddCircleOutline
+import androidx.compose.material.icons.rounded.RemoveCircleOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
@@ -32,10 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -209,7 +209,7 @@ private fun AddIncomeExpense(
                 onClick = { component.addIncome() },
                 icon = {
                     Icon(
-                        imageVector = ImageVector.vectorResource(Resources.drawable.ic_trending_up_24px),
+                        imageVector = Icons.Rounded.AddCircleOutline,
                         contentDescription = stringResource(Resources.string.add_income),
                         tint = IncomeColor,
                     )
@@ -228,7 +228,7 @@ private fun AddIncomeExpense(
                 onClick = { component.addExpense() },
                 icon = {
                     Icon(
-                        imageVector = ImageVector.vectorResource(Resources.drawable.ic_trending_down_24px),
+                        imageVector = Icons.Rounded.RemoveCircleOutline,
                         contentDescription = stringResource(Resources.string.add_expense),
                         tint = ExpenseColor,
                     )
