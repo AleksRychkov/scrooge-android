@@ -18,8 +18,6 @@ value class Datestamp(val value: Long) {
         private const val YEAR_MULTIPLIER = 10_000L
         private const val MONTH_MULTIPLIER = 100L
 
-        val ZERO = Datestamp(0)
-
         fun from(date: LocalDate): Datestamp {
             val date = date.year * YEAR_MULTIPLIER + date.month.number * MONTH_MULTIPLIER + date.day
             return Datestamp(value = date)
