@@ -4,13 +4,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.CompareArrows
 import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
+import androidx.compose.material.icons.rounded.Adb
 import androidx.compose.material.icons.rounded.AddBusiness
 import androidx.compose.material.icons.rounded.AddShoppingCart
+import androidx.compose.material.icons.rounded.Anchor
 import androidx.compose.material.icons.rounded.Apartment
 import androidx.compose.material.icons.rounded.AssuredWorkload
 import androidx.compose.material.icons.rounded.Atm
 import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Attractions
+import androidx.compose.material.icons.rounded.Bathtub
 import androidx.compose.material.icons.rounded.Bed
 import androidx.compose.material.icons.rounded.Biotech
 import androidx.compose.material.icons.rounded.Bungalow
@@ -64,32 +67,47 @@ import androidx.compose.material.icons.rounded.LocalPrintshop
 import androidx.compose.material.icons.rounded.LocalSee
 import androidx.compose.material.icons.rounded.LocalShipping
 import androidx.compose.material.icons.rounded.LocalTaxi
+import androidx.compose.material.icons.rounded.LteMobiledata
 import androidx.compose.material.icons.rounded.MedicalServices
 import androidx.compose.material.icons.rounded.Medication
 import androidx.compose.material.icons.rounded.Money
 import androidx.compose.material.icons.rounded.Museum
 import androidx.compose.material.icons.rounded.NightShelter
 import androidx.compose.material.icons.rounded.Payments
+import androidx.compose.material.icons.rounded.PermPhoneMsg
 import androidx.compose.material.icons.rounded.PestControlRodent
 import androidx.compose.material.icons.rounded.Pets
+import androidx.compose.material.icons.rounded.PhoneEnabled
+import androidx.compose.material.icons.rounded.PhoneInTalk
 import androidx.compose.material.icons.rounded.Plumbing
 import androidx.compose.material.icons.rounded.PointOfSale
+import androidx.compose.material.icons.rounded.Pool
 import androidx.compose.material.icons.rounded.QuestionMark
 import androidx.compose.material.icons.rounded.Receipt
 import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.Savings
+import androidx.compose.material.icons.rounded.ScreenRotation
+import androidx.compose.material.icons.rounded.ScubaDiving
 import androidx.compose.material.icons.rounded.Sell
 import androidx.compose.material.icons.rounded.Shop
 import androidx.compose.material.icons.rounded.ShopTwo
 import androidx.compose.material.icons.rounded.ShoppingBag
 import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.material.icons.rounded.ShoppingCart
+import androidx.compose.material.icons.rounded.Shower
+import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material.icons.rounded.Store
 import androidx.compose.material.icons.rounded.Storm
+import androidx.compose.material.icons.rounded.Surfing
 import androidx.compose.material.icons.rounded.SwitchAccount
 import androidx.compose.material.icons.rounded.Vaccines
+import androidx.compose.material.icons.rounded.Water
+import androidx.compose.material.icons.rounded.WaterDamage
+import androidx.compose.material.icons.rounded.WaterDrop
+import androidx.compose.material.icons.rounded.Waves
 import androidx.compose.material.icons.rounded.Weekend
+import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -185,6 +203,24 @@ val CategoryIcons: Set<CategoryIcon> by lazy {
         CategoryIcon("ElectricBolt", Icons.Rounded.ElectricBolt),
         CategoryIcon("GasMeter", Icons.Rounded.GasMeter),
         CategoryIcon("CompareArrows", Icons.AutoMirrored.Rounded.CompareArrows),
+        CategoryIcon("PhoneEnabled", Icons.Rounded.PhoneEnabled),
+        CategoryIcon("PhoneInTalk", Icons.Rounded.PhoneInTalk),
+        CategoryIcon("PermPhoneMsg", Icons.Rounded.PermPhoneMsg),
+        CategoryIcon("Adb", Icons.Rounded.Adb),
+        CategoryIcon("LteMobiledata", Icons.Rounded.LteMobiledata),
+        CategoryIcon("ScreenRotation", Icons.Rounded.ScreenRotation),
+        CategoryIcon("Water", Icons.Rounded.Water),
+        CategoryIcon("WaterDrop", Icons.Rounded.WaterDrop),
+        CategoryIcon("WaterDamage", Icons.Rounded.WaterDamage),
+        CategoryIcon("Bathtub", Icons.Rounded.Bathtub),
+        CategoryIcon("Anchor", Icons.Rounded.Anchor),
+        CategoryIcon("Pool", Icons.Rounded.Pool),
+        CategoryIcon("Shower", Icons.Rounded.Shower),
+        CategoryIcon("Spa", Icons.Rounded.Spa),
+        CategoryIcon("ScubaDiving", Icons.Rounded.ScubaDiving),
+        CategoryIcon("Surfing", Icons.Rounded.Surfing),
+        CategoryIcon("Waves", Icons.Rounded.Waves),
+        CategoryIcon("Wifi", Icons.Rounded.Wifi),
     )
 }
 

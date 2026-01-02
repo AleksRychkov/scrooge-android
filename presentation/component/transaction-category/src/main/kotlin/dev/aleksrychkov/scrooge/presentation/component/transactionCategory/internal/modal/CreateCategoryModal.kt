@@ -35,7 +35,9 @@ private fun CreateCategoryModal(
 ) {
     slot.child?.instance?.also { component ->
         val scope = rememberCoroutineScope()
-        val modalBottomSheetState = rememberModalBottomSheetState()
+        val modalBottomSheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
         ModalBottomSheet(
             onDismissRequest = close,
             modifier = Modifier
