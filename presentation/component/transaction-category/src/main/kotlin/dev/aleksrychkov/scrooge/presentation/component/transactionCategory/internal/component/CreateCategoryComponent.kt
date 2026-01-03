@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal interface CreateCategoryComponent {
     companion object {
         operator fun invoke(
+            id: Long? = null,
             name: String,
             transactionType: TransactionType,
             componentContext: ComponentContext,
@@ -23,6 +24,7 @@ internal interface CreateCategoryComponent {
             return DefaultCreateCategoryComponent(
                 componentContext = componentContext,
                 name = name,
+                id = id,
                 transactionType = transactionType,
             )
         }
@@ -39,6 +41,7 @@ internal interface CreateCategoryComponent {
 
 private class DefaultCreateCategoryComponent(
     componentContext: ComponentContext,
+    private val id: Long?,
     private val name: String,
     private val transactionType: TransactionType,
 ) : CreateCategoryComponent, ComponentContext by componentContext {
@@ -46,6 +49,7 @@ private class DefaultCreateCategoryComponent(
     private val store: Store<CreateCategoryState, CreateCategoryEvent, CreateCategoryEffect> by lazy {
         instanceKeeper.createStore(
             initialState = CreateCategoryState(
+                id = id,
                 name = name,
                 transactionType = transactionType,
             ),

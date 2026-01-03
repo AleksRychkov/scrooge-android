@@ -25,7 +25,7 @@ internal class DefaultCategoryComponent(
     private val transactionType: TransactionType,
 ) : CategoryComponentInternal, ComponentContext by componentContext {
 
-    private val createCategoryNavigation = SlotNavigation<Pair<String, TransactionType>>()
+    private val createCategoryNavigation = SlotNavigation<CreateCategoryDto>()
 
     private val store: Store<CategoryState, CategoryEvent, CategoryEffect> by lazy {
         instanceKeeper.createStore(
@@ -42,11 +42,12 @@ internal class DefaultCategoryComponent(
             serializer = null,
             handleBackButton = true,
             key = "CreateCategoryModalSlot",
-        ) { pair, childComponentContext ->
+        ) { dto, childComponentContext ->
             CreateCategoryComponent.Companion(
                 componentContext = childComponentContext,
-                name = pair.first,
-                transactionType = pair.second,
+                name = dto.name,
+                transactionType = dto.type,
+                id = dto.id,
             )
         }
 
@@ -60,6 +61,16 @@ internal class DefaultCategoryComponent(
         store.handle(CategoryEvent.External.Delete(category = category))
     }
 
+    override fun editCategory(category: CategoryEntity) {
+        createCategoryNavigation.activate(
+            CreateCategoryDto(
+                name = category.name,
+                type = category.type,
+                id = category.id,
+            )
+        )
+    }
+
     override fun setSearchQuery(query: String) {
         store.handle(CategoryEvent.External.Search(query = query))
     }
@@ -67,10 +78,16 @@ internal class DefaultCategoryComponent(
     override fun openAddCategoryModal() {
         val categoryNameToAdd = state.value.searchQuery
         val type = state.value.transactionType
-        createCategoryNavigation.activate(categoryNameToAdd to type)
+        createCategoryNavigation.activate(CreateCategoryDto(name = categoryNameToAdd, type = type))
     }
 
     override fun closeAddCategoryModal() {
         createCategoryNavigation.dismiss()
     }
+
+    private class CreateCategoryDto(
+        val name: String,
+        val type: TransactionType,
+        val id: Long? = null
+    )
 }

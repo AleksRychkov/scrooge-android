@@ -10,6 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class CreateCategoryState(
+    val id: Long? = null,
     val isLoading: Boolean = false,
     val isDone: Boolean = false,
     val name: String = "",

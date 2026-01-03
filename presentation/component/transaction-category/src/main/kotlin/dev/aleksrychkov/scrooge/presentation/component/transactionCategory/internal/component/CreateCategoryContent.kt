@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,11 +21,17 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -33,18 +40,22 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsInputTextFieldsColors
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
-import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
@@ -59,6 +70,7 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.inter
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.component.udf.CreateCategoryState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -190,6 +202,11 @@ private fun Header(
     setName: (String) -> Unit,
     submit: () -> Unit,
 ) {
+    val isEditing = state.id != null
+    val isLoading = state.isLoading
+    val name = state.name
+    val focusManager = LocalFocusManager.current
+
     Row(
         modifier = modifier.height(IntrinsicSize.Max),
         verticalAlignment = Alignment.CenterVertically,
@@ -213,23 +230,57 @@ private fun Header(
             )
         }
 
-        DsTextField(
+        if (isEditing && isLoading) return@Row
+
+        val categoryNameTextFieldState = rememberTextFieldState(initialText = "")
+        LaunchedEffect(key1 = name) {
+            if (name != categoryNameTextFieldState.text.toString()) {
+                categoryNameTextFieldState.setTextAndPlaceCursorAtEnd(name)
+            }
+        }
+        LaunchedEffect(categoryNameTextFieldState) {
+            snapshotFlow { categoryNameTextFieldState.text.toString() }
+                .collectLatest {
+                    setName(it)
+                }
+        }
+
+        TextField(
             modifier = Modifier
                 .weight(weight = 1f, fill = true)
                 .height(IntrinsicSize.Min)
-                .padding(horizontal = Normal),
-            value = state.name,
+                .padding(horizontal = Normal)
+                .background(
+                    shape = MaterialTheme.shapes.large,
+                    color = MaterialTheme.colorScheme.secondary,
+                ),
+            state = categoryNameTextFieldState,
             placeholder = {
-                if (state.name.isEmpty()) {
+                if (name.isEmpty()) {
                     Text(
                         text = stringResource(Resources.string.category_name_placeholder),
                         color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.25f),
                     )
                 }
             },
-            onValueChanged = { value ->
-                setName(value)
-            }
+            trailingIcon = {
+                if (categoryNameTextFieldState.text.isNotBlank()) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = stringResource(Resources.string.clear),
+                        modifier = Modifier
+                            .clickable { categoryNameTextFieldState.setTextAndPlaceCursorAtEnd("") },
+                    )
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Text,
+            ),
+            onKeyboardAction = {
+                focusManager.clearFocus()
+            },
+            colors = DsInputTextFieldsColors(),
         )
 
         DsButton(

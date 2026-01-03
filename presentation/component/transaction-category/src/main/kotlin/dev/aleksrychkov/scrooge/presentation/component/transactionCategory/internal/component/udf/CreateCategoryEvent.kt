@@ -15,7 +15,9 @@ internal sealed interface CreateCategoryEvent {
     sealed interface Internal : CreateCategoryEvent {
         data class DuplicateError(val duplicate: CategoryEntity) : CreateCategoryEvent
         data object EmptyNameError : CreateCategoryEvent
-        data object Success : CreateCategoryEvent
-        data object Failure : CreateCategoryEvent
+        data class SuccessLoad(val entity: CategoryEntity) : CreateCategoryEvent
+        data object FailedLoad : CreateCategoryEvent
+        data object SuccessSubmit : CreateCategoryEvent
+        data object FailureSubmit : CreateCategoryEvent
     }
 }

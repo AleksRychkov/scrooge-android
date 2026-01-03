@@ -35,6 +35,8 @@
     <string name="yearly">Yearly</string>
     <string name="filters">Filters</string>
     <string name="reset">Reset</string>
+    <string name="more_options">More options</string>
+    <string name="edit">Edit</string>
     <string-array name="month_names">
         <item>January</item>
         <item>February</item>
@@ -98,10 +100,10 @@
     </string-array>
 
     <string name="category_delete">Delete category</string>
-    <string name="category_error_empty_name">Type category name to create new one</string>
+    <string name="category_error_empty_name">Category must have a name</string>
     <string name="category_error_failed_to_delete">Failed to delete category</string>
-    <string name="category_error_failed_to_restore">Failed to restore category</string>
     <string name="category_error_failed_to_create">Failed to create category</string>
+    <string name="category_error_failed_to_update">Failed to update category</string>
     <string name="category_error_duplicate">Category «%s» already exists</string>
     <string name="category_deleted">Category «%s» deleted</string>
     <string name="category_name_placeholder">Category name</string>

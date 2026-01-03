@@ -2,4 +2,5 @@ package dev.aleksrychkov.scrooge.presentation.component.transactionCategory.inte
 
 internal sealed interface CreateCategoryCommand {
     data class Submit(val state: CreateCategoryState) : CreateCategoryCommand
+    data class Load(val id: Long) : CreateCategoryCommand
 }

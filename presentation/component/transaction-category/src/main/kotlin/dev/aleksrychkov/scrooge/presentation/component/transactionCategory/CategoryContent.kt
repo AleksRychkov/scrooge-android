@@ -23,9 +23,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +55,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
@@ -115,6 +119,7 @@ private fun CategoryContent(
             state = state,
             selectCategory = callback,
             deleteCategory = component::deleteCategory,
+            editCategory = component::editCategory,
             setSearchQuery = component::setSearchQuery,
             addNewCategoryClicked = component::openAddCategoryModal,
         )
@@ -130,6 +135,7 @@ private fun CategoryContent(
     state: CategoryState,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
+    editCategory: (CategoryEntity) -> Unit,
     setSearchQuery: (String) -> Unit,
     addNewCategoryClicked: () -> Unit,
 ) {
@@ -152,6 +158,7 @@ private fun CategoryContent(
             state = state,
             selectCategory = selectCategory,
             deleteCategory = deleteCategory,
+            editCategory = editCategory,
         )
     }
 }
@@ -162,6 +169,7 @@ private fun CategoryList(
     state: CategoryState,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
+    editCategory: (CategoryEntity) -> Unit,
 ) {
     Box(
         modifier = modifier.padding(bottom = Normal)
@@ -186,6 +194,7 @@ private fun CategoryList(
                     entity = category,
                     selectCategory = selectCategory,
                     deleteCategory = deleteCategory,
+                    editCategory = editCategory,
                 )
             }
 
@@ -196,12 +205,14 @@ private fun CategoryList(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun Category(
     modifier: Modifier = Modifier,
     entity: CategoryEntity,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
+    editCategory: (CategoryEntity) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -234,30 +245,49 @@ private fun Category(
             text = entity.name,
         )
 
-        val isConfirmationAlertVisible = remember { mutableStateOf(false) }
+        var isConfirmationAlertVisible by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
                 .height(ListItemHeight)
                 .padding(Normal)
                 .aspectRatio(1f)
-                .clip(CircleShape)
-                .debounceClickable {
-                    isConfirmationAlertVisible.value = true
-                }
-                .padding(Medium),
+                .clip(CircleShape),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                imageVector = Icons.Filled.Delete,
-                tint = MaterialTheme.colorScheme.error,
-                contentDescription = stringResource(Resources.string.category_delete),
-            )
+            var dropDownExpanded by remember { mutableStateOf(false) }
+
+            IconButton(onClick = { dropDownExpanded = !dropDownExpanded }) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = stringResource(Resources.string.more_options),
+                )
+            }
+            DropdownMenu(
+                expanded = dropDownExpanded,
+                onDismissRequest = { dropDownExpanded = false },
+                shape = CardDefaults.shape,
+            ) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(Resources.string.edit)) },
+                    onClick = {
+                        dropDownExpanded = false
+                        editCategory(entity)
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(Resources.string.category_delete)) },
+                    onClick = {
+                        dropDownExpanded = false
+                        isConfirmationAlertVisible = true
+                    }
+                )
+            }
         }
 
-        if (!isConfirmationAlertVisible.value) return
+        if (!isConfirmationAlertVisible) return
         AlertDialog(
             onDismissRequest = {
-                isConfirmationAlertVisible.value = false
+                isConfirmationAlertVisible = false
             },
             title = {
                 Text(text = entity.name)
@@ -268,7 +298,7 @@ private fun Category(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        isConfirmationAlertVisible.value = false
+                        isConfirmationAlertVisible = false
                         deleteCategory(entity)
                     }
                 ) {
@@ -278,7 +308,7 @@ private fun Category(
             dismissButton = {
                 TextButton(
                     onClick = {
-                        isConfirmationAlertVisible.value = false
+                        isConfirmationAlertVisible = false
                     }
                 ) {
                     Text(text = stringResource(Resources.string.dismiss))

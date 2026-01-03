@@ -18,7 +18,7 @@ internal class DefaultCreateCategoryUseCase(
         withContext(ioDispatcher) {
             runSuspendCatching {
                 val duplicateCategory = categoryDao.value.getByName(
-                    name = categoryEntity.name,
+                    name = categoryEntity.name.trim(),
                     type = categoryEntity.type,
                 )
                 if (duplicateCategory != null) {

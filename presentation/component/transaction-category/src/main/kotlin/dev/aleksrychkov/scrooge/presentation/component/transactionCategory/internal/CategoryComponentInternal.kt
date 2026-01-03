@@ -17,6 +17,7 @@ internal interface CategoryComponentInternal : CategoryComponent {
     val effects: Flow<CategoryEffect>
 
     fun deleteCategory(category: CategoryEntity)
+    fun editCategory(category: CategoryEntity)
     fun setSearchQuery(query: String)
     fun openAddCategoryModal()
     fun closeAddCategoryModal()

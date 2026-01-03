@@ -27,12 +27,22 @@ internal class DefaultCategoryDao(
         type: TransactionType,
     ): Flow<ImmutableList<CategoryEntity>> = withContext(readDispatcher) {
         database.categoryQueries
-            .selectAllByType(type.type.toLong())
+            .selectAllByType(
+                type = type.type.toLong(),
+                mapper = CategoryMapper::toEntity,
+            )
             .asFlow()
             .mapToList(readDispatcher)
-            .map { list ->
-                list.map(CategoryMapper::toEntity).toImmutableList()
-            }
+            .map { list -> list.toImmutableList() }
+    }
+
+    override suspend fun get(id: Long): CategoryEntity? = withContext(readDispatcher) {
+        database.categoryQueries
+            .getById(
+                id = id,
+                mapper = CategoryMapper::toEntity,
+            )
+            .executeAsOneOrNull()
     }
 
     override suspend fun getByName(
@@ -43,9 +53,9 @@ internal class DefaultCategoryDao(
             .getByNameAndType(
                 name = name,
                 type = type.type.toLong(),
+                mapper = CategoryMapper::toEntity,
             )
             .executeAsOneOrNull()
-            ?.let(CategoryMapper::toEntity)
     }
 
     override suspend fun create(
@@ -59,6 +69,22 @@ internal class DefaultCategoryDao(
             type = type.type.toLong(),
             iconId = iconId,
             color = color.toLong(),
+        )
+    }
+
+    override suspend fun update(
+        id: Long,
+        name: String,
+        type: TransactionType,
+        iconId: String,
+        color: Int
+    ): Unit = withContext(writeDispatcher + NonCancellable) {
+        database.categoryQueries.update(
+            name = name,
+            type = type.type.toLong(),
+            iconId = iconId,
+            color = color.toLong(),
+            id = id,
         )
     }
 
