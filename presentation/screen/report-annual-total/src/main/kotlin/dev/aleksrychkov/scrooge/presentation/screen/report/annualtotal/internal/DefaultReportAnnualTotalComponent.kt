@@ -52,10 +52,7 @@ internal class DefaultReportAnnualTotalComponent(
     init {
         retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
             val initialFilters = FilterEntity.currentYear()
-            _state.value = _state.value.copy(
-                filter = initialFilters,
-                initialFilters = initialFilters,
-            )
+            _state.value = _state.value.copy(filter = initialFilters)
             _periodTotalComponent.setFilters(initialFilters)
             _totalMonthlyComponent.setFilters(initialFilters)
         }
@@ -81,7 +78,6 @@ internal class DefaultReportAnnualTotalComponent(
                 componentContext = childComponentContext,
                 filter = filter,
                 settings = EnumSet.of(FiltersSettings.Years, FiltersSettings.Tags),
-                resetFilter = { state.value.initialFilters }
             )
         }
 

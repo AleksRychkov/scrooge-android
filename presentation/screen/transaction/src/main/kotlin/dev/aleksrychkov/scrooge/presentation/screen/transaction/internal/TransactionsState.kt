@@ -6,5 +6,4 @@ import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 @Immutable
 internal data class TransactionsState(
     val filter: FilterEntity = FilterEntity(),
-    val initialFilter: FilterEntity = FilterEntity(),
 )

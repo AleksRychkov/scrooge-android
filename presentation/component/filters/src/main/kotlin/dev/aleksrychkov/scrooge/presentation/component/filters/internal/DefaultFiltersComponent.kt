@@ -18,7 +18,6 @@ import java.util.EnumSet
 internal class DefaultFiltersComponent(
     componentContext: ComponentContext,
     filter: FilterEntity,
-    private val resetFilter: () -> FilterEntity,
     settings: EnumSet<FiltersSettings>,
 ) : FiltersComponentInternal, ComponentContext by componentContext {
 
@@ -58,6 +57,6 @@ internal class DefaultFiltersComponent(
     }
 
     override fun resetFilters() {
-        store.handle(FiltersEvent.External.Reset(filter = resetFilter()))
+        store.handle(FiltersEvent.External.Reset)
     }
 }

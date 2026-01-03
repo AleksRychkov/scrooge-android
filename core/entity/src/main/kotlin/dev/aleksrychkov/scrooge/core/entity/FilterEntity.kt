@@ -4,7 +4,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
 import kotlinx.datetime.format
 import kotlinx.datetime.format.char
 import kotlinx.datetime.number
@@ -34,7 +36,7 @@ data class FilterEntity(
             return FilterEntity(
                 period = period,
                 years = persistentListOf(today.year),
-                months = persistentListOf(today.month.number),
+                months = (Month.JANUARY.number..Month.DECEMBER.number).toImmutableList(),
             )
         }
     }

@@ -22,5 +22,4 @@ internal data class FiltersState(
     val allMonths: ImmutableList<String> = persistentListOf(),
 
     val allTags: ImmutableSet<TagEntity> = persistentSetOf(),
-    val selectedTags: ImmutableSet<TagEntity> = persistentSetOf(),
 )

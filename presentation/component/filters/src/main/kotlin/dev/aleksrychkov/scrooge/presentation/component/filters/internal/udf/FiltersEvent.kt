@@ -12,7 +12,7 @@ internal sealed interface FiltersEvent {
         data class YearClicked(val year: Int, val isLongClick: Boolean = false) : External
         data class MonthClicked(val month: Int, val isLongClick: Boolean = false) : External
         data class ToggleTag(val tag: TagEntity) : External
-        data class Reset(val filter: FilterEntity) : External
+        data object Reset : External
     }
 
     sealed interface Internal : FiltersEvent {

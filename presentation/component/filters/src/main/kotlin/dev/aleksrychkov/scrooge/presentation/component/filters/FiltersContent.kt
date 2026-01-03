@@ -122,7 +122,7 @@ private fun FiltersContent(
             selectedYears = state.filter.years,
             selectedMonths = state.filter.months,
             allTags = state.allTags,
-            selectedTags = state.selectedTags,
+            selectedTags = state.filter.tags,
             onYearClicked = onYearClicked,
             onYearLongClicked = onYearLongClicked,
             onMonthClicked = onMonthClicked,

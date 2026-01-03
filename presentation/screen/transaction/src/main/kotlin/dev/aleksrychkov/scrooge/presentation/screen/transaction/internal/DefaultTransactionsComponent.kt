@@ -48,10 +48,7 @@ internal class DefaultTransactionsComponent(
     init {
         retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
             val initialFilters = FilterEntity.currentMonth()
-            _state.value = _state.value.copy(
-                filter = initialFilters,
-                initialFilter = initialFilters,
-            )
+            _state.value = _state.value.copy(filter = initialFilters)
             _periodTotalComponent.setFilters(initialFilters)
             _transactionsListComponent.setFilters(initialFilters)
         }
@@ -70,7 +67,6 @@ internal class DefaultTransactionsComponent(
             FiltersComponent(
                 componentContext = childComponentContext,
                 filter = filter,
-                resetFilter = { state.value.initialFilter },
             )
         }
 

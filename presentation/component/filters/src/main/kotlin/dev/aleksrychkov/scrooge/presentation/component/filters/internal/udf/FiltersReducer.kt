@@ -2,11 +2,13 @@ package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.startEndOf
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.utils.FiltersReadableNameHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
@@ -43,7 +45,6 @@ internal class FiltersReducer(
                         filter = event.filter,
                         initialFilter = event.filter.copy(),
                         filterReadable = readableNameHelper.getName(filter = event.filter),
-                        selectedTags = event.filter.tags,
                     )
                 }
             }
@@ -163,7 +164,7 @@ internal class FiltersReducer(
             }
 
             is FiltersEvent.External.ToggleTag -> state.reduceWith(event) {
-                val selectedTags = state.selectedTags.toMutableSet()
+                val selectedTags = state.filter.tags.toMutableSet()
                 if (selectedTags.contains(event.tag)) {
                     selectedTags.remove(event.tag)
                 } else {
@@ -172,22 +173,24 @@ internal class FiltersReducer(
                 val res = selectedTags.toImmutableSet()
                 state {
                     copy(
-                        selectedTags = res,
                         filter = filter.copy(tags = res)
                     )
                 }
             }
 
             is FiltersEvent.External.Reset -> state.reduceWith(event) {
+                val filter = if (state.settings.contains(FiltersSettings.Months)) {
+                    FilterEntity.currentMonth()
+                } else {
+                    FilterEntity.currentYear()
+                }
                 effects {
-                    listOf(FiltersEffect.SubmitFilters(event.filter))
+                    listOf(FiltersEffect.SubmitFilters(filter))
                 }
                 state {
-                    val filter = event.filter
                     copy(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
-                        selectedTags = filter.tags,
                     )
                 }
             }
