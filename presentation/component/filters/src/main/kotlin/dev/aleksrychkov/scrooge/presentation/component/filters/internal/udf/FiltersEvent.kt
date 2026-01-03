@@ -9,8 +9,8 @@ import java.util.EnumSet
 internal sealed interface FiltersEvent {
     sealed interface External : FiltersEvent {
         data class Init(val filter: FilterEntity, val settings: EnumSet<FiltersSettings>) : External
-        data class YearClicked(val year: Int) : External
-        data class MonthClicked(val month: Int) : External
+        data class YearClicked(val year: Int, val isLongClick: Boolean = false) : External
+        data class MonthClicked(val month: Int, val isLongClick: Boolean = false) : External
         data class ToggleTag(val tag: TagEntity) : External
         data class Reset(val filter: FilterEntity) : External
     }

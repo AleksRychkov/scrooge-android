@@ -1,8 +1,8 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
-import dev.aleksrychkov.scrooge.core.entity.startEndOfMonth
-import dev.aleksrychkov.scrooge.core.entity.startEndOfYear
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
+import dev.aleksrychkov.scrooge.core.entity.startEndOf
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
@@ -10,8 +10,11 @@ import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.utils.FiltersReadableNameHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
+import kotlin.math.max
+import kotlin.math.min
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 internal class FiltersReducer(
@@ -21,6 +24,8 @@ internal class FiltersReducer(
     private val readableNameHelper: FiltersReadableNameHelper by lazy {
         FiltersReadableNameHelper(resourceManager = resourceManager.value)
     }
+
+    private val now: LocalDate by lazy { Datestamp.now().date }
 
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun reduce(
@@ -33,27 +38,11 @@ internal class FiltersReducer(
                     listOf(FiltersCommand.GetFiltersStartEndYears, FiltersCommand.GetAvailableTags)
                 }
                 state {
-                    val period = event.filter.period
-                    val startDate = period.from.date
-                    val endDate = period.to.date
-                    val selectedYear = if (startDate.year == endDate.year) {
-                        startDate.year
-                    } else {
-                        -1
-                    }
-                    val selectedMonth =
-                        if (startDate.year == endDate.year && startDate.month == endDate.month) {
-                            startDate.month.number
-                        } else {
-                            -1
-                        }
                     copy(
                         settings = event.settings,
                         filter = event.filter,
                         initialFilter = event.filter.copy(),
                         filterReadable = readableNameHelper.getName(filter = event.filter),
-                        selectedYear = selectedYear,
-                        selectedMonthNumber = selectedMonth,
                         selectedTags = event.filter.tags,
                     )
                 }
@@ -71,11 +60,41 @@ internal class FiltersReducer(
             }
 
             is FiltersEvent.External.MonthClicked -> state.reduceWith(event) {
-                val period = startEndOfMonth(month = Month(event.month), state.selectedYear)
-                val filter = state.filter.copy(period = period)
+                val selectedMonths = state.filter.months.toMutableList()
+                val monthNumber = event.month
+                if (event.isLongClick) {
+                    var min = selectedMonths.min()
+                    var max = selectedMonths.max()
+                    if (monthNumber < min) {
+                        min = monthNumber
+                    } else if (monthNumber > max) {
+                        max = monthNumber
+                    } else {
+                        if (monthNumber <= Month.JUNE.number) {
+                            min = min(monthNumber + 1, Month.JUNE.number)
+                        } else {
+                            max = max(monthNumber - 1, Month.JULY.number)
+                        }
+                    }
+                    selectedMonths.clear()
+                    selectedMonths.addAll(min..max)
+                } else {
+                    selectedMonths.clear()
+                    selectedMonths.add(monthNumber)
+                }
+                val period = startEndOf(
+                    startMonth = selectedMonths.minOrNull() ?: Month.JANUARY.number,
+                    startYear = state.filter.years.min(),
+                    endMonth = selectedMonths.maxOrNull() ?: Month.DECEMBER.number,
+                    endYear = state.filter.years.max(),
+                )
+
+                val filter = state.filter.copy(
+                    period = period,
+                    months = selectedMonths.toImmutableList(),
+                )
                 state {
                     copy(
-                        selectedMonthNumber = event.month,
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
                     )
@@ -83,14 +102,54 @@ internal class FiltersReducer(
             }
 
             is FiltersEvent.External.YearClicked -> state.reduceWith(event) {
-                val period = when (state.selectedMonthNumber) {
-                    -1 -> startEndOfYear(event.year)
-                    else -> startEndOfMonth(month = Month(state.selectedMonthNumber), event.year)
+                val selectedYears = state.filter.years.toMutableList()
+                val year = event.year
+                val resetMonths = selectedYears.size > 1
+                val selectedMonths = state.filter.months.toMutableList()
+                if (event.isLongClick) {
+                    var min = selectedYears.min()
+                    var max = selectedYears.max()
+                    if (year < min) {
+                        min = year
+                    } else if (year > max) {
+                        max = year
+                    } else {
+                        val index = selectedYears.indexOf(year)
+                        if (index <= selectedYears.size / 2) {
+                            min = year
+                        } else {
+                            max = year
+                        }
+                    }
+                    selectedYears.clear()
+                    selectedYears.addAll(min..max)
+
+                    if (selectedYears.size > 1) {
+                        selectedMonths.clear()
+                        selectedMonths.addAll(Month.JANUARY.number..Month.DECEMBER.number)
+                    }
+                } else {
+                    selectedYears.clear()
+                    selectedYears.add(year)
+
+                    if (resetMonths) {
+                        selectedMonths.clear()
+                        selectedMonths.add(now.month.number)
+                    }
                 }
-                val filter = state.filter.copy(period = period)
+                val period = startEndOf(
+                    startMonth = selectedMonths.minOrNull() ?: Month.JANUARY.number,
+                    startYear = selectedYears.min(),
+                    endMonth = selectedMonths.maxOrNull() ?: Month.DECEMBER.number,
+                    endYear = selectedYears.max(),
+                )
+                val filter = state.filter.copy(
+                    period = period,
+                    years = selectedYears.toImmutableList(),
+                    months = selectedMonths.toImmutableList(),
+                )
                 state {
                     copy(
-                        selectedYear = event.year,
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
                     )
@@ -125,25 +184,9 @@ internal class FiltersReducer(
                 }
                 state {
                     val filter = event.filter
-                    val period = filter.period
-                    val startDate = period.from.date
-                    val endDate = period.to.date
-                    val selectedYear = if (startDate.year == endDate.year) {
-                        startDate.year
-                    } else {
-                        -1
-                    }
-                    val selectedMonth =
-                        if (startDate.year == endDate.year && startDate.month == endDate.month) {
-                            startDate.month.number
-                        } else {
-                            -1
-                        }
                     copy(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
-                        selectedYear = selectedYear,
-                        selectedMonthNumber = selectedMonth,
                         selectedTags = filter.tags,
                     )
                 }

@@ -1,9 +1,12 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -22,26 +25,29 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import kotlinx.collections.immutable.ImmutableList
@@ -53,18 +59,21 @@ import kotlinx.datetime.Month
 import java.util.EnumSet
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
+@Suppress("LongParameterList")
 @Composable
 internal fun FiltersFixedPeriod(
     modifier: Modifier,
     settings: EnumSet<FiltersSettings>,
     allYears: ImmutableList<Int>,
-    selectedYear: Int,
+    selectedYears: ImmutableList<Int>,
     allMonths: ImmutableList<String>,
-    selectedMonth: Int,
+    selectedMonths: ImmutableList<Int>,
     allTags: ImmutableSet<TagEntity>,
     selectedTags: ImmutableSet<TagEntity>,
     onYearClicked: (Int) -> Unit,
+    onYearLongClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
+    onMonthLongClicked: (Int) -> Unit,
     toggleTag: (TagEntity) -> Unit,
 ) {
     Column(
@@ -75,8 +84,9 @@ internal fun FiltersFixedPeriod(
             Years(
                 modifier = Modifier.wrapContentWidth(),
                 allYears = allYears,
-                selectedYear = selectedYear,
+                selectedYears = selectedYears,
                 onYearClicked = onYearClicked,
+                onYearLongClicked = onYearLongClicked,
             )
         }
 
@@ -85,9 +95,11 @@ internal fun FiltersFixedPeriod(
 
             Months(
                 modifier = Modifier.fillMaxWidth(),
+                isEnabled = selectedYears.size == 1,
                 allMonths = allMonths,
-                selectedMonth = selectedMonth,
+                selectedMonths = selectedMonths,
                 onMonthClicked = onMonthClicked,
+                onMonthLongClicked = onMonthLongClicked,
             )
         }
 
@@ -108,11 +120,12 @@ internal fun FiltersFixedPeriod(
 private fun Years(
     modifier: Modifier,
     allYears: ImmutableList<Int>,
-    selectedYear: Int,
+    selectedYears: ImmutableList<Int>,
     onYearClicked: (Int) -> Unit,
+    onYearLongClicked: (Int) -> Unit,
 ) {
     if (allYears.isEmpty()) return
-    var selectedItemIndex = allYears.indexOf(selectedYear)
+    var selectedItemIndex = allYears.indexOf(selectedYears.last())
     if (selectedItemIndex < 0) selectedItemIndex = allYears.size / 2
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = selectedItemIndex,
@@ -136,13 +149,13 @@ private fun Years(
                 items = allYears,
                 key = { it }
             ) { year ->
-                OutlinedButton(
-                    modifier = Modifier.padding(),
-                    onClick = {
-                        onYearClicked(year)
-                    }
+                OutlinedBox(
+                    modifier = Modifier,
+                    isEnabled = true,
+                    onClick = { onYearClicked(year) },
+                    onLongClick = { onYearLongClicked(year) }
                 ) {
-                    val color = if (year == selectedYear) {
+                    val color = if (selectedYears.contains(year)) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         Color.Unspecified
@@ -167,9 +180,11 @@ private fun Years(
 @Composable
 private fun Months(
     modifier: Modifier,
+    isEnabled: Boolean,
     allMonths: ImmutableList<String>,
-    selectedMonth: Int,
+    selectedMonths: ImmutableList<Int>,
     onMonthClicked: (Int) -> Unit,
+    onMonthLongClicked: (Int) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -183,34 +198,42 @@ private fun Months(
     ) {
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedMonth = selectedMonth,
+            isEnabled = isEnabled,
+            selectedMonths = selectedMonths,
             months = allMonths.take(3).toImmutableList(),
             monthsPad = 0,
             onMonthClicked = onMonthClicked,
+            onMonthLongClicked = onMonthLongClicked,
         )
 
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedMonth = selectedMonth,
+            isEnabled = isEnabled,
+            selectedMonths = selectedMonths,
             months = allMonths.subList(3, 6),
             monthsPad = 3,
             onMonthClicked = onMonthClicked,
+            onMonthLongClicked = onMonthLongClicked,
         )
 
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedMonth = selectedMonth,
+            isEnabled = isEnabled,
+            selectedMonths = selectedMonths,
             months = allMonths.subList(6, 9),
             monthsPad = 6,
             onMonthClicked = onMonthClicked,
+            onMonthLongClicked = onMonthLongClicked,
         )
 
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedMonth = selectedMonth,
+            isEnabled = isEnabled,
+            selectedMonths = selectedMonths,
             months = allMonths.subList(9, 12),
             monthsPad = 9,
             onMonthClicked = onMonthClicked,
+            onMonthLongClicked = onMonthLongClicked,
         )
     }
 }
@@ -218,10 +241,12 @@ private fun Months(
 @Composable
 private fun MonthRow(
     modifier: Modifier,
-    selectedMonth: Int,
+    isEnabled: Boolean,
+    selectedMonths: ImmutableList<Int>,
     months: ImmutableList<String>,
     monthsPad: Int,
     onMonthClicked: (Int) -> Unit,
+    onMonthLongClicked: (Int) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -232,21 +257,20 @@ private fun MonthRow(
     ) {
         months.forEachIndexed { index, month ->
             val monthNumber = index + 1 + monthsPad
-            OutlinedButton(
-                modifier = Modifier.weight(weight = 1f, fill = true),
-                onClick = {
-                    onMonthClicked(monthNumber)
-                }
+            OutlinedBox(
+                modifier = Modifier.weight(1f),
+                isEnabled = isEnabled,
+                onClick = { onMonthClicked(monthNumber) },
+                onLongClick = { onMonthLongClicked(monthNumber) }
             ) {
-                val color = if (monthNumber == selectedMonth) {
+                val color = if (selectedMonths.contains(monthNumber)) {
                     MaterialTheme.colorScheme.primary
                 } else {
-                    Color.Unspecified
+                    MaterialTheme.colorScheme.onBackground
                 }
                 Text(
                     color = color,
                     text = month,
-                    overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
             }
@@ -312,6 +336,36 @@ private suspend fun LazyListState.animateScrollAndCentralizeItem(index: Int) {
     animateScrollBy(difference.toFloat())
 }
 
+@Composable
+private fun OutlinedBox(
+    modifier: Modifier,
+    isEnabled: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .padding(vertical = Small)
+            .clip(ButtonDefaults.outlinedShape)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(
+                    alpha = if (isEnabled) 1f else 0.25f,
+                ),
+                shape = ButtonDefaults.outlinedShape,
+            )
+            .combinedClickable(
+                enabled = isEnabled,
+                onClick = onClick,
+                onLongClick = onLongClick,
+            )
+            .padding(ButtonDefaults.ContentPadding),
+        contentAlignment = Alignment.Center,
+        content = content,
+    )
+}
+
 @Preview
 @Composable
 @Suppress("UnusedPrivateMember", "MagicNumber")
@@ -321,14 +375,16 @@ private fun ContentPreview() {
             FiltersFixedPeriod(
                 modifier = Modifier,
                 settings = EnumSet.allOf(FiltersSettings::class.java),
-                allYears = persistentListOf(2024, 2025, 2026, 2027, 2028, 2029),
-                selectedYear = 2025,
+                allYears = persistentListOf(2021, 2022, 2023, 2024, 2025),
+                selectedYears = persistentListOf(2025),
                 allMonths = Month.entries.map { it.name }.toImmutableList(),
-                selectedMonth = 12,
+                selectedMonths = persistentListOf(12),
                 allTags = persistentSetOf(TagEntity.from("Tag 1"), TagEntity.from("Tag 2")),
                 selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
                 onYearClicked = {},
+                onYearLongClicked = {},
                 onMonthClicked = {},
+                onMonthLongClicked = {},
                 toggleTag = { _ -> },
             )
         }

@@ -41,8 +41,16 @@ internal class DefaultFiltersComponent(
         store.handle(FiltersEvent.External.YearClicked(year = year))
     }
 
+    override fun onYearLongClicked(year: Int) {
+        store.handle(FiltersEvent.External.YearClicked(year = year, isLongClick = true))
+    }
+
     override fun onMonthClicked(month: Int) {
         store.handle(FiltersEvent.External.MonthClicked(month = month))
+    }
+
+    override fun onMonthLongClicked(month: Int) {
+        store.handle(FiltersEvent.External.MonthClicked(month = month, isLongClick = true))
     }
 
     override fun toggleTag(tag: TagEntity) {

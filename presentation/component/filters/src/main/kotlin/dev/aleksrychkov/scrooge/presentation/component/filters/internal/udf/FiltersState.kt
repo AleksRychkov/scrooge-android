@@ -19,9 +19,7 @@ internal data class FiltersState(
     val filterReadable: String = "",
 
     val allYears: ImmutableList<Int> = persistentListOf(),
-    val selectedYear: Int = 0,
     val allMonths: ImmutableList<String> = persistentListOf(),
-    val selectedMonthNumber: Int = -1,
 
     val allTags: ImmutableSet<TagEntity> = persistentSetOf(),
     val selectedTags: ImmutableSet<TagEntity> = persistentSetOf(),

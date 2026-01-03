@@ -1,28 +1,41 @@
 package dev.aleksrychkov.scrooge.core.entity
 
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format
 import kotlinx.datetime.format.char
+import kotlinx.datetime.number
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class FilterEntity(
     val period: PeriodDatestampEntity = PeriodDatestampEntity(Datestamp.now(), Datestamp.now()),
+    val years: ImmutableList<Int> = persistentListOf(),
+    val months: ImmutableList<Int> = persistentListOf(),
     val tags: ImmutableSet<TagEntity> = persistentSetOf(),
 ) {
     companion object {
         fun currentMonth(): FilterEntity {
             val today = Datestamp.now().date
             val period = startEndOfMonth(month = today.month, year = today.year)
-            return FilterEntity(period = period)
+            return FilterEntity(
+                period = period,
+                years = persistentListOf(today.year),
+                months = persistentListOf(today.month.number),
+            )
         }
 
         fun currentYear(): FilterEntity {
             val today = Datestamp.now().date
             val period = startEndOfYear(year = today.year)
-            return FilterEntity(period = period)
+            return FilterEntity(
+                period = period,
+                years = persistentListOf(today.year),
+                months = persistentListOf(today.month.number),
+            )
         }
     }
 }

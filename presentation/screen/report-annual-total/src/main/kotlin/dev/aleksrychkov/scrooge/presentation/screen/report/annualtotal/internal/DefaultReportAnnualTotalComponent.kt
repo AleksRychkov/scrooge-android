@@ -100,6 +100,7 @@ internal class DefaultReportAnnualTotalComponent(
     }
 
     override fun openCategoryTotal(period: PeriodDatestampEntity) {
-        router.open(DestinationReportCategoryTotal(FilterEntity(period, _state.value.filter.tags)))
+        val filter = state.value.filter.copy(period = period)
+        router.open(DestinationReportCategoryTotal(filter = filter))
     }
 }

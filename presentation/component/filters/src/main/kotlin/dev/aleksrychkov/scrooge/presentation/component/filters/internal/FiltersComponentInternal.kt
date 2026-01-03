@@ -12,7 +12,9 @@ internal interface FiltersComponentInternal : FiltersComponent {
     val effects: Flow<FiltersEffect>
 
     fun onYearClicked(year: Int)
+    fun onYearLongClicked(year: Int)
     fun onMonthClicked(month: Int)
+    fun onMonthLongClicked(month: Int)
     fun toggleTag(tag: TagEntity)
     fun resetFilters()
 }

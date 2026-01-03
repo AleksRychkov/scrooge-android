@@ -26,6 +26,18 @@ fun startEndOfMonth(month: Month, year: Int): PeriodDatestampEntity {
     return PeriodDatestampEntity(from = from, to = to)
 }
 
+fun startEndOf(
+    startMonth: Int,
+    startYear: Int,
+    endMonth: Int,
+    endYear: Int,
+): PeriodDatestampEntity {
+    val from = startEndOfMonth(month = Month(startMonth), year = startYear)
+    val to = startEndOfMonth(month = Month(endMonth), year = endYear)
+
+    return PeriodDatestampEntity(from = from.from, to = to.to)
+}
+
 fun LocalDate.daysInMonth(): Int {
     val start = LocalDate(year, month, 1)
     val end = start.plus(1, DateTimeUnit.MONTH)

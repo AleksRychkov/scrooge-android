@@ -27,8 +27,8 @@ value class Datestamp(val value: Long) {
             return from(date = instant.toLocalDateTime(timeZone = timeZone).date)
         }
 
-        fun now(): Datestamp {
-            return from(instant = Clock.System.now())
+        fun now(timeZone: TimeZone = TimeZone.UTC): Datestamp {
+            return from(instant = Clock.System.now(), timeZone = timeZone)
         }
 
         fun LocalDate.readableName(): String =
