@@ -2,6 +2,8 @@ package dev.aleksrychkov.scrooge.core.resources
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.CompareArrows
+import androidx.compose.material.icons.automirrored.rounded.DirectionsBike
+import androidx.compose.material.icons.automirrored.rounded.DirectionsRun
 import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.Adb
@@ -22,9 +24,13 @@ import androidx.compose.material.icons.rounded.CardGiftcard
 import androidx.compose.material.icons.rounded.CardMembership
 import androidx.compose.material.icons.rounded.Chalet
 import androidx.compose.material.icons.rounded.Checkroom
+import androidx.compose.material.icons.rounded.Coffee
+import androidx.compose.material.icons.rounded.CoffeeMaker
+import androidx.compose.material.icons.rounded.Commute
 import androidx.compose.material.icons.rounded.ConfirmationNumber
 import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.CrueltyFree
+import androidx.compose.material.icons.rounded.DirectionsBike
 import androidx.compose.material.icons.rounded.DirectionsBus
 import androidx.compose.material.icons.rounded.Doorbell
 import androidx.compose.material.icons.rounded.Elderly
@@ -34,8 +40,11 @@ import androidx.compose.material.icons.rounded.ElectricCar
 import androidx.compose.material.icons.rounded.ElectricMeter
 import androidx.compose.material.icons.rounded.ElectricScooter
 import androidx.compose.material.icons.rounded.ElectricalServices
+import androidx.compose.material.icons.rounded.EmojiFoodBeverage
+import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material.icons.rounded.GasMeter
 import androidx.compose.material.icons.rounded.Healing
+import androidx.compose.material.icons.rounded.Hiking
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Light
 import androidx.compose.material.icons.rounded.LocalActivity
@@ -89,6 +98,7 @@ import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.Savings
 import androidx.compose.material.icons.rounded.ScreenRotation
 import androidx.compose.material.icons.rounded.ScubaDiving
+import androidx.compose.material.icons.rounded.SelfImprovement
 import androidx.compose.material.icons.rounded.Sell
 import androidx.compose.material.icons.rounded.Shop
 import androidx.compose.material.icons.rounded.ShopTwo
@@ -97,11 +107,17 @@ import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material.icons.rounded.Shower
 import androidx.compose.material.icons.rounded.Spa
+import androidx.compose.material.icons.rounded.Sports
+import androidx.compose.material.icons.rounded.SportsScore
+import androidx.compose.material.icons.rounded.SportsSoccer
+import androidx.compose.material.icons.rounded.Stadium
 import androidx.compose.material.icons.rounded.Store
 import androidx.compose.material.icons.rounded.Storm
 import androidx.compose.material.icons.rounded.Surfing
 import androidx.compose.material.icons.rounded.SwitchAccount
+import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material.icons.rounded.Vaccines
+import androidx.compose.material.icons.rounded.VideogameAsset
 import androidx.compose.material.icons.rounded.Water
 import androidx.compose.material.icons.rounded.WaterDamage
 import androidx.compose.material.icons.rounded.WaterDrop
@@ -221,6 +237,21 @@ val CategoryIcons: Set<CategoryIcon> by lazy {
         CategoryIcon("Surfing", Icons.Rounded.Surfing),
         CategoryIcon("Waves", Icons.Rounded.Waves),
         CategoryIcon("Wifi", Icons.Rounded.Wifi),
+        CategoryIcon("Coffee", Icons.Rounded.Coffee),
+        CategoryIcon("CoffeeMaker", Icons.Rounded.CoffeeMaker),
+        CategoryIcon("EmojiFoodBeverage", Icons.Rounded.EmojiFoodBeverage),
+        CategoryIcon("Train", Icons.Rounded.Train),
+        CategoryIcon("Commute", Icons.Rounded.Commute),
+        CategoryIcon("DirectionsRun", Icons.AutoMirrored.Rounded.DirectionsRun),
+        CategoryIcon("DirectionsBike", Icons.AutoMirrored.Rounded.DirectionsBike),
+        CategoryIcon("FitnessCenter", Icons.Rounded.FitnessCenter),
+        CategoryIcon("Hiking", Icons.Rounded.Hiking),
+        CategoryIcon("SelfImprovement", Icons.Rounded.SelfImprovement),
+        CategoryIcon("Sports", Icons.Rounded.Sports),
+        CategoryIcon("SportsScore", Icons.Rounded.SportsScore),
+        CategoryIcon("SportsSoccer", Icons.Rounded.SportsSoccer),
+        CategoryIcon("Stadium", Icons.Rounded.Stadium),
+        CategoryIcon("VideogameAsset", Icons.Rounded.VideogameAsset),
     )
 }
 
