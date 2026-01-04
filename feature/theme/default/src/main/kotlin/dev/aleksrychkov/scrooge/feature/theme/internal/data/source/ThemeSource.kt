@@ -24,7 +24,7 @@ internal interface ThemeSource {
             )
     }
 
-    suspend fun observe(): Flow<ThemeEntity>
+    suspend fun observe(): Flow<ThemeEntity?>
     suspend fun set(theme: ThemeEntity)
 }
 
@@ -33,16 +33,13 @@ private class DefaultThemeSource(
     private val context: Context,
 ) : ThemeSource {
 
-    private val Context._dataStore by preferencesDataStore(dataStoreName)
-    private val dataStore: DataStore<Preferences> by lazy {
-        context._dataStore
-    }
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(dataStoreName)
     private val key: Preferences.Key<Int> = intPreferencesKey("theme_type_ordinal")
 
-    override suspend fun observe(): Flow<ThemeEntity> {
-        return dataStore.data
+    override suspend fun observe(): Flow<ThemeEntity?> {
+        return context.dataStore.data
             .map { preferences ->
-                preferences[key] ?: ThemeEntity.Type.System.ordinal
+                preferences[key] ?: ThemeEntity.Type.Undefined.ordinal
             }
             .map { ordinal ->
                 ThemeEntity(type = ThemeEntity.Type.entries[ordinal])
@@ -50,7 +47,7 @@ private class DefaultThemeSource(
     }
 
     override suspend fun set(theme: ThemeEntity): Unit = withContext(NonCancellable) {
-        dataStore.edit { preferences ->
+        context.dataStore.edit { preferences ->
             preferences[key] = theme.type.ordinal
         }
     }

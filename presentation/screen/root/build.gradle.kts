@@ -15,6 +15,10 @@ dependencies {
     implementation(projects.presentation.screen.main.root)
 
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
+
+    implementation(projects.feature.theme.api)
+
 }
 
 dependencies {

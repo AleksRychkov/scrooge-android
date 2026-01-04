@@ -19,8 +19,16 @@ internal class SettingsThemeReducer :
             }
 
             is SettingsThemeEvent.Internal.Result -> state.reduceWith(event) {
+                val theme = when (event.theme?.type) {
+                    ThemeEntity.Type.Light,
+                    ThemeEntity.Type.Dark,
+                    ThemeEntity.Type.System -> ThemeEntity(event.theme.type)
+
+                    ThemeEntity.Type.Undefined -> ThemeEntity()
+                    null -> ThemeEntity()
+                }
                 state {
-                    copy(theme = event.theme)
+                    copy(theme = theme)
                 }
             }
 

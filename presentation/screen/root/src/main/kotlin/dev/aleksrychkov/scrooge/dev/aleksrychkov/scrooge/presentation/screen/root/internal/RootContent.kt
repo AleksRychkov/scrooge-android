@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.ro
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.stack.Children
@@ -12,9 +13,7 @@ internal fun RootContent(
     modifier: Modifier = Modifier,
     componentContext: ComponentContext,
 ) {
-    val component = DefaultRootComponent(
-        componentContext = componentContext,
-    )
+    val component = remember { DefaultRootComponent(componentContext = componentContext) }
     RootContent(
         modifier = modifier,
         component = component,

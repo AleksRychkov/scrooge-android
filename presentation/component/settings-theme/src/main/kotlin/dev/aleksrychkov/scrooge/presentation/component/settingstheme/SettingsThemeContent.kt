@@ -84,6 +84,7 @@ private fun Content(
             ThemeEntity.Type.System -> stringResource(Resources.string.settings_select_theme_system)
             ThemeEntity.Type.Light -> stringResource(Resources.string.settings_select_theme_light)
             ThemeEntity.Type.Dark -> stringResource(Resources.string.settings_select_theme_dark)
+            else -> ""
         }
 
         Text(

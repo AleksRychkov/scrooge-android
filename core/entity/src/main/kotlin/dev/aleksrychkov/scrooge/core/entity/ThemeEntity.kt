@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ThemeEntity(val type: Type = Type.System) {
     enum class Type {
-        Light, Dark, System
+        Light, Dark, System, Undefined,
     }
 }

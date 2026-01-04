@@ -5,6 +5,7 @@ package dev.aleksrychkov.scrooge.feature.theme
 import android.content.Context
 import dev.aleksrychkov.scrooge.core.di.NaiveModule
 import dev.aleksrychkov.scrooge.core.di.factory
+import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.di.singleton
@@ -23,12 +24,11 @@ fun buildThemeModule(context: Context): NaiveModule {
             )
         }
         singleton<ThemeRepository> {
-            ThemeRepository(source = getLazy())
+            ThemeRepository(source = get())
         }
         singleton<ObserveThemeUseCase> {
             DefaultObserveThemeUseCase(
-                ioDispatcher = Dispatchers.IO,
-                repository = getLazy()
+                repository = get(),
             )
         }
         factory<SetThemeUseCase> {

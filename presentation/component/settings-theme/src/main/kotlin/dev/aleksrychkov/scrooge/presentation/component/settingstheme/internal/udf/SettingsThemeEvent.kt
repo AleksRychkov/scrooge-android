@@ -9,6 +9,6 @@ internal sealed interface SettingsThemeEvent {
     }
 
     sealed interface Internal : SettingsThemeEvent {
-        data class Result(val theme: ThemeEntity) : Internal
+        data class Result(val theme: ThemeEntity?) : Internal
     }
 }
