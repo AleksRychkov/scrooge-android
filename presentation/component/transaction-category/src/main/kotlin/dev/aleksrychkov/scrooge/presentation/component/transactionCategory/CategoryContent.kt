@@ -304,7 +304,6 @@ private fun LazyListScope.ordinalList(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun Category(
     modifier: Modifier = Modifier,
@@ -346,77 +345,91 @@ private fun Category(
             text = entity.name,
         )
 
-        var isConfirmationAlertVisible by remember { mutableStateOf(false) }
-        Box(
-            modifier = Modifier
-                .height(ListItemHeight)
-                .padding(Normal)
-                .aspectRatio(1f)
-                .clip(CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            var dropDownExpanded by remember { mutableStateOf(false) }
-
-            IconButton(onClick = { dropDownExpanded = !dropDownExpanded }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = stringResource(Resources.string.more_options),
-                )
-            }
-            DropdownMenu(
-                expanded = dropDownExpanded,
-                onDismissRequest = { dropDownExpanded = false },
-                shape = CardDefaults.shape,
-            ) {
-                DropdownMenuItem(
-                    text = { Text(stringResource(Resources.string.edit)) },
-                    onClick = {
-                        dropDownExpanded = false
-                        editCategory(entity)
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text(stringResource(Resources.string.category_delete)) },
-                    onClick = {
-                        dropDownExpanded = false
-                        isConfirmationAlertVisible = true
-                    }
-                )
-            }
-        }
-
-        if (!isConfirmationAlertVisible) return
-        AlertDialog(
-            onDismissRequest = {
-                isConfirmationAlertVisible = false
-            },
-            title = {
-                Text(text = entity.name)
-            },
-            text = {
-                Text(text = stringResource(Resources.string.category_delete_confirmation_text))
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        isConfirmationAlertVisible = false
-                        deleteCategory(entity)
-                    }
-                ) {
-                    Text(text = stringResource(Resources.string.confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        isConfirmationAlertVisible = false
-                    }
-                ) {
-                    Text(text = stringResource(Resources.string.dismiss))
-                }
-            },
+        CategoryOptions(
+            entity = entity,
+            deleteCategory = deleteCategory,
+            editCategory = editCategory,
         )
     }
+}
+
+@Composable
+private fun CategoryOptions(
+    modifier: Modifier = Modifier,
+    entity: CategoryEntity,
+    deleteCategory: (CategoryEntity) -> Unit,
+    editCategory: (CategoryEntity) -> Unit,
+) {
+    var isConfirmationAlertVisible by remember { mutableStateOf(false) }
+    Box(
+        modifier = modifier
+            .height(ListItemHeight)
+            .padding(Normal)
+            .aspectRatio(1f)
+            .clip(CircleShape),
+        contentAlignment = Alignment.Center,
+    ) {
+        var dropDownExpanded by remember { mutableStateOf(false) }
+
+        IconButton(onClick = { dropDownExpanded = !dropDownExpanded }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = stringResource(Resources.string.more_options),
+            )
+        }
+        DropdownMenu(
+            expanded = dropDownExpanded,
+            onDismissRequest = { dropDownExpanded = false },
+            shape = CardDefaults.shape,
+        ) {
+            DropdownMenuItem(
+                text = { Text(stringResource(Resources.string.edit)) },
+                onClick = {
+                    dropDownExpanded = false
+                    editCategory(entity)
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(Resources.string.category_delete)) },
+                onClick = {
+                    dropDownExpanded = false
+                    isConfirmationAlertVisible = true
+                }
+            )
+        }
+    }
+
+    if (!isConfirmationAlertVisible) return
+    AlertDialog(
+        onDismissRequest = {
+            isConfirmationAlertVisible = false
+        },
+        title = {
+            Text(text = entity.name)
+        },
+        text = {
+            Text(text = stringResource(Resources.string.category_delete_confirmation_text))
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    isConfirmationAlertVisible = false
+                    deleteCategory(entity)
+                }
+            ) {
+                Text(text = stringResource(Resources.string.confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    isConfirmationAlertVisible = false
+                }
+            ) {
+                Text(text = stringResource(Resources.string.dismiss))
+            }
+        },
+    )
 }
 
 @Composable
