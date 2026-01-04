@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.component
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
@@ -29,7 +30,6 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -45,19 +45,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.core.designsystem.composables.CountdownSnackbar
-import dev.aleksrychkov.scrooge.core.designsystem.composables.DialogSnackbarHost
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsInputTextFieldsColors
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
-import dev.aleksrychkov.scrooge.core.designsystem.composables.showCountdownSnackbar
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
@@ -86,18 +84,16 @@ internal fun CreateCategoryContent(
     LaunchedEffect(state.isDone) {
         if (state.isDone) onCloseCallback.invoke()
     }
-
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
     DisposableEffect(component) {
         val job = scope.launch {
             component.effects
                 .onEach { effect ->
                     when (effect) {
                         is CreateCategoryEffect.ShowInfoMessage -> {
-                            snackbarHostState.showCountdownSnackbar(
-                                message = effect.message
-                            )
+                            Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -111,14 +107,6 @@ internal fun CreateCategoryContent(
     Scaffold(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        snackbarHost = {
-            DialogSnackbarHost(
-                snackbarHostState = snackbarHostState,
-                snackbar = { data ->
-                    CountdownSnackbar(data)
-                },
-            )
-        },
     ) { innerPadding ->
         CreateCategoryContent(
             modifier = Modifier
