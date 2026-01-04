@@ -21,5 +21,5 @@ internal interface CategoryComponentInternal : CategoryComponent {
     fun setSearchQuery(query: String)
     fun openAddCategoryModal()
     fun closeAddCategoryModal()
-    fun swapOrder(from: Int, to: Int)
+    fun swapOrder(newOrder: List<Pair<Long, Int>>)
 }

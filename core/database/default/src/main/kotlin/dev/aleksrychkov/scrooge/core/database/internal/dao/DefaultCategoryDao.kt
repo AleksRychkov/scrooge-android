@@ -110,34 +110,16 @@ internal class DefaultCategoryDao(
         }
     }
 
-    override suspend fun swapOrderIndex(
-        fromIndex: Int,
-        toIndex: Int,
-        type: TransactionType
+    override suspend fun updateOrderIndex(
+        list: List<CategoryDao.CategoryOrder>
     ) = withContext(writeDispatcher + NonCancellable) {
         database.categoryQueries.transaction {
-            // database orderIndex starts from 1
-            val tFromIndex = fromIndex.toLong() + 1L
-            val tToIndex = toIndex.toLong() + 1L
-
-            val tType = type.type.toLong()
-            val from = database.categoryQueries.getByOrderIndex(
-                orderIndex = tFromIndex,
-                type = tType,
-            ).executeAsOneOrNull() ?: return@transaction
-            val to = database.categoryQueries.getByOrderIndex(
-                orderIndex = tToIndex,
-                type = tType,
-            ).executeAsOneOrNull() ?: return@transaction
-
-            database.categoryQueries.setOrderIndex(
-                id = from.id,
-                orderIndex = tToIndex,
-            )
-            database.categoryQueries.setOrderIndex(
-                id = to.id,
-                orderIndex = tFromIndex,
-            )
+            list.forEach {
+                database.categoryQueries.setOrderIndex(
+                    id = it.id,
+                    orderIndex = it.orderIndex.toLong(),
+                )
+            }
         }
     }
 }

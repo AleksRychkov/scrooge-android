@@ -73,6 +73,7 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.inter
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -153,7 +154,7 @@ private fun CategoryContent(
     editCategory: (CategoryEntity) -> Unit,
     setSearchQuery: (String) -> Unit,
     addNewCategoryClicked: () -> Unit,
-    swapOrder: (Int, Int) -> Unit,
+    swapOrder: (List<Pair<Long, Int>>) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -188,7 +189,7 @@ private fun CategoryList(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     editCategory: (CategoryEntity) -> Unit,
-    swapOrder: (Int, Int) -> Unit,
+    swapOrder: (List<Pair<Long, Int>>) -> Unit,
 ) {
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
@@ -197,9 +198,9 @@ private fun CategoryList(
         reorderableList = reorderableList.toMutableList().apply {
             add(to.index, removeAt(from.index))
         }
-        swapOrder(from.index, to.index)
         view.reallyPerformHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
     }
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = modifier.padding(bottom = Normal)
@@ -224,6 +225,15 @@ private fun CategoryList(
                     selectCategory = selectCategory,
                     deleteCategory = deleteCategory,
                     editCategory = editCategory,
+                    dragFinished = {
+                        scope.launch(Dispatchers.IO) {
+                            reorderableList
+                                .mapIndexed { index, entity ->
+                                    entity.id to index
+                                }
+                                .let(swapOrder)
+                        }
+                    }
                 )
             }
             item {
@@ -239,6 +249,7 @@ private fun LazyListScope.reorderableList(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     editCategory: (CategoryEntity) -> Unit,
+    dragFinished: () -> Unit,
 ) {
     items(
         list,
@@ -257,7 +268,10 @@ private fun LazyListScope.reorderableList(
             ) {
                 IconButton(
                     modifier = Modifier
-                        .draggableHandle(interactionSource = interactionSource)
+                        .draggableHandle(
+                            onDragStopped = dragFinished,
+                            interactionSource = interactionSource,
+                        )
                         .clearAndSetSemantics { },
                     onClick = {},
                 ) {

@@ -85,8 +85,8 @@ internal class DefaultCategoryComponent(
         createCategoryNavigation.dismiss()
     }
 
-    override fun swapOrder(from: Int, to: Int) {
-        store.handle(CategoryEvent.External.SwapOrder(from = from, to = to))
+    override fun swapOrder(newOrder: List<Pair<Long, Int>>) {
+        store.handle(CategoryEvent.External.SwapOrder(newOrder = newOrder))
     }
 
     private class CreateCategoryDto(

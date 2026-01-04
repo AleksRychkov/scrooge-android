@@ -94,11 +94,7 @@ internal class CategoryReducer(
             is CategoryEvent.External.SwapOrder -> state.reduceWith(event) {
                 command {
                     listOf(
-                        CategoryCommand.SwapOrderIndex(
-                            fromIndex = event.from,
-                            toIndex = event.to,
-                            type = state.transactionType,
-                        )
+                        CategoryCommand.SwapOrderIndex(newOrder = event.newOrder)
                     )
                 }
             }

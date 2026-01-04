@@ -9,7 +9,7 @@ internal sealed interface CategoryEvent {
         data class Init(val transactionType: TransactionType) : External
         data class Search(val query: String) : External
         data class Delete(val category: CategoryEntity) : External
-        data class SwapOrder(val from: Int, val to: Int) : External
+        data class SwapOrder(val newOrder: List<Pair<Long, Int>>) : External
     }
 
     sealed interface Internal : CategoryEvent {

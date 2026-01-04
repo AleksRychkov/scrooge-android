@@ -2,6 +2,8 @@ package dev.aleksrychkov.scrooge.presentation.component.transactionCategory.inte
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.category.SwapOrderIndexCategoryUseCase
+import dev.aleksrychkov.scrooge.feature.category.SwapOrderIndexCategoryUseCase.Arg
+import dev.aleksrychkov.scrooge.feature.category.SwapOrderIndexCategoryUseCase.Args
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryCommand
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryEvent
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +13,7 @@ internal class SwapOrderIndexDelegate(
     private val useCase: Lazy<SwapOrderIndexCategoryUseCase> = getLazy()
 ) {
     suspend operator fun invoke(cmd: CategoryCommand.SwapOrderIndex): Flow<CategoryEvent> {
-        useCase.value.invoke(fromIndex = cmd.fromIndex, toIndex = cmd.toIndex, type = cmd.type)
+        useCase.value.invoke(args = Args(data = cmd.newOrder.map(::Arg)))
         return emptyFlow()
     }
 }
