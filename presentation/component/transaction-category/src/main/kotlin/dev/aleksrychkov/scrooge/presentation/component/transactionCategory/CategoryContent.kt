@@ -1,8 +1,10 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionCategory
 
+import android.view.HapticFeedbackConstants
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,10 +22,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -46,7 +51,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
@@ -56,6 +63,8 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
+import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
 import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
@@ -63,9 +72,14 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.inter
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.modal.CreateCategoryModal
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.ReorderableLazyListState
+import sh.calvin.reorderable.rememberReorderableLazyListState
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -122,6 +136,7 @@ private fun CategoryContent(
             editCategory = component::editCategory,
             setSearchQuery = component::setSearchQuery,
             addNewCategoryClicked = component::openAddCategoryModal,
+            swapOrder = component::swapOrder,
         )
     }
     CreateCategoryModal(
@@ -138,6 +153,7 @@ private fun CategoryContent(
     editCategory: (CategoryEntity) -> Unit,
     setSearchQuery: (String) -> Unit,
     addNewCategoryClicked: () -> Unit,
+    swapOrder: (Int, Int) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -159,10 +175,12 @@ private fun CategoryContent(
             selectCategory = selectCategory,
             deleteCategory = deleteCategory,
             editCategory = editCategory,
+            swapOrder = swapOrder,
         )
     }
 }
 
+@OptIn(FlowPreview::class)
 @Composable
 private fun CategoryList(
     modifier: Modifier,
@@ -170,38 +188,105 @@ private fun CategoryList(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     editCategory: (CategoryEntity) -> Unit,
+    swapOrder: (Int, Int) -> Unit,
 ) {
+    val view = LocalView.current
+    val lazyListState = rememberLazyListState()
+    var reorderableList by remember(state.categories.size) { mutableStateOf(state.categories.toList()) }
+    val reorderableLazyColumnState = rememberReorderableLazyListState(lazyListState) { from, to ->
+        reorderableList = reorderableList.toMutableList().apply {
+            add(to.index, removeAt(from.index))
+        }
+        swapOrder(from.index, to.index)
+        view.reallyPerformHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+    }
+
     Box(
         modifier = modifier.padding(bottom = Normal)
     ) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .animateContentSize(),
+            state = lazyListState,
         ) {
-            val categories = if (state.searchQuery.isNotBlank()) {
-                state.filtered
+            if (state.searchQuery.isNotBlank()) {
+                ordinalList(
+                    list = state.filtered,
+                    selectCategory = selectCategory,
+                    deleteCategory = deleteCategory,
+                    editCategory = editCategory,
+                )
             } else {
-                state.categories
-            }
-
-            items(
-                items = categories,
-                key = { category -> category.id }
-            ) { category ->
-                Category(
-                    modifier = Modifier.animateItem(),
-                    entity = category,
+                reorderableList(
+                    list = reorderableList,
+                    reorderableLazyColumnState = reorderableLazyColumnState,
                     selectCategory = selectCategory,
                     deleteCategory = deleteCategory,
                     editCategory = editCategory,
                 )
             }
-
             item {
                 NavigationBarSpacer()
             }
         }
+    }
+}
+
+private fun LazyListScope.reorderableList(
+    list: List<CategoryEntity>,
+    reorderableLazyColumnState: ReorderableLazyListState,
+    selectCategory: (CategoryEntity) -> Unit,
+    deleteCategory: (CategoryEntity) -> Unit,
+    editCategory: (CategoryEntity) -> Unit,
+) {
+    items(
+        list,
+        key = { category -> category.id }
+    ) { category ->
+        ReorderableItem(reorderableLazyColumnState, category.id) {
+            val interactionSource = remember { MutableInteractionSource() }
+            Category(
+                modifier = Modifier
+                    .animateItem()
+                    .padding(start = Small),
+                entity = category,
+                selectCategory = selectCategory,
+                deleteCategory = deleteCategory,
+                editCategory = editCategory,
+            ) {
+                IconButton(
+                    modifier = Modifier
+                        .draggableHandle(interactionSource = interactionSource)
+                        .clearAndSetSemantics { },
+                    onClick = {},
+                ) {
+                    Icon(Icons.Rounded.DragHandle, contentDescription = null)
+                }
+            }
+        }
+    }
+}
+
+private fun LazyListScope.ordinalList(
+    list: ImmutableList<CategoryEntity>,
+    selectCategory: (CategoryEntity) -> Unit,
+    deleteCategory: (CategoryEntity) -> Unit,
+    editCategory: (CategoryEntity) -> Unit,
+) {
+    items(
+        items = list,
+        key = { category -> category.id }
+    ) { category ->
+        Category(
+            modifier = Modifier
+                .animateItem()
+                .padding(start = Large),
+            entity = category,
+            selectCategory = selectCategory,
+            deleteCategory = deleteCategory,
+            editCategory = editCategory,
+        )
     }
 }
 
@@ -213,6 +298,7 @@ private fun Category(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     editCategory: (CategoryEntity) -> Unit,
+    reorderableHandle: (@Composable () -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
@@ -220,11 +306,12 @@ private fun Category(
             .defaultMinSize(minHeight = ListItemHeight)
             .debounceClickable {
                 selectCategory(entity)
-            }
-            .padding(start = Large),
+            },
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        reorderableHandle?.invoke()
+
         Icon(
             modifier = Modifier
                 .height(CategoryIconSize)

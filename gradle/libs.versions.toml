@@ -37,6 +37,8 @@ kotlinx-serialization-json = "1.9.0"
 paging = "3.3.6"
 paging-compose = "3.4.0-beta01"
 
+reorderable = "3.0.0"
+
 sqldelight = "2.2.1"
 
 uiToolingPreviewAndroid = "1.10.0"
@@ -87,6 +89,8 @@ kotlinx-immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotli
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }

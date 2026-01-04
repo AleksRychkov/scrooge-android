@@ -85,6 +85,10 @@ internal class DefaultCategoryComponent(
         createCategoryNavigation.dismiss()
     }
 
+    override fun swapOrder(from: Int, to: Int) {
+        store.handle(CategoryEvent.External.SwapOrder(from = from, to = to))
+    }
+
     private class CreateCategoryDto(
         val name: String,
         val type: TransactionType,

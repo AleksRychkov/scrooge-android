@@ -29,6 +29,8 @@ dependencies {
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
 
+    implementation(libs.reorderable)
+
     debugImplementation(libs.androidx.ui.tooling)
 
     testImplementation(libs.junit)
