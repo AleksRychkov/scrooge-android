@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.actors
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.feature.category.ObserveCategoryResult
 import dev.aleksrychkov.scrooge.feature.category.ObserveCategoryUseCase
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryCommand
@@ -17,7 +18,12 @@ internal class ObserveCategoryDelegate(
         return if (result is ObserveCategoryResult.Success) {
             result
                 .categories
-                .map { CategoryEvent.Internal.Categories(list = it) }
+                .map {
+                    CategoryEvent.Internal.Categories(
+                        list = it,
+                        hash = it.sortedBy(CategoryEntity::id).hashCode(),
+                    )
+                }
         } else {
             emptyFlow()
         }

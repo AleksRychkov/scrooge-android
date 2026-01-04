@@ -41,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,8 +74,8 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.inter
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryEffect
 import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.internal.udf.CategoryState
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -82,6 +83,8 @@ import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.ReorderableLazyListState
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
+
+private const val SWAP_ORDER_INDEX_DEBOUNCE_DURATION = 500L
 
 @Composable
 fun CategoryContent(
@@ -193,15 +196,19 @@ private fun CategoryList(
 ) {
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
-    var reorderableList by remember(state.categories.size) { mutableStateOf(state.categories.toList()) }
+    var reorderableList by remember(state.categoriesHash) {
+        mutableStateOf(state.categories.toList())
+    }
     val reorderableLazyColumnState = rememberReorderableLazyListState(lazyListState) { from, to ->
         reorderableList = reorderableList.toMutableList().apply {
             add(to.index, removeAt(from.index))
         }
         view.reallyPerformHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
     }
-    val scope = rememberCoroutineScope()
-
+    LaunchedEffect(reorderableList) {
+        delay(SWAP_ORDER_INDEX_DEBOUNCE_DURATION)
+        reorderableList.mapIndexed { index, entity -> entity.id to index }.let(swapOrder)
+    }
     Box(
         modifier = modifier.padding(bottom = Normal)
     ) {
@@ -225,15 +232,6 @@ private fun CategoryList(
                     selectCategory = selectCategory,
                     deleteCategory = deleteCategory,
                     editCategory = editCategory,
-                    dragFinished = {
-                        scope.launch(Dispatchers.IO) {
-                            reorderableList
-                                .mapIndexed { index, entity ->
-                                    entity.id to index
-                                }
-                                .let(swapOrder)
-                        }
-                    }
                 )
             }
             item {
@@ -249,7 +247,6 @@ private fun LazyListScope.reorderableList(
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     editCategory: (CategoryEntity) -> Unit,
-    dragFinished: () -> Unit,
 ) {
     items(
         list,
@@ -268,10 +265,7 @@ private fun LazyListScope.reorderableList(
             ) {
                 IconButton(
                     modifier = Modifier
-                        .draggableHandle(
-                            onDragStopped = dragFinished,
-                            interactionSource = interactionSource,
-                        )
+                        .draggableHandle(interactionSource = interactionSource)
                         .clearAndSetSemantics { },
                     onClick = {},
                 ) {

@@ -66,7 +66,10 @@ internal class CategoryReducer(
                         }
                     }
                     state {
-                        copy(categories = event.list)
+                        copy(
+                            categories = event.list,
+                            categoriesHash = event.hash,
+                        )
                     }
                 }
             }

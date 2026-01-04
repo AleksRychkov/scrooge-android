@@ -13,7 +13,7 @@ internal sealed interface CategoryEvent {
     }
 
     sealed interface Internal : CategoryEvent {
-        data class Categories(val list: ImmutableList<CategoryEntity>) : Internal
+        data class Categories(val list: ImmutableList<CategoryEntity>, val hash: Int) : Internal
         data class Filtered(val list: ImmutableList<CategoryEntity>) : Internal
         data object FailedToDeleteCategory : Internal
     }

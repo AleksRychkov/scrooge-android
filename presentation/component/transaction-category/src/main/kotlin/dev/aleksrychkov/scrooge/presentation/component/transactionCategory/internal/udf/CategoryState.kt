@@ -10,6 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal data class CategoryState(
     val transactionType: TransactionType = TransactionType.Income,
     val categories: ImmutableList<CategoryEntity> = persistentListOf(),
+    val categoriesHash: Int = 0,
     val filtered: ImmutableList<CategoryEntity> = persistentListOf(),
     val searchQuery: String = "",
 )
