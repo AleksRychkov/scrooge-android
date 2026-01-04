@@ -45,7 +45,7 @@ include(":core:udf-extensions")
 include(":core:utils")
 
 // feature
-listOf("category", "currency", "reports", "tag", "transaction").forEach {
+listOf("category", "currency", "reports", "tag", "transaction", "theme").forEach {
     include(":feature:$it:api")
     include(":feature:$it:default")
     include(":feature:$it:di")
