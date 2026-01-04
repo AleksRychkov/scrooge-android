@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.settings"
+    namespace = "dev.aleksrychkov.scrooge.presentation.component.settingstheme"
     buildFeatures {
         compose = true
     }
@@ -13,15 +13,21 @@ android {
 
 dependencies {
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
     implementation(projects.core.resources)
-
-    implementation(projects.presentation.component.settingsTheme)
+    implementation(projects.core.udfExtensions)
+    implementation(projects.feature.theme.api)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

@@ -37,6 +37,7 @@
     <string name="reset">Reset</string>
     <string name="more_options">More options</string>
     <string name="edit">Edit</string>
+    <string name="theme">Theme</string>
     <string-array name="month_names">
         <item>January</item>
         <item>February</item>
@@ -149,4 +150,11 @@
     <string name="filters_custom_period">Custom period</string>
     <string name="filters_fixed_period">Fixed period</string>
     <!-- Filters -->
+
+    <!-- Settings -->
+    <string name="settings_select_theme">Select theme:</string>
+    <string name="settings_select_theme_system">System default</string>
+    <string name="settings_select_theme_light">Light</string>
+    <string name="settings_select_theme_dark">Dark</string>
+    <!-- Settings -->
 </resources>

@@ -54,6 +54,7 @@ listOf("category", "currency", "reports", "tag", "transaction", "theme").forEach
 // presentation component
 include(":presentation:component:filters")
 include(":presentation:component:period-total")
+include(":presentation:component:settings-theme")
 include(":presentation:component:transaction-category")
 include(":presentation:component:transaction-currency")
 include(":presentation:component:transaction-list")
