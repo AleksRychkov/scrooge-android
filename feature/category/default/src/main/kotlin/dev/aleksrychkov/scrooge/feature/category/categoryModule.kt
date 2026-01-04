@@ -13,6 +13,7 @@ import dev.aleksrychkov.scrooge.feature.category.internal.DefaultDeleteCategoryU
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultGetCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultObserveCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultPreloadCategoriesUseCase
+import dev.aleksrychkov.scrooge.feature.category.internal.DefaultSwapOrderIndexCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultUpdateCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.source.CategoryKeyValueSource
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +63,12 @@ fun buildCategoryModule(context: Context): NaiveModule {
                 ioDispatcher = Dispatchers.IO,
                 defaultCategories = defaultCategories,
                 keyValueSource = getLazy(),
+            )
+        }
+        factory<SwapOrderIndexCategoryUseCase> {
+            DefaultSwapOrderIndexCategoryUseCase(
+                categoryDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
             )
         }
     }

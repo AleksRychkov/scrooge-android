@@ -5,7 +5,6 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
-import kotlinx.collections.immutable.toImmutableList
 import dev.aleksrychkov.scrooge.core.resources.R as resources
 
 internal class CategoryReducer(
@@ -93,11 +92,13 @@ internal class CategoryReducer(
             }
 
             is CategoryEvent.External.SwapOrder -> state.reduceWith(event) {
-                state {
-                    copy(
-                        categories = state.categories.toMutableList().apply {
-                            add(event.to, removeAt(event.from))
-                        }.toImmutableList()
+                command {
+                    listOf(
+                        CategoryCommand.SwapOrderIndex(
+                            fromIndex = event.from,
+                            toIndex = event.to,
+                            type = state.transactionType,
+                        )
                     )
                 }
             }

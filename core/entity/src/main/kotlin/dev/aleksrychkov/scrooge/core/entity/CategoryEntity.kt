@@ -9,6 +9,7 @@ data class CategoryEntity(
     val type: TransactionType,
     val iconId: String,
     val color: Int,
+    val orderIndex: Int = 0,
 ) {
     companion object {
         // not good but will work

@@ -34,6 +34,7 @@ sqldelight {
         create("Scrooge") {
             packageName = "dev.aleksrychkov.scrooge.core.database"
             generateAsync = true
+            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
         }
     }
 }

@@ -1,0 +1,9 @@
+ALTER TABLE Category ADD COLUMN orderIndex INTEGER NOT NULL DEFAULT 0;
+
+UPDATE Category
+SET orderIndex = (
+  SELECT COUNT(*)
+  FROM Category c2
+  WHERE c2.type = Category.type
+    AND c2.id < Category.id
+);

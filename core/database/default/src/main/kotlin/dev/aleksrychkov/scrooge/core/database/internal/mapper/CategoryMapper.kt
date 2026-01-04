@@ -9,7 +9,8 @@ internal object CategoryMapper {
         name: String,
         type: Long,
         iconId: String,
-        color: Long
+        color: Long,
+        orderIndex: Long,
     ): CategoryEntity =
         CategoryEntity(
             id = id,
@@ -17,5 +18,6 @@ internal object CategoryMapper {
             name = name,
             iconId = iconId,
             color = color.toInt(),
+            orderIndex = orderIndex.toInt(),
         )
 }

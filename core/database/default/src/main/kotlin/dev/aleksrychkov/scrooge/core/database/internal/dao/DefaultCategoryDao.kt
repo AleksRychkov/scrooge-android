@@ -64,12 +64,19 @@ internal class DefaultCategoryDao(
         iconId: String,
         color: Int,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
-        database.categoryQueries.create(
-            name = name,
-            type = type.type.toLong(),
-            iconId = iconId,
-            color = color.toLong(),
-        )
+        database.categoryQueries.transaction {
+            val tType = type.type.toLong()
+            val orderIndex = database.categoryQueries
+                .lastOrderIndex(tType).executeAsOneOrNull() ?: 0L
+
+            database.categoryQueries.create(
+                name = name,
+                type = tType,
+                iconId = iconId,
+                color = color.toLong(),
+                orderIndex = orderIndex + 1,
+            )
+        }
     }
 
     override suspend fun update(
@@ -91,6 +98,46 @@ internal class DefaultCategoryDao(
     override suspend fun delete(
         id: Long,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
-        database.categoryQueries.delete(id = id)
+        database.categoryQueries.transaction {
+            val itemToDelete = database.categoryQueries.getById(id = id).executeAsOneOrNull()
+            database.categoryQueries.delete(id = id)
+            itemToDelete?.let { category ->
+                database.categoryQueries.updateIndexingAfterDelete(
+                    type = category.type,
+                    deletedOrderIndex = category.orderIndex,
+                )
+            }
+        }
+    }
+
+    override suspend fun swapOrderIndex(
+        fromIndex: Int,
+        toIndex: Int,
+        type: TransactionType
+    ) = withContext(writeDispatcher + NonCancellable) {
+        database.categoryQueries.transaction {
+            // database orderIndex starts from 1
+            val tFromIndex = fromIndex.toLong() + 1L
+            val tToIndex = toIndex.toLong() + 1L
+
+            val tType = type.type.toLong()
+            val from = database.categoryQueries.getByOrderIndex(
+                orderIndex = tFromIndex,
+                type = tType,
+            ).executeAsOneOrNull() ?: return@transaction
+            val to = database.categoryQueries.getByOrderIndex(
+                orderIndex = tToIndex,
+                type = tType,
+            ).executeAsOneOrNull() ?: return@transaction
+
+            database.categoryQueries.setOrderIndex(
+                id = from.id,
+                orderIndex = tToIndex,
+            )
+            database.categoryQueries.setOrderIndex(
+                id = to.id,
+                orderIndex = tFromIndex,
+            )
+        }
     }
 }

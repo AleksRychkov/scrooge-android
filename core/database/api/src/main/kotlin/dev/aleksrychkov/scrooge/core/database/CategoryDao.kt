@@ -12,4 +12,5 @@ interface CategoryDao {
     suspend fun create(name: String, type: TransactionType, iconId: String, color: Int)
     suspend fun update(id: Long, name: String, type: TransactionType, iconId: String, color: Int)
     suspend fun delete(id: Long)
+    suspend fun swapOrderIndex(fromIndex: Int, toIndex: Int, type: TransactionType)
 }
