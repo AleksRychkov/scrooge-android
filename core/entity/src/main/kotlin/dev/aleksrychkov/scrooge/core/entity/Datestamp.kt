@@ -23,11 +23,14 @@ value class Datestamp(val value: Long) {
             return Datestamp(value = date)
         }
 
-        fun from(instant: Instant, timeZone: TimeZone = TimeZone.UTC): Datestamp {
+        fun from(
+            instant: Instant,
+            timeZone: TimeZone = TimeZone.currentSystemDefault()
+        ): Datestamp {
             return from(date = instant.toLocalDateTime(timeZone = timeZone).date)
         }
 
-        fun now(timeZone: TimeZone = TimeZone.UTC): Datestamp {
+        fun now(timeZone: TimeZone = TimeZone.currentSystemDefault()): Datestamp {
             return from(instant = Clock.System.now(), timeZone = timeZone)
         }
 
@@ -51,7 +54,7 @@ value class Datestamp(val value: Long) {
             return LocalDate(year = year, month = month, day = day)
         }
 
-    fun toInstant(timeZone: TimeZone = TimeZone.UTC): Instant =
+    fun toInstant(timeZone: TimeZone = TimeZone.currentSystemDefault()): Instant =
         date.atStartOfDayIn(timeZone = timeZone)
 
     fun readableName(): String = date.readableName()
