@@ -19,7 +19,7 @@ dependencies {
     implementation(projects.core.udfExtensions)
 
     implementation(projects.feature.theme.api)
-
+    implementation(projects.feature.transfer.api)
 }
 
 dependencies {

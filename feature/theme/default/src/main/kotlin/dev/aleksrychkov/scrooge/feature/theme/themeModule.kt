@@ -19,7 +19,7 @@ fun buildThemeModule(context: Context): NaiveModule {
     return module {
         factory<ThemeSource> {
             ThemeSource(
-                storeName = "favorite_currency",
+                storeName = "theme_data_store",
                 context = context,
             )
         }

@@ -6,13 +6,17 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Intermediate
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Main
+import dev.aleksrychkov.scrooge.feature.transfer.ObserveTransferState
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
 
 internal class DefaultRootComponent(
@@ -23,13 +27,19 @@ internal class DefaultRootComponent(
     private val scope: CoroutineScope by lazy(mode = LazyThreadSafetyMode.NONE) {
         retainedCoroutineScope()
     }
+    private val transferStateUseCase: ObserveTransferState = get()
 
     init {
-        scope.launch {
-            @Suppress("MagicNumber")
-            delay(1000)
-            navigation.replaceAll(Configuration.Main)
-        }
+        transferStateUseCase
+            .invoke()
+            .distinctUntilChanged()
+            .onEach {
+                if (it.current == TransferStateEntity.State.None) {
+                    navigation.replaceAll(Configuration.Main)
+                }
+                // todo else transfer in progress screen
+            }
+            .launchIn(scope)
     }
 
     override val stack: Value<ChildStack<*, RootComponent.Child>> =

@@ -49,4 +49,5 @@ dependencies {
     implementation(projects.feature.tag.di)
     implementation(projects.feature.theme.di)
     implementation(projects.feature.transaction.di)
+    implementation(projects.feature.transfer.di)
 }
