@@ -8,6 +8,7 @@ internal interface RootComponent {
     val stack: Value<ChildStack<*, Child>>
 
     sealed class Child {
+        class Intermediate : Child()
         class Main(val component: MainComponent) : Child()
     }
 }

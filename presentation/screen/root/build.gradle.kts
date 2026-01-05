@@ -16,6 +16,7 @@ dependencies {
 
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
+    implementation(projects.core.udfExtensions)
 
     implementation(projects.feature.theme.api)
 

@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.component.IntermediateContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainContent
 
 @Composable
@@ -33,6 +34,10 @@ private fun RootContent(
             is RootComponent.Child.Main -> MainContent(
                 modifier = Modifier.fillMaxSize(),
                 component = instance.component,
+            )
+
+            is RootComponent.Child.Intermediate -> IntermediateContent(
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
