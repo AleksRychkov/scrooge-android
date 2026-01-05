@@ -24,6 +24,8 @@ dependencies {
     implementation(libs.androidx.compose.material.icons)
     implementation(libs.androidx.ui.tooling.preview.android)
 
+    implementation(libs.androidx.splashscreen)
+
     implementation(libs.kotlinx.immutable.collections)
 
     debugImplementation(libs.androidx.ui.tooling)
