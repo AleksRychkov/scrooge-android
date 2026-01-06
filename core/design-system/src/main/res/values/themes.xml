@@ -8,6 +8,7 @@
     <!-- The final theme we use -->
     <style name="Theme.Scrooge" parent="NightAdjusted.Theme.Scrooge">
         <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
