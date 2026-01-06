@@ -11,6 +11,7 @@ import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Intermediate
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Main
+import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Transfer
 import dev.aleksrychkov.scrooge.feature.transfer.ObserveTransferState
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
 import kotlinx.coroutines.CoroutineScope
@@ -36,8 +37,9 @@ internal class DefaultRootComponent(
             .onEach {
                 if (it.current == TransferStateEntity.State.None) {
                     navigation.replaceAll(Configuration.Main)
+                } else {
+                    navigation.replaceAll(Configuration.Transfer(transferState = it))
                 }
-                // todo else transfer in progress screen
             }
             .launchIn(scope)
     }
@@ -59,6 +61,7 @@ internal class DefaultRootComponent(
         when (configuration) {
             is Configuration.Main -> Main(MainComponent(childComponentContext))
             is Configuration.Intermediate -> Intermediate()
+            is Configuration.Transfer -> Transfer(configuration.transferState)
         }
 
     @Serializable
@@ -69,5 +72,8 @@ internal class DefaultRootComponent(
 
         @Serializable
         data object Main : Configuration
+
+        @Serializable
+        data class Transfer(val transferState: TransferStateEntity) : Configuration
     }
 }

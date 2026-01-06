@@ -17,6 +17,7 @@ dependencies {
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
     implementation(projects.core.udfExtensions)
+    implementation(projects.core.resources)
 
     implementation(projects.feature.theme.api)
     implementation(projects.feature.transfer.api)
@@ -24,11 +25,15 @@ dependencies {
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.splashscreen)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

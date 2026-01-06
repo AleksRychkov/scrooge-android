@@ -157,4 +157,9 @@
     <string name="settings_select_theme_light">Light</string>
     <string name="settings_select_theme_dark">Dark</string>
     <!-- Settings -->
+
+    <!-- Transfer -->
+    <string name="transfer_import_in_progress">Import is in progress…</string>
+    <string name="transfer_export_in_progress">Export is in progress…</string>
+    <!-- Transfer -->
 </resources>
