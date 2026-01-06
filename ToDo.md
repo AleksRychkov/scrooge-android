@@ -3,4 +3,4 @@
 - [ ] Settings: Daily, weekly limits
 - [ ] Settings: export
 - [ ] Settings: import
-- [ ] Splash
+- [ ] Annual total: fast scroll up
