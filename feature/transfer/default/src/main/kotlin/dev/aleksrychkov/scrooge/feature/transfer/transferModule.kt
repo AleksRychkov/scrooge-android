@@ -11,6 +11,7 @@ import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.di.singleton
 import dev.aleksrychkov.scrooge.feature.transfer.internal.DefaultExportDataUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.internal.DefaultObserveTransferStateUseCase
+import dev.aleksrychkov.scrooge.feature.transfer.internal.DefaultSetTransferStateUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.internal.data.repository.TransferStateRepository
 import dev.aleksrychkov.scrooge.feature.transfer.internal.data.source.TransferStateSource
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,12 @@ fun buildTransferModule(context: Context): NaiveModule {
             DefaultExportDataUseCase(
                 exportUriUseCase = getLazy(),
                 context = context,
+            )
+        }
+        factory<SetTransferStateUseCase> {
+            DefaultSetTransferStateUseCase(
+                repository = getLazy(),
+                ioDispatcher = Dispatchers.IO,
             )
         }
     }

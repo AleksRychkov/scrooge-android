@@ -33,14 +33,13 @@ fun TransferContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             val text = when (transferState.current) {
-                TransferStateEntity.State.None ->
-                    ""
-
-                TransferStateEntity.State.Importing ->
+                is TransferStateEntity.State.Importing ->
                     stringResource(Resources.string.transfer_import_in_progress)
 
-                TransferStateEntity.State.Exporting ->
+                is TransferStateEntity.State.Exporting ->
                     stringResource(Resources.string.transfer_export_in_progress)
+
+                else -> "todo"
             }
             Text(
                 text = text,
@@ -63,7 +62,7 @@ private fun TransferContentPreview() {
             TransferContent(
                 modifier = Modifier.fillMaxSize(),
                 transferState = TransferStateEntity(
-                    current = TransferStateEntity.State.Importing,
+                    current = TransferStateEntity.State.Importing(),
                 ),
             )
         }

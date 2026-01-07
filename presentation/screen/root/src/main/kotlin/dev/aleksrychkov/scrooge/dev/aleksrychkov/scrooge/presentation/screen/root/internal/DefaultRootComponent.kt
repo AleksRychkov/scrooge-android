@@ -35,7 +35,7 @@ internal class DefaultRootComponent(
             .invoke()
             .distinctUntilChanged()
             .onEach {
-                if (it.current == TransferStateEntity.State.None) {
+                if (it.current is TransferStateEntity.State.None) {
                     navigation.replaceAll(Configuration.Main)
                 } else {
                     navigation.replaceAll(Configuration.Transfer(transferState = it))
