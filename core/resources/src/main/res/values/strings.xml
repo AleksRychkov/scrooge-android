@@ -161,5 +161,9 @@
     <!-- Transfer -->
     <string name="transfer_import_in_progress">Import is in progress…</string>
     <string name="transfer_export_in_progress">Export is in progress…</string>
+    <string name="transfer_export_title">Export data</string>
+    <string name="transfer_export_description">Create data backup to import later</string>
+    <string name="transfer_import_title">Import data</string>
+    <string name="transfer_import_description">Import previously backed up data. All current data will be lost</string>
     <!-- Transfer -->
 </resources>

@@ -6,6 +6,7 @@ import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultCaller
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,21 +19,29 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.defaultComponentContext
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
+import dev.aleksrychkov.scrooge.core.di.Naive
+import dev.aleksrychkov.scrooge.core.di.NaiveModule
+import dev.aleksrychkov.scrooge.core.di.factory
 import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.entity.ThemeEntity
+import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.transfer.DefaultGetExportUriUseCase
 import dev.aleksrychkov.scrooge.feature.theme.ObserveThemeUseCase
+import dev.aleksrychkov.scrooge.feature.transfer.GetExportUriUseCase
 
 private const val SPLASH_SCREEN_EXIT_ANIM_DURATION = 500L
 
 internal class RootActivity : ComponentActivity() {
     private val theme: ObserveThemeUseCase = get()
 
-    val controller by lazy(mode = LazyThreadSafetyMode.NONE) {
+    private val insetController by lazy(mode = LazyThreadSafetyMode.NONE) {
         WindowInsetsControllerCompat(
             window,
             window.decorView
         )
     }
+
+    private var module: NaiveModule? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -56,7 +65,7 @@ internal class RootActivity : ComponentActivity() {
                 else -> null
             }
             if (useDarkTheme != null) {
-                controller.isAppearanceLightStatusBars = !useDarkTheme
+                insetController.isAppearanceLightStatusBars = !useDarkTheme
             }
             AnimatedVisibility(
                 visible = useDarkTheme != null,
@@ -71,6 +80,17 @@ internal class RootActivity : ComponentActivity() {
                 }
             }
         }
+        setupRootModule()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        module?.let(Naive::remove)
+    }
+
+    private fun setupRootModule() {
+        val exportUri = DefaultGetExportUriUseCase(resultCaller = this as ActivityResultCaller)
+        module = module { factory<GetExportUriUseCase> { exportUri } }.also(Naive::add)
     }
 
     private fun setSplashScreenAnimation(splashScreen: SplashScreen) {

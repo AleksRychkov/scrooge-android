@@ -12,7 +12,7 @@ import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Intermediate
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Main
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Transfer
-import dev.aleksrychkov.scrooge.feature.transfer.ObserveTransferState
+import dev.aleksrychkov.scrooge.feature.transfer.ObserveTransferStateUseCase
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,7 +28,7 @@ internal class DefaultRootComponent(
     private val scope: CoroutineScope by lazy(mode = LazyThreadSafetyMode.NONE) {
         retainedCoroutineScope()
     }
-    private val transferStateUseCase: ObserveTransferState = get()
+    private val transferStateUseCase: ObserveTransferStateUseCase = get()
 
     init {
         transferStateUseCase

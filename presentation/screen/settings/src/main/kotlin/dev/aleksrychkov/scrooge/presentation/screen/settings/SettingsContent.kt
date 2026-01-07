@@ -14,8 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.presentation.component.settingstheme.SettingsThemeComponent
 import dev.aleksrychkov.scrooge.presentation.component.settingstheme.SettingsThemeContent
+import dev.aleksrychkov.scrooge.presentation.component.settingstransfer.export.TransferExportComponent
+import dev.aleksrychkov.scrooge.presentation.component.settingstransfer.export.TransferExportContent
+import dev.aleksrychkov.scrooge.presentation.component.settingstransfer.import.TransferImportComponent
+import dev.aleksrychkov.scrooge.presentation.component.settingstransfer.import.TransferImportContent
 import dev.aleksrychkov.scrooge.presentation.screen.settings.internal.SettingsComponentInternal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -77,8 +82,25 @@ private fun Content(
         Theme(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = Large),
+                .padding(top = Large)
+                .padding(horizontal = Large),
             component = component.settingsThemeComponent,
+        )
+
+        Import(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Normal)
+                .padding(horizontal = Large),
+            component = component.transferImportComponent,
+        )
+
+        Export(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Normal)
+                .padding(horizontal = Large),
+            component = component.transferExportComponent,
         )
     }
 }
@@ -89,6 +111,28 @@ private fun Theme(
     component: SettingsThemeComponent
 ) {
     SettingsThemeContent(
+        modifier = modifier,
+        component = component,
+    )
+}
+
+@Composable
+private fun Import(
+    modifier: Modifier,
+    component: TransferImportComponent,
+) {
+    TransferImportContent(
+        modifier = modifier,
+        component = component,
+    )
+}
+
+@Composable
+private fun Export(
+    modifier: Modifier,
+    component: TransferExportComponent,
+) {
+    TransferExportContent(
         modifier = modifier,
         component = component,
     )

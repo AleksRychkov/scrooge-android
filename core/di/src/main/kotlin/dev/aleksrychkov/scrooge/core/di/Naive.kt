@@ -16,12 +16,28 @@ object Naive {
         }
     }
 
+    fun add(module: NaiveModule) {
+        synchronized(lock) {
+            module.keyValues().forEach { (indexKey, factory) ->
+                instances[indexKey] = factory
+            }
+        }
+    }
+
     fun add(vararg modules: NaiveModule) {
         synchronized(lock) {
             modules.forEach { module ->
                 module.keyValues().forEach { (indexKey, factory) ->
                     instances[indexKey] = factory
                 }
+            }
+        }
+    }
+
+    fun remove(module: NaiveModule) {
+        synchronized(lock) {
+            module.keys().forEach { indexKey ->
+                instances.remove(indexKey)
             }
         }
     }

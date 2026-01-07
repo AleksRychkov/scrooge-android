@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
@@ -65,14 +66,14 @@ private fun Content(
 
     Column(
         modifier = modifier
-            .padding(horizontal = Large)
-            .debounceClickable {
-                isThemeDialogVisible = true
-            }
             .background(
                 color = MaterialTheme.colorScheme.secondary,
                 shape = CardDefaults.shape,
             )
+            .clip(shape = CardDefaults.shape)
+            .debounceClickable {
+                isThemeDialogVisible = true
+            }
             .padding(Normal),
     ) {
         Text(

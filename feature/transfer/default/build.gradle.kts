@@ -11,6 +11,7 @@ dependencies {
 
     implementation(projects.core.di)
     implementation(projects.core.utils)
+    implementation(projects.core.resources)
 }
 
 dependencies {
