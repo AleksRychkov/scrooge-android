@@ -9,6 +9,7 @@ android {
 dependencies {
     implementation(projects.feature.transfer.api)
 
+    implementation(projects.core.database.api)
     implementation(projects.core.di)
     implementation(projects.core.utils)
     implementation(projects.core.resources)

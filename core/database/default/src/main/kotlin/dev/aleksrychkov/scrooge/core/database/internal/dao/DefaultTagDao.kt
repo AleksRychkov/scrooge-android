@@ -5,6 +5,7 @@ import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TagDao
 import dev.aleksrychkov.scrooge.core.database.TagDao.Companion.TAG_DELIMITER
+import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TagMapper
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import kotlinx.collections.immutable.ImmutableSet
@@ -16,12 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class DefaultTagDao(
-    private val db: Lazy<Scrooge>,
+    private val dbProvider: DatabaseProvider,
     private val readDispatcher: CoroutineDispatcher,
     private val writeDispatcher: CoroutineDispatcher,
 ) : TagDao {
 
-    private val database: Scrooge by lazy { db.value }
+    private val database: Scrooge
+        get() = dbProvider.scrooge
 
     override suspend fun get(): Flow<ImmutableSet<TagEntity>> = withContext(readDispatcher) {
         database.tagQueries

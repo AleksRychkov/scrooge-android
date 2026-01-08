@@ -7,6 +7,7 @@ import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TransactionDao
+import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TransactionMapper
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
@@ -22,13 +23,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class DefaultTransactionDao(
-    private val db: Lazy<Scrooge>,
+    private val dbProvider: DatabaseProvider,
     private val readDispatcher: CoroutineDispatcher,
     private val writeDispatcher: CoroutineDispatcher,
 ) : TransactionDao {
 
     private val database: Scrooge
-        get() = db.value
+        get() = dbProvider.scrooge
 
     override suspend fun get(
         filter: FilterEntity,

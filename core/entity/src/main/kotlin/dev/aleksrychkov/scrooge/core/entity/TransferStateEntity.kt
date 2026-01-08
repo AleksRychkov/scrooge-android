@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class TransferStateEntity(
     val current: State = State.None(),
 ) {
+    @Serializable
     sealed interface State {
         companion object {
             private const val NONE = 0
@@ -31,31 +32,37 @@ data class TransferStateEntity(
         val ordinal: Int
         val info: String?
 
+        @Serializable
         data class None(
             override val ordinal: Int = NONE,
             override val info: String? = null,
         ) : State
 
+        @Serializable
         data class Importing(
             override val ordinal: Int = IMPORTING,
             override val info: String? = null,
         ) : State
 
+        @Serializable
         data class ImportingFailed(
             override val ordinal: Int = IMPORTING_FAILED,
             override val info: String? = null,
         ) : State
 
+        @Serializable
         data class Exporting(
             override val ordinal: Int = EXPORTING,
             override val info: String? = null,
         ) : State
 
+        @Serializable
         data class ExportingFailed(
             override val ordinal: Int = EXPORTING_FAILED,
             override val info: String? = null,
         ) : State
 
+        @Serializable
         data class ExportingSuccess(
             override val ordinal: Int = EXPORTING_SUCCESS,
             override val info: String? = null,

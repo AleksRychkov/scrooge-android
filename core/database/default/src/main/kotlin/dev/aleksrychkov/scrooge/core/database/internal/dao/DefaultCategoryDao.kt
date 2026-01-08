@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.CategoryDao
 import dev.aleksrychkov.scrooge.core.database.Scrooge
+import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.CategoryMapper
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -16,12 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class DefaultCategoryDao(
-    private val db: Lazy<Scrooge>,
+    private val dbProvider: DatabaseProvider,
     private val readDispatcher: CoroutineDispatcher,
     private val writeDispatcher: CoroutineDispatcher,
 ) : CategoryDao {
 
-    private val database: Scrooge by lazy { db.value }
+    private val database: Scrooge
+        get() = dbProvider.scrooge
 
     override suspend fun get(
         type: TransactionType,
