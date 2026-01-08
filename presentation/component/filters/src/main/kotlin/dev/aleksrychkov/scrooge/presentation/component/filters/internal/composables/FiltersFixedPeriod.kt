@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +50,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
+import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import kotlinx.collections.immutable.ImmutableList
@@ -344,6 +347,7 @@ private fun OutlinedBox(
     onLongClick: () -> Unit,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val view = LocalView.current
     Box(
         modifier = modifier
             .padding(vertical = Small)
@@ -358,7 +362,10 @@ private fun OutlinedBox(
             .combinedClickable(
                 enabled = isEnabled,
                 onClick = onClick,
-                onLongClick = onLongClick,
+                onLongClick = {
+                    view.reallyPerformHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                    onLongClick()
+                },
             )
             .padding(ButtonDefaults.ContentPadding),
         contentAlignment = Alignment.Center,
