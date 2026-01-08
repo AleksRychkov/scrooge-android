@@ -14,14 +14,3 @@ dependencies {
     implementation(projects.core.di)
     implementation(projects.core.resources)
 }
-
-dependencies {
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.kotlinx.coroutines.core)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.mockk)
-
-    testRuntimeOnly(libs.junit.platform.launcher)
-}

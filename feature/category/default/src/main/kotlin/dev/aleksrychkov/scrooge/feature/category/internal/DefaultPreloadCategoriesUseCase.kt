@@ -4,7 +4,6 @@ import dev.aleksrychkov.scrooge.core.database.CategoryDao
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.category.PreloadCategoriesUseCase
-import dev.aleksrychkov.scrooge.feature.category.internal.source.CategoryKeyValueSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -12,11 +11,10 @@ internal class DefaultPreloadCategoriesUseCase(
     private val categoryDao: Lazy<CategoryDao>,
     private val ioDispatcher: CoroutineDispatcher,
     private val defaultCategories: DefaultCategories,
-    private val keyValueSource: Lazy<CategoryKeyValueSource>,
 ) : PreloadCategoriesUseCase {
     override suspend fun invoke(): Unit = withContext(ioDispatcher) {
         runSuspendCatching {
-            val isPreloadNeeded = !keyValueSource.value.isPreloadDone()
+            val isPreloadNeeded = categoryDao.value.isPreloadNeeded()
             if (!isPreloadNeeded) return@runSuspendCatching
             defaultCategories.get(TransactionType.Expense).forEach { entity ->
                 categoryDao.value.create(
@@ -34,7 +32,6 @@ internal class DefaultPreloadCategoriesUseCase(
                     color = entity.color,
                 )
             }
-            keyValueSource.value.setPreloadDone()
         }
     }
 }

@@ -13,6 +13,7 @@ interface CategoryDao {
     suspend fun update(id: Long, name: String, type: TransactionType, iconId: String, color: Int)
     suspend fun delete(id: Long)
     suspend fun updateOrderIndex(list: List<CategoryOrder>)
+    suspend fun isPreloadNeeded(): Boolean
 
     class CategoryOrder(val id: Long, val orderIndex: Int)
 }

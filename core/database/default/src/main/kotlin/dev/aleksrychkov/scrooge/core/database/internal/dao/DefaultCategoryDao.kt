@@ -124,4 +124,8 @@ internal class DefaultCategoryDao(
             }
         }
     }
+
+    override suspend fun isPreloadNeeded(): Boolean = withContext(readDispatcher) {
+        (database.categoryQueries.getSize().executeAsOneOrNull() ?: 0L) <= 0L
+    }
 }

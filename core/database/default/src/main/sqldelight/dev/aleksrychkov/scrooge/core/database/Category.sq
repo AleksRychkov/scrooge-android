@@ -48,3 +48,6 @@ UPDATE Category SET orderIndex = :orderIndex WHERE id = :id;
 
 selectAll:
 SELECT * FROM Category;
+
+getSize:
+SELECT COUNT(id) FROM Category;
