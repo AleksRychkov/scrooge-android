@@ -14,7 +14,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.component.IntermediateContent
-import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.component.TransferContent
+import dev.aleksrychkov.scrooge.presentation.component.roottransfer.RootTransferContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainContent
 
 @Composable
@@ -55,9 +55,9 @@ private fun RootContent(
                 modifier = Modifier.fillMaxSize(),
             )
 
-            is RootComponent.Child.Transfer -> TransferContent(
+            is RootComponent.Child.Transfer -> RootTransferContent(
                 modifier = Modifier.fillMaxSize(),
-                transferState = instance.transferState,
+                component = instance.component,
             )
         }
     }

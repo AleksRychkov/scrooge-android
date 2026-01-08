@@ -2,7 +2,7 @@ package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.ro
 
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
+import dev.aleksrychkov.scrooge.presentation.component.roottransfer.RootTransferComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
 
 internal interface RootComponent {
@@ -11,6 +11,6 @@ internal interface RootComponent {
     sealed class Child {
         class Intermediate : Child()
         class Main(val component: MainComponent) : Child()
-        class Transfer(val transferState: TransferStateEntity) : Child()
+        class Transfer(val component: RootTransferComponent) : Child()
     }
 }

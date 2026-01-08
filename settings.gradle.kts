@@ -54,6 +54,7 @@ listOf("category", "currency", "reports", "tag", "transaction", "transfer", "the
 // presentation component
 include(":presentation:component:filters")
 include(":presentation:component:period-total")
+include(":presentation:component:root-transfer")
 include(":presentation:component:settings-theme")
 include(":presentation:component:settings-transfer")
 include(":presentation:component:transaction-category")

@@ -13,8 +13,8 @@ import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.roo
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Main
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Transfer
 import dev.aleksrychkov.scrooge.feature.transfer.ObserveTransferStateUseCase
+import dev.aleksrychkov.scrooge.presentation.component.roottransfer.RootTransferComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,9 +25,6 @@ internal class DefaultRootComponent(
 ) : RootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
-    private val scope: CoroutineScope by lazy(mode = LazyThreadSafetyMode.NONE) {
-        retainedCoroutineScope()
-    }
     private val transferStateUseCase: ObserveTransferStateUseCase = get()
 
     init {
@@ -38,10 +35,10 @@ internal class DefaultRootComponent(
                 if (it.current is TransferStateEntity.State.None) {
                     navigation.replaceAll(Configuration.Main)
                 } else {
-                    navigation.replaceAll(Configuration.Transfer(transferState = it))
+                    navigation.replaceAll(Configuration.Transfer(state = it))
                 }
             }
-            .launchIn(scope)
+            .launchIn(retainedCoroutineScope())
     }
 
     override val stack: Value<ChildStack<*, RootComponent.Child>> =
@@ -61,7 +58,12 @@ internal class DefaultRootComponent(
         when (configuration) {
             is Configuration.Main -> Main(MainComponent(childComponentContext))
             is Configuration.Intermediate -> Intermediate()
-            is Configuration.Transfer -> Transfer(configuration.transferState)
+            is Configuration.Transfer -> Transfer(
+                RootTransferComponent(
+                    componentContext = childComponentContext,
+                    state = configuration.state,
+                )
+            )
         }
 
     @Serializable
@@ -74,6 +76,6 @@ internal class DefaultRootComponent(
         data object Main : Configuration
 
         @Serializable
-        data class Transfer(val transferState: TransferStateEntity) : Configuration
+        data class Transfer(val state: TransferStateEntity) : Configuration
     }
 }
