@@ -26,8 +26,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal.MainTabsComponentInternal
@@ -76,7 +74,6 @@ private fun Tabs(
     Children(
         stack = component.stack,
         modifier = modifier,
-        animation = stackAnimation(fade()),
     ) {
         when (val child = it.instance) {
             is MainTabsComponentInternal.Child.Transactions -> TransactionsContent(

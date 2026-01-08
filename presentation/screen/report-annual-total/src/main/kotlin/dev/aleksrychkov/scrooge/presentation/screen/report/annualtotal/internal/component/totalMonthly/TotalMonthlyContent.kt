@@ -1,18 +1,14 @@
 package dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,8 +26,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyState
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -77,27 +71,10 @@ private fun TotalMonthlyContent(
             top = paddingTop,
             bottom = paddingBottom,
         ),
-        verticalArrangement = Arrangement.spacedBy(Normal2X),
     ) {
         if (headerItem != null) {
             item {
                 headerItem()
-            }
-        }
-
-        stickyHeader {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Small)
-            ) {
-                if (state.isLoading) {
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = Large)
-                    )
-                }
             }
         }
 
@@ -110,7 +87,8 @@ private fun TotalMonthlyContent(
                     .fillMaxWidth()
                     .debounceClickable {
                         openCategoryReport(byMonth.periodTimestamp)
-                    },
+                    }
+                    .animateItem(),
                 byMonth = byMonth,
             )
         }
@@ -123,7 +101,7 @@ private fun TotalByMonth(
     byMonth: TotalMonthlyState.ByMonth,
 ) {
     Column(
-        modifier = modifier.padding(),
+        modifier = modifier.padding(top = 52.dp),
     ) {
         Text(
             modifier = Modifier.padding(horizontal = Large),

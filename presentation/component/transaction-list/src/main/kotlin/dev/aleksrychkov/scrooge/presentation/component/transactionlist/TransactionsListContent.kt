@@ -90,12 +90,12 @@ private fun Content(
             val item = items[index] ?: return@items
             when (item) {
                 is TransactionsItem.Group -> TransactionsGroupItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().animateItem(),
                     group = item,
                 )
 
                 is TransactionsItem.Item -> TransactionItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().animateItem(),
                     transaction = item,
                     onTransactionClicked = onTransactionClicked,
                 )

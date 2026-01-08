@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -84,20 +84,20 @@ private fun Content(
         data = state.data,
         elevation = elevation,
         openCategoryTotal = openCategoryTotal,
-        isLoading = state.isLoading,
     )
 }
 
 @Composable
 private fun TotalContent(
     modifier: Modifier,
-    isLoading: Boolean,
     data: PeriodTotalState.ByType,
     elevation: Dp,
     openCategoryTotal: () -> Unit,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .wrapContentSize()
+            .animateContentSize(),
         elevation = CardDefaults.cardElevation(defaultElevation = elevation),
         shape = ShapeDefaults.Large.copy(
             topStart = CornerSize(0.dp),
@@ -114,18 +114,6 @@ private fun TotalContent(
                     openCategoryTotal()
                 }
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Small)
-                    .padding(horizontal = Large)
-            ) {
-                if (isLoading) {
-                    LinearProgressIndicator(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
             Text(
                 modifier = Modifier
                     .padding(horizontal = Large)
@@ -137,9 +125,11 @@ private fun TotalContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .defaultMinSize(
+                        minHeight = 60.dp,
+                    )
                     .padding(horizontal = Large)
-                    .padding(vertical = Normal)
-                    .animateContentSize(),
+                    .padding(vertical = Normal),
             ) {
                 data.total.forEach { item ->
                     Row {
@@ -159,10 +149,12 @@ private fun TotalContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .defaultMinSize(
+                        minHeight = 80.dp,
+                    )
                     .background(MaterialTheme.colorScheme.secondary)
                     .padding(horizontal = Large)
-                    .padding(bottom = Normal)
-                    .animateContentSize(),
+                    .padding(bottom = Normal),
             ) {
                 IncomeExpenseBlock(
                     modifier = Modifier.weight(1f),
@@ -228,7 +220,6 @@ private fun TotalContentPreview() {
                 modifier = Modifier.fillMaxWidth(),
                 elevation = Medium,
                 openCategoryTotal = {},
-                isLoading = true,
                 data = PeriodTotalState.ByType(
                     income = persistentListOf(
                         PeriodTotalState.ByType.Value(
