@@ -38,7 +38,7 @@ internal class DefaultDatabaseFileAdapter(
         database.categoryQueries.selectAll().executeAsList().forEach {
             serializer.serialize(it, output)
         }
-        database.tagQueries.selectAllTransactionTag().executeAsList().forEach {
+        database.tagQueries.selectAll().executeAsList().forEach {
             serializer.serialize(it, output)
         }
 
@@ -65,6 +65,10 @@ internal class DefaultDatabaseFileAdapter(
                     serializer.serialize(t, output)
                 }
             index = Datestamp.from(nextMonth.plus(1, DateTimeUnit.DAY))
+        }
+
+        database.tagQueries.selectAllTransactionTag().executeAsList().forEach {
+            serializer.serialize(it, output)
         }
     }
 

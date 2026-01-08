@@ -80,7 +80,7 @@ private fun RootTransferContent(
         },
     ) { state ->
         Box(
-            modifier = modifier,
+            modifier = modifier.padding(Large),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -137,9 +137,7 @@ private fun Failed(
     }
     Spacer(modifier = Modifier.height(Normal2X))
     DsButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Large),
+        modifier = Modifier.fillMaxWidth(),
         onClick = close,
     ) {
         Text(text = stringResource(Resources.string.close))
@@ -160,9 +158,7 @@ private fun SuccessExport(
     val shareTxt = stringResource(Resources.string.send)
     val ctx = LocalContext.current
     TextButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Large),
+        modifier = Modifier.fillMaxWidth(),
         onClick = {
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "*/*"
@@ -189,9 +185,7 @@ private fun SuccessExport(
 
     Spacer(modifier = Modifier.height(Normal2X))
     DsButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Large),
+        modifier = Modifier.fillMaxWidth(),
         onClick = close,
     ) {
         Text(text = stringResource(Resources.string.close))
@@ -209,9 +203,7 @@ private fun SuccessImport(
 
     Spacer(modifier = Modifier.height(Normal2X))
     DsButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Large),
+        modifier = Modifier.fillMaxWidth(),
         onClick = close,
     ) {
         Text(text = stringResource(Resources.string.close))
