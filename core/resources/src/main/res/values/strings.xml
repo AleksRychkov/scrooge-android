@@ -38,6 +38,7 @@
     <string name="more_options">More options</string>
     <string name="edit">Edit</string>
     <string name="theme">Theme</string>
+    <string name="send">Send file</string>
     <string-array name="month_names">
         <item>January</item>
         <item>February</item>
@@ -161,6 +162,8 @@
     <!-- Transfer -->
     <string name="transfer_import_in_progress">Import is in progress…</string>
     <string name="transfer_export_in_progress">Export is in progress…</string>
+    <string name="transfer_transfer_failed">Something went wrong…</string>
+    <string name="transfer_transfer_success">All done!</string>
     <string name="transfer_export_title">Export data</string>
     <string name="transfer_export_description">Create data backup to import later</string>
     <string name="transfer_import_title">Import data</string>

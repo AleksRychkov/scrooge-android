@@ -24,6 +24,7 @@ Copied from https://github.com/MahboubehSeyedpour/jetpack-loading/blob/master/je
 @Composable
 fun DsPacmanIndicator(
     color: Color = Color.White,
+    ballIn: Boolean = false,
     ballDiameter: Float = 40f,
     canvasSize: Dp = 40.dp,
     animationDuration: Int = 500
@@ -31,9 +32,12 @@ fun DsPacmanIndicator(
     val lipStart = 0f
     val lipEnd = 45f
 
+    val initPositionMultiplier = if (ballIn) -1 else 1
+    val targetPositionMultiplier = if (ballIn) 1 else -1
+
     val positionAnimation by rememberInfiniteTransition().animateFloat(
-        initialValue = ballDiameter,
-        targetValue = -ballDiameter,
+        initialValue = initPositionMultiplier * ballDiameter,
+        targetValue = targetPositionMultiplier * ballDiameter,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = animationDuration, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Restart

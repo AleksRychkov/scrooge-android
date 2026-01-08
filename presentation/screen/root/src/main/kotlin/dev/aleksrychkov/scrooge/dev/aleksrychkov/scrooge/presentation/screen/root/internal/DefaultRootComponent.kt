@@ -33,9 +33,13 @@ internal class DefaultRootComponent(
             .distinctUntilChanged()
             .onEach {
                 if (it.current is TransferStateEntity.State.None) {
-                    navigation.replaceAll(Configuration.Main)
+                    if (stack.value.active.configuration !is Configuration.Main) {
+                        navigation.replaceAll(Configuration.Main)
+                    }
                 } else {
-                    navigation.replaceAll(Configuration.Transfer(state = it))
+                    if (stack.value.active.configuration !is Configuration.Transfer) {
+                        navigation.replaceAll(Configuration.Transfer(state = it))
+                    }
                 }
             }
             .launchIn(retainedCoroutineScope())

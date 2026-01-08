@@ -45,7 +45,7 @@ internal class DefaultDatabaseFileAdapter(
         val fromDatestamp = Datestamp(minMax.minDatestamp!!)
         val toDatestamp = Datestamp(minMax.maxDatestamp!!)
         var index: Datestamp = fromDatestamp
-        while (index.value < toDatestamp.value) {
+        while (index.value <= toDatestamp.value) {
             val fromDatestamp = index.value
             val nextMonth = index.date.plus(1, DateTimeUnit.MONTH)
             val toDatestamp = Datestamp.from(nextMonth).value
