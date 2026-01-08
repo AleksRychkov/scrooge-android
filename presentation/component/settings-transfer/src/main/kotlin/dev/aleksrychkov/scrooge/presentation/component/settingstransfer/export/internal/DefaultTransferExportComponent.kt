@@ -16,11 +16,7 @@ internal class DefaultTransferExportComponent(
     @Suppress("SwallowedException")
     override fun export() {
         retainedCoroutineScope().launch(Dispatchers.IO) {
-            try {
-                exportUseCase.value.invoke()
-            } catch (_: IllegalStateException) {
-                // todo: handle it?
-            }
+            exportUseCase.value.invoke()
         }
     }
 }

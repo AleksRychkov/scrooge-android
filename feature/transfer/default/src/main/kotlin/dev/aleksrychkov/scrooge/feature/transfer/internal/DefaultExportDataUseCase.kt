@@ -22,8 +22,7 @@ internal class DefaultExportDataUseCase(
     override suspend fun invoke() {
         val dt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
         val dbName = DB_BACKUP_NAME + "_" + dt
-        val uriString = exportUriUseCase.value.invoke(dbName)
-        checkNotNull(uriString)
+        val uriString = exportUriUseCase.value.invoke(dbName) ?: return
         ExportWorker.fire(context = context, uri = uriString)
     }
 }

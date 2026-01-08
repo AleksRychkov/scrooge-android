@@ -15,11 +15,7 @@ internal class DefaultTransferImportComponent(
 
     override fun import() {
         retainedCoroutineScope().launch(Dispatchers.IO) {
-            try {
-                importUseCase.value.invoke()
-            } catch (_: IllegalStateException) {
-                // todo: handle it?
-            }
+            importUseCase.value.invoke()
         }
     }
 }

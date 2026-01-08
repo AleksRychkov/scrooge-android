@@ -11,8 +11,7 @@ internal class DefaultImportDataUseCase(
 ) : ImportDataUseCase {
 
     override suspend fun invoke() {
-        val uriString = importUriUseCase.value.invoke()
-        checkNotNull(uriString)
+        val uriString = importUriUseCase.value.invoke() ?: return
         ImportWorker.fire(context = context, uri = uriString)
     }
 }
