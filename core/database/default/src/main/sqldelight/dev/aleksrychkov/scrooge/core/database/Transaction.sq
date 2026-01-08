@@ -99,6 +99,9 @@ SELECT last_insert_rowid();
 create:
 INSERT INTO TTransaction (amount, datestamp, type, categoryId, currencyCode) VALUES (?, ?, ?,  ?, ?);
 
+add:
+INSERT INTO TTransaction (id, amount, datestamp, type, categoryId, currencyCode) VALUES (?, ?, ?, ?,  ?, ?);
+
 update:
 UPDATE TTransaction SET amount = ?, datestamp = ?, type = ?, categoryId = ?, currencyCode = ? WHERE id = ?;
 

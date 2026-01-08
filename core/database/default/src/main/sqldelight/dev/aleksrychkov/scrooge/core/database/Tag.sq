@@ -29,6 +29,9 @@ SELECT * FROM Tag WHERE name = ? LIMIT 1;
 create:
 INSERT INTO Tag (name) VALUES (?);
 
+add:
+INSERT INTO Tag (id, name) VALUES (?, ?);
+
 delete:
 DELETE FROM Tag WHERE id = ?;
 
@@ -43,3 +46,6 @@ DELETE FROM FilterTag;
 
 insertFilterTag:
 INSERT OR IGNORE INTO FilterTag(tagId) VALUES (?);
+
+selectAllTransactionTag:
+SELECT * FROM TransactionTag;

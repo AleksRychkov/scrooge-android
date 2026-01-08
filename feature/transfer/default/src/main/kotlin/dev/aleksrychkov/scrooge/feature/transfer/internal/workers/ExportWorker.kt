@@ -1,19 +1,22 @@
 package dev.aleksrychkov.scrooge.feature.transfer.internal.workers
 
 import android.content.Context
+import android.net.Uri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import dev.aleksrychkov.scrooge.core.database.DatabaseManger
+import dev.aleksrychkov.scrooge.core.database.fileadapter.DatabaseFileAdapter
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
 import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.transfer.SetTransferStateUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.io.BufferedOutputStream
+import java.io.DataOutputStream
+import java.io.OutputStream
 
 internal class ExportWorker(
-    context: Context,
+    private val context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
 
@@ -22,7 +25,7 @@ internal class ExportWorker(
     }
 
     private val setTransferStateUseCase: Lazy<SetTransferStateUseCase> = getLazy()
-    private val databaseManger: Lazy<DatabaseManger> = getLazy()
+    private val databaseFileAdapter: Lazy<DatabaseFileAdapter> = getLazy()
 
     @Suppress("TooGenericExceptionCaught")
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {
@@ -42,13 +45,12 @@ internal class ExportWorker(
             .getOrDefault(Result.failure())
     }
 
-    @Suppress("MagicNumber", "UnusedParameter")
     private suspend fun export(uriString: String) {
-        try {
-            databaseManger.value.close()
-            delay(2000)
-        } finally {
-            databaseManger.value.open()
+        val outputStream: OutputStream
+        val uri = Uri.parse(uriString)
+        outputStream = requireNotNull(context.contentResolver.openOutputStream(uri))
+        DataOutputStream(BufferedOutputStream(outputStream)).use {
+            databaseFileAdapter.value.write(it)
         }
     }
 }

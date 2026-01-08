@@ -25,6 +25,9 @@ SELECT * FROM Category WHERE type = :type ORDER BY orderIndex ASC;
 create:
 INSERT INTO Category (name, type, iconId, color, orderIndex) VALUES (?, ?, ?, ?, ?);
 
+add:
+INSERT INTO Category (id, name, type, iconId, color, orderIndex) VALUES (?, ?, ?, ?, ?, ?);
+
 update:
 UPDATE Category SET name = :name, type = :type, iconId = :iconId, color = :color WHERE id = :id;
 
@@ -42,3 +45,6 @@ UPDATE Category SET orderIndex = orderIndex - 1 WHERE type = :type AND orderInde
 
 setOrderIndex:
 UPDATE Category SET orderIndex = :orderIndex WHERE id = :id;
+
+selectAll:
+SELECT * FROM Category;
