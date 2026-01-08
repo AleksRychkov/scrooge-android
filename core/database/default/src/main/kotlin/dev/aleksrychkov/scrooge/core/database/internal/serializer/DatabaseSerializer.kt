@@ -12,6 +12,8 @@ import java.io.IOException
 internal class DatabaseSerializer {
 
     private companion object {
+        const val SIGNATURE = "dev.aleksrychkov.scrooge"
+
         const val TYPE_CATEGORY = 1
         const val TYPE_TAG = 2
         const val TYPE_TRANSACTION = 3
@@ -20,6 +22,10 @@ internal class DatabaseSerializer {
         const val VERSION_1 = 1L
 
         const val VERSION = VERSION_1
+    }
+
+    fun writeSignature(output: DataOutput) {
+        output.writeUTF(SIGNATURE)
     }
 
     fun writeVersion(output: DataOutput) {
@@ -66,6 +72,11 @@ internal class DatabaseSerializer {
         transactionCallback: suspend (TTransaction) -> Unit,
         transactionTagCallback: suspend (TransactionTag) -> Unit,
     ) {
+        val signature = input.readUTF()
+        if (signature != SIGNATURE) {
+            error("Invalid signature: $signature")
+        }
+
         val version = input.readLong()
         if (version !in VERSION_1..VERSION) {
             error("Unsupported version: $VERSION_1")

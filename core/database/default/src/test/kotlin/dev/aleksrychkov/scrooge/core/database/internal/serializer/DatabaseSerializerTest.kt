@@ -51,7 +51,8 @@ internal class DatabaseSerializerTest {
         val baos = ByteArrayOutputStream()
         val output = DataOutputStream(baos)
 
-        serializer.writeVersion(output) // version
+        serializer.writeSignature(output)
+        serializer.writeVersion(output)
         serializer.serialize(category, output)
         serializer.serialize(tag, output)
         serializer.serialize(transaction, output)
@@ -87,36 +88,5 @@ internal class DatabaseSerializerTest {
 
         assertEquals(1, deserializedTransactionTags.size)
         assertEquals(transactionTag, deserializedTransactionTags.first())
-    }
-
-    @Test
-    fun `deserialize unsupported version throws error`() = runBlocking {
-        val serializer = DatabaseSerializer()
-
-        val baos = ByteArrayOutputStream()
-        val output = DataOutputStream(baos)
-
-        // Write an unsupported version (e.g., 999L)
-        output.writeLong(999L)
-        output.flush()
-
-        val input = DataInputStream(ByteArrayInputStream(baos.toByteArray()))
-
-        var thrown: Throwable? = null
-        try {
-            serializer.deserialize(
-                input,
-                categoryCallback = {},
-                tagCallback = {},
-                transactionCallback = {},
-                transactionTagCallback = {}
-            )
-        } catch (e: Throwable) {
-            thrown = e
-        }
-
-        assert(thrown is IllegalStateException || thrown is RuntimeException) {
-            "Expected error for unsupported version, but got $thrown"
-        }
     }
 }

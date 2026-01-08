@@ -32,6 +32,7 @@ internal class DefaultDatabaseFileAdapter(
             .minMaxDatestamp()
             .executeAsOneOrNull() ?: return@withContext
 
+        serializer.writeSignature(output)
         serializer.writeVersion(output)
 
         database.categoryQueries.selectAll().executeAsList().forEach {
@@ -45,10 +46,12 @@ internal class DefaultDatabaseFileAdapter(
         val toDatestamp = Datestamp(minMax.maxDatestamp!!)
         var index: Datestamp = fromDatestamp
         while (index.value < toDatestamp.value) {
-            val nextIndex = Datestamp.from(index.date.plus(1, DateTimeUnit.MONTH))
+            val fromDatestamp = index.value
+            val nextMonth = index.date.plus(1, DateTimeUnit.MONTH)
+            val toDatestamp = Datestamp.from(nextMonth).value
 
             database.transactionQueries
-                .selectFromTo(fromDatestamp = index.value, toDatestamp = nextIndex.value)
+                .selectFromTo(fromDatestamp = fromDatestamp, toDatestamp = toDatestamp)
                 .executeAsList()
                 .forEach {
                     val t = TTransaction(
@@ -61,7 +64,7 @@ internal class DefaultDatabaseFileAdapter(
                     )
                     serializer.serialize(t, output)
                 }
-            index = nextIndex
+            index = Datestamp.from(nextMonth.plus(1, DateTimeUnit.DAY))
         }
     }
 

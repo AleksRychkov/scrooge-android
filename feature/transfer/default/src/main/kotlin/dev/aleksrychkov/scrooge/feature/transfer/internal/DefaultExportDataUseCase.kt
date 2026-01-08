@@ -3,10 +3,6 @@
 package dev.aleksrychkov.scrooge.feature.transfer.internal
 
 import android.content.Context
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
-import androidx.work.WorkManager
 import dev.aleksrychkov.scrooge.feature.transfer.ExportDataUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.GetExportUriUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.internal.workers.ExportWorker
@@ -28,11 +24,6 @@ internal class DefaultExportDataUseCase(
         val dbName = DB_BACKUP_NAME + "_" + dt
         val uriString = exportUriUseCase.value.invoke(dbName)
         checkNotNull(uriString)
-        val data = Data.Builder().put(ExportWorker.KEY_URI, uriString).build()
-        val request = OneTimeWorkRequestBuilder<ExportWorker>()
-            .setInputData(data)
-            .setExpedited(policy = OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-            .build()
-        WorkManager.getInstance(context).enqueue(request)
+        ExportWorker.fire(context = context, uri = uriString)
     }
 }

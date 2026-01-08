@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.core.database.DatabaseManger
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.createDriver
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -58,6 +59,16 @@ internal class DefaultDatabaseManger(
             isInitAllowed.set(true)
             getOrCreateDatabase()
         }
+    }
+
+    override suspend fun cleanup() = withContext(ioDispatcher + NonCancellable) {
+        val driver = driverRef.get() ?: return@withContext
+        driver.execute(null, "DELETE FROM TTransaction", 0).await()
+        driver.execute(null, "DELETE FROM Category", 0).await()
+        driver.execute(null, "DELETE FROM Tag", 0).await()
+        driver.execute(null, "DELETE FROM TransactionTag", 0).await()
+        driver.execute(null, "DELETE FROM FilterTag", 0).await()
+        driver.execute(null, "DELETE FROM sqlite_sequence", 0).await()
     }
     // endregion DatabaseManger
 

@@ -26,8 +26,10 @@ import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.entity.ThemeEntity
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.transfer.DefaultGetExportUriUseCase
+import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.transfer.DefaultGetImportUriUseCase
 import dev.aleksrychkov.scrooge.feature.theme.ObserveThemeUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.GetExportUriUseCase
+import dev.aleksrychkov.scrooge.feature.transfer.GetImportUriUseCase
 
 private const val SPLASH_SCREEN_EXIT_ANIM_DURATION = 500L
 
@@ -90,7 +92,11 @@ internal class RootActivity : ComponentActivity() {
 
     private fun setupRootModule() {
         val exportUri = DefaultGetExportUriUseCase(resultCaller = this as ActivityResultCaller)
-        module = module { factory<GetExportUriUseCase> { exportUri } }.also(Naive::add)
+        val importUri = DefaultGetImportUriUseCase(resultCaller = this as ActivityResultCaller)
+        module = module {
+            factory<GetExportUriUseCase> { exportUri }
+            factory<GetImportUriUseCase> { importUri }
+        }.also(Naive::add)
     }
 
     private fun setSplashScreenAnimation(splashScreen: SplashScreen) {

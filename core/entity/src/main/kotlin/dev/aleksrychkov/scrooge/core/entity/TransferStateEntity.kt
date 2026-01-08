@@ -15,6 +15,7 @@ data class TransferStateEntity(
             private const val EXPORTING = 3
             private const val EXPORTING_FAILED = 4
             private const val EXPORTING_SUCCESS = 5
+            private const val IMPORTING_SUCCESS = 6
 
             fun fromOrdinal(ordinal: Int, info: String?): State {
                 return when (ordinal) {
@@ -24,6 +25,7 @@ data class TransferStateEntity(
                     EXPORTING -> Exporting(info = info)
                     EXPORTING_FAILED -> ExportingFailed(info = info)
                     EXPORTING_SUCCESS -> ExportingSuccess(info = info)
+                    IMPORTING_SUCCESS -> ImportingSuccess(info = info)
                     else -> error("Unknown ordinal: $ordinal")
                 }
             }
@@ -41,6 +43,12 @@ data class TransferStateEntity(
         @Serializable
         data class Importing(
             override val ordinal: Int = IMPORTING,
+            override val info: String? = null,
+        ) : State
+
+        @Serializable
+        data class ImportingSuccess(
+            override val ordinal: Int = IMPORTING_SUCCESS,
             override val info: String? = null,
         ) : State
 

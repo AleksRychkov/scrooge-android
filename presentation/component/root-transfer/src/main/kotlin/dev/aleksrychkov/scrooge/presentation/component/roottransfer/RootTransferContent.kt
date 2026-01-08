@@ -72,6 +72,7 @@ private fun RootTransferContent(
                 is TransferStateEntity.State.ExportingSuccess -> "export success"
                 is TransferStateEntity.State.ImportingFailed -> "import fail"
                 is TransferStateEntity.State.None -> "none"
+                is TransferStateEntity.State.ImportingSuccess -> "import success"
             }
             Text(
                 text = text,

@@ -8,6 +8,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import dev.aleksrychkov.scrooge.core.database.DatabaseManger
 import dev.aleksrychkov.scrooge.core.database.fileadapter.DatabaseFileAdapter
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
@@ -15,21 +16,21 @@ import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
 import dev.aleksrychkov.scrooge.feature.transfer.SetTransferStateUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.BufferedOutputStream
-import java.io.DataOutputStream
-import java.io.OutputStream
+import java.io.BufferedInputStream
+import java.io.DataInputStream
+import java.io.InputStream
 
-internal class ExportWorker(
+internal class ImportWorker(
     private val context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
 
     companion object {
-        private const val KEY_URI = "export_uri"
+        const val KEY_URI = "import_uri"
 
         fun fire(context: Context, uri: String) {
             val data = Data.Builder().put(KEY_URI, uri).build()
-            val request = OneTimeWorkRequestBuilder<ExportWorker>()
+            val request = OneTimeWorkRequestBuilder<ImportWorker>()
                 .setInputData(data)
                 .setExpedited(policy = OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .build()
@@ -39,31 +40,35 @@ internal class ExportWorker(
 
     private val setTransferStateUseCase: Lazy<SetTransferStateUseCase> = getLazy()
     private val databaseFileAdapter: Lazy<DatabaseFileAdapter> = getLazy()
+    private val databaseManager: Lazy<DatabaseManger> = getLazy()
 
     @Suppress("TooGenericExceptionCaught")
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {
         val stateUseCase = setTransferStateUseCase.value
         runSuspendCatching {
-            stateUseCase(TransferStateEntity(TransferStateEntity.State.Exporting()))
+            stateUseCase(TransferStateEntity(TransferStateEntity.State.Importing()))
+
+            databaseManager.value.cleanup()
 
             val uri = requireNotNull(inputData.getString(KEY_URI))
-            export(uri)
+            import(uri)
 
-            stateUseCase(TransferStateEntity(TransferStateEntity.State.ExportingSuccess(info = uri)))
+            stateUseCase(TransferStateEntity(TransferStateEntity.State.ImportingSuccess(info = uri)))
             Result.success()
         }
             .onFailure { e ->
-                stateUseCase(TransferStateEntity(TransferStateEntity.State.ExportingFailed(info = e.message)))
+                e.printStackTrace()
+                stateUseCase(TransferStateEntity(TransferStateEntity.State.ImportingFailed(info = e.message)))
             }
             .getOrDefault(Result.failure())
     }
 
-    private suspend fun export(uriString: String) {
-        val outputStream: OutputStream
+    private suspend fun import(uriString: String) {
+        val inputStream: InputStream
         val uri = Uri.parse(uriString)
-        outputStream = requireNotNull(context.contentResolver.openOutputStream(uri))
-        DataOutputStream(BufferedOutputStream(outputStream)).use {
-            databaseFileAdapter.value.write(it)
+        inputStream = requireNotNull(context.contentResolver.openInputStream(uri))
+        DataInputStream(BufferedInputStream(inputStream)).use {
+            databaseFileAdapter.value.read(it)
         }
     }
 }

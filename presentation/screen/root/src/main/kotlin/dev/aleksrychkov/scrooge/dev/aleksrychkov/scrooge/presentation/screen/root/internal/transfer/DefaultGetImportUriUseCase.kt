@@ -4,12 +4,12 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.contract.ActivityResultContracts
-import dev.aleksrychkov.scrooge.feature.transfer.GetExportUriUseCase
+import dev.aleksrychkov.scrooge.feature.transfer.GetImportUriUseCase
 import kotlinx.coroutines.CompletableDeferred
 
-internal class DefaultGetExportUriUseCase(
+internal class DefaultGetImportUriUseCase(
     resultCaller: ActivityResultCaller,
-) : GetExportUriUseCase {
+) : GetImportUriUseCase {
 
     private companion object {
         const val DB_MIME_TYPE = "application/octet-stream"
@@ -21,13 +21,13 @@ internal class DefaultGetExportUriUseCase(
     private var deferred: CompletableDeferred<String?>? = null
 
     private var getUriLauncher = resultCaller.registerForActivityResult(
-        contract = ActivityResultContracts.CreateDocument(DB_MIME_TYPE),
+        contract = ActivityResultContracts.OpenDocument(),
         callback = callback
     )
 
-    override suspend fun invoke(fileName: String): String? {
+    override suspend fun invoke(): String? {
         deferred = CompletableDeferred()
-        getUriLauncher.launch(fileName)
+        getUriLauncher.launch(arrayOf(DB_MIME_TYPE))
 
         return deferred?.await()
     }

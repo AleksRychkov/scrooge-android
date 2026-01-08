@@ -10,6 +10,7 @@ import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.di.singleton
 import dev.aleksrychkov.scrooge.feature.transfer.internal.DefaultExportDataUseCase
+import dev.aleksrychkov.scrooge.feature.transfer.internal.DefaultImportDataUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.internal.DefaultObserveTransferStateUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.internal.DefaultSetTransferStateUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.internal.data.repository.TransferStateRepository
@@ -38,6 +39,12 @@ fun buildTransferModule(context: Context): NaiveModule {
         factory<ExportDataUseCase> {
             DefaultExportDataUseCase(
                 exportUriUseCase = getLazy(),
+                context = context,
+            )
+        }
+        factory<ImportDataUseCase> {
+            DefaultImportDataUseCase(
+                importUriUseCase = getLazy(),
                 context = context,
             )
         }
