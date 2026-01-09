@@ -9,6 +9,7 @@ import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
+import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect.SubmitFilters
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.utils.FiltersReadableNameHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
@@ -37,7 +38,7 @@ internal class FiltersReducer(
         return when (event) {
             is FiltersEvent.External.Init -> state.reduceWith(event) {
                 command {
-                    listOf(FiltersCommand.GetFiltersStartEndYears, FiltersCommand.GetAvailableTags)
+                    listOf(FiltersCommand.GetFiltersStartEndYears)
                 }
                 state {
                     copy(
@@ -157,19 +158,9 @@ internal class FiltersReducer(
                 }
             }
 
-            is FiltersEvent.Internal.AvailableTags -> state.reduceWith(event) {
-                state {
-                    copy(allTags = event.tags)
-                }
-            }
-
-            is FiltersEvent.External.ToggleTag -> state.reduceWith(event) {
+            is FiltersEvent.External.RemoveTag -> state.reduceWith(event) {
                 val selectedTags = state.filter.tags.toMutableSet()
-                if (selectedTags.contains(event.tag)) {
-                    selectedTags.remove(event.tag)
-                } else {
-                    selectedTags.add(event.tag)
-                }
+                selectedTags.remove(event.tag)
                 val res = selectedTags.toImmutableSet()
                 state {
                     copy(
@@ -185,12 +176,23 @@ internal class FiltersReducer(
                     FilterEntity.currentYear()
                 }
                 effects {
-                    listOf(FiltersEffect.SubmitFilters(filter))
+                    listOf(SubmitFilters(filter))
                 }
                 state {
                     copy(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
+                    )
+                }
+            }
+
+            is FiltersEvent.External.AddTag -> state.reduceWith(event) {
+                val selectedTags = state.filter.tags.toMutableSet()
+                selectedTags.add(event.tag)
+                val res = selectedTags.toImmutableSet()
+                state {
+                    copy(
+                        filter = filter.copy(tags = res)
                     )
                 }
             }

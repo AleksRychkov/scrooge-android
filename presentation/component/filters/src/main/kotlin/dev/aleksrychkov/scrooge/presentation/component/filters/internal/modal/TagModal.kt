@@ -1,13 +1,13 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal
+package dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import dev.aleksrychkov.scrooge.presentation.component.filters.internal.FiltersComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagModal
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 
 @Composable
-internal fun FormTagModal(
-    component: TransactionFormComponentInternal,
+internal fun FiltersTagModal(
+    component: FiltersComponentInternal,
 ) {
     val categorySlot = component.tagModal.subscribeAsState().value
     TagModal(

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,14 +22,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.InputChip
-import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,20 +32,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
+import dev.aleksrychkov.scrooge.presentation.component.transactiontag.composable.TagsRow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
@@ -60,7 +51,6 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Month
 import java.util.EnumSet
-import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Suppress("LongParameterList")
 @Composable
@@ -71,13 +61,13 @@ internal fun FiltersFixedPeriod(
     selectedYears: ImmutableList<Int>,
     allMonths: ImmutableList<String>,
     selectedMonths: ImmutableList<Int>,
-    allTags: ImmutableSet<TagEntity>,
     selectedTags: ImmutableSet<TagEntity>,
     onYearClicked: (Int) -> Unit,
     onYearLongClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
     onMonthLongClicked: (Int) -> Unit,
-    toggleTag: (TagEntity) -> Unit,
+    removeTag: (TagEntity) -> Unit,
+    openTagModal: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -106,14 +96,14 @@ internal fun FiltersFixedPeriod(
             )
         }
 
-        if (settings.contains(FiltersSettings.Tags) && allTags.isNotEmpty()) {
+        if (settings.contains(FiltersSettings.Tags)) {
             Spacer(modifier = Modifier.height(Normal))
 
             Tags(
                 modifier = Modifier.fillMaxWidth(),
-                tags = allTags,
                 selectedTags = selectedTags,
-                toggleTag = toggleTag,
+                removeTag = removeTag,
+                addTag = openTagModal,
             )
         }
     }
@@ -284,49 +274,22 @@ private fun MonthRow(
 @Composable
 private fun Tags(
     modifier: Modifier,
-    tags: ImmutableSet<TagEntity>,
     selectedTags: ImmutableSet<TagEntity>,
-    toggleTag: (TagEntity) -> Unit,
+    removeTag: (TagEntity) -> Unit,
+    addTag: () -> Unit,
 ) {
-    FlowRow(
-        modifier = modifier
+    TagsRow(
+        modifier
             .padding(horizontal = Large)
             .background(
                 color = MaterialTheme.colorScheme.secondary,
                 shape = CardDefaults.shape,
             )
-            .padding(Normal)
-            .verticalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(space = Normal),
-        itemVerticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            modifier = Modifier,
-            imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground,
-        )
-
-        tags.forEach { tag ->
-            val isSelected = selectedTags.contains(tag)
-            InputChip(
-                modifier = Modifier,
-                selected = isSelected,
-                colors = InputChipDefaults.inputChipColors().copy(
-                    selectedContainerColor = MaterialTheme.colorScheme.primary,
-                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                ),
-                label = {
-                    Text(
-                        modifier = Modifier,
-                        text = tag.name,
-                    )
-                },
-                shape = RoundedCornerShape(Normal2X),
-                onClick = { toggleTag(tag) },
-            )
-        }
-    }
+            .padding(horizontal = Large),
+        tags = selectedTags,
+        removeTag = removeTag,
+        openTagModal = addTag,
+    )
 }
 
 private suspend fun LazyListState.animateScrollAndCentralizeItem(index: Int) {
@@ -386,13 +349,13 @@ private fun ContentPreview() {
                 selectedYears = persistentListOf(2025),
                 allMonths = Month.entries.map { it.name }.toImmutableList(),
                 selectedMonths = persistentListOf(12),
-                allTags = persistentSetOf(TagEntity.from("Tag 1"), TagEntity.from("Tag 2")),
                 selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
                 onYearClicked = {},
                 onYearLongClicked = {},
                 onMonthClicked = {},
                 onMonthLongClicked = {},
-                toggleTag = { _ -> },
+                openTagModal = {},
+                removeTag = { _ -> },
             )
         }
     }

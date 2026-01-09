@@ -7,8 +7,10 @@ interface TagComponent {
     companion object {
         operator fun invoke(
             componentContext: ComponentContext,
+            isEditable: Boolean = true,
         ): TagComponent = DefaultTagComponent(
             componentContext = componentContext,
+            isEditable = isEditable,
         )
     }
 }

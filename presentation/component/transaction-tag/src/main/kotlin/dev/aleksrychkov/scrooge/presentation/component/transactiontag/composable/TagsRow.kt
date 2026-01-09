@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables
+package dev.aleksrychkov.scrooge.presentation.component.transactiontag.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -15,6 +16,7 @@ import androidx.compose.material3.InputChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
@@ -27,11 +29,11 @@ import kotlinx.collections.immutable.persistentSetOf
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
-internal fun FormTags(
+fun TagsRow(
     modifier: Modifier,
     tags: ImmutableSet<TagEntity>,
-    openTagModal: () -> Unit,
     removeTag: (TagEntity) -> Unit,
+    openTagModal: () -> Unit,
 ) {
     FlowRow(
         modifier = modifier,
@@ -71,9 +73,9 @@ internal fun FormTags(
                     Icon(
                         imageVector = Icons.Default.Clear,
                         contentDescription = stringResource(Resources.string.tag_delete),
-                        modifier = Modifier.debounceClickable {
-                            removeTag(tag)
-                        }
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .debounceClickable { removeTag(tag) }
                     )
                 }
             )
@@ -84,10 +86,10 @@ internal fun FormTags(
 @Preview
 @Composable
 @Suppress("UnusedPrivateMember")
-private fun FormContentPreview() {
+private fun TagsRowPreview() {
     AppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
-            FormTags(
+            TagsRow(
                 modifier = Modifier.fillMaxWidth(),
                 tags = persistentSetOf(
                     TagEntity.from("tag 1"),

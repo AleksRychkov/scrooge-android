@@ -1,6 +1,12 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
+import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
@@ -11,6 +17,7 @@ import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.Filt
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEvent
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersReducer
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
+import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.EnumSet
@@ -20,6 +27,8 @@ internal class DefaultFiltersComponent(
     filter: FilterEntity,
     settings: EnumSet<FiltersSettings>,
 ) : FiltersComponentInternal, ComponentContext by componentContext {
+
+    private val tagNavigation = SlotNavigation<Unit>()
 
     private val store: Store<FiltersState, FiltersEvent, FiltersEffect> by lazy {
         instanceKeeper.createStore(
@@ -52,9 +61,36 @@ internal class DefaultFiltersComponent(
         store.handle(FiltersEvent.External.MonthClicked(month = month, isLongClick = true))
     }
 
-    override fun toggleTag(tag: TagEntity) {
-        store.handle(FiltersEvent.External.ToggleTag(tag = tag))
+    // region Tag
+    override val tagModal: Value<ChildSlot<*, TagComponent>> =
+        childSlot(
+            source = tagNavigation,
+            serializer = null,
+            handleBackButton = true,
+            key = "FiltersComponentTagModalSlot",
+        ) { _, childComponentContext ->
+            TagComponent(
+                componentContext = childComponentContext,
+                isEditable = false,
+            )
+        }
+
+    override fun removeTag(tag: TagEntity) {
+        store.handle(FiltersEvent.External.RemoveTag(tag = tag))
     }
+
+    override fun openTagModal() {
+        tagNavigation.activate(Unit)
+    }
+
+    override fun closeTagModal() {
+        tagNavigation.dismiss()
+    }
+
+    override fun addTag(tag: TagEntity) {
+        store.handle(FiltersEvent.External.AddTag(tag = tag))
+    }
+    // endregion Tag
 
     override fun resetFilters() {
         store.handle(FiltersEvent.External.Reset)

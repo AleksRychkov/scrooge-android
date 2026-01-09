@@ -14,11 +14,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultTagComponent(
     private val componentContext: ComponentContext,
+    isEditable: Boolean,
 ) : TagComponentInternal, ComponentContext by componentContext {
 
     private val store: Store<TagState, TagEvent, TagEffect> by lazy {
         instanceKeeper.createStore(
-            initialState = TagState(),
+            initialState = TagState(isEditable = isEditable),
             actor = TagActor(),
             reducer = TagReducer(),
             startEvent = TagEvent.External.Init,

@@ -173,6 +173,7 @@ private fun TagsList(
                 Tag(
                     modifier = Modifier.animateItem(),
                     entity = tag,
+                    isEditable = state.isEditable,
                     selectTag = selectTag,
                     deleteTag = deleteTag,
                 )
@@ -189,6 +190,7 @@ private fun TagsList(
 private fun Tag(
     modifier: Modifier = Modifier,
     entity: TagEntity,
+    isEditable: Boolean,
     selectTag: (TagEntity) -> Unit,
     deleteTag: (TagEntity) -> Unit,
 ) {
@@ -207,7 +209,7 @@ private fun Tag(
             modifier = Modifier.weight(weight = 1f, fill = true),
             text = entity.name,
         )
-
+        if (!isEditable) return
         val isConfirmationAlertVisible = remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
@@ -283,6 +285,8 @@ private fun TagBar(
                 onValueChanged = setSearchQuery,
             )
         }
+
+        if (!state.isEditable) return
 
         DsButton(
             modifier = Modifier

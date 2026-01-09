@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,11 +26,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.FiltersComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables.FiltersFixedPeriod
+import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersTagModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
 import kotlinx.collections.immutable.persistentListOf
@@ -66,16 +68,19 @@ private fun FiltersContent(
         onYearLongClicked = component::onYearLongClicked,
         onMonthClicked = component::onMonthClicked,
         onMonthLongClicked = component::onMonthLongClicked,
-        toggleTag = component::toggleTag,
-        onSubmitClicked = {
-            callback(state.filter)
-        },
+        openTagModal = component::openTagModal,
+        removeTag = component::removeTag,
+        onSubmitClicked = { callback(state.filter) },
         resetFilters = component::resetFilters,
     )
 
     HandleEffects(
         component = component,
         callback = callback,
+    )
+
+    FiltersTagModal(
+        component = component,
     )
 }
 
@@ -88,52 +93,58 @@ private fun FiltersContent(
     onMonthClicked: (Int) -> Unit,
     onMonthLongClicked: (Int) -> Unit,
     onSubmitClicked: () -> Unit,
-    toggleTag: (TagEntity) -> Unit,
+    openTagModal: () -> Unit,
+    removeTag: (TagEntity) -> Unit,
     resetFilters: () -> Unit,
 ) {
-    Column(modifier = modifier) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Large),
-            verticalAlignment = Alignment.CenterVertically,
+    Box(modifier = modifier.verticalScroll(rememberScrollState())) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = state.filterReadable,
-                style = MaterialTheme.typography.bodyMedium,
-            )
 
-            DsButton(
-                onClick = onSubmitClicked
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Large),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(stringResource(Resources.string.apply))
-            }
-        }
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = state.filterReadable,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
 
-        FiltersFixedPeriod(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            settings = state.settings,
-            allYears = state.allYears,
-            allMonths = state.allMonths,
-            selectedYears = state.filter.years,
-            selectedMonths = state.filter.months,
-            allTags = state.allTags,
-            selectedTags = state.filter.tags,
-            onYearClicked = onYearClicked,
-            onYearLongClicked = onYearLongClicked,
-            onMonthClicked = onMonthClicked,
-            onMonthLongClicked = onMonthLongClicked,
-            toggleTag = toggleTag,
-        )
+                DsButton(
+                    onClick = onSubmitClicked
+                ) {
+                    Text(stringResource(Resources.string.apply))
+                }
+            }
+
+            FiltersFixedPeriod(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                settings = state.settings,
+                allYears = state.allYears,
+                allMonths = state.allMonths,
+                selectedYears = state.filter.years,
+                selectedMonths = state.filter.months,
+                selectedTags = state.filter.tags,
+                onYearClicked = onYearClicked,
+                onYearLongClicked = onYearLongClicked,
+                onMonthClicked = onMonthClicked,
+                onMonthLongClicked = onMonthLongClicked,
+                removeTag = removeTag,
+                openTagModal = openTagModal,
+            )
+        }
 
         TextButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = Normal, horizontal = Large),
+                .align(Alignment.BottomCenter)
+                .padding(Large),
             onClick = resetFilters,
         ) {
             Text(text = stringResource(Resources.string.reset))
@@ -182,7 +193,8 @@ private fun FormContentPreview() {
                 onMonthClicked = { _ -> },
                 onMonthLongClicked = { _ -> },
                 onSubmitClicked = {},
-                toggleTag = { _ -> },
+                removeTag = { _ -> },
+                openTagModal = {},
                 resetFilters = {},
             )
         }

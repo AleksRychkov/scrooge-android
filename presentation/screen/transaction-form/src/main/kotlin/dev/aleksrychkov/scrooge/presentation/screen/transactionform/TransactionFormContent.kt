@@ -34,15 +34,15 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.presentation.component.transactiontag.composable.TagsRow
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormAmount
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormCategory
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormDate
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormTags
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormTopAppBar
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.CategoryModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.CurrencyModal
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.TagModal
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormTagModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormState
 import kotlinx.coroutines.flow.collect
@@ -103,7 +103,7 @@ private fun TransactionFormContent(
     CategoryModal(
         component = component,
     )
-    TagModal(
+    FormTagModal(
         component = component,
     )
     CurrencyModal(
@@ -181,7 +181,7 @@ private fun FormContent(
 
         Spacer(modifier = Modifier.height(HalfNormal))
 
-        FormTags(
+        TagsRow(
             modifier = Modifier.fillMaxWidth(),
             tags = state.tags,
             openTagModal = openTagModal,

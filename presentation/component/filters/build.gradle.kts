@@ -17,8 +17,9 @@ dependencies {
     implementation(projects.core.resources)
     implementation(projects.core.udfExtensions)
 
-    implementation(projects.feature.tag.api)
     implementation(projects.feature.transaction.api)
+
+    implementation(projects.presentation.component.transactionTag)
 }
 
 dependencies {
