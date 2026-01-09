@@ -19,6 +19,7 @@ dependencies {
 
     implementation(projects.feature.transaction.api)
 
+    implementation(projects.presentation.component.category)
     implementation(projects.presentation.component.tags)
 }
 

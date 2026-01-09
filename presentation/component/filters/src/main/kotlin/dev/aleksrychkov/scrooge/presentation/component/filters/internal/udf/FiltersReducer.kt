@@ -196,6 +196,22 @@ internal class FiltersReducer(
                     )
                 }
             }
+
+            FiltersEvent.External.RemoveCategory -> state.reduceWith(event) {
+                state {
+                    copy(
+                        filter = filter.copy(category = null)
+                    )
+                }
+            }
+
+            is FiltersEvent.External.SetCategory -> state.reduceWith(event) {
+                state {
+                    copy(
+                        filter = filter.copy(category = event.category)
+                    )
+                }
+            }
         }
     }
 }

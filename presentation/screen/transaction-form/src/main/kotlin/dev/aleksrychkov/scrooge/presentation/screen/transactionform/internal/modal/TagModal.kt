@@ -9,9 +9,9 @@ import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.Tra
 internal fun FormTagModal(
     component: TransactionFormComponentInternal,
 ) {
-    val categorySlot = component.tagModal.subscribeAsState().value
+    val slot = component.tagModal.subscribeAsState().value
     TagModal(
-        slot = categorySlot,
+        slot = slot,
         close = component::closeTagModal,
         select = component::addTag,
     )

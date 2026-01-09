@@ -159,6 +159,7 @@ private fun CategoryContent(
     addNewCategoryClicked: () -> Unit,
     swapOrder: (List<Pair<Long, Int>>) -> Unit,
 ) {
+    println("ASDASD $state")
     Column(
         modifier = modifier
             .displayCutoutPadding()
@@ -218,9 +219,15 @@ private fun CategoryList(
                 .animateContentSize(),
             state = lazyListState,
         ) {
-            if (state.searchQuery.isNotBlank()) {
+            if (state.searchQuery.isNotBlank() || !state.isEditable) {
+                val list = if (!state.isEditable) {
+                    state.categories
+                } else {
+                    state.filtered
+                }
                 ordinalList(
-                    list = state.filtered,
+                    list = list,
+                    isEditable = state.isEditable,
                     selectCategory = selectCategory,
                     deleteCategory = deleteCategory,
                     editCategory = editCategory,
@@ -228,6 +235,7 @@ private fun CategoryList(
             } else {
                 reorderableList(
                     list = reorderableList,
+                    isEditable = true,
                     reorderableLazyColumnState = reorderableLazyColumnState,
                     selectCategory = selectCategory,
                     deleteCategory = deleteCategory,
@@ -243,6 +251,7 @@ private fun CategoryList(
 
 private fun LazyListScope.reorderableList(
     list: List<CategoryEntity>,
+    isEditable: Boolean,
     reorderableLazyColumnState: ReorderableLazyListState,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
@@ -250,7 +259,7 @@ private fun LazyListScope.reorderableList(
 ) {
     items(
         list,
-        key = { category -> category.id }
+        key = { category -> "${category.id}-${category.type.type}" }
     ) { category ->
         ReorderableItem(reorderableLazyColumnState, category.id) {
             val interactionSource = remember { MutableInteractionSource() }
@@ -259,6 +268,7 @@ private fun LazyListScope.reorderableList(
                     .animateItem()
                     .padding(start = Small),
                 entity = category,
+                isEditable = isEditable,
                 selectCategory = selectCategory,
                 deleteCategory = deleteCategory,
                 editCategory = editCategory,
@@ -278,19 +288,21 @@ private fun LazyListScope.reorderableList(
 
 private fun LazyListScope.ordinalList(
     list: ImmutableList<CategoryEntity>,
+    isEditable: Boolean,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     editCategory: (CategoryEntity) -> Unit,
 ) {
     items(
         items = list,
-        key = { category -> category.id }
+        key = { category -> "${category.id}-${category.type.type}" }
     ) { category ->
         Category(
             modifier = Modifier
                 .animateItem()
                 .padding(start = Large),
             entity = category,
+            isEditable = isEditable,
             selectCategory = selectCategory,
             deleteCategory = deleteCategory,
             editCategory = editCategory,
@@ -301,6 +313,7 @@ private fun LazyListScope.ordinalList(
 @Composable
 private fun Category(
     modifier: Modifier = Modifier,
+    isEditable: Boolean,
     entity: CategoryEntity,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
@@ -339,6 +352,7 @@ private fun Category(
             text = entity.name,
         )
 
+        if (!isEditable) return
         CategoryOptions(
             entity = entity,
             deleteCategory = deleteCategory,
@@ -448,6 +462,8 @@ private fun CategoryBar(
                 onValueChanged = setSearchQuery,
             )
         }
+
+        if (!state.isEditable) return
 
         DsButton(
             modifier = Modifier

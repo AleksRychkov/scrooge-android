@@ -22,17 +22,21 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultCategoryComponent(
     private val componentContext: ComponentContext,
-    private val transactionType: TransactionType,
+    transactionType: TransactionType?,
+    isEditable: Boolean,
 ) : CategoryComponentInternal, ComponentContext by componentContext {
 
     private val createCategoryNavigation = SlotNavigation<CreateCategoryDto>()
 
     private val store: Store<CategoryState, CategoryEvent, CategoryEffect> by lazy {
         instanceKeeper.createStore(
-            initialState = CategoryState(),
+            initialState = CategoryState(
+                isEditable = isEditable,
+                transactionType = transactionType
+            ),
             actor = CategoryActor(),
             reducer = CategoryReducer(),
-            startEvent = CategoryEvent.External.Init(transactionType),
+            startEvent = CategoryEvent.External.Init,
         )
     }
 
@@ -77,7 +81,7 @@ internal class DefaultCategoryComponent(
 
     override fun openAddCategoryModal() {
         val categoryNameToAdd = state.value.searchQuery
-        val type = state.value.transactionType
+        val type = state.value.transactionType ?: return
         createCategoryNavigation.activate(CreateCategoryDto(name = categoryNameToAdd, type = type))
     }
 

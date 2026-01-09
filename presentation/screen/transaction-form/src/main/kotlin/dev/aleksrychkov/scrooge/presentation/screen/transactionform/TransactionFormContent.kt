@@ -40,8 +40,8 @@ import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.com
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormCategory
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormDate
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormTopAppBar
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.CategoryModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.CurrencyModal
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormCategoryModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormTagModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormState
@@ -100,7 +100,7 @@ private fun TransactionFormContent(
             component = component,
         )
     }
-    CategoryModal(
+    FormCategoryModal(
         component = component,
     )
     FormTagModal(

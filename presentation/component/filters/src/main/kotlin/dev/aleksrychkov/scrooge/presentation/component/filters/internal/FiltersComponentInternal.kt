@@ -2,7 +2,9 @@ package dev.aleksrychkov.scrooge.presentation.component.filters.internal
 
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
@@ -15,6 +17,7 @@ internal interface FiltersComponentInternal : FiltersComponent {
     val effects: Flow<FiltersEffect>
 
     val tagModal: Value<ChildSlot<*, TagComponent>>
+    val categoryModal: Value<ChildSlot<*, CategoryComponent>>
 
     fun onYearClicked(year: Int)
     fun onYearLongClicked(year: Int)
@@ -26,4 +29,9 @@ internal interface FiltersComponentInternal : FiltersComponent {
     fun closeTagModal()
     fun addTag(tag: TagEntity)
     fun removeTag(tag: TagEntity)
+
+    fun openCategoryModal()
+    fun closeCategoryModal()
+    fun setCategory(category: CategoryEntity)
+    fun removeCategory()
 }

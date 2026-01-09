@@ -1,7 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.animateScrollBy
@@ -22,25 +21,35 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsInputTextFieldsColors
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsRow
@@ -51,6 +60,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Month
 import java.util.EnumSet
+import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Suppress("LongParameterList")
 @Composable
@@ -62,12 +72,15 @@ internal fun FiltersFixedPeriod(
     allMonths: ImmutableList<String>,
     selectedMonths: ImmutableList<Int>,
     selectedTags: ImmutableSet<TagEntity>,
+    category: CategoryEntity?,
     onYearClicked: (Int) -> Unit,
     onYearLongClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
     onMonthLongClicked: (Int) -> Unit,
     removeTag: (TagEntity) -> Unit,
     openTagModal: () -> Unit,
+    openCategoryModal: () -> Unit,
+    removeCategory: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -93,6 +106,17 @@ internal fun FiltersFixedPeriod(
                 selectedMonths = selectedMonths,
                 onMonthClicked = onMonthClicked,
                 onMonthLongClicked = onMonthLongClicked,
+            )
+        }
+
+        if (settings.contains(FiltersSettings.Category)) {
+            Spacer(modifier = Modifier.height(Normal))
+
+            Category(
+                modifier = Modifier.fillMaxWidth(),
+                category = category,
+                addCategory = openCategoryModal,
+                removeCategory = removeCategory,
             )
         }
 
@@ -123,42 +147,42 @@ private fun Years(
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = selectedItemIndex,
     )
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = Large)
-            .background(
-                color = MaterialTheme.colorScheme.secondary,
-                shape = CardDefaults.shape,
-            ),
-        contentAlignment = Alignment.Center,
+    DsSecondaryCard(
+        modifier = modifier.padding(horizontal = Large)
     ) {
-        LazyRow(
-            state = listState,
-            contentPadding = PaddingValues(Normal),
-            horizontalArrangement = Arrangement.spacedBy(Normal),
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = Large),
+            contentAlignment = Alignment.Center,
         ) {
-            items(
-                items = allYears,
-                key = { it }
-            ) { year ->
-                OutlinedBox(
-                    modifier = Modifier,
-                    isEnabled = true,
-                    onClick = { onYearClicked(year) },
-                    onLongClick = { onYearLongClicked(year) }
-                ) {
-                    val color = if (selectedYears.contains(year)) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        Color.Unspecified
+            LazyRow(
+                state = listState,
+                contentPadding = PaddingValues(Normal),
+                horizontalArrangement = Arrangement.spacedBy(Normal),
+            ) {
+                items(
+                    items = allYears,
+                    key = { it }
+                ) { year ->
+                    OutlinedBox(
+                        modifier = Modifier,
+                        isEnabled = true,
+                        onClick = { onYearClicked(year) },
+                        onLongClick = { onYearLongClicked(year) }
+                    ) {
+                        val color = if (selectedYears.contains(year)) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            Color.Unspecified
+                        }
+                        Text(
+                            color = color,
+                            text = year.toString(),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                        )
                     }
-                    Text(
-                        color = color,
-                        text = year.toString(),
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                    )
                 }
             }
         }
@@ -179,16 +203,14 @@ private fun Months(
     onMonthClicked: (Int) -> Unit,
     onMonthLongClicked: (Int) -> Unit,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = Large)
-            .background(
-                color = MaterialTheme.colorScheme.secondary,
-                shape = CardDefaults.shape,
-            )
-            .padding(vertical = Normal),
+    DsSecondaryCard(
+        modifier = modifier.padding(horizontal = Large)
     ) {
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(Normal)
+        )
         MonthRow(
             modifier = Modifier.fillMaxWidth(),
             isEnabled = isEnabled,
@@ -227,6 +249,11 @@ private fun Months(
             monthsPad = 9,
             onMonthClicked = onMonthClicked,
             onMonthLongClicked = onMonthLongClicked,
+        )
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(Normal)
         )
     }
 }
@@ -278,18 +305,68 @@ private fun Tags(
     removeTag: (TagEntity) -> Unit,
     addTag: () -> Unit,
 ) {
-    TagsRow(
-        modifier
+    DsSecondaryCard(
+        modifier = modifier.padding(horizontal = Large)
+    ) {
+        TagsRow(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Large, vertical = Normal),
+            tags = selectedTags,
+            removeTag = removeTag,
+            openTagModal = addTag,
+        )
+    }
+}
+
+@Composable
+private fun Category(
+    modifier: Modifier,
+    category: CategoryEntity?,
+    addCategory: () -> Unit,
+    removeCategory: () -> Unit
+) {
+    DsSecondaryCard(
+        modifier = modifier
             .padding(horizontal = Large)
-            .background(
-                color = MaterialTheme.colorScheme.secondary,
-                shape = CardDefaults.shape,
+            .height(intrinsicSize = IntrinsicSize.Max)
+    ) {
+        val focusManager = LocalFocusManager.current
+        Box {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = category?.name.orEmpty(),
+                singleLine = true,
+                label = {
+                    Text(stringResource(Resources.string.category))
+                },
+                colors = DsInputTextFieldsColors(),
+                readOnly = true,
+                trailingIcon = {
+                    if (category != null) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .debounceClickable {
+                                    focusManager.clearFocus(force = true)
+                                    removeCategory()
+                                }
+                        )
+                    }
+                },
+                onValueChange = { },
             )
-            .padding(horizontal = Large, vertical = Normal),
-        tags = selectedTags,
-        removeTag = removeTag,
-        openTagModal = addTag,
-    )
+            if (category == null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .debounceClickable(onClick = addCategory)
+                )
+            }
+        }
+    }
 }
 
 private suspend fun LazyListState.animateScrollAndCentralizeItem(index: Int) {
@@ -350,12 +427,15 @@ private fun ContentPreview() {
                 allMonths = Month.entries.map { it.name }.toImmutableList(),
                 selectedMonths = persistentListOf(12),
                 selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
+                category = null,
                 onYearClicked = {},
                 onYearLongClicked = {},
                 onMonthClicked = {},
                 onMonthLongClicked = {},
                 openTagModal = {},
                 removeTag = { _ -> },
+                openCategoryModal = {},
+                removeCategory = {},
             )
         }
     }

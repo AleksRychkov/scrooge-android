@@ -29,10 +29,7 @@ internal class CategoryReducer(
             is CategoryEvent.External.Init -> {
                 state.reduceWith(event) {
                     command {
-                        listOf(CategoryCommand.ObserveCategories(transactionType = event.transactionType))
-                    }
-                    state {
-                        copy(transactionType = event.transactionType)
+                        listOf(CategoryCommand.ObserveCategories(transactionType = state.transactionType))
                     }
                 }
             }

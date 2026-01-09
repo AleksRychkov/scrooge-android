@@ -8,10 +8,12 @@ interface CategoryComponent {
     companion object {
         operator fun invoke(
             componentContext: ComponentContext,
-            transactionType: TransactionType,
+            transactionType: TransactionType?,
+            isEditable: Boolean = true,
         ): CategoryComponent = DefaultCategoryComponent(
             componentContext = componentContext,
             transactionType = transactionType,
+            isEditable = isEditable,
         )
     }
 }

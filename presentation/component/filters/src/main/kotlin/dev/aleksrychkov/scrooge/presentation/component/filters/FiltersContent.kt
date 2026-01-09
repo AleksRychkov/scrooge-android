@@ -30,6 +30,7 @@ import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.FiltersComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables.FiltersFixedPeriod
+import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCategoryModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersTagModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
@@ -70,6 +71,8 @@ private fun FiltersContent(
         onMonthLongClicked = component::onMonthLongClicked,
         openTagModal = component::openTagModal,
         removeTag = component::removeTag,
+        openCategoryModal = component::openCategoryModal,
+        removeCategory = component::removeCategory,
         onSubmitClicked = { callback(state.filter) },
         resetFilters = component::resetFilters,
     )
@@ -80,6 +83,9 @@ private fun FiltersContent(
     )
 
     FiltersTagModal(
+        component = component,
+    )
+    FiltersCategoryModal(
         component = component,
     )
 }
@@ -95,6 +101,8 @@ private fun FiltersContent(
     onSubmitClicked: () -> Unit,
     openTagModal: () -> Unit,
     removeTag: (TagEntity) -> Unit,
+    openCategoryModal: () -> Unit,
+    removeCategory: () -> Unit,
     resetFilters: () -> Unit,
 ) {
     Box(modifier = modifier.verticalScroll(rememberScrollState())) {
@@ -131,12 +139,15 @@ private fun FiltersContent(
                 selectedYears = state.filter.years,
                 selectedMonths = state.filter.months,
                 selectedTags = state.filter.tags,
+                category = state.filter.category,
                 onYearClicked = onYearClicked,
                 onYearLongClicked = onYearLongClicked,
                 onMonthClicked = onMonthClicked,
                 onMonthLongClicked = onMonthLongClicked,
                 removeTag = removeTag,
                 openTagModal = openTagModal,
+                openCategoryModal = openCategoryModal,
+                removeCategory = removeCategory,
             )
         }
 
@@ -195,6 +206,8 @@ private fun FormContentPreview() {
                 onSubmitClicked = {},
                 removeTag = { _ -> },
                 openTagModal = {},
+                openCategoryModal = {},
+                removeCategory = {},
                 resetFilters = {},
             )
         }

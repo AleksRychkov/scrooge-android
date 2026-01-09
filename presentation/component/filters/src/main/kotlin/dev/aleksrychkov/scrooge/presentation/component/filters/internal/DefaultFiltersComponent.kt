@@ -7,10 +7,12 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersActor
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
@@ -29,6 +31,7 @@ internal class DefaultFiltersComponent(
 ) : FiltersComponentInternal, ComponentContext by componentContext {
 
     private val tagNavigation = SlotNavigation<Unit>()
+    private val categoryNavigation = SlotNavigation<Unit>()
 
     private val store: Store<FiltersState, FiltersEvent, FiltersEffect> by lazy {
         instanceKeeper.createStore(
@@ -91,6 +94,38 @@ internal class DefaultFiltersComponent(
         store.handle(FiltersEvent.External.AddTag(tag = tag))
     }
     // endregion Tag
+
+    // region Category
+    override val categoryModal: Value<ChildSlot<*, CategoryComponent>> =
+        childSlot(
+            source = categoryNavigation,
+            serializer = null,
+            handleBackButton = true,
+            key = "FiltersComponentCategoryModalSlot",
+        ) { _, childComponentContext ->
+            CategoryComponent(
+                componentContext = childComponentContext,
+                transactionType = null,
+                isEditable = false,
+            )
+        }
+
+    override fun openCategoryModal() {
+        categoryNavigation.activate(Unit)
+    }
+
+    override fun closeCategoryModal() {
+        categoryNavigation.dismiss()
+    }
+
+    override fun setCategory(category: CategoryEntity) {
+        store.handle(FiltersEvent.External.SetCategory(category = category))
+    }
+
+    override fun removeCategory() {
+        store.handle(FiltersEvent.External.RemoveCategory)
+    }
+    // endregion Category
 
     override fun resetFilters() {
         store.handle(FiltersEvent.External.Reset)
