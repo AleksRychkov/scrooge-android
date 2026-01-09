@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -95,9 +94,7 @@ private fun TotalContent(
     openCategoryTotal: () -> Unit,
 ) {
     Card(
-        modifier = modifier
-            .wrapContentSize()
-            .animateContentSize(),
+        modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = elevation),
         shape = ShapeDefaults.Large.copy(
             topStart = CornerSize(0.dp),
@@ -110,6 +107,7 @@ private fun TotalContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Max)
+                .animateContentSize()
                 .debounceClickable {
                     openCategoryTotal()
                 }
