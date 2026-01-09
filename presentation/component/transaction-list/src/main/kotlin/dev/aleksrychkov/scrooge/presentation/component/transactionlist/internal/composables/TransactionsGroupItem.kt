@@ -13,11 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsItem
 import kotlinx.collections.immutable.persistentListOf
@@ -30,7 +30,7 @@ internal fun TransactionsGroupItem(
     Row(
         modifier = modifier
             .padding(horizontal = Large)
-            .padding(bottom = Normal, top = 52.dp),
+            .padding(bottom = Normal, top = Normal2X),
         verticalAlignment = Alignment.Top,
     ) {
         Text(

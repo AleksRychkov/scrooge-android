@@ -26,6 +26,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.udf.TotalMonthlyState
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -101,7 +102,7 @@ private fun TotalByMonth(
     byMonth: TotalMonthlyState.ByMonth,
 ) {
     Column(
-        modifier = modifier.padding(top = 52.dp),
+        modifier = modifier.padding(vertical = Normal2X),
     ) {
         Text(
             modifier = Modifier.padding(horizontal = Large),
