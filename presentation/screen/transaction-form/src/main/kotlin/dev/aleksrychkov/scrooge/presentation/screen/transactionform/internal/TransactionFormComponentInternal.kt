@@ -6,8 +6,8 @@ import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.CurrencyComponent
+import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
-import dev.aleksrychkov.scrooge.presentation.component.transactionCategory.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.TransactionFormComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormState
