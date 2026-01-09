@@ -1,10 +1,10 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf
+package dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf
 
 import dev.aleksrychkov.scrooge.core.udf.Actor
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.CreateTagDelegate
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.DeleteTagDelegate
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.ObserveTagsDelegate
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors.SearchTagsDelegate
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.actors.CreateTagDelegate
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.actors.DeleteTagDelegate
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.actors.ObserveTagsDelegate
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.actors.SearchTagsDelegate
 import kotlinx.coroutines.flow.Flow
 
 internal class TagActor(

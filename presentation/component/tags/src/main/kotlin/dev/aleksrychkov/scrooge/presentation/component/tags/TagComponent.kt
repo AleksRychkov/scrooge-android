@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag
+package dev.aleksrychkov.scrooge.presentation.component.tags
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.DefaultTagComponent
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.DefaultTagComponent
 
 interface TagComponent {
     companion object {

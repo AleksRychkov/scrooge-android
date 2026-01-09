@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag
+package dev.aleksrychkov.scrooge.presentation.component.tags
 
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
@@ -50,9 +50,9 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.TagComponentInternal
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagEffect
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagState
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.TagComponentInternal
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagEffect
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

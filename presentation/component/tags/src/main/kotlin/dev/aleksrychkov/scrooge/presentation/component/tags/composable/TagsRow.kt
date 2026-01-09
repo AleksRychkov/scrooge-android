@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag.composable
+package dev.aleksrychkov.scrooge.presentation.component.tags.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

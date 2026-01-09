@@ -57,10 +57,10 @@ include(":presentation:component:period-total")
 include(":presentation:component:root-transfer")
 include(":presentation:component:settings-theme")
 include(":presentation:component:settings-transfer")
+include(":presentation:component:tags")
 include(":presentation:component:transaction-category")
 include(":presentation:component:transaction-currency")
 include(":presentation:component:transaction-list")
-include(":presentation:component:transaction-tag")
 
 // presentation screen
 include(":presentation:screen:main:root")

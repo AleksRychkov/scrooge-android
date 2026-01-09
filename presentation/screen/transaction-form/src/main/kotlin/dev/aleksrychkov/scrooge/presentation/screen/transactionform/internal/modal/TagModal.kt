@@ -2,7 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.mo
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagModal
+import dev.aleksrychkov.scrooge.presentation.component.tags.TagModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 
 @Composable

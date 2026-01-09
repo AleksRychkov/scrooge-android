@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf
+package dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf
 
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import kotlinx.collections.immutable.ImmutableList

@@ -6,7 +6,7 @@ import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagComponent
+import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 

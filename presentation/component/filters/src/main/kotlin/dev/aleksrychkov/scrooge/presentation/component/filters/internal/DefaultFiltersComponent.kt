@@ -17,7 +17,7 @@ import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.Filt
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEvent
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersReducer
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.TagComponent
+import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.EnumSet

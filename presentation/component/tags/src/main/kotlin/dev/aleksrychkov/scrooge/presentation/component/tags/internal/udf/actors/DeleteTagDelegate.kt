@@ -1,10 +1,10 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors
+package dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.actors
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.tag.DeleteTagResult
 import dev.aleksrychkov.scrooge.feature.tag.DeleteTagUseCase
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagCommand
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagEvent
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagCommand
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf

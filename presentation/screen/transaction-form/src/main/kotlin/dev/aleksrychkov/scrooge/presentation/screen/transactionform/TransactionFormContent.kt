@@ -34,7 +34,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.composable.TagsRow
+import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsRow
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormAmount
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormCategory

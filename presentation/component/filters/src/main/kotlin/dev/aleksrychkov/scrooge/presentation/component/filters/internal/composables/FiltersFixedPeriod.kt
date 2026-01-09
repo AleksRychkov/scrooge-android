@@ -43,7 +43,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.composable.TagsRow
+import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsRow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf

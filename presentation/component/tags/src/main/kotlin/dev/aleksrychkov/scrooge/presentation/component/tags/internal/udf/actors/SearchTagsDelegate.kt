@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.actors
+package dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.actors
 
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagCommand
-import dev.aleksrychkov.scrooge.presentation.component.transactiontag.internal.udf.TagEvent
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagCommand
+import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagEvent
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow

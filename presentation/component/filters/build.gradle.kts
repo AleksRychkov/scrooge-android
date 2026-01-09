@@ -19,7 +19,7 @@ dependencies {
 
     implementation(projects.feature.transaction.api)
 
-    implementation(projects.presentation.component.transactionTag)
+    implementation(projects.presentation.component.tags)
 }
 
 dependencies {

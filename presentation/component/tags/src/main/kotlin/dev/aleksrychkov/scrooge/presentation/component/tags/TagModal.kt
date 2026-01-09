@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.transactiontag
+package dev.aleksrychkov.scrooge.presentation.component.tags
 
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
