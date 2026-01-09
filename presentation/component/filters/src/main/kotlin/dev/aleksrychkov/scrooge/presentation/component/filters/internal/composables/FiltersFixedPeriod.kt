@@ -285,7 +285,7 @@ private fun Tags(
                 color = MaterialTheme.colorScheme.secondary,
                 shape = CardDefaults.shape,
             )
-            .padding(horizontal = Large),
+            .padding(horizontal = Large, vertical = Normal),
         tags = selectedTags,
         removeTag = removeTag,
         openTagModal = addTag,
