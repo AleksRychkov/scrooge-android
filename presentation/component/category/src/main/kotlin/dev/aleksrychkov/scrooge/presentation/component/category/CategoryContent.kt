@@ -261,7 +261,7 @@ private fun LazyListScope.reorderableList(
         list,
         key = { category -> "${category.id}-${category.type.type}" }
     ) { category ->
-        ReorderableItem(reorderableLazyColumnState, category.id) {
+        ReorderableItem(reorderableLazyColumnState, "${category.id}-${category.type.type}") {
             val interactionSource = remember { MutableInteractionSource() }
             Category(
                 modifier = Modifier
