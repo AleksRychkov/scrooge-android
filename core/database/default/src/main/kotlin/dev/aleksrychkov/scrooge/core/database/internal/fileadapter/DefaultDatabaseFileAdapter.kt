@@ -51,7 +51,11 @@ internal class DefaultDatabaseFileAdapter(
             val toDatestamp = Datestamp.from(nextMonth).value
 
             database.transactionQueries
-                .selectFromTo(fromDatestamp = fromDatestamp, toDatestamp = toDatestamp)
+                .selectFromTo(
+                    fromDatestamp = fromDatestamp,
+                    toDatestamp = toDatestamp,
+                    categoryId = null,
+                )
                 .executeAsList()
                 .forEach {
                     val t = TTransaction(

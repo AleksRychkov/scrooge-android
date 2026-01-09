@@ -32,6 +32,7 @@ internal class DefaultReportDao(
                 .totalAmount(
                     fromDatestamp = filter.period.from.value,
                     toDatestamp = filter.period.to.value,
+                    categoryId = filter.category?.id,
                 )
                 .asFlow()
                 .mapToList(readDispatcher)
@@ -48,6 +49,7 @@ internal class DefaultReportDao(
             .totalAmountMothly(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
+                categoryId = filter.category?.id,
             )
             .executeAsList()
             .let(ReportMapper::totalAmountMonthlyToEntity)
@@ -61,6 +63,7 @@ internal class DefaultReportDao(
             .byCategory(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
+                categoryId = filter.category?.id,
             )
             .executeAsList()
             .let(ReportMapper::byCategoryToEntity)

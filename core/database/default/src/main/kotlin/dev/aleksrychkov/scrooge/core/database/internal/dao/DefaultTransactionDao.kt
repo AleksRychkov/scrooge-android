@@ -39,6 +39,7 @@ internal class DefaultTransactionDao(
             .selectFromTo(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
+                categoryId = filter.category?.id,
                 mapper = TransactionMapper::transactionEntityMapper,
             )
             .asFlow()
@@ -72,6 +73,7 @@ internal class DefaultTransactionDao(
                     .selectFromToKeyd(
                         fromDatestamp = from,
                         toDatestamp = to ?: (filter.period.from.value - 1),
+                        categoryId = filter.category?.id,
                         mapper = TransactionMapper::transactionEntityMapper,
                     )
             }

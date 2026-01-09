@@ -44,6 +44,7 @@ WHERE
           WHERE tt2.transactionId = t.id
         )
     )
+  AND (:categoryId IS NULL OR t.categoryId = :categoryId)
 GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
 
@@ -90,6 +91,7 @@ WHERE
         WHERE tt2.transactionId = t.id
       )
   )
+  AND (:categoryId IS NULL OR t.categoryId = :categoryId)
 GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
 
