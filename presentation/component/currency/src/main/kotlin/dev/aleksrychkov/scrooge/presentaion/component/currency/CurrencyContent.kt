@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency
+package dev.aleksrychkov.scrooge.presentaion.component.currency
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
@@ -50,9 +50,9 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.CurrencyComponentInternal
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.entity.FavoriteCurrencyEntity
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyState
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.CurrencyComponentInternal
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.entity.FavoriteCurrencyEntity
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyState
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable

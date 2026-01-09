@@ -1,14 +1,14 @@
-package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal
+package dev.aleksrychkov.scrooge.presentaion.component.currency.internal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyActor
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyEffect
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyEvent
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyReducer
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyState
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyActor
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyEffect
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyEvent
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyReducer
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyState
 import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultCurrencyComponent(

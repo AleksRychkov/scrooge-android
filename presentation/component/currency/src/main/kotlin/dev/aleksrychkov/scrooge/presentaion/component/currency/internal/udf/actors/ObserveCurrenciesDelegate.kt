@@ -1,12 +1,12 @@
-package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.actors
+package dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.actors
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.feature.currency.GetCurrenciesUseCase
 import dev.aleksrychkov.scrooge.feature.currency.ObserveFavoriteCurrencyResult
 import dev.aleksrychkov.scrooge.feature.currency.ObserveFavoriteCurrencyUseCase
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.entity.FavoriteCurrencyEntity
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyEvent
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.entity.FavoriteCurrencyEntity
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyEvent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList

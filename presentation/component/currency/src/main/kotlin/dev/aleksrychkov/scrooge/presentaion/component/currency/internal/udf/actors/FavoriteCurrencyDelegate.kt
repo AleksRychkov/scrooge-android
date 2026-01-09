@@ -1,10 +1,10 @@
-package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.actors
+package dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.actors
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.currency.AddToFavoriteCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.currency.RemoveFromFavoriteCurrencyUseCase
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyCommand
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf.CurrencyEvent
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyCommand
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf.CurrencyEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 

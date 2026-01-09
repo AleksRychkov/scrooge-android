@@ -16,7 +16,7 @@ import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.CurrencyComponent
+import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormActor

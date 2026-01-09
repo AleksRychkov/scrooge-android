@@ -52,6 +52,7 @@ listOf("category", "currency", "reports", "tag", "transaction", "transfer", "the
 }
 
 // presentation component
+include(":presentation:component:currency")
 include(":presentation:component:category")
 include(":presentation:component:filters")
 include(":presentation:component:period-total")
@@ -59,7 +60,6 @@ include(":presentation:component:root-transfer")
 include(":presentation:component:settings-theme")
 include(":presentation:component:settings-transfer")
 include(":presentation:component:tags")
-include(":presentation:component:transaction-currency")
 include(":presentation:component:transaction-list")
 
 // presentation screen

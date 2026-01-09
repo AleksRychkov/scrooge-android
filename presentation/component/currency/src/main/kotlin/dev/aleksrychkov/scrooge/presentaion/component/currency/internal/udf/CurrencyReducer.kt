@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.udf
+package dev.aleksrychkov.scrooge.presentaion.component.currency.internal.udf
 
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult

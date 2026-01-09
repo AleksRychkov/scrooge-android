@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency
+package dev.aleksrychkov.scrooge.presentaion.component.currency
 
 import com.arkivanov.decompose.ComponentContext
-import dev.aleksrychkov.scrooge.presentaion.component.transactioncurrency.internal.DefaultCurrencyComponent
+import dev.aleksrychkov.scrooge.presentaion.component.currency.internal.DefaultCurrencyComponent
 
 interface CurrencyComponent {
     companion object {
