@@ -34,8 +34,10 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun DsTextField(
     modifier: Modifier,
     value: String,
+    singleLine: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
+    label: @Composable (() -> Unit)? = null,
     onValueChanged: (String) -> Unit,
 ) {
     var text by remember {
@@ -59,7 +61,7 @@ fun DsTextField(
                 color = MaterialTheme.colorScheme.secondary,
             ),
         value = text,
-        singleLine = true,
+        singleLine = singleLine,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Text,
@@ -67,6 +69,7 @@ fun DsTextField(
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }
         ),
+        label = label,
         placeholder = placeholder,
         leadingIcon = leadingIcon,
         trailingIcon = {

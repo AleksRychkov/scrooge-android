@@ -9,6 +9,7 @@ internal sealed interface FormEvent {
     sealed interface External : FormEvent {
         data class Init(val transactionId: Long?) : External
         data class SetAmount(val amount: String) : External
+        data class SetComment(val comment: String) : External
         data class SetCategory(val category: CategoryEntity) : External
         data class SetCurrency(val currency: CurrencyEntity) : External
         data class SetDate(val timestamp: Long) : External

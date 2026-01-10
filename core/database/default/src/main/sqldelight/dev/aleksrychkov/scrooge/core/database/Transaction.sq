@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS TTransaction (
   datestamp INTEGER NOT NULL,
   type INTEGER NOT NULL,
   categoryId INTEGER NOT NULL,
-  currencyCode TEXT NOT NULL
+  currencyCode TEXT NOT NULL,
+  comment TEXT
 );
 
 -- Indexes
@@ -21,6 +22,7 @@ SELECT
   t.datestamp,
   t.type,
   t.currencyCode,
+  t.comment,
   Category.id AS categoryId,
   Category.name AS categoryName,
   Category.iconId AS categoryIconId,
@@ -48,6 +50,21 @@ WHERE
 GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
 
+selectFromToForExport:
+SELECT
+  t.id,
+  t.amount,
+  t.datestamp,
+  t.type,
+  t.currencyCode,
+  t.categoryId,
+  t.comment
+FROM TTransaction t
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+ORDER BY t.datestamp DESC, t.id DESC;
+
 selectFromToKeydBoundaries:
 SELECT DISTINCT datestamp
 FROM (
@@ -68,6 +85,7 @@ SELECT
   t.datestamp,
   t.type,
   t.currencyCode,
+  t.comment,
   Category.id AS categoryId,
   Category.name AS categoryName,
   Category.iconId AS categoryIconId,
@@ -99,13 +117,13 @@ getLastInsertId:
 SELECT last_insert_rowid();
 
 create:
-INSERT INTO TTransaction (amount, datestamp, type, categoryId, currencyCode) VALUES (?, ?, ?,  ?, ?);
+INSERT INTO TTransaction (amount, datestamp, type, categoryId, currencyCode, comment) VALUES (?, ?, ?,  ?, ?, ?);
 
 add:
-INSERT INTO TTransaction (id, amount, datestamp, type, categoryId, currencyCode) VALUES (?, ?, ?, ?,  ?, ?);
+INSERT INTO TTransaction (id, amount, datestamp, type, categoryId, currencyCode, comment) VALUES (?, ?, ?, ?,  ?, ?, ?);
 
 update:
-UPDATE TTransaction SET amount = ?, datestamp = ?, type = ?, categoryId = ?, currencyCode = ? WHERE id = ?;
+UPDATE TTransaction SET amount = :amount, datestamp = :datestamp, type = :type, categoryId = :categoryId, currencyCode = :currencyCode, comment = :comment WHERE id = ?;
 
 selectById:
 SELECT
@@ -114,6 +132,7 @@ SELECT
   t.datestamp,
   t.type,
   t.currencyCode,
+  t.comment,
   Category.id AS categoryId,
   Category.name AS categoryName,
   Category.iconId AS categoryIconId,

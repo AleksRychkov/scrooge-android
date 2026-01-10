@@ -33,5 +33,6 @@ internal sealed interface TransactionsItem {
         val type: TransactionType,
         val tags: String,
         val date: String,
+        val comment: String = "",
     ) : TransactionsItem
 }

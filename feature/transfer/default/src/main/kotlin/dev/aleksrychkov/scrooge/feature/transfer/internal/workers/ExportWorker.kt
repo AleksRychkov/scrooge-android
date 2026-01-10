@@ -1,7 +1,9 @@
 package dev.aleksrychkov.scrooge.feature.transfer.internal.workers
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
@@ -28,7 +30,7 @@ internal class ExportWorker(
         private const val KEY_URI = "export_uri"
 
         fun fire(context: Context, uri: String) {
-            val data = Data.Builder().put(KEY_URI, uri).build()
+            val data = Data.Builder().putString(KEY_URI, uri).build()
             val request = OneTimeWorkRequestBuilder<ExportWorker>()
                 .setInputData(data)
                 .setExpedited(policy = OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
@@ -46,24 +48,33 @@ internal class ExportWorker(
         runSuspendCatching {
             stateUseCase(TransferStateEntity(TransferStateEntity.State.Exporting()))
 
-            val uri = requireNotNull(inputData.getString(KEY_URI))
+            val uri = requireNotNull(inputData.getString(KEY_URI)).let(Uri::parse)
             export(uri)
 
-            stateUseCase(TransferStateEntity(TransferStateEntity.State.ExportingSuccess(info = uri)))
+            stateUseCase(TransferStateEntity(TransferStateEntity.State.ExportingSuccess(info = uri.toString())))
             Result.success()
         }
             .onFailure { e ->
+                cleanOnFailure()
+                e.printStackTrace()
                 stateUseCase(TransferStateEntity(TransferStateEntity.State.ExportingFailed(info = e.message)))
             }
             .getOrDefault(Result.failure())
     }
 
-    private suspend fun export(uriString: String) {
-        val outputStream: OutputStream
-        val uri = Uri.parse(uriString)
-        outputStream = requireNotNull(context.contentResolver.openOutputStream(uri))
+    @SuppressLint("UseKtx")
+    private suspend fun export(uri: Uri) {
+        val outputStream: OutputStream =
+            requireNotNull(context.contentResolver.openOutputStream(uri))
         DataOutputStream(BufferedOutputStream(outputStream)).use {
             databaseFileAdapter.value.write(it)
+        }
+    }
+
+    private fun cleanOnFailure() {
+        runSuspendCatching {
+            val uri = requireNotNull(inputData.getString(KEY_URI)).let(Uri::parse)
+            DocumentsContract.deleteDocument(context.contentResolver, uri)
         }
     }
 }

@@ -19,9 +19,14 @@ internal class DatabaseSerializer {
         const val TYPE_TRANSACTION = 3
         const val TYPE_TRANSACTION_TAG = 4
 
+        // initial
         const val VERSION_1 = 1L
 
-        const val VERSION = VERSION_1
+        // added `comment` column to TTransaction
+        const val VERSION_2 = 2L
+
+        // current version
+        const val VERSION = VERSION_2
     }
 
     fun writeSignature(output: DataOutput) {
@@ -56,6 +61,7 @@ internal class DatabaseSerializer {
         output.writeLong(transaction.type)
         output.writeLong(transaction.categoryId)
         output.writeUTF(transaction.currencyCode)
+        output.writeUTF(transaction.comment ?: "") // VERSION_2
     }
 
     fun serialize(transactionTag: TransactionTag, output: DataOutput) {
@@ -87,7 +93,7 @@ internal class DatabaseSerializer {
                 when (val type = input.readInt()) {
                     TYPE_CATEGORY -> deserializeCategory(input, categoryCallback)
                     TYPE_TAG -> deserializeTag(input, tagCallback)
-                    TYPE_TRANSACTION -> deserializeTransaction(input, transactionCallback)
+                    TYPE_TRANSACTION -> deserializeTransaction(input, version, transactionCallback)
                     TYPE_TRANSACTION_TAG -> deserializeTransactionTag(input, transactionTagCallback)
                     else -> error("Unknown type: $type")
                 }
@@ -136,6 +142,7 @@ internal class DatabaseSerializer {
 
     private suspend fun deserializeTransaction(
         input: DataInput,
+        version: Long,
         transactionCallback: suspend (TTransaction) -> Unit
     ) {
         val id = input.readLong()
@@ -145,6 +152,12 @@ internal class DatabaseSerializer {
         val categoryId = input.readLong()
         val currencyCode = input.readUTF()
 
+        val comment: String? = if (version >= VERSION_2) {
+            input.readUTF()
+        } else {
+            null
+        }
+
         transactionCallback(
             TTransaction(
                 id = id,
@@ -153,6 +166,7 @@ internal class DatabaseSerializer {
                 type = type,
                 categoryId = categoryId,
                 currencyCode = currencyCode,
+                comment = comment,
             )
         )
     }

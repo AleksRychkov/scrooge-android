@@ -19,6 +19,7 @@ data class TransactionEntity(
     val category: CategoryEntity,
     val tags: ImmutableSet<TagEntity> = persistentSetOf(),
     val currency: CurrencyEntity,
+    val comment: String = "",
 ) {
     companion object {
         val DUMMY: TransactionEntity = TransactionEntity(

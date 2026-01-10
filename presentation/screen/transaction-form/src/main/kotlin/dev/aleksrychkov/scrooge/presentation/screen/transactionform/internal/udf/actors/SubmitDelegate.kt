@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.actors
 
+import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.feature.transaction.CreateTransactionResult
 import dev.aleksrychkov.scrooge.feature.transaction.CreateTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.EditTransactionResult
@@ -7,6 +8,7 @@ import dev.aleksrychkov.scrooge.feature.transaction.EditTransactionUseCase
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormCommand
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEvent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormState
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -43,16 +45,17 @@ internal class SubmitDelegate(
     private suspend fun create(state: FormState): Flow<FormEvent> {
         requireNotNull(state.category)
         val amount: Long = state.amount.toCents()
-
-        val args = CreateTransactionUseCase.Args(
+        val transaction = TransactionEntity(
+            id = -1L,
             amount = amount,
-            transactionType = state.transactionType,
-            category = state.category,
-            tags = state.tags.toSet(),
-            currency = state.currency,
             datestamp = state.datestamp,
+            type = state.transactionType,
+            category = state.category,
+            tags = state.tags.toImmutableSet(),
+            currency = state.currency,
+            comment = state.comment,
         )
-        val result = createUseCase.value.invoke(args = args)
+        val result = createUseCase.value.invoke(transaction = transaction)
         val resultEvent = when (result) {
             CreateTransactionResult.Failure -> FormEvent.Internal.SubmitTransactionFailure
             CreateTransactionResult.Success -> FormEvent.Internal.SubmitTransactionSuccess
@@ -66,17 +69,17 @@ internal class SubmitDelegate(
 
         val amount: Long = state.amount.toCents()
 
-        val args = EditTransactionUseCase.Args(
-            transactionId = state.transactionId,
+        val transaction = TransactionEntity(
+            id = state.transactionId,
             amount = amount,
-            transactionType = state.transactionType,
-            category = state.category,
-            tags = state.tags.toSet(),
-            currency = state.currency,
             datestamp = state.datestamp,
+            type = state.transactionType,
+            category = state.category,
+            tags = state.tags.toImmutableSet(),
+            currency = state.currency,
+            comment = state.comment,
         )
-
-        val result = editUseCase.value.invoke(args = args)
+        val result = editUseCase.value.invoke(transaction = transaction)
         val resultEvent = when (result) {
             EditTransactionResult.Failure -> FormEvent.Internal.SubmitTransactionFailure
             EditTransactionResult.Success -> FormEvent.Internal.SubmitTransactionSuccess

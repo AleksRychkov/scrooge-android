@@ -26,6 +26,7 @@ interface TransactionDao {
         categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
+        comment: String?,
     )
 
     suspend fun update(
@@ -36,6 +37,7 @@ interface TransactionDao {
         categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
+        comment: String?,
     )
 
     suspend fun delete(id: Long)

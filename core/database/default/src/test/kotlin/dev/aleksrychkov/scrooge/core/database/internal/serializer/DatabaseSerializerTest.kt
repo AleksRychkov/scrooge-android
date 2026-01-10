@@ -39,7 +39,8 @@ internal class DatabaseSerializerTest {
             datestamp = 1680000000L,
             type = 1L,
             categoryId = category.id,
-            currencyCode = "USD"
+            currencyCode = "USD",
+            comment = "comment",
         )
 
         val transactionTag = TransactionTag(

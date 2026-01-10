@@ -1,24 +1,9 @@
 package dev.aleksrychkov.scrooge.feature.transaction
 
-import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
-import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
-import dev.aleksrychkov.scrooge.core.entity.Datestamp
-import dev.aleksrychkov.scrooge.core.entity.TagEntity
-import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 
 fun interface EditTransactionUseCase {
-
-    suspend operator fun invoke(args: Args): EditTransactionResult
-
-    data class Args(
-        val transactionId: Long,
-        val amount: Long,
-        val transactionType: TransactionType,
-        val category: CategoryEntity,
-        val tags: Set<TagEntity>? = null,
-        val currency: CurrencyEntity,
-        val datestamp: Datestamp,
-    )
+    suspend operator fun invoke(transaction: TransactionEntity): EditTransactionResult
 }
 
 sealed interface EditTransactionResult {

@@ -145,6 +145,10 @@ internal class DefaultTransactionFormComponent(
         store.handle(FormEvent.External.SetAmount(amount = amount))
     }
 
+    override fun onCommentChanged(comment: String) {
+        store.handle(FormEvent.External.SetComment(comment = comment))
+    }
+
     override fun onSubmitClicked() {
         store.handle(FormEvent.External.Submit)
     }

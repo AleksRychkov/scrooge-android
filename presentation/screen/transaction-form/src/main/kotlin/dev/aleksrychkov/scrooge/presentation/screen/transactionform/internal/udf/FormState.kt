@@ -21,5 +21,6 @@ internal data class FormState(
     val datestamp: Datestamp = Datestamp.now(),
     val category: CategoryEntity? = null,
     val tags: ImmutableSet<TagEntity> = persistentSetOf(),
+    val comment: String = "",
     val currency: CurrencyEntity = CurrencyEntity.RUB,
 )

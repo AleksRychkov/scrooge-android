@@ -27,6 +27,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.paging)
     implementation(libs.androidx.paging.compose)

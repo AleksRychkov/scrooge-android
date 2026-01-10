@@ -1,14 +1,16 @@
 package dev.aleksrychkov.scrooge.presentation.screen.transactionform
 
 import android.widget.Toast
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -38,6 +40,7 @@ import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsRow
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormAmount
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormCategory
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormComment
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormDate
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormTopAppBar
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.CurrencyModal
@@ -86,18 +89,22 @@ private fun TransactionFormContent(
         }
     }
 
+    val scrollState = rememberScrollState()
+
     Scaffold(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         topBar = {
             FormTopAppBar(
                 component = component,
+                scrollState = scrollState,
             )
         }
     ) { innerPadding ->
         FormContent(
             modifier = Modifier.padding(innerPadding),
             component = component,
+            scrollState = scrollState,
         )
     }
     FormCategoryModal(
@@ -114,13 +121,15 @@ private fun TransactionFormContent(
 @Composable
 private fun FormContent(
     modifier: Modifier,
+    scrollState: ScrollState,
     component: TransactionFormComponentInternal,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
-    FormContent(
+    FormContentIme(
         modifier = modifier,
         state = state,
+        scrollState = scrollState,
         amountChanged = component::setAmount,
         openCategoryModal = component::openCategoryModal,
         openTagModal = component::openTagModal,
@@ -129,14 +138,15 @@ private fun FormContent(
         removeTag = component::removeTag,
         submitClicked = component::onSubmitClicked,
         deleteClicked = component::onDeleteClicked,
+        onCommentChanged = component::onCommentChanged,
     )
 }
 
 @Composable
-@Suppress("LongParameterList")
-private fun FormContent(
+private fun FormContentIme(
     modifier: Modifier,
     state: FormState,
+    scrollState: ScrollState,
     amountChanged: (String) -> Unit,
     openCategoryModal: () -> Unit,
     openTagModal: () -> Unit,
@@ -145,12 +155,54 @@ private fun FormContent(
     removeTag: (TagEntity) -> Unit,
     submitClicked: () -> Unit,
     deleteClicked: () -> Unit,
+    onCommentChanged: (String) -> Unit,
+) {
+    Scaffold(
+        modifier = modifier,
+    ) { contentPadding ->
+        Box(
+            modifier = Modifier
+                .padding(bottom = contentPadding.calculateBottomPadding())
+                .consumeWindowInsets(contentPadding)
+                .imePadding()
+        ) {
+            FormContent(
+                modifier = Modifier.fillMaxSize(),
+                state = state,
+                scrollState = scrollState,
+                amountChanged = amountChanged,
+                openCategoryModal = openCategoryModal,
+                openTagModal = openTagModal,
+                openCurrencyModal = openCurrencyModal,
+                onDateSelected = onDateSelected,
+                removeTag = removeTag,
+                submitClicked = submitClicked,
+                deleteClicked = deleteClicked,
+                onCommentChanged = onCommentChanged,
+            )
+        }
+    }
+}
+
+@Composable
+@Suppress("LongParameterList")
+private fun FormContent(
+    modifier: Modifier,
+    state: FormState,
+    scrollState: ScrollState? = null,
+    amountChanged: (String) -> Unit,
+    openCategoryModal: () -> Unit,
+    openTagModal: () -> Unit,
+    openCurrencyModal: () -> Unit,
+    onDateSelected: (Long?) -> Unit,
+    removeTag: (TagEntity) -> Unit,
+    submitClicked: () -> Unit,
+    deleteClicked: () -> Unit,
+    onCommentChanged: (String) -> Unit,
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState ?: rememberScrollState())
             .padding(Large)
     ) {
         FormAmount(
@@ -186,6 +238,14 @@ private fun FormContent(
             tags = state.tags,
             openTagModal = openTagModal,
             removeTag = removeTag,
+        )
+
+        Spacer(modifier = Modifier.height(HalfNormal))
+
+        FormComment(
+            modifier = Modifier.fillMaxWidth(),
+            comment = state.comment,
+            onCommentChanged = onCommentChanged,
         )
 
         ExtendedFloatingActionButton(
@@ -272,6 +332,7 @@ private fun FormContentPreview() {
                 removeTag = {},
                 submitClicked = {},
                 deleteClicked = {},
+                onCommentChanged = {},
             )
         }
     }

@@ -97,6 +97,7 @@ internal class DefaultTransactionDao(
         categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
+        comment: String?,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
         database.transactionQueries.transaction {
             database.transactionQueries.create(
@@ -105,6 +106,7 @@ internal class DefaultTransactionDao(
                 type = type.type.toLong(),
                 categoryId = categoryId,
                 currencyCode = currencyCode,
+                comment = comment,
             )
             val transactionId = database.transactionQueries.getLastInsertId().executeAsOne()
             tagIds?.forEach { tagId ->
@@ -124,15 +126,17 @@ internal class DefaultTransactionDao(
         categoryId: Long,
         tagIds: Set<Long>?,
         currencyCode: String,
+        comment: String?,
     ): Unit = withContext(writeDispatcher + NonCancellable) {
         database.transactionQueries.transaction {
             database.transactionQueries.update(
+                id = id,
                 amount = amount,
                 datestamp = datestamp.value,
                 type = type.type.toLong(),
                 categoryId = categoryId,
                 currencyCode = currencyCode,
-                id = id,
+                comment = comment,
             )
             database.tagQueries.deleteTransactioTag(transactionId = id)
             tagIds?.forEach { tagId ->

@@ -5,7 +5,9 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Comment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,10 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,8 +38,8 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -53,7 +58,7 @@ internal fun TransactionItem(
             .debounceClickable {
                 onTransactionClicked(transaction.id, transaction.type)
             }
-            .padding(horizontal = Large, vertical = Medium),
+            .padding(horizontal = Large, vertical = Normal),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val transactionColor = when (transaction.type) {
@@ -97,32 +102,72 @@ internal fun TransactionItem(
                 )
             }
 
-            if (transaction.tags.isNotEmpty()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Small),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .height(12.dp)
-                            .width(12.dp),
-                        imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground,
-                    )
+            TransactionItemMetadata(
+                modifier = Modifier.fillMaxWidth(),
+                value = transaction.tags,
+                imageVector = ImageVector.vectorResource(Resources.drawable.ic_tag_24px),
+            )
 
-                    Text(
-                        modifier = Modifier
-                            .padding(start = Small)
-                            .horizontalScroll(rememberScrollState()),
-                        text = transaction.tags,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontStyle = FontStyle.Italic,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
+            TransactionItemMetadata(
+                modifier = Modifier.fillMaxWidth(),
+                value = transaction.comment,
+                imageVector = Icons.AutoMirrored.Rounded.Comment,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TransactionItemMetadata(
+    modifier: Modifier,
+    value: String,
+    imageVector: ImageVector,
+) {
+    if (value.isNotEmpty()) {
+        Row(
+            modifier = modifier.padding(top = Small),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                modifier = Modifier
+                    .height(12.dp)
+                    .width(12.dp),
+                imageVector = imageVector,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground,
+            )
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(IntrinsicSize.Min),
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = Small)
+                        .horizontalScroll(rememberScrollState())
+                        .padding(end = Normal2X),
+                    text = value,
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.Normal,
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+
+                Box(
+                    modifier = Modifier
+                        .width(Normal2X)
+                        .fillMaxHeight()
+                        .align(Alignment.CenterEnd)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.background
+                                ),
+                            )
+                        )
+                )
             }
         }
     }
@@ -134,6 +179,10 @@ internal fun TransactionItem(
 private fun FormContentPreview() {
     AppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
+            val longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
+                " Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
+                " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut" +
+                " aliquip ex ea commodo consequat."
             TransactionItem(
                 modifier = Modifier.fillMaxWidth(),
                 transaction = TransactionsItem.Item(
@@ -143,8 +192,9 @@ private fun FormContentPreview() {
                     categoryIcon = UncategorizedIcon,
                     amount = "+123,00 $",
                     type = TransactionType.Income,
-                    tags = TransactionEntity.DUMMY.tags.joinToString(),
+                    tags = longText,
                     date = "12.02.2025",
+                    comment = longText,
                 ),
                 onTransactionClicked = { _, _ -> },
             )

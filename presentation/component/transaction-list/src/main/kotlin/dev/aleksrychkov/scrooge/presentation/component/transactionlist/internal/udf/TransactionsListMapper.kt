@@ -28,6 +28,7 @@ internal class TransactionsListMapper {
             tags = entity.tags.joinToString { it.name },
             id = entity.id,
             date = date,
+            comment = entity.comment,
         )
     }
 

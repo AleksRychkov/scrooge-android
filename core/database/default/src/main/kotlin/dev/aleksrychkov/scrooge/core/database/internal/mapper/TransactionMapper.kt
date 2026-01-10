@@ -20,6 +20,7 @@ internal object TransactionMapper {
         datestamp: Long,
         type: Long,
         currencyCode: String,
+        comment: String?,
         categoryId: Long?,
         categoryName: String?,
         categoryIconId: String?,
@@ -70,6 +71,7 @@ internal object TransactionMapper {
             },
             currency = CurrencyEntity.fromCurrencyCode(currencyCode)!!,
             tags = tagEntities,
+            comment = comment ?: "",
         )
     }
 }

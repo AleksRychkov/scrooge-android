@@ -41,6 +41,8 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
     fun setAmount(amount: String)
     fun onDateSelected(timestamp: Long?)
 
+    fun onCommentChanged(comment: String)
+
     fun onSubmitClicked()
     fun onDeleteClicked()
 }

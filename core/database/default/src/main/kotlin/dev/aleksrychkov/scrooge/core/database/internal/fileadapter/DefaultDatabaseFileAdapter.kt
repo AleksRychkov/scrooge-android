@@ -49,12 +49,10 @@ internal class DefaultDatabaseFileAdapter(
             val fromDatestamp = index.value
             val nextMonth = index.date.plus(1, DateTimeUnit.MONTH)
             val toDatestamp = Datestamp.from(nextMonth).value
-
             database.transactionQueries
-                .selectFromTo(
+                .selectFromToForExport(
                     fromDatestamp = fromDatestamp,
                     toDatestamp = toDatestamp,
-                    categoryId = null,
                 )
                 .executeAsList()
                 .forEach {
@@ -63,8 +61,9 @@ internal class DefaultDatabaseFileAdapter(
                         it.amount,
                         it.datestamp,
                         it.type,
-                        it.categoryId ?: -1,
-                        it.currencyCode
+                        it.categoryId,
+                        it.currencyCode,
+                        it.comment
                     )
                     serializer.serialize(t, output)
                 }
@@ -99,6 +98,7 @@ internal class DefaultDatabaseFileAdapter(
                     type = transaction.type,
                     categoryId = transaction.categoryId,
                     currencyCode = transaction.currencyCode,
+                    comment = transaction.comment,
                 )
             }
             val transactionTagCallback: suspend (TransactionTag) -> Unit =

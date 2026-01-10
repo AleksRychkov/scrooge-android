@@ -6,6 +6,13 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormCommand.Delete
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormCommand.Exit
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormCommand.GetLastUsedCurrency
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormCommand.LoadTransaction
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormCommand.SetLastUsedCurrency
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormCommand.Submit
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEffect.ShowErrorMessage
 import kotlinx.collections.immutable.toImmutableSet
 import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -23,14 +30,14 @@ internal class FormReducer(
             is FormEvent.External.Init -> state.reduceWith(event) {
                 if (event.transactionId != null) {
                     command {
-                        listOf(FormCommand.LoadTransaction(transactionId = event.transactionId))
+                        listOf(LoadTransaction(transactionId = event.transactionId))
                     }
                     state {
                         copy(isLoading = true)
                     }
                 } else {
                     command {
-                        listOf(FormCommand.GetLastUsedCurrency)
+                        listOf(GetLastUsedCurrency)
                     }
                 }
             }
@@ -87,7 +94,7 @@ internal class FormReducer(
                     copy(isLoading = true)
                 }
                 command {
-                    listOf(FormCommand.Submit(state = state.copy()))
+                    listOf(Submit(state = state.copy()))
                 }
             }
 
@@ -96,7 +103,7 @@ internal class FormReducer(
                     copy(isLoading = true)
                 }
                 command {
-                    listOf(FormCommand.Delete(state = state.copy()))
+                    listOf(Delete(state = state.copy()))
                 }
             }
 
@@ -105,7 +112,7 @@ internal class FormReducer(
                     copy(isLoading = false)
                 }
                 command {
-                    listOf(FormCommand.Exit)
+                    listOf(Exit)
                 }
             }
 
@@ -115,7 +122,7 @@ internal class FormReducer(
                 }
                 effects {
                     val msg = resourceManager.getString(Resources.string.form_failed_delete)
-                    listOf(FormEffect.ShowErrorMessage(message = msg))
+                    listOf(ShowErrorMessage(message = msg))
                 }
             }
 
@@ -131,7 +138,7 @@ internal class FormReducer(
                 }
                 effects {
                     val msg = resourceManager.getString(Resources.string.form_empty_amount)
-                    listOf(FormEffect.ShowErrorMessage(message = msg))
+                    listOf(ShowErrorMessage(message = msg))
                 }
             }
 
@@ -141,7 +148,7 @@ internal class FormReducer(
                 }
                 effects {
                     val msg = resourceManager.getString(Resources.string.form_empty_category)
-                    listOf(FormEffect.ShowErrorMessage(message = msg))
+                    listOf(ShowErrorMessage(message = msg))
                 }
             }
 
@@ -151,7 +158,7 @@ internal class FormReducer(
                 }
                 effects {
                     val msg = resourceManager.getString(Resources.string.form_failed_submit)
-                    listOf(FormEffect.ShowErrorMessage(message = msg))
+                    listOf(ShowErrorMessage(message = msg))
                 }
             }
 
@@ -160,7 +167,7 @@ internal class FormReducer(
                     copy(isLoading = false)
                 }
                 command {
-                    listOf(FormCommand.SetLastUsedCurrency(state.currency), FormCommand.Exit)
+                    listOf(SetLastUsedCurrency(state.currency), Exit)
                 }
             }
 
@@ -174,6 +181,7 @@ internal class FormReducer(
                         category = event.entity.category,
                         tags = event.entity.tags,
                         currency = event.entity.currency,
+                        comment = event.entity.comment,
                     )
                 }
             }
@@ -183,7 +191,13 @@ internal class FormReducer(
                     copy(isLoading = false)
                 }
                 command {
-                    listOf(FormCommand.Exit)
+                    listOf(Exit)
+                }
+            }
+
+            is FormEvent.External.SetComment -> state.reduceWith(event) {
+                state {
+                    copy(comment = event.comment)
                 }
             }
         }

@@ -145,6 +145,7 @@
     <string name="form_failed_submit">Не удалось отправить</string>
     <string name="form_failed_delete">Не удалось удалить</string>
     <string name="form_delete_confirmation_text">Вы уверены, что хотите удалить транзакцию?</string>
+    <string name="form_comment">Комментарий</string>
     <!-- Form -->
 
     <!-- Reports -->
