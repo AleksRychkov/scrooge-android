@@ -5,14 +5,14 @@
 </p>
 
 
-# Scrooge 🐷💰
+# Scrooge
 
 **Scrooge** is an Android application designed to help you **track your incomes, expenses, and
 financial flow** with clarity and efficiency.
 
 ---
 
-## Architecture 🏗️
+## Architecture
 
 Modules are divided into:
 
