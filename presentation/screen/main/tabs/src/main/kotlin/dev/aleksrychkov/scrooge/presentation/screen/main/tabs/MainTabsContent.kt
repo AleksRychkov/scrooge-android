@@ -1,5 +1,9 @@
 package dev.aleksrychkov.scrooge.presentation.screen.main.tabs
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -19,9 +23,14 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,6 +42,13 @@ import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnn
 import dev.aleksrychkov.scrooge.presentation.screen.settings.SettingsContent
 import dev.aleksrychkov.scrooge.presentation.screen.transaction.TransactionsContent
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
+
+private const val ROTATE_X = 0
+private const val ROTATE_Y = 1
+private const val ROTATE_Z = 2
+private const val ANIM_DURATION = 1000
+private const val ANIM_CAMERA_DISTANCE = 12f
+private const val ANIM_FULL_TARGET_ANGLE = 360f
 
 @Composable
 fun MainTabsContent(
@@ -136,18 +152,21 @@ private fun BottomBar(
                 isSelected = activeComponent is MainTabsComponentInternal.Child.Transactions,
                 icon = Icons.Filled.Home,
                 title = stringResource(Resources.string.transactions),
+                axis = ROTATE_Y,
                 onClick = onHomeClicked
             )
             BottomBarItem(
                 isSelected = activeComponent is MainTabsComponentInternal.Child.Report,
                 icon = Icons.AutoMirrored.Filled.List,
                 title = stringResource(Resources.string.reports),
+                axis = ROTATE_X,
                 onClick = onReportsClicked,
             )
             BottomBarItem(
                 isSelected = activeComponent is MainTabsComponentInternal.Child.Settings,
                 icon = Icons.Filled.Settings,
                 title = stringResource(Resources.string.settings),
+                axis = ROTATE_Z,
                 onClick = onSettingsClicked,
             )
         }
@@ -159,24 +178,52 @@ private fun RowScope.BottomBarItem(
     isSelected: Boolean,
     icon: ImageVector,
     title: String,
+    axis: Int,
     onClick: () -> Unit
 ) {
-    val color = if (isSelected) {
+    var wasSelected by remember { mutableStateOf(isSelected) }
+    val shouldAnimate = !wasSelected && isSelected
+    LaunchedEffect(isSelected) {
+        wasSelected = isSelected
+    }
+
+    val targetColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
     } else {
         MaterialTheme.colorScheme.onBackground
     }
+
+    val animatedColor by animateColorAsState(
+        targetValue = targetColor,
+        animationSpec = tween(ANIM_DURATION)
+    )
+
+    val rotation by animateFloatAsState(
+        targetValue = if (isSelected) ANIM_FULL_TARGET_ANGLE else 0f,
+        animationSpec = if (shouldAnimate) tween(ANIM_DURATION) else snap()
+    )
+
     NavigationBarItem(
         selected = isSelected,
         onClick = onClick,
         colors = NavigationBarItemDefaults.colors().copy(
             selectedIndicatorColor = Color.Transparent,
-            selectedIconColor = color
+            selectedIconColor = animatedColor,
+            unselectedIconColor = animatedColor
         ),
         icon = {
             Icon(
-                icon,
+                imageVector = icon,
                 contentDescription = title,
+                modifier = Modifier.graphicsLayer {
+                    when (axis) {
+                        ROTATE_X -> rotationX = rotation
+                        ROTATE_Y -> rotationY = rotation
+                        ROTATE_Z -> rotationZ = rotation
+                    }
+                    cameraDistance = ANIM_CAMERA_DISTANCE * density
+                },
+                tint = animatedColor
             )
         }
     )
