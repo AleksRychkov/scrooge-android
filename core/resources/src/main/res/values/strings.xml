@@ -108,7 +108,7 @@
     <string name="category_error_failed_to_update">Failed to update category</string>
     <string name="category_error_duplicate">Category «%s» already exists</string>
     <string name="category_deleted">Category «%s» deleted</string>
-    <string name="category_name_placeholder">Category name</string>
+    <string name="category_name_placeholder">Name</string>
     <string name="category_select_icon">Icon</string>
     <string name="category_select_color">Color</string>
     <string name="category_delete_confirmation_text">Are you sure you want to delete category?</string>
