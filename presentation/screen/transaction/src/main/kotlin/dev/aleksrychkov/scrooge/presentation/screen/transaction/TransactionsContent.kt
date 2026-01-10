@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -122,9 +126,12 @@ private fun TransactionsAppBar(
                 val months = stringArrayResource(Resources.array.month_names)
                 val shortMonths = stringArrayResource(Resources.array.short_month_names)
                 val name = state.filter.readableName(months = months, shortMonths = shortMonths)
+                val showFilterIcon = with(state.filter) {
+                    tags.isNotEmpty() || category != null || transactionType != null
+                }
                 DsFilterAction(
                     name = name,
-                    showTagIcon = state.filter.tags.isNotEmpty(),
+                    showFilterIcon = showFilterIcon,
                     openFiltersModal = component::openFiltersModal,
                 )
             }
@@ -188,13 +195,24 @@ private fun Content(
     }
 }
 
+@Suppress("MagicNumber")
 @Composable
 private fun AddIncomeExpense(
     modifier: Modifier,
     component: TransactionsComponentInternal,
 ) {
     Row(
-        modifier = modifier.padding(bottom = Large2X)
+        modifier = modifier
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Transparent,
+                        MaterialTheme.colorScheme.background,
+                    ),
+                    endY = 100f,
+                )
+            )
+            .padding(bottom = Large, top = Large2X)
     ) {
         Box(
             modifier = Modifier.weight(weight = 1f, fill = true),
@@ -244,7 +262,7 @@ private fun ScrollUpThumb(
 ) {
     Box(
         modifier = modifier
-            .padding(bottom = Large2X)
+            .padding(bottom = Large)
             .padding(end = Large),
         contentAlignment = Alignment.CenterEnd
     ) {

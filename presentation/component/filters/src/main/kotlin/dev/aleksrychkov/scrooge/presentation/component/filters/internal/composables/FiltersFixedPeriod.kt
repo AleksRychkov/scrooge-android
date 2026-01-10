@@ -156,7 +156,7 @@ private fun Years(
     onYearClicked: (Int) -> Unit,
     onYearLongClicked: (Int) -> Unit,
 ) {
-    if (allYears.isEmpty()) return
+    if (allYears.isEmpty() || selectedYears.isEmpty()) return
     var selectedItemIndex = allYears.indexOf(selectedYears.last())
     if (selectedItemIndex < 0) selectedItemIndex = allYears.size / 2
     val listState = rememberLazyListState(

@@ -2,30 +2,46 @@
 
 package dev.aleksrychkov.scrooge.presentation.component.filters
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -92,6 +108,7 @@ private fun FiltersContent(
     )
 }
 
+@Suppress("MagicNumber")
 @Composable
 private fun FiltersContent(
     modifier: Modifier,
@@ -108,15 +125,23 @@ private fun FiltersContent(
     resetFilters: () -> Unit,
     onTransactionTypeSelected: (TransactionType?) -> Unit,
 ) {
-    Box(modifier = modifier.verticalScroll(rememberScrollState())) {
+    Box(
+        modifier = modifier
+    ) {
+        val localDensity = LocalDensity.current
+        var bottomColumnHeightDp by remember {
+            mutableStateOf(0.dp)
+        }
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         ) {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Large),
+                    .padding(start = Large)
+                    .padding(vertical = Large),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -125,10 +150,11 @@ private fun FiltersContent(
                     style = MaterialTheme.typography.bodyMedium,
                 )
 
-                DsButton(
-                    onClick = onSubmitClicked
+                TextButton(
+                    modifier = Modifier.padding(horizontal = Small),
+                    onClick = resetFilters,
                 ) {
-                    Text(stringResource(Resources.string.apply))
+                    Text(text = stringResource(Resources.string.reset))
                 }
             }
 
@@ -154,16 +180,41 @@ private fun FiltersContent(
                 removeCategory = removeCategory,
                 onTransactionTypeSelected = onTransactionTypeSelected,
             )
+
+            Spacer(
+                modifier = Modifier
+                    .height(bottomColumnHeightDp)
+            )
         }
 
-        TextButton(
+        Column(
             modifier = Modifier
+                .align(BottomCenter)
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(Large),
-            onClick = resetFilters,
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            MaterialTheme.colorScheme.background,
+                        ),
+                        endY = 100f,
+                    )
+                )
+                .padding(top = Normal2X)
+                .onGloballyPositioned { coordinates ->
+                    bottomColumnHeightDp = with(localDensity) {
+                        coordinates.size.height.toDp() + Large
+                    }
+                },
         ) {
-            Text(text = stringResource(Resources.string.reset))
+            ExtendedFloatingActionButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Large, vertical = Normal),
+                onClick = onSubmitClicked,
+            ) {
+                Text(stringResource(Resources.string.apply))
+            }
         }
     }
 }

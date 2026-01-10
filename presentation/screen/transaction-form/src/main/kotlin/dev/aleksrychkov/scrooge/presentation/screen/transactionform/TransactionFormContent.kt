@@ -249,13 +249,15 @@ private fun FormContent(
             onCommentChanged = onCommentChanged,
         )
 
+        Spacer(modifier = Modifier.weight(1f, fill = true))
+
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = Normal),
             onClick = submitClicked,
         ) {
-            Text(stringResource(Resources.string.submit))
+            Text(stringResource(Resources.string.save))
         }
 
         DeleteTransaction(

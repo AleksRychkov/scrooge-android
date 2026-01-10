@@ -122,9 +122,12 @@ private fun ReportAppBar(
                 val months = stringArrayResource(Resources.array.month_names)
                 val shortMonths = stringArrayResource(Resources.array.short_month_names)
                 val name = state.filter.readableName(months = months, shortMonths = shortMonths)
+                val showFilterIcon = with(state.filter) {
+                    tags.isNotEmpty() || category != null || transactionType != null
+                }
                 DsFilterAction(
                     name = name,
-                    showTagIcon = state.filter.tags.isNotEmpty(),
+                    showFilterIcon = showFilterIcon,
                     openFiltersModal = component::openFiltersModal,
                 )
             }
