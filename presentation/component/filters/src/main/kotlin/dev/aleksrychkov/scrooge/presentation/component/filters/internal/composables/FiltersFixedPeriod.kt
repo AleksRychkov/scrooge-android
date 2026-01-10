@@ -417,7 +417,7 @@ private fun TransactionType(
                 modifier = Modifier.wrapContentWidth(),
                 isSelected = selectedType == TransactionType.Income,
                 name = stringResource(Resources.string.incomes)
-            ) { onTransactionTypeSelected(TransactionType.Expense) }
+            ) { onTransactionTypeSelected(TransactionType.Income) }
         }
     }
 }

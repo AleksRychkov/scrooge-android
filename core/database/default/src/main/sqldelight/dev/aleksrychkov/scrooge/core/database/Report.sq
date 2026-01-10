@@ -18,6 +18,7 @@ WHERE
           )
       )
   AND (:categoryId IS NULL OR t.categoryId = :categoryId)
+  AND (:transactionType IS NULL OR t.type = :transactionType)
 GROUP BY t.type, t.currencyCode;
 
 totalAmountMothly:
@@ -42,6 +43,7 @@ WITH monthly AS (
               )
           )
       AND (:categoryId IS NULL OR t.categoryId = :categoryId)
+      AND (:transactionType IS NULL OR t.type = :transactionType)
     GROUP BY year, month, t.type, t.currencyCode
 )
 SELECT * FROM monthly;
@@ -71,4 +73,5 @@ WHERE
           )
       )
   AND (:categoryId IS NULL OR t.categoryId = :categoryId)
+  AND (:transactionType IS NULL OR t.type = :transactionType)
 GROUP BY t.type, t.currencyCode, t.categoryId;
