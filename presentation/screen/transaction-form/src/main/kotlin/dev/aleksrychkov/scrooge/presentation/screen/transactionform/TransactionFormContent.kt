@@ -162,7 +162,6 @@ private fun FormContentIme(
     ) { contentPadding ->
         Box(
             modifier = Modifier
-                .padding(bottom = contentPadding.calculateBottomPadding())
                 .consumeWindowInsets(contentPadding)
                 .imePadding()
         ) {
