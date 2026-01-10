@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.presentation.component.settingstheme.SettingsThemeComponent
 import dev.aleksrychkov.scrooge.presentation.component.settingstheme.SettingsThemeContent
@@ -61,7 +60,6 @@ private fun SettingsContent(
 private fun SettingsAppBar() {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shadowElevation = Medium,
     ) {
         TopAppBar(
             title = {

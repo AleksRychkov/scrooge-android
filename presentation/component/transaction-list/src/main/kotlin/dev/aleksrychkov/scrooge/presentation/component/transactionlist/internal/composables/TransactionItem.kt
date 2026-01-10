@@ -128,13 +128,14 @@ private fun TransactionItemMetadata(
             modifier = modifier.padding(top = Small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            val color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
             Icon(
                 modifier = Modifier
                     .height(12.dp)
                     .width(12.dp),
                 imageVector = imageVector,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
+                tint = color,
             )
 
             Box(
@@ -151,7 +152,7 @@ private fun TransactionItemMetadata(
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.Normal,
                     ),
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = color,
                 )
 
                 Box(
