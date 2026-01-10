@@ -156,14 +156,14 @@ private fun TotalContent(
             ) {
                 IncomeExpenseBlock(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(Resources.string.income),
+                    title = stringResource(Resources.string.incomes),
                     items = data.income,
                     color = IncomeColor,
                 )
 
                 IncomeExpenseBlock(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(Resources.string.expense),
+                    title = stringResource(Resources.string.expenses),
                     items = data.expense,
                     color = ExpenseColor,
                 )

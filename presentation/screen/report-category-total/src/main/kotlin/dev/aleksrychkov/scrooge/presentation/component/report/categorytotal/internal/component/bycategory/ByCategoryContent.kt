@@ -105,8 +105,8 @@ private fun ByCategoryContent(
             mutableIntStateOf(TransactionType.Expense.type)
         }
         val titles = listOf(
-            stringResource(Resources.string.income),
-            stringResource(Resources.string.expense),
+            stringResource(Resources.string.incomes),
+            stringResource(Resources.string.expenses),
         )
         DsTabBar(
             modifier = Modifier

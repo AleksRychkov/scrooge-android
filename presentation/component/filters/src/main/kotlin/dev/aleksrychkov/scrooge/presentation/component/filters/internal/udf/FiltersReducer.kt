@@ -212,6 +212,14 @@ internal class FiltersReducer(
                     )
                 }
             }
+
+            is FiltersEvent.External.SetTransactionType -> state.reduceWith(event) {
+                state {
+                    copy(
+                        filter = filter.copy(transactionType = event.type)
+                    )
+                }
+            }
         }
     }
 }

@@ -22,6 +22,9 @@
     <string name="settings">Настройки</string>
     <string name="income">Доход</string>
     <string name="expense">Расход</string>
+    <string name="incomes">Доходы</string>
+    <string name="expenses">Расходы</string>
+    <string name="all">Все</string>
     <string name="add_income">Добавить доход</string>
     <string name="add_expense">Добавить расход</string>
     <string name="total">Всего</string>

@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import java.util.EnumSet
 
@@ -14,6 +15,7 @@ internal sealed interface FiltersEvent {
         data class RemoveTag(val tag: TagEntity) : External
         data class AddTag(val tag: TagEntity) : External
         data class SetCategory(val category: CategoryEntity) : External
+        data class SetTransactionType(val type: TransactionType?) : External
         data object RemoveCategory : External
         data object Reset : External
     }

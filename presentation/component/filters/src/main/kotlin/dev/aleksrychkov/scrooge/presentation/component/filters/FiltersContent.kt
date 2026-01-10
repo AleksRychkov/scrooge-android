@@ -28,6 +28,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.FiltersComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables.FiltersFixedPeriod
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCategoryModal
@@ -75,6 +76,7 @@ private fun FiltersContent(
         removeCategory = component::removeCategory,
         onSubmitClicked = { callback(state.filter) },
         resetFilters = component::resetFilters,
+        onTransactionTypeSelected = component::onTransactionTypeSelected,
     )
 
     HandleEffects(
@@ -104,6 +106,7 @@ private fun FiltersContent(
     openCategoryModal: () -> Unit,
     removeCategory: () -> Unit,
     resetFilters: () -> Unit,
+    onTransactionTypeSelected: (TransactionType?) -> Unit,
 ) {
     Box(modifier = modifier.verticalScroll(rememberScrollState())) {
         Column(
@@ -140,6 +143,7 @@ private fun FiltersContent(
                 selectedMonths = state.filter.months,
                 selectedTags = state.filter.tags,
                 category = state.filter.category,
+                selectedType = state.filter.transactionType,
                 onYearClicked = onYearClicked,
                 onYearLongClicked = onYearLongClicked,
                 onMonthClicked = onMonthClicked,
@@ -148,6 +152,7 @@ private fun FiltersContent(
                 openTagModal = openTagModal,
                 openCategoryModal = openCategoryModal,
                 removeCategory = removeCategory,
+                onTransactionTypeSelected = onTransactionTypeSelected,
             )
         }
 
@@ -209,6 +214,7 @@ private fun FormContentPreview() {
                 openCategoryModal = {},
                 removeCategory = {},
                 resetFilters = {},
+                onTransactionTypeSelected = { _ -> },
             )
         }
     }

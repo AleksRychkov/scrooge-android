@@ -4,6 +4,7 @@ import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -51,6 +53,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsRow
 import kotlinx.collections.immutable.ImmutableList
@@ -73,6 +76,7 @@ internal fun FiltersFixedPeriod(
     selectedMonths: ImmutableList<Int>,
     selectedTags: ImmutableSet<TagEntity>,
     category: CategoryEntity?,
+    selectedType: TransactionType?,
     onYearClicked: (Int) -> Unit,
     onYearLongClicked: (Int) -> Unit,
     onMonthClicked: (Int) -> Unit,
@@ -81,6 +85,7 @@ internal fun FiltersFixedPeriod(
     openTagModal: () -> Unit,
     openCategoryModal: () -> Unit,
     removeCategory: () -> Unit,
+    onTransactionTypeSelected: (TransactionType?) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -106,6 +111,16 @@ internal fun FiltersFixedPeriod(
                 selectedMonths = selectedMonths,
                 onMonthClicked = onMonthClicked,
                 onMonthLongClicked = onMonthLongClicked,
+            )
+        }
+
+        if (settings.contains(FiltersSettings.TransactionType)) {
+            Spacer(modifier = Modifier.height(Normal))
+
+            TransactionType(
+                modifier = Modifier.fillMaxWidth(),
+                selectedType = selectedType,
+                onTransactionTypeSelected = onTransactionTypeSelected,
             )
         }
 
@@ -369,6 +384,69 @@ private fun Category(
     }
 }
 
+@Composable
+private fun TransactionType(
+    modifier: Modifier,
+    selectedType: TransactionType? = null,
+    onTransactionTypeSelected: (TransactionType?) -> Unit,
+) {
+    DsSecondaryCard(
+        modifier = modifier.padding(horizontal = Large)
+    ) {
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+                .padding(horizontal = Large, vertical = Normal)
+                .horizontalScroll(rememberScrollState()),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Normal)
+        ) {
+            TransactionTypeItem(
+                modifier = Modifier.wrapContentWidth(),
+                isSelected = selectedType == null,
+                name = stringResource(Resources.string.all)
+            ) { onTransactionTypeSelected(null) }
+
+            TransactionTypeItem(
+                modifier = Modifier.wrapContentWidth(),
+                isSelected = selectedType == TransactionType.Expense,
+                name = stringResource(Resources.string.expenses)
+            ) { onTransactionTypeSelected(TransactionType.Expense) }
+
+            TransactionTypeItem(
+                modifier = Modifier.wrapContentWidth(),
+                isSelected = selectedType == TransactionType.Income,
+                name = stringResource(Resources.string.incomes)
+            ) { onTransactionTypeSelected(TransactionType.Expense) }
+        }
+    }
+}
+
+@Composable
+private fun TransactionTypeItem(
+    modifier: Modifier,
+    isSelected: Boolean,
+    name: String,
+    onClick: () -> Unit,
+) {
+    OutlinedBox(
+        modifier = modifier,
+        isEnabled = true,
+        onClick = onClick,
+    ) {
+        val color = if (isSelected) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.onBackground
+        }
+        Text(
+            color = color,
+            text = name,
+            maxLines = 1,
+        )
+    }
+}
+
 private suspend fun LazyListState.animateScrollAndCentralizeItem(index: Int) {
     animateScrollToItem(index, -layoutInfo.viewportEndOffset / 2)
     val itemInfo = layoutInfo.visibleItemsInfo.firstOrNull { it.index == index } ?: return
@@ -384,7 +462,7 @@ private fun OutlinedBox(
     modifier: Modifier,
     isEnabled: Boolean,
     onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    onLongClick: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val view = LocalView.current
@@ -403,8 +481,10 @@ private fun OutlinedBox(
                 enabled = isEnabled,
                 onClick = onClick,
                 onLongClick = {
-                    view.reallyPerformHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                    onLongClick()
+                    if (onLongClick != null) {
+                        view.reallyPerformHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        onLongClick()
+                    }
                 },
             )
             .padding(ButtonDefaults.ContentPadding),
@@ -427,6 +507,7 @@ private fun ContentPreview() {
                 allMonths = Month.entries.map { it.name }.toImmutableList(),
                 selectedMonths = persistentListOf(12),
                 selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
+                selectedType = null,
                 category = null,
                 onYearClicked = {},
                 onYearLongClicked = {},
@@ -436,6 +517,7 @@ private fun ContentPreview() {
                 removeTag = { _ -> },
                 openCategoryModal = {},
                 removeCategory = {},
+                onTransactionTypeSelected = { _ -> },
             )
         }
     }

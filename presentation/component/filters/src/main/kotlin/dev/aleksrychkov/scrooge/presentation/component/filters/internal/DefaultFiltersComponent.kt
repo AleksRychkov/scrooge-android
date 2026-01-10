@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
@@ -62,6 +63,10 @@ internal class DefaultFiltersComponent(
 
     override fun onMonthLongClicked(month: Int) {
         store.handle(FiltersEvent.External.MonthClicked(month = month, isLongClick = true))
+    }
+
+    override fun onTransactionTypeSelected(type: TransactionType?) {
+        store.handle(FiltersEvent.External.SetTransactionType(type = type))
     }
 
     // region Tag

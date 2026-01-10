@@ -136,14 +136,14 @@ private fun TotalByMonth(
             IncomeExpenseBlock(
                 modifier = Modifier
                     .weight(1f),
-                title = stringResource(Resources.string.income),
+                title = stringResource(Resources.string.incomes),
                 items = byMonth.byType.income,
                 color = IncomeColor,
             )
 
             IncomeExpenseBlock(
                 modifier = Modifier.weight(1f),
-                title = stringResource(Resources.string.expense),
+                title = stringResource(Resources.string.expenses),
                 items = byMonth.byType.expense,
                 color = ExpenseColor,
             )

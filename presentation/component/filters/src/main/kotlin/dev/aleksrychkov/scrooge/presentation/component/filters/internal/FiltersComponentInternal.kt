@@ -4,6 +4,7 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
@@ -34,4 +35,6 @@ internal interface FiltersComponentInternal : FiltersComponent {
     fun closeCategoryModal()
     fun setCategory(category: CategoryEntity)
     fun removeCategory()
+
+    fun onTransactionTypeSelected(type: TransactionType?)
 }
