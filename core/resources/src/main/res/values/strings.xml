@@ -122,7 +122,6 @@
     <string name="tag_error_duplicate">Tag «%s» already exists</string>
     <string name="tag_error_empty_name">Type tag name to create new one</string>
     <string name="tag_error_failed_to_delete">Failed to delete tag</string>
-    <string name="tag_error_failed_to_restore">Failed to restore tag</string>
     <string name="tag_delete_confirmation_text">Are you sure you want to delete tag?</string>
     <!-- Tag -->
 
@@ -146,11 +145,6 @@
     <!-- Reports -->
     <string name="reports_period_current_year">Current year</string>
     <!-- Reports -->
-
-    <!-- Filters -->
-    <string name="filters_custom_period">Custom period</string>
-    <string name="filters_fixed_period">Fixed period</string>
-    <!-- Filters -->
 
     <!-- Settings -->
     <string name="settings_select_theme">Select theme:</string>

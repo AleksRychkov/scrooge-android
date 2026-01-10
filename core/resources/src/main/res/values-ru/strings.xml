@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region common -->
+    <string name="close">Закрыть</string>
+    <string name="clear">Очистить</string>
+    <string name="back">Назад</string>
+    <string name="undo">Отменить</string>
+    <string name="ok">ОК</string>
+    <string name="add">Добавить</string>
+    <string name="save">Сохранить</string>
+    <string name="amount">Сумма</string>
+    <string name="category">Категория</string>
+    <string name="currency">Валюта</string>
+    <string name="date">Дата</string>
+    <string name="tags">Теги</string>
+    <string name="submit">Отправить</string>
+    <string name="apply">Применить</string>
+    <string name="delete">Удалить</string>
+    <string name="transactions">Транзакции</string>
+    <string name="reports">Отчёты</string>
+    <string name="totals">Итого</string>
+    <string name="settings">Настройки</string>
+    <string name="income">Доход</string>
+    <string name="expense">Расход</string>
+    <string name="add_income">Добавить доход</string>
+    <string name="add_expense">Добавить расход</string>
+    <string name="total">Всего</string>
+    <string name="details">Подробнее</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="dismiss">Закрыть</string>
+    <string name="today">Сегодня</string>
+    <string name="yesterday">Вчера</string>
+    <string name="month">Месяц</string>
+    <string name="monthly">Ежемесячно</string>
+    <string name="yearly">Ежегодно</string>
+    <string name="filters">Фильтры</string>
+    <string name="reset">Сбросить</string>
+    <string name="more_options">Дополнительно</string>
+    <string name="edit">Редактировать</string>
+    <string name="theme">Тема</string>
+    <string name="send">Отправить файл</string>
+
+    <string-array name="month_names">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+
+    <string-array name="short_month_names">
+        <item>Янв.</item>
+        <item>Февр.</item>
+        <item>Март</item>
+        <item>Апр.</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Авг.</item>
+        <item>Сент.</item>
+        <item>Окт.</item>
+        <item>Нояб.</item>
+        <item>Дек.</item>
+    </string-array>
+    <!-- Common -->
+
+    <!-- Category -->
+    <string-array name="income_categories">
+        <item>Зарплата</item>
+        <item>Проценты по вкладу</item>
+        <item>Кэшбэк</item>
+    </string-array>
+
+    <string-array name="income_categories_icon_ids">
+        <item>Payments</item>
+        <item>AccountBalance</item>
+        <item>Redeem</item>
+    </string-array>
+
+    <string-array name="expense_categories">
+        <item>Продукты</item>
+        <item>Одежда и обувь</item>
+        <item>Развлечения</item>
+        <item>Такси</item>
+        <item>Кафе и рестораны</item>
+        <item>Транспорт</item>
+        <item>Аптека</item>
+        <item>Другое</item>
+    </string-array>
+
+    <string-array name="expense_categories_icon_ids">
+        <item>ShoppingBasket</item>
+        <item>Checkroom</item>
+        <item>Attractions</item>
+        <item>LocalTaxi</item>
+        <item>Restaurant</item>
+        <item>DirectionsBus</item>
+        <item>LocalPharmacy</item>
+        <item>Receipt</item>
+    </string-array>
+
+    <string name="category_delete">Удалить категорию</string>
+    <string name="category_error_empty_name">У категории должно быть название</string>
+    <string name="category_error_failed_to_delete">Не удалось удалить категорию</string>
+    <string name="category_error_failed_to_create">Не удалось создать категорию</string>
+    <string name="category_error_failed_to_update">Не удалось обновить категорию</string>
+    <string name="category_error_duplicate">Категория «%s» уже существует</string>
+    <string name="category_deleted">Категория «%s» удалена</string>
+    <string name="category_name_placeholder">Название категории</string>
+    <string name="category_select_icon">Иконка</string>
+    <string name="category_select_color">Цвет</string>
+    <string name="category_delete_confirmation_text">Вы уверены, что хотите удалить категорию?</string>
+    <!-- Category -->
+
+    <!-- Tag -->
+    <string name="tag_delete">Удалить тег</string>
+    <string name="tag_add">Добавить тег</string>
+    <string name="tag_deleted">Тег «%s» удалён</string>
+    <string name="tag_error_failed_to_create">Не удалось создать тег</string>
+    <string name="tag_error_duplicate">Тег «%s» уже существует</string>
+    <string name="tag_error_empty_name">Введите название тега, чтобы создать новый</string>
+    <string name="tag_error_failed_to_delete">Не удалось удалить тег</string>
+    <string name="tag_delete_confirmation_text">Вы уверены, что хотите удалить тег?</string>
+    <!-- Tag -->
+
+    <!-- Currency -->
+    <string name="currency_tab_all">Все</string>
+    <string name="currency_tab_favorite">Избранные</string>
+    <!-- Currency -->
+
+    <!-- Form -->
+    <string name="form_add_transaction">Добавить транзакцию</string>
+    <string name="form_edit_income">Редактировать доход</string>
+    <string name="form_edit_expense">Редактировать расход</string>
+    <string name="form_edit_transaction">Редактировать транзакцию</string>
+    <string name="form_empty_category">Выберите категорию</string>
+    <string name="form_empty_amount">Укажите сумму</string>
+    <string name="form_failed_submit">Не удалось отправить</string>
+    <string name="form_failed_delete">Не удалось удалить</string>
+    <string name="form_delete_confirmation_text">Вы уверены, что хотите удалить транзакцию?</string>
+    <!-- Form -->
+
+    <!-- Reports -->
+    <string name="reports_period_current_year">Текущий год</string>
+    <!-- Reports -->
+
+    <!-- Settings -->
+    <string name="settings_select_theme">Выберите тему:</string>
+    <string name="settings_select_theme_system">Системная</string>
+    <string name="settings_select_theme_light">Светлая</string>
+    <string name="settings_select_theme_dark">Тёмная</string>
+    <!-- Settings -->
+
+    <!-- Transfer -->
+    <string name="transfer_import_in_progress">Импорт выполняется…</string>
+    <string name="transfer_export_in_progress">Экспорт выполняется…</string>
+    <string name="transfer_transfer_failed">Что-то пошло не так…</string>
+    <string name="transfer_transfer_success">Готово!</string>
+    <string name="transfer_export_title">Экспорт данных</string>
+    <string name="transfer_export_description">Создайте резервную копию для последующего импорта</string>
+    <string name="transfer_import_title">Импорт данных</string>
+    <string name="transfer_import_description">Импорт ранее сохранённых данных. Все текущие данные будут потеряны</string>
+    <!-- Transfer -->
+</resources>
