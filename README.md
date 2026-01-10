@@ -1,6 +1,6 @@
 <p align='center'>
  <a href='https://github.com/sponsors/alexandresanlim'>
-  <img src='https://raw.githubusercontent.com/AleksRychkov/scrooge-android/refs/heads/main/assets/icon.svg?token=GHSAT0AAAAAADS6CNTS2OA3RZV5EZW4XLMI2LCUMMQ' width=150 />
+  <img src='https://raw.githubusercontent.com/AleksRychkov/scrooge-android/refs/heads/main/assets/icon.svg?token=GHSAT0AAAAAADS6CNTSTLJTL5TVLYWBDY4K2LCUS2A' width=150 />
  </a>
 </p>
 
