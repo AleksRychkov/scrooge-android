@@ -244,6 +244,8 @@ private fun FormContent(
         FormComment(
             modifier = Modifier.fillMaxWidth(),
             comment = state.comment,
+            isEditing = state.transactionId != null,
+            isLoading = state.isLoading,
             onCommentChanged = onCommentChanged,
         )
 

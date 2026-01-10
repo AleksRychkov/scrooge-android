@@ -1,7 +1,5 @@
 package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,16 +12,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
@@ -103,14 +100,5 @@ private fun FormTopAppBar(
                 )
             }
         },
-    )
-}
-
-@Composable
-private fun Dp.animateElevation(durationMillis: Int = 300): State<Dp> {
-    return animateDpAsState(
-        targetValue = this,
-        animationSpec = tween(durationMillis = durationMillis),
-        label = "toolbar shadow animation"
     )
 }
