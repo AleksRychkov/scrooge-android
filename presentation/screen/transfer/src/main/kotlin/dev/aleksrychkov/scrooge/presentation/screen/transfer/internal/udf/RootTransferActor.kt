@@ -1,8 +1,8 @@
-package dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf
+package dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf
 
 import dev.aleksrychkov.scrooge.core.udf.Actor
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.actors.ObserveDelegate
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.actors.SetStateDelegate
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.actors.ObserveDelegate
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.actors.SetStateDelegate
 import kotlinx.coroutines.flow.Flow
 
 internal class RootTransferActor(

@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf
+package dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity

@@ -1,8 +1,8 @@
-package dev.aleksrychkov.scrooge.presentation.component.roottransfer
+package dev.aleksrychkov.scrooge.presentation.screen.transfer
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.DefaultRootTransferComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.DefaultRootTransferComponent
 
 interface RootTransferComponent {
     companion object {

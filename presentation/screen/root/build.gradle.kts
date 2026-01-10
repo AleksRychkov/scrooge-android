@@ -12,8 +12,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.presentation.component.rootTransfer)
     implementation(projects.presentation.screen.main.root)
+    implementation(projects.presentation.screen.transfer)
 
     implementation(projects.core.designSystem)
     implementation(projects.core.di)

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.component.roottransfer"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.transfer"
     buildFeatures {
         compose = true
     }

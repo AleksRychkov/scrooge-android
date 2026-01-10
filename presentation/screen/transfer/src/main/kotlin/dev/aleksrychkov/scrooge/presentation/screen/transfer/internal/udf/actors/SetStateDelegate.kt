@@ -1,10 +1,10 @@
-package dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.actors
+package dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.actors
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
 import dev.aleksrychkov.scrooge.feature.transfer.SetTransferStateUseCase
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.RootTransferCommand
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.RootTransferEvent
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.RootTransferCommand
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.RootTransferEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 

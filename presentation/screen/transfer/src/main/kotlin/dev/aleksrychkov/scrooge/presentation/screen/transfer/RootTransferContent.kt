@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.roottransfer
+package dev.aleksrychkov.scrooge.presentation.screen.transfer
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedContent
@@ -35,7 +35,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.RootTransferComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.RootTransferComponentInternal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable

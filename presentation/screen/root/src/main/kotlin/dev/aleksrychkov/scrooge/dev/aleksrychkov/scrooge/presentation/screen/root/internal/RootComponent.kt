@@ -2,8 +2,8 @@ package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.ro
 
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.RootTransferComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.RootTransferComponent
 
 internal interface RootComponent {
     val stack: Value<ChildStack<*, Child>>

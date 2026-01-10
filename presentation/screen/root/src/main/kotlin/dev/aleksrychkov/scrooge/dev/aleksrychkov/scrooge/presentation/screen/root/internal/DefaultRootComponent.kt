@@ -13,8 +13,8 @@ import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.roo
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Main
 import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Transfer
 import dev.aleksrychkov.scrooge.feature.transfer.ObserveTransferStateUseCase
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.RootTransferComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.RootTransferComponent
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

@@ -1,13 +1,13 @@
-package dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal
+package dev.aleksrychkov.scrooge.presentation.screen.transfer.internal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.RootTransferActor
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.RootTransferEvent
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.RootTransferReducer
-import dev.aleksrychkov.scrooge.presentation.component.roottransfer.internal.udf.RootTransferState
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.RootTransferActor
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.RootTransferEvent
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.RootTransferReducer
+import dev.aleksrychkov.scrooge.presentation.screen.transfer.internal.udf.RootTransferState
 import kotlinx.coroutines.flow.StateFlow
 
 internal class DefaultRootTransferComponent(
