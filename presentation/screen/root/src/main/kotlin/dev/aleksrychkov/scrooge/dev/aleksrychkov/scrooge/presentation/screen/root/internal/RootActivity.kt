@@ -1,8 +1,6 @@
 package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
-import android.animation.Animator
 import android.os.Bundle
-import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,7 +11,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,8 +27,6 @@ import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.roo
 import dev.aleksrychkov.scrooge.feature.theme.ObserveThemeUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.GetExportUriUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.GetImportUriUseCase
-
-private const val SPLASH_SCREEN_EXIT_ANIM_DURATION = 500L
 
 internal class RootActivity : ComponentActivity() {
     private val theme: ObserveThemeUseCase = get()
@@ -54,7 +49,6 @@ internal class RootActivity : ComponentActivity() {
         val hideSplashScreen: () -> Unit = {
             splashScreen.setKeepOnScreenCondition { false }
         }
-        setSplashScreenAnimation(splashScreen)
 
         setContent {
             val componentContext = remember { defaultComponentContext() }
@@ -97,33 +91,5 @@ internal class RootActivity : ComponentActivity() {
             factory<GetExportUriUseCase> { exportUri }
             factory<GetImportUriUseCase> { importUri }
         }.also(Naive::add)
-    }
-
-    private fun setSplashScreenAnimation(splashScreen: SplashScreen) {
-        splashScreen.setOnExitAnimationListener { splashScreenView ->
-            splashScreenView.view
-                .animate()
-                .alpha(0f)
-                .setDuration(SPLASH_SCREEN_EXIT_ANIM_DURATION)
-                .setInterpolator(AnticipateInterpolator())
-                .setListener(object : Animator.AnimatorListener {
-                    override fun onAnimationCancel(animation: Animator) {
-                        splashScreenView.remove()
-                    }
-
-                    override fun onAnimationEnd(animation: Animator) {
-                        splashScreenView.remove()
-                    }
-
-                    override fun onAnimationRepeat(animation: Animator) {
-                        // no-op
-                    }
-
-                    override fun onAnimationStart(animation: Animator) {
-                        // no-op
-                    }
-                })
-                .start()
-        }
     }
 }

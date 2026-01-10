@@ -163,41 +163,37 @@ private fun Years(
         initialFirstVisibleItemIndex = selectedItemIndex,
     )
     DsSecondaryCard(
-        modifier = modifier.padding(horizontal = Large)
+        modifier = modifier
+            .padding(horizontal = Large),
     ) {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = Large),
-            contentAlignment = Alignment.Center,
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+            state = listState,
+            contentPadding = PaddingValues(vertical = Normal, horizontal = Large),
+            horizontalArrangement = Arrangement.spacedBy(Normal),
         ) {
-            LazyRow(
-                state = listState,
-                contentPadding = PaddingValues(Normal),
-                horizontalArrangement = Arrangement.spacedBy(Normal),
-            ) {
-                items(
-                    items = allYears,
-                    key = { it }
-                ) { year ->
-                    OutlinedBox(
-                        modifier = Modifier,
-                        isEnabled = true,
-                        onClick = { onYearClicked(year) },
-                        onLongClick = { onYearLongClicked(year) }
-                    ) {
-                        val color = if (selectedYears.contains(year)) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            Color.Unspecified
-                        }
-                        Text(
-                            color = color,
-                            text = year.toString(),
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                        )
+            items(
+                items = allYears,
+                key = { it }
+            ) { year ->
+                OutlinedBox(
+                    modifier = Modifier,
+                    isEnabled = true,
+                    onClick = { onYearClicked(year) },
+                    onLongClick = { onYearLongClicked(year) }
+                ) {
+                    val color = if (selectedYears.contains(year)) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        Color.Unspecified
                     }
+                    Text(
+                        color = color,
+                        text = year.toString(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
                 }
             }
         }
@@ -349,7 +345,9 @@ private fun Category(
         val focusManager = LocalFocusManager.current
         Box {
             TextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Small),
                 value = category?.name.orEmpty(),
                 singleLine = true,
                 label = {
@@ -358,26 +356,26 @@ private fun Category(
                 colors = DsInputTextFieldsColors(),
                 readOnly = true,
                 trailingIcon = {
-                    if (category != null) {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .debounceClickable {
-                                    focusManager.clearFocus(force = true)
-                                    removeCategory()
-                                }
-                        )
-                    }
                 },
                 onValueChange = { },
             )
-            if (category == null) {
-                Box(
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .debounceClickable(onClick = addCategory)
+            )
+            if (category != null) {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .debounceClickable(onClick = addCategory)
+                        .padding(end = Normal)
+                        .clip(CircleShape)
+                        .debounceClickable {
+                            focusManager.clearFocus(force = true)
+                            removeCategory()
+                        }
+                        .align(Alignment.CenterEnd)
                 )
             }
         }
@@ -508,7 +506,7 @@ private fun ContentPreview() {
                 selectedMonths = persistentListOf(12),
                 selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
                 selectedType = null,
-                category = null,
+                category = CategoryEntity.from("Transport", TransactionType.Expense),
                 onYearClicked = {},
                 onYearLongClicked = {},
                 onMonthClicked = {},

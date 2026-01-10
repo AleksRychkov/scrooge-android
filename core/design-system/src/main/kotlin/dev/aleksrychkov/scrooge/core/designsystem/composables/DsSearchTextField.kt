@@ -1,7 +1,7 @@
 package dev.aleksrychkov.scrooge.core.designsystem.composables
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -70,7 +71,8 @@ fun DsSearchTextField(
                     imageVector = Icons.Default.Clear,
                     contentDescription = stringResource(Resources.string.clear),
                     modifier = Modifier
-                        .clickable { text = "" },
+                        .clip(CircleShape)
+                        .debounceClickable { text = "" },
                 )
             }
         },

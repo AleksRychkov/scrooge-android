@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.ByCategoryContent
@@ -71,7 +70,6 @@ internal fun ReportAppBar(
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shadowElevation = Medium,
     ) {
         TopAppBar(
             title = {
