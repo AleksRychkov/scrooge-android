@@ -4,7 +4,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
@@ -45,13 +44,12 @@ internal class TransactionsListReducer(
             }
 
             is TransactionsListEvent.Internal.PagedTransactions -> state.reduceWith(event) {
-                val today = Datestamp.now().date
                 val pagedTransactions: Flow<PagingData<TransactionsItem>> = event.data
                     .map { pagingData: PagingData<TransactionEntity> ->
                         val transactions = mutableMapOf<String, MutableList<TransactionEntity>>()
                         pagingData
                             .map { entity ->
-                                val itemDate = mapper.transactionDate(entity, today)
+                                val itemDate = entity.datestamp.readableName()
                                 val map = transactions[itemDate] ?: mutableListOf()
                                 map.add(entity)
                                 transactions[itemDate] = map
