@@ -48,8 +48,6 @@ graph TD
 %% App dependencies
     APP --> FEATURE_DI
     APP --> PRES_SCREEN
-    APP --> PRES_COMPONENT
-    APP --> CORE
 
 %% Presentation depends on API
     PRES_SCREEN --> FEATURE_API
