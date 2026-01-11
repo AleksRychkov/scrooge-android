@@ -175,7 +175,7 @@ private fun IncomeExpenseBlock(
                 Row {
                     Text(
                         color = color,
-                        text = "${item.currencySymbol} ${item.amount}",
+                        text = "${item.amount} ${item.currencySymbol}",
                         style = MaterialTheme.typography.titleSmall,
                     )
                 }

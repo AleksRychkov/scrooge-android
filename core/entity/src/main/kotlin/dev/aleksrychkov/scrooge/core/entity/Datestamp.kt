@@ -11,9 +11,8 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Clock
 import kotlin.time.Instant
 
-@JvmInline
 @Serializable
-value class Datestamp(val value: Long) {
+data class Datestamp(val value: Long) {
     companion object Companion {
         private const val YEAR_MULTIPLIER = 10_000L
         private const val MONTH_MULTIPLIER = 100L

@@ -42,32 +42,34 @@ internal class DefaultDatabaseFileAdapter(
             serializer.serialize(it, output)
         }
 
-        val fromDatestamp = Datestamp(minMax.minDatestamp!!)
-        val toDatestamp = Datestamp(minMax.maxDatestamp!!)
-        var index: Datestamp = fromDatestamp
-        while (index.value <= toDatestamp.value) {
-            val fromDatestamp = index.value
-            val nextMonth = index.date.plus(1, DateTimeUnit.MONTH)
-            val toDatestamp = Datestamp.from(nextMonth).value
-            database.transactionQueries
-                .selectFromToForExport(
-                    fromDatestamp = fromDatestamp,
-                    toDatestamp = toDatestamp,
-                )
-                .executeAsList()
-                .forEach {
-                    val t = TTransaction(
-                        it.id,
-                        it.amount,
-                        it.datestamp,
-                        it.type,
-                        it.categoryId,
-                        it.currencyCode,
-                        it.comment
+        if (minMax.maxDatestamp != null && minMax.minDatestamp != null) {
+            val fromDatestamp = Datestamp(minMax.minDatestamp)
+            val toDatestamp = Datestamp(minMax.maxDatestamp)
+            var index: Datestamp = fromDatestamp
+            while (index.value <= toDatestamp.value) {
+                val fromDatestamp = index.value
+                val nextMonth = index.date.plus(1, DateTimeUnit.MONTH)
+                val toDatestamp = Datestamp.from(nextMonth).value
+                database.transactionQueries
+                    .selectFromToForExport(
+                        fromDatestamp = fromDatestamp,
+                        toDatestamp = toDatestamp,
                     )
-                    serializer.serialize(t, output)
-                }
-            index = Datestamp.from(nextMonth.plus(1, DateTimeUnit.DAY))
+                    .executeAsList()
+                    .forEach {
+                        val t = TTransaction(
+                            it.id,
+                            it.amount,
+                            it.datestamp,
+                            it.type,
+                            it.categoryId,
+                            it.currencyCode,
+                            it.comment
+                        )
+                        serializer.serialize(t, output)
+                    }
+                index = Datestamp.from(nextMonth.plus(1, DateTimeUnit.DAY))
+            }
         }
 
         database.tagQueries.selectAllTransactionTag().executeAsList().forEach {

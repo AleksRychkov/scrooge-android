@@ -26,4 +26,6 @@ dependencies {
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    implementation(libs.kotlinx.serialization.json)
 }

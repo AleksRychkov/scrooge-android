@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.CompareArrows
 import androidx.compose.material.icons.automirrored.rounded.DirectionsBike
 import androidx.compose.material.icons.automirrored.rounded.DirectionsRun
+import androidx.compose.material.icons.automirrored.rounded.LibraryBooks
 import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.Adb
@@ -15,15 +16,21 @@ import androidx.compose.material.icons.rounded.AssuredWorkload
 import androidx.compose.material.icons.rounded.Atm
 import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Attractions
+import androidx.compose.material.icons.rounded.AutoStories
 import androidx.compose.material.icons.rounded.Bathtub
 import androidx.compose.material.icons.rounded.Bed
 import androidx.compose.material.icons.rounded.Biotech
+import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Bungalow
 import androidx.compose.material.icons.rounded.Cabin
+import androidx.compose.material.icons.rounded.Cake
+import androidx.compose.material.icons.rounded.CarRental
 import androidx.compose.material.icons.rounded.CardGiftcard
 import androidx.compose.material.icons.rounded.CardMembership
+import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.Chalet
 import androidx.compose.material.icons.rounded.Checkroom
+import androidx.compose.material.icons.rounded.ChildFriendly
 import androidx.compose.material.icons.rounded.Coffee
 import androidx.compose.material.icons.rounded.CoffeeMaker
 import androidx.compose.material.icons.rounded.Commute
@@ -32,7 +39,10 @@ import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.CrueltyFree
 import androidx.compose.material.icons.rounded.DirectionsBike
 import androidx.compose.material.icons.rounded.DirectionsBus
+import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.Doorbell
+import androidx.compose.material.icons.rounded.Draw
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Elderly
 import androidx.compose.material.icons.rounded.ElectricBike
 import androidx.compose.material.icons.rounded.ElectricBolt
@@ -41,11 +51,16 @@ import androidx.compose.material.icons.rounded.ElectricMeter
 import androidx.compose.material.icons.rounded.ElectricScooter
 import androidx.compose.material.icons.rounded.ElectricalServices
 import androidx.compose.material.icons.rounded.EmojiFoodBeverage
+import androidx.compose.material.icons.rounded.EmojiObjects
 import androidx.compose.material.icons.rounded.FitnessCenter
+import androidx.compose.material.icons.rounded.Garage
 import androidx.compose.material.icons.rounded.GasMeter
 import androidx.compose.material.icons.rounded.Healing
+import androidx.compose.material.icons.rounded.HealthAndSafety
 import androidx.compose.material.icons.rounded.Hiking
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.LaptopMac
+import androidx.compose.material.icons.rounded.LibraryBooks
 import androidx.compose.material.icons.rounded.Light
 import androidx.compose.material.icons.rounded.LocalActivity
 import androidx.compose.material.icons.rounded.LocalAirport
@@ -80,9 +95,12 @@ import androidx.compose.material.icons.rounded.LteMobiledata
 import androidx.compose.material.icons.rounded.MedicalServices
 import androidx.compose.material.icons.rounded.Medication
 import androidx.compose.material.icons.rounded.Money
+import androidx.compose.material.icons.rounded.Moped
 import androidx.compose.material.icons.rounded.Museum
 import androidx.compose.material.icons.rounded.NightShelter
+import androidx.compose.material.icons.rounded.Paid
 import androidx.compose.material.icons.rounded.Payments
+import androidx.compose.material.icons.rounded.PedalBike
 import androidx.compose.material.icons.rounded.PermPhoneMsg
 import androidx.compose.material.icons.rounded.PestControlRodent
 import androidx.compose.material.icons.rounded.Pets
@@ -92,10 +110,12 @@ import androidx.compose.material.icons.rounded.Plumbing
 import androidx.compose.material.icons.rounded.PointOfSale
 import androidx.compose.material.icons.rounded.Pool
 import androidx.compose.material.icons.rounded.QuestionMark
+import androidx.compose.material.icons.rounded.Quiz
 import androidx.compose.material.icons.rounded.Receipt
 import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.Savings
+import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.ScreenRotation
 import androidx.compose.material.icons.rounded.ScubaDiving
 import androidx.compose.material.icons.rounded.SelfImprovement
@@ -113,6 +133,7 @@ import androidx.compose.material.icons.rounded.SportsSoccer
 import androidx.compose.material.icons.rounded.Stadium
 import androidx.compose.material.icons.rounded.Store
 import androidx.compose.material.icons.rounded.Storm
+import androidx.compose.material.icons.rounded.Subway
 import androidx.compose.material.icons.rounded.Surfing
 import androidx.compose.material.icons.rounded.SwitchAccount
 import androidx.compose.material.icons.rounded.Train
@@ -252,6 +273,26 @@ val CategoryIcons: Set<CategoryIcon> by lazy {
         CategoryIcon("SportsSoccer", Icons.Rounded.SportsSoccer),
         CategoryIcon("Stadium", Icons.Rounded.Stadium),
         CategoryIcon("VideogameAsset", Icons.Rounded.VideogameAsset),
+        CategoryIcon("Cake", Icons.Rounded.Cake),
+        CategoryIcon("AutoStories", Icons.Rounded.AutoStories),
+        CategoryIcon("Book", Icons.Rounded.Book),
+        CategoryIcon("LibraryBooks", Icons.AutoMirrored.Rounded.LibraryBooks),
+        CategoryIcon("LaptopMac", Icons.Rounded.LaptopMac),
+        CategoryIcon("Quiz", Icons.Rounded.Quiz),
+        CategoryIcon("School", Icons.Rounded.School),
+        CategoryIcon("HealthAndSafety", Icons.Rounded.HealthAndSafety),
+        CategoryIcon("Draw", Icons.Rounded.Draw),
+        CategoryIcon("Edit", Icons.Rounded.Edit),
+        CategoryIcon("CarRental", Icons.Rounded.CarRental),
+        CategoryIcon("DirectionsCar", Icons.Rounded.DirectionsCar),
+        CategoryIcon("Subway", Icons.Rounded.Subway),
+        CategoryIcon("Moped", Icons.Rounded.Moped),
+        CategoryIcon("PedalBike", Icons.Rounded.PedalBike),
+        CategoryIcon("Garage", Icons.Rounded.Garage),
+        CategoryIcon("ChildFriendly", Icons.Rounded.ChildFriendly),
+        CategoryIcon("Paid", Icons.Rounded.Paid),
+        CategoryIcon("EmojiObjects", Icons.Rounded.EmojiObjects),
+        CategoryIcon("Category", Icons.Rounded.Category),
     )
 }
 

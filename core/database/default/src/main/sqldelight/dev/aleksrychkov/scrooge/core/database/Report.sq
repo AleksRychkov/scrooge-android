@@ -74,4 +74,5 @@ WHERE
       )
   AND (:categoryId IS NULL OR t.categoryId = :categoryId)
   AND (:transactionType IS NULL OR t.type = :transactionType)
-GROUP BY t.type, t.currencyCode, t.categoryId;
+GROUP BY t.type, t.currencyCode, t.categoryId
+ORDER BY t.currencyCode DESC;

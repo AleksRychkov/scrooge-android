@@ -1,6 +1,5 @@
 package dev.aleksrychkov.scrooge.core.entity
 
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
@@ -15,8 +14,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FilterEntity(
     val period: PeriodDatestampEntity = PeriodDatestampEntity(Datestamp.now(), Datestamp.now()),
-    val years: ImmutableList<Int> = persistentListOf(),
-    val months: ImmutableList<Int> = persistentListOf(),
+    val years: SerializableImmutableList<Int> = persistentListOf(),
+    val months: SerializableImmutableList<Int> = persistentListOf(),
     val tags: ImmutableSet<TagEntity> = persistentSetOf(),
     val category: CategoryEntity? = null,
     val transactionType: TransactionType? = null,

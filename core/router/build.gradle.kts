@@ -9,4 +9,5 @@ dependencies {
 
 dependencies {
     implementation(libs.decompose.decompose)
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +36,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.PeriodTotalComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.PeriodTotalState
@@ -130,14 +130,16 @@ private fun TotalContent(
                     .padding(vertical = Normal),
             ) {
                 data.total.forEach { item ->
-                    Row {
-                        Text(
-                            modifier = Modifier.width(Normal2X),
-                            text = item.currencySymbol,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
                         Text(
                             text = item.amount,
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                        Spacer(modifier = Modifier.width(Normal))
+                        Text(
+                            text = item.currencySymbol,
                             style = MaterialTheme.typography.titleLarge,
                         )
                     }
@@ -192,14 +194,14 @@ private fun IncomeExpenseBlock(
             items.forEach { item ->
                 Row {
                     Text(
-                        modifier = Modifier.defaultMinSize(minWidth = Large),
-                        color = color,
-                        text = item.currencySymbol,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                    Text(
                         color = color,
                         text = item.amount,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(modifier = Modifier.width(Medium))
+                    Text(
+                        color = color,
+                        text = item.currencySymbol,
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }

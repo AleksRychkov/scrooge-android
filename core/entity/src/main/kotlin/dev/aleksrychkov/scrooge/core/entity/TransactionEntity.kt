@@ -1,6 +1,5 @@
 package dev.aleksrychkov.scrooge.core.entity
 
-import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.serialization.Serializable
 import kotlin.math.abs
@@ -17,7 +16,7 @@ data class TransactionEntity(
     val datestamp: Datestamp,
     val type: TransactionType,
     val category: CategoryEntity,
-    val tags: ImmutableSet<TagEntity> = persistentSetOf(),
+    val tags: SerializableImmutableSet<TagEntity> = persistentSetOf(),
     val currency: CurrencyEntity,
     val comment: String = "",
 ) {
