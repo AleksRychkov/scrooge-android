@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,10 +32,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
-import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsRow
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
@@ -230,16 +232,20 @@ private fun FormContent(
             onDateSelected = onDateSelected,
         )
 
-        Spacer(modifier = Modifier.height(HalfNormal))
+        Spacer(modifier = Modifier.height(Normal))
 
-        TagsRow(
-            modifier = Modifier.fillMaxWidth(),
-            tags = state.tags,
-            openTagModal = openTagModal,
-            removeTag = removeTag,
-        )
+        DsSecondaryCard(modifier = modifier.height(intrinsicSize = IntrinsicSize.Max)) {
+            TagsRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Large, vertical = Small),
+                tags = state.tags,
+                openTagModal = openTagModal,
+                removeTag = removeTag,
+            )
+        }
 
-        Spacer(modifier = Modifier.height(HalfNormal))
+        Spacer(modifier = Modifier.height(Normal))
 
         FormComment(
             modifier = Modifier.fillMaxWidth(),
@@ -325,7 +331,7 @@ private fun FormContentPreview() {
     AppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             FormContent(
-                modifier = Modifier,
+                modifier = Modifier.fillMaxSize(),
                 state = FormState(),
                 amountChanged = {},
                 openCategoryModal = {},
