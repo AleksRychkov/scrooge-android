@@ -73,7 +73,7 @@ internal fun ReportAppBar(
     ) {
         TopAppBar(
             title = {
-                Text(text = stringResource(Resources.string.category))
+                Text(text = stringResource(Resources.string.categories))
             },
             navigationIcon = {
                 IconButton(onClick = component::onBackClicked) {

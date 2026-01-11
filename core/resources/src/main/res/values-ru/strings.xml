@@ -10,6 +10,7 @@
     <string name="save">Сохранить</string>
     <string name="amount">Сумма</string>
     <string name="category">Категория</string>
+    <string name="categories">Категории</string>
     <string name="currency">Валюта</string>
     <string name="date">Дата</string>
     <string name="tags">Теги</string>
@@ -18,7 +19,7 @@
     <string name="delete">Удалить</string>
     <string name="transactions">Транзакции</string>
     <string name="reports">Отчёты</string>
-    <string name="totals">Итого</string>
+    <string name="totals">Итоги</string>
     <string name="settings">Настройки</string>
     <string name="income">Доход</string>
     <string name="expense">Расход</string>
@@ -27,7 +28,7 @@
     <string name="all">Все</string>
     <string name="add_income">Добавить доход</string>
     <string name="add_expense">Добавить расход</string>
-    <string name="total">Всего</string>
+    <string name="total">Итого</string>
     <string name="details">Подробнее</string>
     <string name="confirm">Подтвердить</string>
     <string name="dismiss">Закрыть</string>

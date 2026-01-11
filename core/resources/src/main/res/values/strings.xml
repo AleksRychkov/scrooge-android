@@ -10,6 +10,7 @@
     <string name="save">Save</string>
     <string name="amount">Amount</string>
     <string name="category">Category</string>
+    <string name="categories">Categories</string>
     <string name="currency">Currency</string>
     <string name="date">Date</string>
     <string name="tags">Tags</string>
