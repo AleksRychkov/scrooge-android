@@ -8,12 +8,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -32,8 +36,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsInputTextFieldsColors
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import kotlinx.coroutines.flow.collectLatest
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
+
+private const val MAX_COMMENT_LENGTH = 100
 
 @Composable
 internal fun FormComment(
@@ -45,7 +52,9 @@ internal fun FormComment(
 ) {
     DsSecondaryCard(modifier = modifier.height(intrinsicSize = IntrinsicSize.Max)) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = Small),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -54,14 +63,14 @@ internal fun FormComment(
 
             if (isEditing && isLoading) return@Row
 
-            val amountTextFieldState = rememberTextFieldState("")
+            val commentTextFieldState = rememberTextFieldState("")
             LaunchedEffect(key1 = comment) {
-                if (comment != amountTextFieldState.text.toString()) {
-                    amountTextFieldState.setTextAndPlaceCursorAtEnd(comment)
+                if (comment != commentTextFieldState.text.toString()) {
+                    commentTextFieldState.setTextAndPlaceCursorAtEnd(comment)
                 }
             }
-            LaunchedEffect(amountTextFieldState) {
-                snapshotFlow { amountTextFieldState.text.toString() }
+            LaunchedEffect(commentTextFieldState) {
+                snapshotFlow { commentTextFieldState.text.toString() }
                     .collectLatest {
                         onCommentChanged(it)
                     }
@@ -71,9 +80,16 @@ internal fun FormComment(
                 modifier = Modifier
                     .weight(weight = 1f, fill = true)
                     .focusRequester(focusRequester),
-                state = amountTextFieldState,
+                state = commentTextFieldState,
                 label = {
                     Text(text = stringResource(Resources.string.form_comment))
+                },
+                supportingText = {
+                    Text(
+                        modifier = Modifier.padding(bottom = Small),
+                        text = "${commentTextFieldState.text.length} / $MAX_COMMENT_LENGTH",
+                        style = MaterialTheme.typography.labelSmall,
+                    )
                 },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -84,15 +100,16 @@ internal fun FormComment(
                 },
                 colors = DsInputTextFieldsColors(),
                 trailingIcon = {
-                    if (amountTextFieldState.text.isNotBlank()) {
+                    if (commentTextFieldState.text.isNotBlank()) {
                         Icon(
                             imageVector = Icons.Default.Clear,
                             contentDescription = stringResource(Resources.string.clear),
                             modifier = Modifier
-                                .clickable { amountTextFieldState.setTextAndPlaceCursorAtEnd("") },
+                                .clickable { commentTextFieldState.setTextAndPlaceCursorAtEnd("") },
                         )
                     }
                 },
+                inputTransformation = InputTransformation.maxLength(maxLength = MAX_COMMENT_LENGTH),
             )
         }
     }

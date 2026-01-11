@@ -23,6 +23,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -36,7 +37,7 @@ fun TagsRow(
     openTagModal: () -> Unit,
 ) {
     FlowRow(
-        modifier = modifier,
+        modifier = modifier.padding(vertical = Small),
         horizontalArrangement = Arrangement.spacedBy(space = Normal),
     ) {
         InputChip(
