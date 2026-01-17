@@ -67,7 +67,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
-import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
@@ -403,7 +402,7 @@ private fun ByCategoryList(
                     .debounceClickable {
                         onCategoryClicked(value.reference)
                     }
-                    .padding(horizontal = Large, vertical = HalfNormal),
+                    .padding(horizontal = Large, vertical = Normal),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
             ) {
