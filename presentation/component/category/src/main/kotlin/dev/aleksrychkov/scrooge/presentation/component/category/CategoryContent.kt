@@ -455,7 +455,9 @@ private fun CategoryBar(
 
     val headerElevation by remember {
         derivedStateOf {
-            if (contentListState.firstVisibleItemScrollOffset > 0) {
+            if (contentListState.firstVisibleItemScrollOffset > 0 ||
+                contentListState.firstVisibleItemIndex != 0
+            ) {
                 AppBarShadow
             } else {
                 0.dp

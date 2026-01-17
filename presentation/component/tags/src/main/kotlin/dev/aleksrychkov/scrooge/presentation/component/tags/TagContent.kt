@@ -2,24 +2,24 @@ package dev.aleksrychkov.scrooge.presentation.component.tags
 
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -27,10 +27,12 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,14 +40,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
-import dev.aleksrychkov.scrooge.core.designsystem.composables.NavigationBarSpacer
+import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
+import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
@@ -96,19 +104,24 @@ private fun TagContent(
             job.cancel()
         }
     }
+    val contentListState = rememberLazyListState()
     Scaffold(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        topBar = {
+            TagBar(
+                modifier = Modifier.fillMaxWidth(),
+                component = component,
+                contentListState = contentListState,
+            )
+        }
     ) { innerPadding ->
         TagContent(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding())
                 .fillMaxSize(),
-            state = state,
+            component = component,
+            contentListState = contentListState,
             selectTag = callback,
-            deleteTag = component::deleteTag,
-            setSearchQuery = component::setSearchQuery,
-            addNewTagClicked = component::addNewTag,
         )
     }
 }
@@ -116,39 +129,26 @@ private fun TagContent(
 @Composable
 private fun TagContent(
     modifier: Modifier,
-    state: TagState,
+    component: TagComponentInternal,
+    contentListState: LazyListState,
     selectTag: (TagEntity) -> Unit,
-    deleteTag: (TagEntity) -> Unit,
-    setSearchQuery: (String) -> Unit,
-    addNewTagClicked: () -> Unit,
 ) {
-    Column(
-        modifier = modifier
-            .displayCutoutPadding()
-            .statusBarsPadding()
-    ) {
-        TagBar(
-            modifier = Modifier.fillMaxWidth(),
-            state = state,
-            setSearchQuery = setSearchQuery,
-            addTagClicked = addNewTagClicked,
-        )
+    val state by component.state.collectAsStateWithLifecycle()
 
-        Spacer(modifier = Modifier.height(Normal))
-
-        TagsList(
-            modifier = Modifier.fillMaxSize(),
-            state = state,
-            selectTag = selectTag,
-            deleteTag = deleteTag,
-        )
-    }
+    TagsList(
+        modifier = modifier,
+        state = state,
+        selectTag = selectTag,
+        contentListState = contentListState,
+        deleteTag = component::deleteTag,
+    )
 }
 
 @Composable
 private fun TagsList(
     modifier: Modifier,
     state: TagState,
+    contentListState: LazyListState,
     selectTag: (TagEntity) -> Unit,
     deleteTag: (TagEntity) -> Unit,
 ) {
@@ -159,6 +159,7 @@ private fun TagsList(
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
+            state = contentListState,
         ) {
             val tags = if (state.searchQuery.isNotBlank()) {
                 state.filtered
@@ -180,9 +181,26 @@ private fun TagsList(
             }
 
             item {
-                NavigationBarSpacer()
+                Spacer(Modifier.height(Large2X))
             }
         }
+
+        val density = LocalDensity.current
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(Large2X)
+                .align(Alignment.BottomCenter)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            MaterialTheme.colorScheme.background,
+                        ),
+                        endY = with(density) { Large2X.toPx() },
+                    ),
+                ),
+        )
     }
 }
 
@@ -225,7 +243,6 @@ private fun Tag(
         ) {
             Icon(
                 imageVector = Icons.Filled.Delete,
-                tint = MaterialTheme.colorScheme.error,
                 contentDescription = stringResource(Resources.string.tag_delete),
             )
         }
@@ -266,35 +283,53 @@ private fun Tag(
 @Composable
 private fun TagBar(
     modifier: Modifier,
-    state: TagState,
-    setSearchQuery: (String) -> Unit,
-    addTagClicked: () -> Unit,
+    component: TagComponentInternal,
+    contentListState: LazyListState,
 ) {
-    Row(
-        modifier = modifier
-            .height(IntrinsicSize.Max)
-            .padding(horizontal = Large),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-        ) {
-            DsSearchTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = state.searchQuery,
-                onValueChanged = setSearchQuery,
-            )
+    val state by component.state.collectAsStateWithLifecycle()
+
+    val headerElevation by remember {
+        derivedStateOf {
+            if (contentListState.firstVisibleItemScrollOffset > 0 ||
+                contentListState.firstVisibleItemIndex != 0
+            ) {
+                AppBarShadow
+            } else {
+                0.dp
+            }
         }
-
-        if (!state.isEditable) return
-
-        DsButton(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(start = Normal),
-            onClick = addTagClicked,
+    }
+    val animatedElevation by headerElevation.animateElevation()
+    Surface(
+        Modifier.fillMaxWidth(),
+        shadowElevation = animatedElevation,
+    ) {
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Max)
+                .padding(Large),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = stringResource(Resources.string.add))
+            Box(
+                modifier = Modifier.weight(weight = 1f, fill = true),
+            ) {
+                DsSearchTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state.searchQuery,
+                    onValueChanged = component::setSearchQuery,
+                )
+            }
+
+            if (state.isEditable) {
+                DsButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(start = Normal),
+                    onClick = component::addNewTag,
+                ) {
+                    Text(text = stringResource(Resources.string.add))
+                }
+            }
         }
     }
 }
