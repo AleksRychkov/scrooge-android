@@ -11,6 +11,7 @@ import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.Repo
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsContent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.TransactionFormContent
+import dev.aleksrychkov.scrooge.presentation.screen.transactions.TransactionsContent
 
 @Composable
 fun MainContent(
@@ -48,6 +49,11 @@ private fun MainContent(
                 )
 
                 is MainComponentInternal.Child.ReportCategoryTotal -> ReportCategoryTotalContent(
+                    modifier = Modifier.fillMaxSize(),
+                    component = child.component,
+                )
+
+                is MainComponentInternal.Child.Transactions -> TransactionsContent(
                     modifier = Modifier.fillMaxSize(),
                     component = child.component,
                 )

@@ -1,7 +1,11 @@
 package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory
 
 import com.arkivanov.decompose.ComponentContext
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.core.router.DestinationTransactions
+import dev.aleksrychkov.scrooge.core.router.Router
+import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryActor
@@ -25,12 +29,17 @@ internal interface ByCategoryComponent {
 
     fun setTransactionType(type: Int)
     fun setFilter(filter: FilterEntity)
+    fun onCategoryClicked(category: CategoryEntity)
 }
 
 private class DefaultByCategoryComponent(
     componentContext: ComponentContext,
     filter: FilterEntity,
 ) : ByCategoryComponent, ComponentContext by componentContext {
+
+    private val router: Router by lazy {
+        (componentContext as RouterComponentContext).router
+    }
 
     private val store: Store<ByCategoryState, ByCategoryEvent, Unit> by lazy {
         instanceKeeper.createStore(
@@ -50,5 +59,13 @@ private class DefaultByCategoryComponent(
 
     override fun setFilter(filter: FilterEntity) {
         store.handle(ByCategoryEvent.External.Load(filter))
+    }
+
+    override fun onCategoryClicked(category: CategoryEntity) {
+        router.open(
+            DestinationTransactions(
+                filter = state.value.filter.copy(category = category)
+            )
+        )
     }
 }

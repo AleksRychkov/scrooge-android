@@ -135,7 +135,6 @@ private fun CategoryContent(
         modifier = modifier,
         topBar = {
             CategoryBar(
-                modifier = Modifier.fillMaxWidth(),
                 component = component,
                 contentListState = contentListState,
             )
@@ -447,7 +446,6 @@ private fun CategoryOptions(
 
 @Composable
 private fun CategoryBar(
-    modifier: Modifier,
     component: CategoryComponentInternal,
     contentListState: LazyListState,
 ) {
@@ -471,7 +469,8 @@ private fun CategoryBar(
         shadowElevation = animatedElevation,
     ) {
         Row(
-            modifier = modifier
+            modifier = Modifier
+                .fillMaxWidth()
                 .height(IntrinsicSize.Max)
                 .padding(Large),
             verticalAlignment = Alignment.CenterVertically,

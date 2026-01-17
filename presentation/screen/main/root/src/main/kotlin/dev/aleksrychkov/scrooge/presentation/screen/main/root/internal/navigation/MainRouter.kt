@@ -7,9 +7,11 @@ import com.arkivanov.decompose.router.stack.pushNew
 import dev.aleksrychkov.scrooge.core.router.Destination
 import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
+import dev.aleksrychkov.scrooge.core.router.DestinationTransactions
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig.ReportCategoryTotal
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig.TransactionForm
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig.Transactions
 
 internal class MainRouter(
     val navigation: StackNavigation<MainNavigationConfig>
@@ -24,6 +26,10 @@ internal class MainRouter(
 
             is DestinationReportCategoryTotal -> {
                 navigation.pushNew(ReportCategoryTotal(destination = destination))
+            }
+
+            is DestinationTransactions -> {
+                navigation.pushNew(Transactions(destination = destination))
             }
         }
     }

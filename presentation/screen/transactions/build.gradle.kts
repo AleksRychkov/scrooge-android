@@ -5,28 +5,30 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.main.root"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.transactions"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.presentation.screen.main.tabs)
-    implementation(projects.presentation.screen.reportCategoryTotal)
-    implementation(projects.presentation.screen.transactions)
-    implementation(projects.presentation.screen.transactionForm)
+    implementation(projects.presentation.component.transactionList)
 
+    implementation(projects.core.designSystem)
     implementation(projects.core.entity)
+    implementation(projects.core.resources)
     implementation(projects.core.router)
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
 
-    implementation(libs.kotlinx.serialization.json)
+    debugImplementation(libs.androidx.ui.tooling)
 }

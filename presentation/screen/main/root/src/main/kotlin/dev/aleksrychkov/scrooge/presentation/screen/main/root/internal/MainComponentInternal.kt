@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.Repo
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.TransactionFormComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transactions.TransactionsComponent
 
 internal interface MainComponentInternal : MainComponent {
     val stack: Value<ChildStack<*, Child>>
@@ -14,5 +15,6 @@ internal interface MainComponentInternal : MainComponent {
         class MainTabs(val component: MainTabsComponent) : Child()
         class TransactionForm(val component: TransactionFormComponent) : Child()
         class ReportCategoryTotal(val component: ReportCategoryTotalComponent) : Child()
+        class Transactions(val component: TransactionsComponent) : Child()
     }
 }

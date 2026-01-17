@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf
 
 import androidx.compose.runtime.Immutable
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -35,6 +36,7 @@ internal data class ByCategoryState(
             val categoryColor: Int,
             val currencySymbol: String,
             val amount: String,
+            val reference: CategoryEntity,
         )
     }
 }
@@ -64,6 +66,7 @@ private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyValueState
                 categoryIcon = categoryIconFromId(value.category.iconId),
                 currencySymbol = currencySymbol,
                 amount = value.amount.amountToStringFormatted(""),
+                reference = value.category,
             )
         }
         .toImmutableList()

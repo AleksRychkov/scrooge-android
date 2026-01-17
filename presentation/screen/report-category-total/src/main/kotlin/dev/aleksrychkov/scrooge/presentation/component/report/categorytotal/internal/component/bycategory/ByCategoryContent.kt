@@ -71,6 +71,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
 import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChart
@@ -92,6 +93,7 @@ internal fun ByCategoryContent(
         modifier = modifier,
         state = state,
         setType = component::setTransactionType,
+        onCategoryClicked = component::onCategoryClicked,
     )
 }
 
@@ -100,6 +102,7 @@ private fun ByCategoryContent(
     modifier: Modifier,
     state: ByCategoryState,
     setType: (Int) -> Unit,
+    onCategoryClicked: (CategoryEntity) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -132,6 +135,7 @@ private fun ByCategoryContent(
             modifier = Modifier
                 .fillMaxWidth(),
             byCurrency = byCurrency,
+            onCategoryClicked = onCategoryClicked,
         )
     }
 }
@@ -140,6 +144,7 @@ private fun ByCategoryContent(
 private fun ByCurrency(
     modifier: Modifier,
     byCurrency: ImmutableList<ByCategoryState.ByCurrency>,
+    onCategoryClicked: (CategoryEntity) -> Unit,
 ) {
     if (byCurrency.isEmpty()) return
     BoxWithConstraints(modifier = modifier) {
@@ -176,6 +181,7 @@ private fun ByCurrency(
             data = byCurrency[pagerState.currentPage].valueData,
             maxOffset = maxBottomSheetOffset,
             sheetOffset = bottomSheetOffset,
+            onCategoryClicked = onCategoryClicked,
         )
     }
 }
@@ -187,6 +193,7 @@ private fun ByCategoryBottomSheet(
     data: List<ByCategoryState.ByCurrency.Value>,
     maxOffset: Float,
     sheetOffset: Animatable<Float, AnimationVector1D>,
+    onCategoryClicked: (CategoryEntity) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -282,6 +289,7 @@ private fun ByCategoryBottomSheet(
                     .fillMaxSize(),
                 data = animatedData,
                 listState = listState,
+                onCategoryClicked = onCategoryClicked,
             )
         }
     }
@@ -348,6 +356,7 @@ private fun ByCategoryList(
     modifier: Modifier,
     data: List<ByCategoryState.ByCurrency.Value>,
     listState: LazyListState,
+    onCategoryClicked: (CategoryEntity) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -361,7 +370,9 @@ private fun ByCategoryList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .defaultMinSize(minHeight = ListItemHeight)
-                    .debounceClickable {}
+                    .debounceClickable {
+                        onCategoryClicked(value.reference)
+                    }
                     .padding(horizontal = Large, vertical = HalfNormal),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,

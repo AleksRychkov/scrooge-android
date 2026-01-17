@@ -10,10 +10,12 @@ import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.Repo
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.MainTabs
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.ReportCategoryTotal
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.TransactionForm
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.Transactions
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainRouter
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.TransactionFormComponent
+import dev.aleksrychkov.scrooge.presentation.screen.transactions.TransactionsComponent
 
 internal class DefaultMainComponent(
     componentContext: ComponentContext,
@@ -50,6 +52,13 @@ internal class DefaultMainComponent(
 
             is MainNavigationConfig.ReportCategoryTotal -> ReportCategoryTotal(
                 ReportCategoryTotalComponent(
+                    componentContext = routerComponentContext,
+                    filter = config.destination.filter,
+                )
+            )
+
+            is MainNavigationConfig.Transactions -> Transactions(
+                TransactionsComponent(
                     componentContext = routerComponentContext,
                     filter = config.destination.filter,
                 )

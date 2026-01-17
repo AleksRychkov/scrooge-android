@@ -40,3 +40,8 @@ data class DestinationTransactionForm(
 data class DestinationReportCategoryTotal(
     val filter: FilterEntity,
 ) : Destination
+
+@Serializable
+data class DestinationTransactions(
+    val filter: FilterEntity,
+) : Destination
