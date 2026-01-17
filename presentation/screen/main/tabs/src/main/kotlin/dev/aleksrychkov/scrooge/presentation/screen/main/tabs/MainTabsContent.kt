@@ -37,10 +37,10 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
+import dev.aleksrychkov.scrooge.presentation.screen.hub.HubContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal.MainTabsComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.settings.SettingsContent
-import dev.aleksrychkov.scrooge.presentation.screen.hub.HubContent
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 private const val ROTATE_X = 0
