@@ -2,6 +2,7 @@
 
 package dev.aleksrychkov.scrooge.presentation.component.calculator
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
@@ -12,9 +13,11 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,12 +40,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
@@ -58,6 +63,8 @@ import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 private const val CURSOR_ANIMATION_DURATION = 600
+private val MAX_INFIX_TEXT_SIZE = 60.sp
+private val MIN_INFIX_TEXT_SIZE = 30.sp
 
 @Suppress("UnusedParameter")
 @Composable
@@ -165,47 +172,26 @@ private fun InputBox(
                 .fillMaxSize()
                 .padding(Large)
         ) {
-            val horizontalScrollState = rememberScrollState()
+            val scrollState = rememberScrollState()
             LaunchedEffect(infix) {
-                launch { horizontalScrollState.scrollTo(horizontalScrollState.maxValue) }
+                launch { scrollState.scrollTo(scrollState.maxValue) }
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(horizontalScrollState)
+                    .height(IntrinsicSize.Min)
+                    .horizontalScroll(scrollState)
                     .align(Alignment.Center),
                 horizontalArrangement = Arrangement.End,
             ) {
-                val density = LocalDensity.current
-                var textHeight by remember { mutableStateOf(0.dp) }
-                Text(
-                    modifier = Modifier
-                        .onSizeChanged {
-                            textHeight = with(density) { it.height.toDp() }
-                        },
+                AutoSizeText(
                     textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.displayLarge,
                     text = infix,
-                )
-
-                val infiniteTransition = rememberInfiniteTransition()
-                val cursorColor by infiniteTransition.animateColor(
-                    initialValue = MaterialTheme.colorScheme.primary,
-                    targetValue = Color.Transparent,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(CURSOR_ANIMATION_DURATION),
-                        repeatMode = RepeatMode.Reverse
-                    )
                 )
 
                 Spacer(modifier = Modifier.width(Tinny))
 
-                Box(
-                    modifier = Modifier
-                        .width(2.dp)
-                        .height(textHeight)
-                        .background(color = cursorColor)
-                )
+                Cursor()
             }
 
             Text(
@@ -218,6 +204,25 @@ private fun InputBox(
             )
         }
     }
+}
+
+@Composable
+private fun Cursor() {
+    val infiniteTransition = rememberInfiniteTransition()
+    val cursorColor by infiniteTransition.animateColor(
+        initialValue = MaterialTheme.colorScheme.primary,
+        targetValue = Color.Transparent,
+        animationSpec = infiniteRepeatable(
+            animation = tween(CURSOR_ANIMATION_DURATION),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    Box(
+        modifier = Modifier
+            .width(2.dp)
+            .fillMaxHeight()
+            .background(color = cursorColor)
+    )
 }
 
 @Composable
@@ -370,6 +375,48 @@ private fun RowScope.Pad(
             )
         }
     }
+}
+
+@SuppressLint("ConfigurationScreenWidthHeight")
+@Composable
+private fun AutoSizeText(
+    modifier: Modifier = Modifier,
+    text: String,
+    textAlign: TextAlign,
+    maxFontSize: TextUnit = MAX_INFIX_TEXT_SIZE,
+    minFontSize: TextUnit = MIN_INFIX_TEXT_SIZE,
+) {
+    var fontSize by remember { mutableStateOf(maxFontSize) }
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val paint = android.text.TextPaint()
+
+    LaunchedEffect(text, maxFontSize) {
+        var low = minFontSize.value
+        var high = maxFontSize.value
+        val maxWidthPx = with(density) {
+            configuration.screenWidthDp.dp.toPx() * 0.75
+        }
+        while (high - low > 0.5f) {
+            val mid = (low + high) / 2f
+            paint.textSize = with(density) { mid.sp.toPx() }
+            val width = paint.measureText(text)
+            if (width <= maxWidthPx) {
+                low = mid
+            } else {
+                high = mid
+            }
+        }
+
+        fontSize = low.sp
+    }
+
+    Text(
+        modifier = modifier,
+        text = text,
+        textAlign = textAlign,
+        fontSize = fontSize,
+    )
 }
 
 @Preview
