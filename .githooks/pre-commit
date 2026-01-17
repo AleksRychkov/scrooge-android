@@ -2,6 +2,7 @@
 echo "Running detekt check..."
 
 OUTPUT="/tmp/detekt-$(date +%s)"
+./gradlew detekt --auto-correct
 ./gradlew detekt --auto-correct > $OUTPUT
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
