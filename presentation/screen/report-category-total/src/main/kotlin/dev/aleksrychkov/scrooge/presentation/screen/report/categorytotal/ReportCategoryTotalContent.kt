@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.entity.readableName
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.ByCategoryContent
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.modal.FiltersModal
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.ReportCategoryTotalComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.ByCategoryContent
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.modal.FiltersModal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable

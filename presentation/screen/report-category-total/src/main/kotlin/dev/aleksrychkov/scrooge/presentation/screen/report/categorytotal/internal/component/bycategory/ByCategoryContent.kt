@@ -1,6 +1,6 @@
 @file:Suppress("All")
 
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -73,9 +73,9 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChart
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChartSegment
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.composables.PieChart
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.composables.PieChartSegment
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue

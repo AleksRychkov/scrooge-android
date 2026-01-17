@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
@@ -13,7 +13,7 @@ import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.ByCategoryComponent
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.ByCategoryComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

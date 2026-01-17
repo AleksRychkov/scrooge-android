@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
@@ -8,10 +8,10 @@ import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryActor
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryEvent
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryReducer
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryActor
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryEvent
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryReducer
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
 import kotlinx.coroutines.flow.StateFlow
 
 internal interface ByCategoryComponent {

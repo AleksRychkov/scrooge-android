@@ -1,10 +1,10 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.actors
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.actors
 
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.reports.ReportByCategoryResult
 import dev.aleksrychkov.scrooge.feature.reports.ReportByCategoryUseCase
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryCommand
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryEvent
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryCommand
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.ReportCategoryTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsContent
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.ReportCategoryTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.TransactionFormContent
 import dev.aleksrychkov.scrooge.presentation.screen.transactions.TransactionsContent
 

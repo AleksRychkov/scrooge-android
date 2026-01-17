@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.component.report.categorytotal"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal"
     buildFeatures {
         compose = true
     }

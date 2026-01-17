@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity

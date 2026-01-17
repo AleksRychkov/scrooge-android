@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf
 
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 

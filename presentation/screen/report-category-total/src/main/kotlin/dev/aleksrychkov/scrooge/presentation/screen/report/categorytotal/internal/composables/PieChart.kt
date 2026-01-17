@@ -1,6 +1,6 @@
 @file:Suppress("MagicNumber")
 
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.composables
 
 import android.content.res.Configuration
 import android.graphics.BlurMaskFilter

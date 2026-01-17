@@ -1,7 +1,7 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf
 
 import dev.aleksrychkov.scrooge.core.udf.Actor
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.actors.LoadDelegate
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.actors.LoadDelegate
 import kotlinx.coroutines.flow.Flow
 
 internal class ByCategoryActor(

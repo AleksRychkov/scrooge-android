@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.modal
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.modal
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -7,7 +7,7 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersBottomSheetModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.ReportCategoryTotalComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.ReportCategoryTotalComponentInternal
 
 @Composable
 internal fun FiltersModal(

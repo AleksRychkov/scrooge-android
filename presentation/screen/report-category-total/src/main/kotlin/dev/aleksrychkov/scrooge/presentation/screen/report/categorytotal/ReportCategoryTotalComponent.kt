@@ -1,8 +1,8 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.DefaultReportCategoryTotalComponent
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.DefaultReportCategoryTotalComponent
 
 interface ReportCategoryTotalComponent {
     companion object {

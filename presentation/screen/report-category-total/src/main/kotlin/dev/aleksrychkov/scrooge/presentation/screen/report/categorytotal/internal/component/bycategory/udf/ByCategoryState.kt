@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf
+package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf
 
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
@@ -8,7 +8,7 @@ import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcon
 import dev.aleksrychkov.scrooge.core.resources.categoryIconFromId
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChartSegment
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.composables.PieChartSegment
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
