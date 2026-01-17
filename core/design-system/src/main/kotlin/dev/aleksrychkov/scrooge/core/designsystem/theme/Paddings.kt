@@ -11,3 +11,4 @@ val HalfNormal: Dp = 6.dp
 val Medium: Dp = 8.dp
 val Small: Dp = 4.dp
 val Tinny: Dp = 2.dp
+val AppBarShadow = Medium

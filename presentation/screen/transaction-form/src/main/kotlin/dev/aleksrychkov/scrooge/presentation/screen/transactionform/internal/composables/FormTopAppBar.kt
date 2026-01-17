@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
+import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -36,7 +36,7 @@ internal fun FormTopAppBar(
     val headerElevation by remember {
         derivedStateOf {
             if (scrollState.value > MINIMAL_SCROLL_VALUE_TO_CAST_SHADOW) {
-                Medium
+                AppBarShadow
             } else {
                 0.dp
             }

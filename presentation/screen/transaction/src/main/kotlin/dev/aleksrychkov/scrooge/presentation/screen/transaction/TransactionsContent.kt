@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
+import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
@@ -72,7 +73,7 @@ private fun TransactionsContent(
     component: TransactionsComponentInternal
 ) {
     val contentListState = rememberLazyListState()
-    val elevation = Medium
+    val elevation = AppBarShadow
     Scaffold(
         modifier = modifier,
         topBar = {
