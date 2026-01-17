@@ -13,6 +13,7 @@ android {
 
 dependencies {
     implementation(projects.core.designSystem)
+    implementation(projects.core.entity)
     implementation(projects.core.resources)
 }
 

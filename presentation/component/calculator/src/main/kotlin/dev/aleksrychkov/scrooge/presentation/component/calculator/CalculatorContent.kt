@@ -1,6 +1,15 @@
+@file:Suppress("MagicNumber")
+
 package dev.aleksrychkov.scrooge.presentation.component.calculator
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Backspace
 import androidx.compose.material3.ButtonDefaults
@@ -21,14 +29,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
@@ -36,9 +50,14 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
+import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER_STRING
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CalculatorComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CalculatorState
+import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
+
+private const val CURSOR_ANIMATION_DURATION = 600
 
 @Suppress("UnusedParameter")
 @Composable
@@ -50,6 +69,7 @@ fun CalculatorContent(
     CalculatorContent(
         modifier = modifier,
         component = component as CalculatorComponentInternal,
+        callback = callback,
     )
 }
 
@@ -57,11 +77,23 @@ fun CalculatorContent(
 private fun CalculatorContent(
     modifier: Modifier,
     component: CalculatorComponentInternal,
+    callback: (String) -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
     Content(
         modifier = modifier,
         state = state,
+        onDigitClicked = component::onDigitClicked,
+        onCleanClicked = component::onCleanClicked,
+        onOpenParenthesesClicked = component::onOpenParenthesesClicked,
+        onCloseParenthesesClicked = component::onCloseParenthesesClicked,
+        onDivideClicked = component::onDivideClicked,
+        onMultiplyClicked = component::onMultiplyClicked,
+        onSubtractClicked = component::onSubtractClicked,
+        onAddClicked = component::onAddClicked,
+        onDecimalClicked = component::onDecimalClicked,
+        onRemoveClicked = component::onRemoveClicked,
+        onApplyClicked = { callback(state.result) },
     )
 }
 
@@ -69,9 +101,22 @@ private fun CalculatorContent(
 private fun Content(
     modifier: Modifier,
     state: CalculatorState,
+    onDigitClicked: (Int) -> Unit,
+    onCleanClicked: () -> Unit,
+    onOpenParenthesesClicked: () -> Unit,
+    onCloseParenthesesClicked: () -> Unit,
+    onDivideClicked: () -> Unit,
+    onMultiplyClicked: () -> Unit,
+    onSubtractClicked: () -> Unit,
+    onAddClicked: () -> Unit,
+    onDecimalClicked: () -> Unit,
+    onRemoveClicked: () -> Unit,
+    onApplyClicked: () -> Unit,
 ) {
     Column(
-        modifier = modifier.padding(Large)
+        modifier = modifier
+            .padding(horizontal = Large)
+            .padding(bottom = Large),
     ) {
         InputBox(
             modifier = Modifier
@@ -82,14 +127,24 @@ private fun Content(
         )
 
         OperatorsBox(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onDigitClicked = onDigitClicked,
+            onCleanClicked = onCleanClicked,
+            onOpenParenthesesClicked = onOpenParenthesesClicked,
+            onCloseParenthesesClicked = onCloseParenthesesClicked,
+            onDivideClicked = onDivideClicked,
+            onMultiplyClicked = onMultiplyClicked,
+            onSubtractClicked = onSubtractClicked,
+            onAddClicked = onAddClicked,
+            onDecimalClicked = onDecimalClicked,
+            onRemoveClicked = onRemoveClicked,
         )
 
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = Normal),
-            onClick = {},
+            onClick = onApplyClicked,
         ) {
             Text(stringResource(Resources.string.apply))
         }
@@ -110,19 +165,48 @@ private fun InputBox(
                 .fillMaxSize()
                 .padding(Large)
         ) {
-            Text(
+            val horizontalScrollState = rememberScrollState()
+            LaunchedEffect(infix) {
+                launch { horizontalScrollState.scrollTo(horizontalScrollState.maxValue) }
+            }
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
+                    .horizontalScroll(horizontalScrollState)
                     .align(Alignment.Center),
-                autoSize = TextAutoSize.StepBased(
-                    minFontSize = 36.sp,
-                    maxFontSize = 60.sp,
-                ),
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                text = infix,
-            )
+                horizontalArrangement = Arrangement.End,
+            ) {
+                val density = LocalDensity.current
+                var textHeight by remember { mutableStateOf(0.dp) }
+                Text(
+                    modifier = Modifier
+                        .onSizeChanged {
+                            textHeight = with(density) { it.height.toDp() }
+                        },
+                    textAlign = TextAlign.End,
+                    style = MaterialTheme.typography.displayLarge,
+                    text = infix,
+                )
+
+                val infiniteTransition = rememberInfiniteTransition()
+                val cursorColor by infiniteTransition.animateColor(
+                    initialValue = MaterialTheme.colorScheme.primary,
+                    targetValue = Color.Transparent,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(CURSOR_ANIMATION_DURATION),
+                        repeatMode = RepeatMode.Reverse
+                    )
+                )
+
+                Spacer(modifier = Modifier.width(Tinny))
+
+                Box(
+                    modifier = Modifier
+                        .width(2.dp)
+                        .height(textHeight)
+                        .background(color = cursorColor)
+                )
+            }
 
             Text(
                 modifier = Modifier
@@ -139,6 +223,16 @@ private fun InputBox(
 @Composable
 private fun OperatorsBox(
     modifier: Modifier,
+    onDigitClicked: (Int) -> Unit,
+    onCleanClicked: () -> Unit,
+    onOpenParenthesesClicked: () -> Unit,
+    onCloseParenthesesClicked: () -> Unit,
+    onDivideClicked: () -> Unit,
+    onMultiplyClicked: () -> Unit,
+    onSubtractClicked: () -> Unit,
+    onAddClicked: () -> Unit,
+    onDecimalClicked: () -> Unit,
+    onRemoveClicked: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -149,10 +243,10 @@ private fun OperatorsBox(
             text2 = "(",
             text3 = ")",
             text4 = "÷",
-            onClick1 = {},
-            onClick2 = {},
-            onClick3 = {},
-            onClick4 = {},
+            onClick1 = onCleanClicked,
+            onClick2 = onOpenParenthesesClicked,
+            onClick3 = onCloseParenthesesClicked,
+            onClick4 = onDivideClicked,
         )
 
         Spacer(modifier = Modifier.height(Medium))
@@ -162,10 +256,10 @@ private fun OperatorsBox(
             text2 = "8",
             text3 = "9",
             text4 = "×",
-            onClick1 = {},
-            onClick2 = {},
-            onClick3 = {},
-            onClick4 = {},
+            onClick1 = { onDigitClicked(7) },
+            onClick2 = { onDigitClicked(8) },
+            onClick3 = { onDigitClicked(9) },
+            onClick4 = onMultiplyClicked,
         )
 
         Spacer(modifier = Modifier.height(Medium))
@@ -175,10 +269,10 @@ private fun OperatorsBox(
             text2 = "5",
             text3 = "6",
             text4 = "—",
-            onClick1 = {},
-            onClick2 = {},
-            onClick3 = {},
-            onClick4 = {},
+            onClick1 = { onDigitClicked(4) },
+            onClick2 = { onDigitClicked(5) },
+            onClick3 = { onDigitClicked(6) },
+            onClick4 = onSubtractClicked,
         )
 
         Spacer(modifier = Modifier.height(Medium))
@@ -188,10 +282,10 @@ private fun OperatorsBox(
             text2 = "2",
             text3 = "3",
             text4 = "+",
-            onClick1 = {},
-            onClick2 = {},
-            onClick3 = {},
-            onClick4 = {},
+            onClick1 = { onDigitClicked(1) },
+            onClick2 = { onDigitClicked(2) },
+            onClick3 = { onDigitClicked(3) },
+            onClick4 = onAddClicked,
         )
 
         Spacer(modifier = Modifier.height(Medium))
@@ -200,14 +294,14 @@ private fun OperatorsBox(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Pad(text = "0", weight = 2f, onClick = {})
+            Pad(text = "0", weight = 2f, onClick = { onDigitClicked(0) })
             Spacer(modifier = Modifier.width(Medium))
-            Pad(text = ",", onClick = {})
+            Pad(text = AMOUNT_DELIMITER_STRING, onClick = onDecimalClicked)
             Spacer(modifier = Modifier.width(Medium))
             Pad(
                 text = "",
                 containerColor = MaterialTheme.colorScheme.primary,
-                onClick = {},
+                onClick = onRemoveClicked,
             ) {
                 Icon(
                     modifier = Modifier.padding(vertical = Medium),
@@ -290,6 +384,17 @@ private fun CalculatorContentPreview() {
                     infix = "3+4*2/(1-5)",
                     result = "5",
                 ),
+                onDigitClicked = { _ -> },
+                onCleanClicked = {},
+                onOpenParenthesesClicked = {},
+                onCloseParenthesesClicked = {},
+                onDivideClicked = {},
+                onMultiplyClicked = {},
+                onSubtractClicked = {},
+                onAddClicked = {},
+                onDecimalClicked = {},
+                onRemoveClicked = {},
+                onApplyClicked = {},
             )
         }
     }
