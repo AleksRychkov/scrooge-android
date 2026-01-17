@@ -52,6 +52,7 @@ listOf("category", "currency", "reports", "tag", "transaction", "transfer", "the
 }
 
 // presentation component
+include(":presentation:component:calculator")
 include(":presentation:component:currency")
 include(":presentation:component:category")
 include(":presentation:component:filters")
