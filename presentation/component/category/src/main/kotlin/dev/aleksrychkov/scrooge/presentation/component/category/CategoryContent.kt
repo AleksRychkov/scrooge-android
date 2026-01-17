@@ -64,7 +64,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
@@ -159,7 +158,6 @@ private fun CategoryContent(
     addNewCategoryClicked: () -> Unit,
     swapOrder: (List<Pair<Long, Int>>) -> Unit,
 ) {
-    println("ASDASD $state")
     Column(
         modifier = modifier
             .displayCutoutPadding()
@@ -264,9 +262,7 @@ private fun LazyListScope.reorderableList(
         ReorderableItem(reorderableLazyColumnState, "${category.id}-${category.type.type}") {
             val interactionSource = remember { MutableInteractionSource() }
             Category(
-                modifier = Modifier
-                    .animateItem()
-                    .padding(start = Small),
+                modifier = Modifier.animateItem(),
                 entity = category,
                 isEditable = isEditable,
                 selectCategory = selectCategory,
@@ -298,9 +294,7 @@ private fun LazyListScope.ordinalList(
         key = { category -> "${category.id}-${category.type.type}" }
     ) { category ->
         Category(
-            modifier = Modifier
-                .animateItem()
-                .padding(start = Large),
+            modifier = Modifier.animateItem(),
             entity = category,
             isEditable = isEditable,
             selectCategory = selectCategory,
@@ -324,9 +318,8 @@ private fun Category(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = ListItemHeight)
-            .debounceClickable {
-                selectCategory(entity)
-            },
+            .debounceClickable { selectCategory(entity) }
+            .padding(horizontal = Large),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
