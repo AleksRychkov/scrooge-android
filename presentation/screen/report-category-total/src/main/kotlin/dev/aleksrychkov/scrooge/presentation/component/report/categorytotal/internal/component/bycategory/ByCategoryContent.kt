@@ -6,18 +6,18 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -60,18 +60,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChart
-import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChartSegment
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsTabBar
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
+import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
+import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.component.bycategory.udf.ByCategoryState
+import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChart
+import dev.aleksrychkov.scrooge.presentation.component.report.categorytotal.internal.composables.PieChartSegment
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -276,8 +279,7 @@ private fun ByCategoryBottomSheet(
 
             ByCategoryList(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = Large),
+                    .fillMaxSize(),
                 data = animatedData,
                 listState = listState,
             )
@@ -358,13 +360,16 @@ private fun ByCategoryList(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = Normal),
+                    .defaultMinSize(minHeight = ListItemHeight)
+                    .debounceClickable {}
+                    .padding(horizontal = Large, vertical = HalfNormal),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
             ) {
                 Icon(
                     modifier = Modifier
-                        .height(36.dp)
-                        .width(36.dp)
+                        .height(CategoryIconSize)
+                        .width(CategoryIconSize)
                         .clip(CircleShape)
                         .background(Color(value.categoryColor))
                         .padding(Medium),
@@ -378,7 +383,6 @@ private fun ByCategoryList(
                         .weight(weight = 1f)
                         .padding(horizontal = Normal),
                     text = value.categoryName,
-                    style = MaterialTheme.typography.bodyMedium,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
