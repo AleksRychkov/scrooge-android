@@ -13,7 +13,7 @@ import com.arkivanov.essenty.backhandler.BackCallback
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.settings.SettingsComponent
-import dev.aleksrychkov.scrooge.presentation.screen.transaction.TransactionsComponent
+import dev.aleksrychkov.scrooge.presentation.screen.hub.HubComponent
 import kotlinx.serialization.Serializable
 
 internal class DefaultMainTabsComponent(
@@ -70,7 +70,7 @@ internal class DefaultMainTabsComponent(
     ): MainTabsComponentInternal.Child =
         when (config) {
             Config.Transactions ->
-                MainTabsComponentInternal.Child.Transactions(TransactionsComponent(componentContext = componentContext))
+                MainTabsComponentInternal.Child.Transactions(HubComponent(componentContext = componentContext))
 
             Config.Report ->
                 MainTabsComponentInternal.Child.Report(ReportAnnualTotalComponent(componentContext = componentContext))

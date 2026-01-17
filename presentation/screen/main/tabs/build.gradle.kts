@@ -12,9 +12,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.presentation.screen.hub)
     implementation(projects.presentation.screen.reportAnnualTotal)
     implementation(projects.presentation.screen.settings)
-    implementation(projects.presentation.screen.transaction)
 
     implementation(projects.core.designSystem)
     implementation(projects.core.resources)

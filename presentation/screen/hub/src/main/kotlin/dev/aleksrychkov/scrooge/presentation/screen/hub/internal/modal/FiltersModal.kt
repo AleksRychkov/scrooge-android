@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal
+package dev.aleksrychkov.scrooge.presentation.screen.hub.internal.modal
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -7,11 +7,11 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersBottomSheetModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
-import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.HubComponentInternal
 
 @Composable
 internal fun FiltersModal(
-    component: TransactionsComponentInternal,
+    component: HubComponentInternal,
 ) {
     val periodSlot = component.filtersModal.subscribeAsState().value
     FiltersModal(

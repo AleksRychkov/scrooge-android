@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.transaction"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.hub"
     buildFeatures {
         compose = true
     }

@@ -5,7 +5,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.settings.SettingsComponent
-import dev.aleksrychkov.scrooge.presentation.screen.transaction.TransactionsComponent
+import dev.aleksrychkov.scrooge.presentation.screen.hub.HubComponent
 
 internal interface MainTabsComponentInternal : MainTabsComponent {
     val stack: Value<ChildStack<*, Child>>
@@ -15,7 +15,7 @@ internal interface MainTabsComponentInternal : MainTabsComponent {
     fun onSettingsClicked()
 
     sealed class Child {
-        class Transactions(val component: TransactionsComponent) : Child()
+        class Transactions(val component: HubComponent) : Child()
         class Report(val component: ReportAnnualTotalComponent) : Child()
         class Settings(val component: SettingsComponent) : Child()
     }

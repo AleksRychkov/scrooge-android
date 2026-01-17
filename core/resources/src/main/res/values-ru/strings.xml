@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- region common -->
+    <string name="scrooge">Scrooge</string>
     <string name="close">Закрыть</string>
     <string name="clear">Очистить</string>
     <string name="back">Назад</string>

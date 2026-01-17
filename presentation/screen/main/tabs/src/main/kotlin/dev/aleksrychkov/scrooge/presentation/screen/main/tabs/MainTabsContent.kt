@@ -40,7 +40,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal.MainTabsComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.settings.SettingsContent
-import dev.aleksrychkov.scrooge.presentation.screen.transaction.TransactionsContent
+import dev.aleksrychkov.scrooge.presentation.screen.hub.HubContent
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 private const val ROTATE_X = 0
@@ -92,7 +92,7 @@ private fun Tabs(
         modifier = modifier,
     ) {
         when (val child = it.instance) {
-            is MainTabsComponentInternal.Child.Transactions -> TransactionsContent(
+            is MainTabsComponentInternal.Child.Transactions -> HubContent(
                 modifier = Modifier.fillMaxSize(),
                 component = child.component,
             )

@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transaction
+package dev.aleksrychkov.scrooge.presentation.screen.hub
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -51,26 +51,26 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
-import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.TransactionsComponentInternal
-import dev.aleksrychkov.scrooge.presentation.screen.transaction.internal.modal.FiltersModal
+import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.HubComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.modal.FiltersModal
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
-fun TransactionsContent(
+fun HubContent(
     modifier: Modifier,
-    component: TransactionsComponent
+    component: HubComponent
 ) {
-    TransactionsContent(
+    HubContent(
         modifier = modifier,
-        component = component as TransactionsComponentInternal,
+        component = component as HubComponentInternal,
     )
 }
 
 @Composable
-private fun TransactionsContent(
+private fun HubContent(
     modifier: Modifier,
-    component: TransactionsComponentInternal
+    component: HubComponentInternal
 ) {
     val contentListState = rememberLazyListState()
     val elevation = AppBarShadow
@@ -99,7 +99,7 @@ private fun TransactionsContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionsAppBar(
-    component: TransactionsComponentInternal,
+    component: HubComponentInternal,
     contentListState: LazyListState,
     elevation: Dp,
 ) {
@@ -121,7 +121,7 @@ private fun TransactionsAppBar(
     ) {
         TopAppBar(
             title = {
-                Text(text = stringResource(Resources.string.transactions))
+                Text(text = stringResource(Resources.string.scrooge))
             },
             actions = {
                 val months = stringArrayResource(Resources.array.month_names)
@@ -145,7 +145,7 @@ private fun Content(
     modifier: Modifier,
     contentListState: LazyListState,
     periodContentElevation: Dp,
-    component: TransactionsComponentInternal
+    component: HubComponentInternal
 ) {
     val isAddIncomeExpenseVisible by remember {
         derivedStateOf { contentListState.firstVisibleItemIndex == 0 }
@@ -200,7 +200,7 @@ private fun Content(
 @Composable
 private fun AddIncomeExpense(
     modifier: Modifier,
-    component: TransactionsComponentInternal,
+    component: HubComponentInternal,
 ) {
     Row(
         modifier = modifier

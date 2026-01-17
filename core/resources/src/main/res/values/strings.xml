@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- region common -->
+    <string name="scrooge">Scrooge</string>
     <string name="close">Close</string>
     <string name="clear">Clear</string>
     <string name="back">Back</string>

@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transaction.internal
+package dev.aleksrychkov.scrooge.presentation.screen.hub.internal
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
@@ -22,9 +22,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-internal class DefaultTransactionsComponent(
+internal class DefaultHubComponent(
     private val componentContext: ComponentContext,
-) : TransactionsComponentInternal, ComponentContext by componentContext {
+) : HubComponentInternal, ComponentContext by componentContext {
     private val filtersNavigation = SlotNavigation<FilterEntity>()
 
     private val router: Router by lazy {
@@ -43,7 +43,7 @@ internal class DefaultTransactionsComponent(
         )
     }
 
-    private val _state = MutableStateFlow(TransactionsState())
+    private val _state = MutableStateFlow(HubState())
 
     init {
         retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
@@ -54,7 +54,7 @@ internal class DefaultTransactionsComponent(
         }
     }
 
-    override val state: StateFlow<TransactionsState>
+    override val state: StateFlow<HubState>
         get() = _state.asStateFlow()
 
     override val filtersModal: Value<ChildSlot<*, FiltersComponent>> =
