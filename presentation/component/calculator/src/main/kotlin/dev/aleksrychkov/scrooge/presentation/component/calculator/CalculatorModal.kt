@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 fun CalculatorModal(
     slot: ChildSlot<*, CalculatorComponent>,
     close: () -> Unit,
-    callback: (Long) -> Unit,
+    callback: (String) -> Unit,
 ) {
     slot.child?.instance?.also { component ->
         val scope = rememberCoroutineScope()

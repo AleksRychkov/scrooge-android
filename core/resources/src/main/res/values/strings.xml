@@ -147,6 +147,7 @@
     <string name="form_failed_delete">Failed to delete</string>
     <string name="form_delete_confirmation_text">Are you sure you want to delete transaction?</string>
     <string name="form_comment">Comment</string>
+    <string name="form_calculator">Calculator</string>
     <!-- Form -->
 
     <!-- Reports -->

@@ -17,6 +17,7 @@ import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyComponent
+import dev.aleksrychkov.scrooge.presentation.component.calculator.CalculatorComponent
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormActor
@@ -37,6 +38,7 @@ internal class DefaultTransactionFormComponent(
     private val categoryNavigation = SlotNavigation<TransactionType>()
     private val tagNavigation = SlotNavigation<Unit>()
     private val currencyNavigation = SlotNavigation<Unit>()
+    private val calculatorNavigation = SlotNavigation<Unit>()
 
     private val router: Router by lazy {
         (componentContext as RouterComponentContext).router
@@ -93,6 +95,18 @@ internal class DefaultTransactionFormComponent(
             key = "CurrencyModalSlot",
         ) { _, childComponentContext ->
             CurrencyComponent(
+                componentContext = childComponentContext,
+            )
+        }
+
+    override val calculatorModal: Value<ChildSlot<*, CalculatorComponent>> =
+        childSlot(
+            source = calculatorNavigation,
+            serializer = null,
+            handleBackButton = true,
+            key = "CalculatorModalSlot",
+        ) { _, childComponentContext ->
+            CalculatorComponent(
                 componentContext = childComponentContext,
             )
         }
@@ -160,5 +174,13 @@ internal class DefaultTransactionFormComponent(
     override fun onDateSelected(timestamp: Long?) {
         if (timestamp == null) return
         store.handle(FormEvent.External.SetDate(timestamp = timestamp))
+    }
+
+    override fun openCalculatorModal() {
+        calculatorNavigation.activate(Unit)
+    }
+
+    override fun closeCalculatorModal() {
+        calculatorNavigation.dismiss()
     }
 }

@@ -46,6 +46,7 @@ import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.com
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormDate
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormTopAppBar
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.CurrencyModal
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormCalculatorModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormCategoryModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormTagModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEffect
@@ -118,6 +119,9 @@ private fun TransactionFormContent(
     CurrencyModal(
         component = component,
     )
+    FormCalculatorModal(
+        component = component,
+    )
 }
 
 @Composable
@@ -136,6 +140,7 @@ private fun FormContent(
         openCategoryModal = component::openCategoryModal,
         openTagModal = component::openTagModal,
         openCurrencyModal = component::openCurrencyModal,
+        openCalculatorModal = component::openCalculatorModal,
         onDateSelected = component::onDateSelected,
         removeTag = component::removeTag,
         submitClicked = component::onSubmitClicked,
@@ -153,6 +158,7 @@ private fun FormContentIme(
     openCategoryModal: () -> Unit,
     openTagModal: () -> Unit,
     openCurrencyModal: () -> Unit,
+    openCalculatorModal: () -> Unit,
     onDateSelected: (Long?) -> Unit,
     removeTag: (TagEntity) -> Unit,
     submitClicked: () -> Unit,
@@ -175,6 +181,7 @@ private fun FormContentIme(
                 openCategoryModal = openCategoryModal,
                 openTagModal = openTagModal,
                 openCurrencyModal = openCurrencyModal,
+                openCalculatorModal = openCalculatorModal,
                 onDateSelected = onDateSelected,
                 removeTag = removeTag,
                 submitClicked = submitClicked,
@@ -195,6 +202,7 @@ private fun FormContent(
     openCategoryModal: () -> Unit,
     openTagModal: () -> Unit,
     openCurrencyModal: () -> Unit,
+    openCalculatorModal: () -> Unit,
     onDateSelected: (Long?) -> Unit,
     removeTag: (TagEntity) -> Unit,
     submitClicked: () -> Unit,
@@ -214,6 +222,7 @@ private fun FormContent(
             currency = state.currency.currencySymbol,
             amountChanged = amountChanged,
             openCurrencyModal = openCurrencyModal,
+            openCalculatorModal = openCalculatorModal,
         )
 
         Spacer(modifier = Modifier.height(Normal))
@@ -337,6 +346,7 @@ private fun FormContentPreview() {
                 openCategoryModal = {},
                 openTagModal = {},
                 openCurrencyModal = {},
+                openCalculatorModal = {},
                 onDateSelected = {},
                 removeTag = {},
                 submitClicked = {},

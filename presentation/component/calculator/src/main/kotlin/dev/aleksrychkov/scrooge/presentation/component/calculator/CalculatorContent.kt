@@ -45,7 +45,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun CalculatorContent(
     modifier: Modifier,
     component: CalculatorComponent,
-    callback: (Long) -> Unit,
+    callback: (String) -> Unit,
 ) {
     CalculatorContent(
         modifier = modifier,

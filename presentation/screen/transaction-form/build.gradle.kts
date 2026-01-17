@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.presentation.component.calculator)
     implementation(projects.presentation.component.category)
     implementation(projects.presentation.component.currency)
     implementation(projects.presentation.component.tags)

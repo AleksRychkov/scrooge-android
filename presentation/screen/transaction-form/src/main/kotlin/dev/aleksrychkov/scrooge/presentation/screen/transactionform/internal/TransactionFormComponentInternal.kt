@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyComponent
+import dev.aleksrychkov.scrooge.presentation.component.calculator.CalculatorComponent
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.TransactionFormComponent
@@ -19,6 +20,7 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
     val categoryModal: Value<ChildSlot<*, CategoryComponent>>
     val tagModal: Value<ChildSlot<*, TagComponent>>
     val currencyModal: Value<ChildSlot<*, CurrencyComponent>>
+    val calculatorModal: Value<ChildSlot<*, CalculatorComponent>>
 
     val state: StateFlow<FormState>
     val effects: Flow<FormEffect>
@@ -35,6 +37,9 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
     fun openCurrencyModal()
     fun closeCurrencyModal()
     fun selectCurrency(currency: CurrencyEntity)
+
+    fun openCalculatorModal()
+    fun closeCalculatorModal()
 
     fun onBackClicked()
 
