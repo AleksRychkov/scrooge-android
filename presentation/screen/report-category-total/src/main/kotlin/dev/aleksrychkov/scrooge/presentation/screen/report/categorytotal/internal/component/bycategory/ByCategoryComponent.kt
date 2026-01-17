@@ -30,6 +30,7 @@ internal interface ByCategoryComponent {
     fun setTransactionType(type: Int)
     fun setFilter(filter: FilterEntity)
     fun onCategoryClicked(category: CategoryEntity)
+    fun storeBottomSheetOffset(offset: Float)
 }
 
 private class DefaultByCategoryComponent(
@@ -67,5 +68,9 @@ private class DefaultByCategoryComponent(
                 filter = state.value.filter.copy(category = category)
             )
         )
+    }
+
+    override fun storeBottomSheetOffset(offset: Float) {
+        store.handle(ByCategoryEvent.External.BottomSheetOffset(offset = offset))
     }
 }

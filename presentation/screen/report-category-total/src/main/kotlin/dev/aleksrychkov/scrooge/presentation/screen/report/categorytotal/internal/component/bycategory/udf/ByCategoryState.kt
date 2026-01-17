@@ -20,6 +20,7 @@ internal data class ByCategoryState(
     val currentType: TransactionType = TransactionType.Expense,
     val byCurrencyIncome: ImmutableList<ByCurrency> = persistentListOf(),
     val byCurrencyExpense: ImmutableList<ByCurrency> = persistentListOf(),
+    val bottomSheetOffset: Float = -1f,
 ) {
 
     @Immutable
@@ -42,7 +43,7 @@ internal data class ByCategoryState(
 }
 
 internal fun List<ReportByCategoryEntity.ByCurrency>.toByCurrencyStateList():
-    ImmutableList<ByCategoryState.ByCurrency> {
+        ImmutableList<ByCategoryState.ByCurrency> {
     return this
         .map { byCurrency ->
             ByCategoryState.ByCurrency(
@@ -73,7 +74,7 @@ private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyValueState
 }
 
 private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyChartDataStateList():
-    ImmutableList<PieChartSegment> {
+        ImmutableList<PieChartSegment> {
     val total = this.sumOf { it.amount }
     return this
         .sortedBy { -it.amount }

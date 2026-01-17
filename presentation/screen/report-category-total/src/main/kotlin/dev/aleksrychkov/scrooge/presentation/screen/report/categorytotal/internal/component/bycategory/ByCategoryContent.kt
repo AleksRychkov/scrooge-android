@@ -46,6 +46,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,9 +78,14 @@ import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.interna
 import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.composables.PieChart
 import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.composables.PieChartSegment
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -94,6 +100,7 @@ internal fun ByCategoryContent(
         state = state,
         setType = component::setTransactionType,
         onCategoryClicked = component::onCategoryClicked,
+        storeBottomSheetOffset = component::storeBottomSheetOffset,
     )
 }
 
@@ -103,6 +110,7 @@ private fun ByCategoryContent(
     state: ByCategoryState,
     setType: (Int) -> Unit,
     onCategoryClicked: (CategoryEntity) -> Unit,
+    storeBottomSheetOffset: (Float) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -135,7 +143,9 @@ private fun ByCategoryContent(
             modifier = Modifier
                 .fillMaxWidth(),
             byCurrency = byCurrency,
+            storedBottomSheetOffset = state.bottomSheetOffset,
             onCategoryClicked = onCategoryClicked,
+            storeBottomSheetOffset = storeBottomSheetOffset,
         )
     }
 }
@@ -144,7 +154,9 @@ private fun ByCategoryContent(
 private fun ByCurrency(
     modifier: Modifier,
     byCurrency: ImmutableList<ByCategoryState.ByCurrency>,
+    storedBottomSheetOffset: Float,
     onCategoryClicked: (CategoryEntity) -> Unit,
+    storeBottomSheetOffset: (Float) -> Unit,
 ) {
     if (byCurrency.isEmpty()) return
     BoxWithConstraints(modifier = modifier) {
@@ -153,6 +165,12 @@ private fun ByCurrency(
         )
         val maxBottomSheetOffset = with(LocalDensity.current) { maxWidth.toPx() * 0.67f }
         val bottomSheetOffset = remember { Animatable(maxBottomSheetOffset) }
+
+        LaunchedEffect(Unit) {
+            if (storedBottomSheetOffset >= 0f) {
+                launch { bottomSheetOffset.snapTo(storedBottomSheetOffset) }
+            }
+        }
 
         HorizontalPager(
             modifier = Modifier.fillMaxWidth(),
@@ -182,11 +200,12 @@ private fun ByCurrency(
             maxOffset = maxBottomSheetOffset,
             sheetOffset = bottomSheetOffset,
             onCategoryClicked = onCategoryClicked,
+            storeBottomSheetOffset = storeBottomSheetOffset,
         )
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, FlowPreview::class)
 @Composable
 private fun ByCategoryBottomSheet(
     modifier: Modifier,
@@ -194,6 +213,7 @@ private fun ByCategoryBottomSheet(
     maxOffset: Float,
     sheetOffset: Animatable<Float, AnimationVector1D>,
     onCategoryClicked: (CategoryEntity) -> Unit,
+    storeBottomSheetOffset: (Float) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -247,6 +267,16 @@ private fun ByCategoryBottomSheet(
 //                return Velocity.Zero
 //            }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { sheetOffset.value }
+            .debounce(250.milliseconds)
+            .onEach { it ->
+                println("ASDASD $it")
+                storeBottomSheetOffset(it)
+            }
+            .launchIn(this)
     }
 
     Column(

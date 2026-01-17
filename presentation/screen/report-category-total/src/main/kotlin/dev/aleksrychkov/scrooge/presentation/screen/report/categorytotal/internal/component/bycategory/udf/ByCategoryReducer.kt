@@ -4,6 +4,7 @@ import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryCommand.Load
 
 internal class ByCategoryReducer :
     Reducer<ByCategoryState, ByCategoryEvent, ByCategoryCommand, Unit> {
@@ -17,7 +18,7 @@ internal class ByCategoryReducer :
                     copy(isLoading = true, filter = event.filter)
                 }
                 command {
-                    listOf(ByCategoryCommand.Load(event.filter))
+                    listOf(Load(event.filter))
                 }
             }
 
@@ -39,6 +40,14 @@ internal class ByCategoryReducer :
                         isLoading = false,
                         byCurrencyIncome = event.result.income.toByCurrencyStateList(),
                         byCurrencyExpense = event.result.expense.toByCurrencyStateList(),
+                    )
+                }
+            }
+
+            is ByCategoryEvent.External.BottomSheetOffset -> state.reduceWith(event) {
+                state {
+                    copy(
+                        bottomSheetOffset = event.offset,
                     )
                 }
             }
