@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.calculator.internal
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,7 +47,12 @@ internal class DefaultCalculatorComponent(
                 )
             } else {
                 _state.value = _state.value.copy(
-                    result = (round(result * ROUNDING) / ROUNDING).toString(),
+                    result = (round(result * ROUNDING) / ROUNDING)
+                        .toString()
+                        .replace(
+                            DECIMAL_SEPARATOR,
+                            AMOUNT_DELIMITER
+                        ),
                     errorMessage = null,
                 )
             }
