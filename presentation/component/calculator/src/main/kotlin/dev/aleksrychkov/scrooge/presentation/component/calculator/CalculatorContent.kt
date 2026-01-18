@@ -64,6 +64,7 @@ import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 private const val CURSOR_ANIMATION_DURATION = 600
+private const val AUTO_FONT_SIZE_ANIMATION_DURATION = 250
 private val MAX_INFIX_TEXT_SIZE = 60.sp
 private val MIN_INFIX_TEXT_SIZE = 30.sp
 
@@ -387,16 +388,17 @@ private fun AutoSizeText(
     minFontSize: TextUnit = MIN_INFIX_TEXT_SIZE,
 ) {
     var fontSize by remember { mutableStateOf(maxFontSize) }
+    val paint = remember { android.text.TextPaint() }
     val density = LocalDensity.current
     val configuration = LocalConfiguration.current
-    val paint = android.text.TextPaint()
+    val maxWidthPx = remember {
+        with(density) { configuration.screenWidthDp.dp.toPx() * 0.75 }
+    }
 
-    LaunchedEffect(text, maxFontSize) {
+    LaunchedEffect(text) {
         var low = minFontSize.value
         var high = maxFontSize.value
-        val maxWidthPx = with(density) {
-            configuration.screenWidthDp.dp.toPx() * 0.75
-        }
+
         while (high - low > 0.5f) {
             val mid = (low + high) / 2f
             paint.textSize = with(density) { mid.sp.toPx() }
@@ -413,7 +415,7 @@ private fun AutoSizeText(
 
     val animatedFontSize by animateFloatAsState(
         targetValue = fontSize.value,
-        animationSpec = tween(durationMillis = 150),
+        animationSpec = tween(durationMillis = AUTO_FONT_SIZE_ANIMATION_DURATION),
         label = "autoSizeAnimation"
     )
 
