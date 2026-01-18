@@ -16,6 +16,8 @@ dependencies {
     implementation(projects.core.di)
     implementation(projects.core.entity)
     implementation(projects.core.resources)
+    implementation(projects.core.udfExtensions)
+    implementation(projects.core.utils)
 }
 
 dependencies {

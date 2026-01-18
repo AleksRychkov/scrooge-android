@@ -271,10 +271,7 @@ private fun ByCategoryBottomSheet(
     LaunchedEffect(Unit) {
         snapshotFlow { sheetOffset.value }
             .debounce(250.milliseconds)
-            .onEach { it ->
-                println("ASDASD $it")
-                storeBottomSheetOffset(it)
-            }
+            .onEach { storeBottomSheetOffset(it) }
             .launchIn(this)
     }
 

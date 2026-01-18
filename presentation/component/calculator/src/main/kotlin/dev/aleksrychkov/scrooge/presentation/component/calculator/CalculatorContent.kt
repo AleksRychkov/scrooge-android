@@ -3,6 +3,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.calculator
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloatAsState
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,6 +90,8 @@ private const val CURSOR_ANIMATION_DURATION = 600
 private const val AUTO_FONT_SIZE_ANIMATION_DURATION = 250
 private val MAX_INFIX_TEXT_SIZE = 60.sp
 private val MIN_INFIX_TEXT_SIZE = 30.sp
+private val MAX_RESULT_TEXT_SIZE = 48.sp
+private val MIN_RESULT_TEXT_SIZE = 24.sp
 
 @Composable
 fun CalculatorContent(
@@ -184,6 +188,7 @@ private fun InputBox(
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun InputBox(
     modifier: Modifier,
@@ -221,21 +226,27 @@ private fun InputBox(
                 Cursor()
             }
 
-            val resultTextColor = if (resultErrorMessage != null) {
-                MaterialTheme.colorScheme.error
-            } else {
-                Color.Unspecified
-            }
-            Text(
+            val density = LocalDensity.current
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
+                    .defaultMinSize(minHeight = with(density) { MAX_INFIX_TEXT_SIZE.toDp() })
                     .align(Alignment.BottomEnd),
-                textAlign = TextAlign.End,
-                style = MaterialTheme.typography.displaySmall,
-                color = resultTextColor,
-                text = resultErrorMessage ?: result,
-            )
+                contentAlignment = Alignment.CenterEnd,
+            ) {
+                if (resultErrorMessage == null) {
+                    AutoSizeText(
+                        text = result,
+                        maxFontSize = MAX_RESULT_TEXT_SIZE,
+                        minFontSize = MIN_RESULT_TEXT_SIZE,
+                    )
+                } else {
+                    Text(
+                        text = resultErrorMessage,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
         }
     }
 }
@@ -454,7 +465,8 @@ private fun RowScope.Pad(
 private fun AutoSizeText(
     modifier: Modifier = Modifier,
     text: String,
-    textAlign: TextAlign,
+    textAlign: TextAlign? = null,
+    color: Color = Color.Unspecified,
     maxFontSize: TextUnit = MAX_INFIX_TEXT_SIZE,
     minFontSize: TextUnit = MIN_INFIX_TEXT_SIZE,
 ) {
@@ -494,6 +506,7 @@ private fun AutoSizeText(
         modifier = modifier,
         text = text,
         textAlign = textAlign,
+        color = color,
         fontSize = animatedFontSize.sp,
     )
 }

@@ -34,8 +34,8 @@ internal class PostfixNotationTest {
     )
     fun `infix to calculated result`(infix: String, expected: Float) {
         val transformer = InfixCalculator()
-        val actual = transformer.calculate(infix)
-        val epsilon = 1e-5f
+        val actual = transformer.calculate(infix).toFloat()
+        val epsilon = 1e-2f
         assertEquals(expected, actual, epsilon)
     }
 }

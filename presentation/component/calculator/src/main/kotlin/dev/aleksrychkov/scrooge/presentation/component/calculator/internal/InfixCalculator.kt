@@ -1,6 +1,8 @@
 package dev.aleksrychkov.scrooge.presentation.component.calculator.internal
 
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.ArrayDeque
 
 // http://e-maxx.ru/algo/expressions_parsing
@@ -13,8 +15,12 @@ internal class InfixCalculator {
         const val LOCAL_DIVIDE = '/'
     }
 
-    @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "NestedBlockDepth", "CyclomaticComplexMethod")
-    fun calculate(input: String): Float {
+    @Suppress(
+        "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
+        "NestedBlockDepth",
+        "CyclomaticComplexMethod"
+    )
+    fun calculate(input: String): BigDecimal {
         val tmp = input
             .replace(AMOUNT_DELIMITER, DECIMAL_SEPARATOR)
             .replace(MULTIPLY, LOCAL_MULTIPLY)
@@ -22,7 +28,7 @@ internal class InfixCalculator {
             .replace(DIVIDE, LOCAL_DIVIDE)
             .replace(ADD, LOCAL_ADD)
 
-        val numberStack = ArrayDeque<Float>()
+        val numberStack = ArrayDeque<BigDecimal>()
         val operandsStack = ArrayDeque<Int>()
         var maybeUnary = true
 
@@ -42,7 +48,7 @@ internal class InfixCalculator {
                         }
                         j++
                     }
-                    numberStack.push(number.toFloat())
+                    numberStack.push(BigDecimal(number))
                     maybeUnary = false
                     index = j
                 }
@@ -108,10 +114,10 @@ internal class InfixCalculator {
         }
     }
 
-    private fun processOperation(stack: ArrayDeque<Float>, operand: Int) {
+    private fun processOperation(stack: ArrayDeque<BigDecimal>, operand: Int) {
         if (operand < 0) {
             val value = stack.pop()
-            stack.push(if (-operand == ADD.toSigned()) value else -value)
+            stack.push(if (-operand == ADD.toSigned()) value else value.multiply(BigDecimal(-1)))
             return
         }
 
@@ -119,10 +125,10 @@ internal class InfixCalculator {
         val left = stack.pop()
         stack.push(
             when (operand) {
-                LOCAL_ADD.toSigned() -> left + right
-                LOCAL_SUBTRACT.toSigned() -> left - right
-                LOCAL_MULTIPLY.toSigned() -> left * right
-                LOCAL_DIVIDE.toSigned() -> left / right
+                LOCAL_ADD.toSigned() -> left.add(right)
+                LOCAL_SUBTRACT.toSigned() -> left.subtract(right)
+                LOCAL_MULTIPLY.toSigned() -> left.multiply(right)
+                LOCAL_DIVIDE.toSigned() -> left.divide(right, 2, RoundingMode.HALF_EVEN)
                 else -> throw IllegalArgumentException("Unknown operator")
             }
         )

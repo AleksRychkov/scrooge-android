@@ -4,10 +4,14 @@ import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
+import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
+import dev.aleksrychkov.scrooge.core.utils.runSuspendCatching
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.math.round
+import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 internal class DefaultCalculatorComponent(
@@ -16,7 +20,7 @@ internal class DefaultCalculatorComponent(
 ) : CalculatorComponentInternal, ComponentContext by componentContext {
 
     private companion object {
-        const val ROUNDING = 100
+        const val SCALE = 2
     }
 
     private val calculator = InfixCalculator()
@@ -38,16 +42,12 @@ internal class DefaultCalculatorComponent(
             _state.value = _state.value.copy(result = "", errorMessage = null)
             return
         }
-        try {
-            val result = calculator.calculate(infix)
-            if (result == Float.POSITIVE_INFINITY || result == Float.NEGATIVE_INFINITY) {
+        retainedCoroutineScope().launch(Dispatchers.IO) {
+            runSuspendCatching {
+                val result = calculator.calculate(infix)
                 _state.value = _state.value.copy(
-                    result = "",
-                    errorMessage = divisionByZeroErrorMessage,
-                )
-            } else {
-                _state.value = _state.value.copy(
-                    result = (round(result * ROUNDING) / ROUNDING)
+                    result = result
+                        .setScale(SCALE, RoundingMode.HALF_EVEN)
                         .toString()
                         .replace(
                             DECIMAL_SEPARATOR,
@@ -55,10 +55,14 @@ internal class DefaultCalculatorComponent(
                         ),
                     errorMessage = null,
                 )
+            }.onFailure { e ->
+                val msg = if (e.message?.contains("divide by zero") == true) {
+                    divisionByZeroErrorMessage
+                } else {
+                    invalidInfixInputErrorMessage
+                }
+                _state.value = _state.value.copy(result = "", errorMessage = msg)
             }
-        } catch (_: Exception) {
-            _state.value =
-                _state.value.copy(result = "", errorMessage = invalidInfixInputErrorMessage)
         }
     }
 }
