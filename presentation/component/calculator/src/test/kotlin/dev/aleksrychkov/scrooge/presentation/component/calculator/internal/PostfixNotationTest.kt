@@ -28,6 +28,9 @@ internal class PostfixNotationTest {
         "(1.25*(2+3.75))-4,         3.1875",
         "5.5/(1.1+0.55),            3.3333333333333335",
         "(2.5+3.5)/(1.2*0.5),       10.0",
+        "-10,                       -10.0",
+        "-10-10,                    -20.0",
+        "(-10-10),                  -20.0",
     )
     fun `infix to calculated result`(infix: String, expected: Float) {
         val transformer = InfixCalculator()

@@ -20,5 +20,5 @@ internal const val DECIMAL_SEPARATOR = '.'
 fun Char.isOperand(): Boolean =
     this == ADD || this == SUBTRACT || this == DIVIDE || this == MULTIPLY
 
-fun Char.isParentheses(): Boolean =
-    this == OPEN_PARENTHESES || this == CLOSE_PARENTHESES
+fun Char.isNatural(): Boolean =
+    this.isDigit() && this != '0'

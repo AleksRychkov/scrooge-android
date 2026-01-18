@@ -83,7 +83,6 @@ internal fun FormAmount(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 if (isEditing && isLoading) return@Row
 
                 val amountTextFieldState = rememberTextFieldState("")

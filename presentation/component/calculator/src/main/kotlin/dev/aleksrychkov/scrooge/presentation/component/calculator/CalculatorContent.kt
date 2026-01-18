@@ -77,7 +77,7 @@ import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.OPEN_
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.OPEN_PARENTHESES_STRING
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.SUBTRACT
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.SUBTRACT_STRING
-import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.isOperand
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.processNewInfix
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -113,7 +113,13 @@ private fun CalculatorContent(
         modifier = modifier,
         state = state,
         onInfixInputChanged = component::calculateResult,
-        onApplyClicked = { callback(state.result) },
+        onApplyClicked = {
+            if (state.result.startsWith(SUBTRACT)) {
+                state.result.drop(1)
+            } else {
+                state.result
+            }.let(callback)
+        },
     )
 }
 
@@ -490,40 +496,6 @@ private fun AutoSizeText(
         textAlign = textAlign,
         fontSize = animatedFontSize.sp,
     )
-}
-
-// todo: find (think of) a better approach
-@Suppress("All")
-private fun processNewInfix(current: String, newValue: Char): String {
-    if (current.isEmpty() &&
-        (
-            newValue == DIVIDE ||
-                newValue == MULTIPLY ||
-                newValue == ADD ||
-                newValue == AMOUNT_DELIMITER ||
-                newValue == CLOSE_PARENTHESES
-            )
-    ) {
-        return ""
-    }
-
-    if (current.isEmpty()) return current + newValue
-
-    if (current.last() == AMOUNT_DELIMITER && !newValue.isDigit()) return current
-
-    if (current.last().isOperand() && newValue.isOperand()) return current
-
-    if (current.last() == CLOSE_PARENTHESES && newValue == OPEN_PARENTHESES) return current
-
-    if ((
-            !current.last()
-                .isOperand() && current.last() != OPEN_PARENTHESES
-            ) && newValue == OPEN_PARENTHESES
-    ) {
-        return current
-    }
-
-    return current + newValue
 }
 
 @Preview
