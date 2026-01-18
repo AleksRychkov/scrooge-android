@@ -5,6 +5,7 @@ package dev.aleksrychkov.scrooge.presentation.component.calculator
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -66,7 +67,6 @@ private const val CURSOR_ANIMATION_DURATION = 600
 private val MAX_INFIX_TEXT_SIZE = 60.sp
 private val MIN_INFIX_TEXT_SIZE = 30.sp
 
-@Suppress("UnusedParameter")
 @Composable
 fun CalculatorContent(
     modifier: Modifier,
@@ -174,7 +174,7 @@ private fun InputBox(
         ) {
             val scrollState = rememberScrollState()
             LaunchedEffect(infix) {
-                launch { scrollState.scrollTo(scrollState.maxValue) }
+                launch { scrollState.animateScrollTo(scrollState.maxValue) }
             }
             Row(
                 modifier = Modifier
@@ -411,11 +411,17 @@ private fun AutoSizeText(
         fontSize = low.sp
     }
 
+    val animatedFontSize by animateFloatAsState(
+        targetValue = fontSize.value,
+        animationSpec = tween(durationMillis = 150),
+        label = "autoSizeAnimation"
+    )
+
     Text(
         modifier = modifier,
         text = text,
         textAlign = textAlign,
-        fontSize = fontSize,
+        fontSize = animatedFontSize.sp,
     )
 }
 
