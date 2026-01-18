@@ -6,4 +6,5 @@ import androidx.compose.runtime.Immutable
 internal data class CalculatorState(
     val infix: String = "",
     val result: String = "",
+    val errorMessage: String? = null,
 )

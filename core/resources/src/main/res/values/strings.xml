@@ -171,4 +171,9 @@
     <string name="transfer_import_title">Import data</string>
     <string name="transfer_import_description">Import previously backed up data. All current data will be lost</string>
     <!-- Transfer -->
+
+    <!-- Calculator -->
+    <string name="calculator_invalid_expression_error">Invalid expression</string>
+    <string name="calculator_division_by_0">Can\'t divide by 0</string>
+    <!-- Calculator -->
 </resources>

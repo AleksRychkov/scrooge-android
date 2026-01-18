@@ -40,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,16 +60,27 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
+import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.ADD
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.ADD_STRING
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CLEAN_STRING
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CLOSE_PARENTHESES
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CLOSE_PARENTHESES_STRING
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CalculatorComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CalculatorState
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.DIVIDE
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.DIVIDE_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.MULTIPLY
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.MULTIPLY_STRING
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.OPEN_PARENTHESES
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.OPEN_PARENTHESES_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.SUBTRACT
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.SUBTRACT_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.isOperand
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -100,6 +112,7 @@ private fun CalculatorContent(
     Content(
         modifier = modifier,
         state = state,
+        onInfixInputChanged = component::calculateResult,
         onApplyClicked = { callback(state.result) },
     )
 }
@@ -108,6 +121,7 @@ private fun CalculatorContent(
 private fun Content(
     modifier: Modifier,
     state: CalculatorState,
+    onInfixInputChanged: (String) -> Unit,
     onApplyClicked: () -> Unit,
 ) {
     Column(
@@ -117,12 +131,20 @@ private fun Content(
     ) {
         val infix = remember { mutableStateOf("") }
 
+        LaunchedEffect(Unit) {
+            snapshotFlow { infix.value }
+                .distinctUntilChanged()
+                .onEach { onInfixInputChanged(it) }
+                .launchIn(this)
+        }
+
         InputBox(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(weight = 1f, fill = true),
             infix = infix,
             result = state.result,
+            resultErrorMessage = state.errorMessage,
         )
 
         OperatorsBox(
@@ -146,11 +168,13 @@ private fun InputBox(
     modifier: Modifier,
     infix: State<String>,
     result: String,
+    resultErrorMessage: String?,
 ) {
     InputBox(
         modifier = modifier,
         infix = infix.value,
         result = result,
+        resultErrorMessage = resultErrorMessage,
     )
 }
 
@@ -159,6 +183,7 @@ private fun InputBox(
     modifier: Modifier,
     infix: String,
     result: String,
+    resultErrorMessage: String?,
 ) {
     DsSecondaryCard(
         modifier = modifier
@@ -190,13 +215,20 @@ private fun InputBox(
                 Cursor()
             }
 
+            val resultTextColor = if (resultErrorMessage != null) {
+                MaterialTheme.colorScheme.error
+            } else {
+                Color.Unspecified
+            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
                     .align(Alignment.BottomEnd),
                 textAlign = TextAlign.End,
                 style = MaterialTheme.typography.displaySmall,
-                text = result,
+                color = resultTextColor,
+                text = resultErrorMessage ?: result,
             )
         }
     }
@@ -229,50 +261,32 @@ private fun OperatorsBox(
     OperatorsBox(
         modifier = modifier,
         onDigitClicked = { digit ->
-            val tmp = infix.value
-            val newInfix = tmp + digit.toString()
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, digit.digitToChar())
         },
         onCleanClicked = { infix.value = "" },
         onOpenParenthesesClicked = {
-            val tmp = infix.value
-            val newInfix = "$tmp$OPEN_PARENTHESES"
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, OPEN_PARENTHESES)
         },
         onCloseParenthesesClicked = {
-            val tmp = infix.value
-            val newInfix = "$tmp$CLOSE_PARENTHESES"
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, CLOSE_PARENTHESES)
         },
         onDivideClicked = {
-            val tmp = infix.value
-            val newInfix = "$tmp$DIVIDE_STRING"
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, DIVIDE)
         },
         onMultiplyClicked = {
-            val tmp = infix.value
-            val newInfix = "$tmp$MULTIPLY_STRING"
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, MULTIPLY)
         },
         onSubtractClicked = {
-            val tmp = infix.value
-            val newInfix = "$tmp$SUBTRACT_STRING"
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, SUBTRACT)
         },
         onAddClicked = {
-            val tmp = infix.value
-            val newInfix = "$tmp$ADD_STRING"
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, ADD)
         },
         onDecimalClicked = {
-            val tmp = infix.value
-            val newInfix = "$tmp$AMOUNT_DELIMITER_STRING"
-            infix.value = processNewInfix(newInfix)
+            infix.value = processNewInfix(infix.value, AMOUNT_DELIMITER)
         },
         onRemoveClicked = {
-            val tmp = infix.value
-            val newInfix = tmp.dropLast(1)
-            infix.value = processNewInfix(newInfix)
+            infix.value = infix.value.dropLast(1)
         },
     )
 }
@@ -297,8 +311,8 @@ private fun OperatorsBox(
     ) {
         PadRow(
             text1 = CLEAN_STRING,
-            text2 = OPEN_PARENTHESES,
-            text3 = CLOSE_PARENTHESES,
+            text2 = OPEN_PARENTHESES_STRING,
+            text3 = CLOSE_PARENTHESES_STRING,
             text4 = DIVIDE_STRING,
             onClick1 = onCleanClicked,
             onClick2 = onOpenParenthesesClicked,
@@ -478,8 +492,38 @@ private fun AutoSizeText(
     )
 }
 
-private fun processNewInfix(newInfix: String): String {
-    return newInfix
+// todo: find (think of) a better approach
+@Suppress("All")
+private fun processNewInfix(current: String, newValue: Char): String {
+    if (current.isEmpty() &&
+        (
+            newValue == DIVIDE ||
+                newValue == MULTIPLY ||
+                newValue == ADD ||
+                newValue == AMOUNT_DELIMITER ||
+                newValue == CLOSE_PARENTHESES
+            )
+    ) {
+        return ""
+    }
+
+    if (current.isEmpty()) return current + newValue
+
+    if (current.last() == AMOUNT_DELIMITER && !newValue.isDigit()) return current
+
+    if (current.last().isOperand() && newValue.isOperand()) return current
+
+    if (current.last() == CLOSE_PARENTHESES && newValue == OPEN_PARENTHESES) return current
+
+    if ((
+            !current.last()
+                .isOperand() && current.last() != OPEN_PARENTHESES
+            ) && newValue == OPEN_PARENTHESES
+    ) {
+        return current
+    }
+
+    return current + newValue
 }
 
 @Preview
@@ -493,7 +537,9 @@ private fun CalculatorContentPreview() {
                 state = CalculatorState(
                     infix = "3+4*2/(1-5)",
                     result = "5",
+                    errorMessage = "Invalid expression"
                 ),
+                onInfixInputChanged = { _ -> },
                 onApplyClicked = {},
             )
         }

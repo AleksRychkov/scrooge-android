@@ -13,6 +13,7 @@ android {
 
 dependencies {
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
     implementation(projects.core.entity)
     implementation(projects.core.resources)
 }
@@ -27,4 +28,7 @@ dependencies {
     implementation(libs.decompose.extensionsComposeJetbrains)
 
     debugImplementation(libs.androidx.ui.tooling)
+
+    testImplementation(libs.junit)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

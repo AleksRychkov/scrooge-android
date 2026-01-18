@@ -176,4 +176,9 @@
     <string name="transfer_import_title">Импорт данных</string>
     <string name="transfer_import_description">Импорт ранее сохранённых данных. Все текущие данные будут потеряны</string>
     <!-- Transfer -->
+
+    <!-- Calculator -->
+    <string name="calculator_invalid_expression_error">Неверное выражение</string>
+    <string name="calculator_division_by_0">Нельзя делить на 0</string>
+    <!-- Calculator -->
 </resources>
