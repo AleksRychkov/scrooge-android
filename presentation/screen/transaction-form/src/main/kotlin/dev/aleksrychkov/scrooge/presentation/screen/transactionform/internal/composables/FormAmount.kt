@@ -70,6 +70,8 @@ internal fun FormAmount(
         modifier = modifier
             .height(IntrinsicSize.Min)
     ) {
+        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
         DsSecondaryCard(
             modifier = Modifier
                 .weight(weight = 1f),
@@ -81,8 +83,6 @@ internal fun FormAmount(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val focusRequester = remember { FocusRequester() }
-                val focusManager = LocalFocusManager.current
 
                 if (isEditing && isLoading) return@Row
 
@@ -155,7 +155,10 @@ internal fun FormAmount(
                 .fillMaxHeight()
                 .aspectRatio(1f),
             contentPadding = PaddingValues(0.dp),
-            onClick = openCalculatorModal,
+            onClick = {
+                focusManager.clearFocus(force = true)
+                openCalculatorModal()
+            },
         ) {
             Icon(
                 modifier = Modifier.size(36.dp),
