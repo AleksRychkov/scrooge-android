@@ -34,6 +34,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,8 +60,15 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.ADD_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CLEAN_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CLOSE_PARENTHESES
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CalculatorComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.CalculatorState
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.DIVIDE_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.MULTIPLY_STRING
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.OPEN_PARENTHESES
+import dev.aleksrychkov.scrooge.presentation.component.calculator.internal.SUBTRACT_STRING
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -91,16 +100,6 @@ private fun CalculatorContent(
     Content(
         modifier = modifier,
         state = state,
-        onDigitClicked = component::onDigitClicked,
-        onCleanClicked = component::onCleanClicked,
-        onOpenParenthesesClicked = component::onOpenParenthesesClicked,
-        onCloseParenthesesClicked = component::onCloseParenthesesClicked,
-        onDivideClicked = component::onDivideClicked,
-        onMultiplyClicked = component::onMultiplyClicked,
-        onSubtractClicked = component::onSubtractClicked,
-        onAddClicked = component::onAddClicked,
-        onDecimalClicked = component::onDecimalClicked,
-        onRemoveClicked = component::onRemoveClicked,
         onApplyClicked = { callback(state.result) },
     )
 }
@@ -109,16 +108,6 @@ private fun CalculatorContent(
 private fun Content(
     modifier: Modifier,
     state: CalculatorState,
-    onDigitClicked: (Int) -> Unit,
-    onCleanClicked: () -> Unit,
-    onOpenParenthesesClicked: () -> Unit,
-    onCloseParenthesesClicked: () -> Unit,
-    onDivideClicked: () -> Unit,
-    onMultiplyClicked: () -> Unit,
-    onSubtractClicked: () -> Unit,
-    onAddClicked: () -> Unit,
-    onDecimalClicked: () -> Unit,
-    onRemoveClicked: () -> Unit,
     onApplyClicked: () -> Unit,
 ) {
     Column(
@@ -126,26 +115,19 @@ private fun Content(
             .padding(horizontal = Large)
             .padding(bottom = Large),
     ) {
+        val infix = remember { mutableStateOf("") }
+
         InputBox(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(weight = 1f, fill = true),
-            infix = state.infix,
+            infix = infix,
             result = state.result,
         )
 
         OperatorsBox(
             modifier = Modifier.fillMaxWidth(),
-            onDigitClicked = onDigitClicked,
-            onCleanClicked = onCleanClicked,
-            onOpenParenthesesClicked = onOpenParenthesesClicked,
-            onCloseParenthesesClicked = onCloseParenthesesClicked,
-            onDivideClicked = onDivideClicked,
-            onMultiplyClicked = onMultiplyClicked,
-            onSubtractClicked = onSubtractClicked,
-            onAddClicked = onAddClicked,
-            onDecimalClicked = onDecimalClicked,
-            onRemoveClicked = onRemoveClicked,
+            infix = infix,
         )
 
         ExtendedFloatingActionButton(
@@ -157,6 +139,19 @@ private fun Content(
             Text(stringResource(Resources.string.apply))
         }
     }
+}
+
+@Composable
+private fun InputBox(
+    modifier: Modifier,
+    infix: State<String>,
+    result: String,
+) {
+    InputBox(
+        modifier = modifier,
+        infix = infix.value,
+        result = result,
+    )
 }
 
 @Composable
@@ -229,6 +224,62 @@ private fun Cursor() {
 @Composable
 private fun OperatorsBox(
     modifier: Modifier,
+    infix: MutableState<String>,
+) {
+    OperatorsBox(
+        modifier = modifier,
+        onDigitClicked = { digit ->
+            val tmp = infix.value
+            val newInfix = tmp + digit.toString()
+            infix.value = processNewInfix(newInfix)
+        },
+        onCleanClicked = { infix.value = "" },
+        onOpenParenthesesClicked = {
+            val tmp = infix.value
+            val newInfix = "$tmp$OPEN_PARENTHESES"
+            infix.value = processNewInfix(newInfix)
+        },
+        onCloseParenthesesClicked = {
+            val tmp = infix.value
+            val newInfix = "$tmp$CLOSE_PARENTHESES"
+            infix.value = processNewInfix(newInfix)
+        },
+        onDivideClicked = {
+            val tmp = infix.value
+            val newInfix = "$tmp$DIVIDE_STRING"
+            infix.value = processNewInfix(newInfix)
+        },
+        onMultiplyClicked = {
+            val tmp = infix.value
+            val newInfix = "$tmp$MULTIPLY_STRING"
+            infix.value = processNewInfix(newInfix)
+        },
+        onSubtractClicked = {
+            val tmp = infix.value
+            val newInfix = "$tmp$SUBTRACT_STRING"
+            infix.value = processNewInfix(newInfix)
+        },
+        onAddClicked = {
+            val tmp = infix.value
+            val newInfix = "$tmp$ADD_STRING"
+            infix.value = processNewInfix(newInfix)
+        },
+        onDecimalClicked = {
+            val tmp = infix.value
+            val newInfix = "$tmp$AMOUNT_DELIMITER_STRING"
+            infix.value = processNewInfix(newInfix)
+        },
+        onRemoveClicked = {
+            val tmp = infix.value
+            val newInfix = tmp.dropLast(1)
+            infix.value = processNewInfix(newInfix)
+        },
+    )
+}
+
+@Composable
+private fun OperatorsBox(
+    modifier: Modifier,
     onDigitClicked: (Int) -> Unit,
     onCleanClicked: () -> Unit,
     onOpenParenthesesClicked: () -> Unit,
@@ -245,10 +296,10 @@ private fun OperatorsBox(
             .padding(vertical = Normal)
     ) {
         PadRow(
-            text1 = "C",
-            text2 = "(",
-            text3 = ")",
-            text4 = "÷",
+            text1 = CLEAN_STRING,
+            text2 = OPEN_PARENTHESES,
+            text3 = CLOSE_PARENTHESES,
+            text4 = DIVIDE_STRING,
             onClick1 = onCleanClicked,
             onClick2 = onOpenParenthesesClicked,
             onClick3 = onCloseParenthesesClicked,
@@ -261,7 +312,7 @@ private fun OperatorsBox(
             text1 = "7",
             text2 = "8",
             text3 = "9",
-            text4 = "×",
+            text4 = MULTIPLY_STRING,
             onClick1 = { onDigitClicked(7) },
             onClick2 = { onDigitClicked(8) },
             onClick3 = { onDigitClicked(9) },
@@ -274,7 +325,7 @@ private fun OperatorsBox(
             text1 = "4",
             text2 = "5",
             text3 = "6",
-            text4 = "—",
+            text4 = SUBTRACT_STRING,
             onClick1 = { onDigitClicked(4) },
             onClick2 = { onDigitClicked(5) },
             onClick3 = { onDigitClicked(6) },
@@ -287,7 +338,7 @@ private fun OperatorsBox(
             text1 = "1",
             text2 = "2",
             text3 = "3",
-            text4 = "+",
+            text4 = ADD_STRING,
             onClick1 = { onDigitClicked(1) },
             onClick2 = { onDigitClicked(2) },
             onClick3 = { onDigitClicked(3) },
@@ -427,6 +478,10 @@ private fun AutoSizeText(
     )
 }
 
+private fun processNewInfix(newInfix: String): String {
+    return newInfix
+}
+
 @Preview
 @Composable
 @Suppress("UnusedPrivateMember")
@@ -439,16 +494,6 @@ private fun CalculatorContentPreview() {
                     infix = "3+4*2/(1-5)",
                     result = "5",
                 ),
-                onDigitClicked = { _ -> },
-                onCleanClicked = {},
-                onOpenParenthesesClicked = {},
-                onCloseParenthesesClicked = {},
-                onDivideClicked = {},
-                onMultiplyClicked = {},
-                onSubtractClicked = {},
-                onAddClicked = {},
-                onDecimalClicked = {},
-                onRemoveClicked = {},
                 onApplyClicked = {},
             )
         }
