@@ -6,12 +6,12 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -31,9 +31,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.aleksrychkov.scrooge.core.designsystem.locals.LocalAppTheme
+import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import kotlin.math.roundToInt
 
@@ -98,7 +101,8 @@ fun DsTabBar(
                         contentAlignment = Alignment.Center
                     ) {
                         val isSelected = index == selectedIndex
-                        val textColor = if (isSystemInDarkTheme()) {
+                        val appThemeState = LocalAppTheme.current
+                        val textColor = if (appThemeState.useDarkTheme) {
                             Color.White
                         } else {
                             animateColorAsState(
@@ -115,6 +119,22 @@ fun DsTabBar(
                     }
                 }
             }
+        }
+    }
+}
+
+@Suppress("UnusedPrivateMember")
+@Preview
+@Composable
+private fun DsTabBarPreview() {
+    AppTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            DsTabBar(
+                modifier = Modifier.fillMaxWidth(),
+                options = listOf("Option 1", "Option 2"),
+                selectedIndex = 0,
+                onOptionSelected = { _ -> },
+            )
         }
     }
 }

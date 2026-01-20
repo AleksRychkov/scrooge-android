@@ -9,12 +9,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.defaultComponentContext
+import dev.aleksrychkov.scrooge.core.designsystem.locals.AppThemeState
+import dev.aleksrychkov.scrooge.core.designsystem.locals.LocalAppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.di.Naive
 import dev.aleksrychkov.scrooge.core.di.NaiveModule
@@ -63,16 +66,19 @@ internal class RootActivity : ComponentActivity() {
             if (useDarkTheme != null) {
                 insetController.isAppearanceLightStatusBars = !useDarkTheme
             }
+            val appTheme = AppThemeState(useDarkTheme = useDarkTheme ?: isSystemInDarkTheme())
             AnimatedVisibility(
                 visible = useDarkTheme != null,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 AppTheme(useDarkTheme = useDarkTheme ?: isSystemInDarkTheme()) {
-                    RootContent(
-                        componentContext = componentContext,
-                        readyCallback = hideSplashScreen,
-                    )
+                    CompositionLocalProvider(LocalAppTheme provides appTheme) {
+                        RootContent(
+                            componentContext = componentContext,
+                            readyCallback = hideSplashScreen,
+                        )
+                    }
                 }
             }
         }
