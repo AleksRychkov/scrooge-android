@@ -26,6 +26,7 @@ dependencies {
 
     implementation(libs.androidx.splashscreen)
 
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.immutable.collections)
 
     debugImplementation(libs.androidx.ui.tooling)

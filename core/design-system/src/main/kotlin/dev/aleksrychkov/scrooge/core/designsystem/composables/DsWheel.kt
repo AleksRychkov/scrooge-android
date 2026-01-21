@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,11 +38,13 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import kotlinx.coroutines.launch
 import kotlin.math.PI
 import kotlin.math.abs
@@ -54,10 +57,10 @@ fun <T> DsWheel(
     data: List<T> = emptyList(),
     rowCount: Int = 5,
     selectedItem: T,
-    verticalPadding: Dp = Medium,
+    verticalPadding: Dp = Normal,
     labelStyle: TextStyle = MaterialTheme.typography.titleLarge,
     labelColor: Color = Color.Unspecified,
-    labelAsString: @Composable T.() -> String = { this.toString() },
+    labelAsString: T.() -> String = { this.toString() },
     onItemSelected: (T) -> Unit = {},
 ) {
     require(rowCount > 1 && rowCount % 2 != 0) {
@@ -131,9 +134,9 @@ fun <T> DsWheel(
                 onDragStopped = { velocity ->
                     coroutineScope.launch {
                         val offset = animatedOffset.fling(
-                            initialVelocity = velocity / 3f,
-                            lowerBound = itemHeightPx,
-                            upperBound = virtualHeightPx - itemHeightPx,
+                            initialVelocity = velocity / 5f,
+                            lowerBound = itemHeightPx / 2f,
+                            upperBound = virtualHeightPx - itemHeightPx / 2f,
                             itemHeight = itemHeightPx,
                         ).endState.value
 
@@ -168,7 +171,7 @@ fun <T> DsWheel(
             val scale = 1f.coerceAtLeast(1f - abs(t) * 0.05f)
 
             // Optional alpha fading
-            val alpha = (1f - abs(t) * 0.6f).coerceIn(0.2f, 1f)
+            val alpha = (1f - abs(t) * 0.5f).coerceIn(0.2f, 1f)
 
             Box(
                 modifier = Modifier
@@ -185,10 +188,13 @@ fun <T> DsWheel(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
+                    modifier = Modifier.padding(horizontal = Small),
                     text = labelAsString(data[i]),
                     style = labelStyle,
                     color = labelColor,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
