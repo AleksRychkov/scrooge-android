@@ -23,10 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsInputTextFieldsColors
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
+import dev.aleksrychkov.scrooge.core.designsystem.picker.WheelDatePickerDialog
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.DatePickerModal
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
@@ -66,7 +66,7 @@ internal fun FormDate(
 
     if (showModal) {
         val timestamp = remember(datestamp) { datestamp.toInstant() }
-        DatePickerModal(
+        WheelDatePickerDialog(
             timestamp = timestamp,
             onDateSelected = onDateSelected,
             onDismiss = { showModal = false }

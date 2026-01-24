@@ -58,7 +58,7 @@ fun <T> DsWheel(
     rowCount: Int = 5,
     selectedItem: T,
     verticalPadding: Dp = Normal,
-    labelStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    labelStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     labelColor: Color = Color.Unspecified,
     labelAsString: T.() -> String = { this.toString() },
     onItemSelected: (T) -> Unit = {},
@@ -134,9 +134,9 @@ fun <T> DsWheel(
                 onDragStopped = { velocity ->
                     coroutineScope.launch {
                         val offset = animatedOffset.fling(
-                            initialVelocity = velocity / 5f,
-                            lowerBound = itemHeightPx / 2f,
-                            upperBound = virtualHeightPx - itemHeightPx / 2f,
+                            initialVelocity = velocity / 6f,
+                            lowerBound = itemHeightPx / 4f,
+                            upperBound = virtualHeightPx - itemHeightPx / 4f,
                             itemHeight = itemHeightPx,
                         ).endState.value
 
