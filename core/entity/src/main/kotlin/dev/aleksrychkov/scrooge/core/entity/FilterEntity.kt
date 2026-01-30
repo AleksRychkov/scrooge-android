@@ -19,6 +19,7 @@ data class FilterEntity(
     val tags: ImmutableSet<TagEntity> = persistentSetOf(),
     val category: CategoryEntity? = null,
     val transactionType: TransactionType? = null,
+    val currency: CurrencyEntity? = null,
 ) {
     companion object {
         fun currentMonth(): FilterEntity {

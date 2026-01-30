@@ -112,6 +112,7 @@ WHERE
   )
   AND (:categoryId IS NULL OR t.categoryId = :categoryId)
   AND (:transactionType IS NULL OR t.type = :transactionType)
+  AND (:currencyCode IS NULL OR t.currencyCode = :currencyCode)
 GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
 

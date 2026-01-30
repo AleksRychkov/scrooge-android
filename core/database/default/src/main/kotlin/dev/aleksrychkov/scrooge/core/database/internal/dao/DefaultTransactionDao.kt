@@ -76,6 +76,7 @@ internal class DefaultTransactionDao(
                         toDatestamp = to ?: (filter.period.from.value - 1),
                         categoryId = filter.category?.id,
                         transactionType = filter.transactionType?.type?.toLong(),
+                        currencyCode = filter.currency?.currencyCode,
                         mapper = TransactionMapper::transactionEntityMapper,
                     )
             }

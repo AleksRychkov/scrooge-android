@@ -36,6 +36,7 @@ internal data class ByCategoryState(
             val categoryIcon: CategoryIcon,
             val categoryColor: Int,
             val currencySymbol: String,
+            val currencyCode: String,
             val amount: String,
             val reference: CategoryEntity,
         )
@@ -49,7 +50,10 @@ internal fun List<ReportByCategoryEntity.ByCurrency>.toByCurrencyStateList():
             ByCategoryState.ByCurrency(
                 currencySymbol = byCurrency.currency.currencySymbol,
                 chartData = byCurrency.data.toByCurrencyChartDataStateList(),
-                valueData = byCurrency.data.toByCurrencyValueStateList(byCurrency.currency.currencySymbol)
+                valueData = byCurrency.data.toByCurrencyValueStateList(
+                    currencySymbol = byCurrency.currency.currencySymbol,
+                    currencyCode = byCurrency.currency.currencyCode,
+                )
             )
         }
         .toImmutableList()
@@ -57,6 +61,7 @@ internal fun List<ReportByCategoryEntity.ByCurrency>.toByCurrencyStateList():
 
 private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyValueStateList(
     currencySymbol: String,
+    currencyCode: String,
 ): ImmutableList<ByCategoryState.ByCurrency.Value> {
     return this
         .sortedBy { -it.amount }
@@ -66,6 +71,7 @@ private fun List<ReportByCategoryEntity.ByCurrency.Value>.toByCurrencyValueState
                 categoryName = value.category.name,
                 categoryIcon = categoryIconFromId(value.category.iconId),
                 currencySymbol = currencySymbol,
+                currencyCode = currencyCode,
                 amount = value.amount.amountToStringFormatted(""),
                 reference = value.category,
             )

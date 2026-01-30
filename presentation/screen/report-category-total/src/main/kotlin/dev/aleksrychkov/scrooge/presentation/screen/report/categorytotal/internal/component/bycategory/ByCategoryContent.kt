@@ -108,7 +108,7 @@ private fun ByCategoryContent(
     modifier: Modifier,
     state: ByCategoryState,
     setType: (Int) -> Unit,
-    onCategoryClicked: (CategoryEntity) -> Unit,
+    onCategoryClicked: (CategoryEntity, String) -> Unit,
     storeBottomSheetOffset: (Float) -> Unit,
 ) {
     Column(
@@ -154,7 +154,7 @@ private fun ByCurrency(
     modifier: Modifier,
     byCurrency: ImmutableList<ByCategoryState.ByCurrency>,
     storedBottomSheetOffset: Float,
-    onCategoryClicked: (CategoryEntity) -> Unit,
+    onCategoryClicked: (CategoryEntity, String) -> Unit,
     storeBottomSheetOffset: (Float) -> Unit,
 ) {
     if (byCurrency.isEmpty()) return
@@ -211,7 +211,7 @@ private fun ByCategoryBottomSheet(
     data: List<ByCategoryState.ByCurrency.Value>,
     maxOffset: Float,
     sheetOffset: Animatable<Float, AnimationVector1D>,
-    onCategoryClicked: (CategoryEntity) -> Unit,
+    onCategoryClicked: (CategoryEntity, String) -> Unit,
     storeBottomSheetOffset: (Float) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -382,7 +382,7 @@ private fun ByCategoryList(
     modifier: Modifier,
     data: List<ByCategoryState.ByCurrency.Value>,
     listState: LazyListState,
-    onCategoryClicked: (CategoryEntity) -> Unit,
+    onCategoryClicked: (CategoryEntity, String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -397,7 +397,7 @@ private fun ByCategoryList(
                     .fillMaxWidth()
                     .defaultMinSize(minHeight = ListItemHeight)
                     .debounceClickable {
-                        onCategoryClicked(value.reference)
+                        onCategoryClicked(value.reference, value.currencyCode)
                     }
                     .padding(horizontal = Large, vertical = Normal),
                 verticalAlignment = Alignment.CenterVertically,

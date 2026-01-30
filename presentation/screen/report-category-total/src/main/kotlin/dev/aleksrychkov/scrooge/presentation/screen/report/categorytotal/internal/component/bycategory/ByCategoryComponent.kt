@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.intern
 
 import com.arkivanov.decompose.ComponentContext
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactions
 import dev.aleksrychkov.scrooge.core.router.Router
@@ -29,7 +30,7 @@ internal interface ByCategoryComponent {
 
     fun setTransactionType(type: Int)
     fun setFilter(filter: FilterEntity)
-    fun onCategoryClicked(category: CategoryEntity)
+    fun onCategoryClicked(category: CategoryEntity, currencyCode: String)
     fun storeBottomSheetOffset(offset: Float)
 }
 
@@ -62,10 +63,13 @@ private class DefaultByCategoryComponent(
         store.handle(ByCategoryEvent.External.Load(filter))
     }
 
-    override fun onCategoryClicked(category: CategoryEntity) {
+    override fun onCategoryClicked(category: CategoryEntity, currencyCode: String) {
         router.open(
             DestinationTransactions(
-                filter = state.value.filter.copy(category = category)
+                filter = state.value.filter.copy(
+                    category = category,
+                    currency = CurrencyEntity.fromCurrencyCode(currencyCode),
+                )
             )
         )
     }
