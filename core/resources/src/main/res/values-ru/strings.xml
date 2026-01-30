@@ -186,5 +186,8 @@
     <!-- Limits -->
     <string name="limits_description">Установите ежедневные, еженедельные или ежемесячные лимиты.</string>
     <string name="limits_add">Добавить лимит</string>
+    <string name="limits_daily">Дневной</string>
+    <string name="limits_weekly">Недельный</string>
+    <string name="limits_monthly">Месячный</string>
     <!-- Limits -->
 </resources>

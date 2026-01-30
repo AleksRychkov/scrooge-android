@@ -13,8 +13,12 @@ android {
 
 dependencies {
     implementation(projects.core.designSystem)
+    implementation(projects.core.di)
+    implementation(projects.core.entity)
     implementation(projects.core.resources)
     implementation(projects.core.router)
+
+    implementation(projects.core.udfExtensions)
 }
 
 dependencies {
@@ -24,6 +28,8 @@ dependencies {
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    implementation(libs.kotlinx.immutable.collections)
 
     debugImplementation(libs.androidx.ui.tooling)
 }
