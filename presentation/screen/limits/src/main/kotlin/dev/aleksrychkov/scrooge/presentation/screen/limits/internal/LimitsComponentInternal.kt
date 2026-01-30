@@ -4,4 +4,6 @@ import dev.aleksrychkov.scrooge.presentation.screen.limits.LimitsComponent
 
 internal interface LimitsComponentInternal : LimitsComponent {
     fun onBackPressed()
+    fun onSaveClicked()
+    fun onAddLimitClicked()
 }

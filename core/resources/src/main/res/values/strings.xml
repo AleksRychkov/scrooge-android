@@ -180,5 +180,6 @@
 
     <!-- Limits -->
     <string name="limits_description">Install daily, weekly or monthly limits.</string>
+    <string name="limits_add">Add limit</string>
     <!-- -->
 </resources>

@@ -20,7 +20,10 @@ dependencies {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

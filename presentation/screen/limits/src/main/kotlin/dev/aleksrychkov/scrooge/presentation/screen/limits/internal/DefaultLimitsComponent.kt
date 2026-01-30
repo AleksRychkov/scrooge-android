@@ -15,4 +15,12 @@ internal class DefaultLimitsComponent(
     override fun onBackPressed() {
         router.close()
     }
+
+    override fun onSaveClicked() {
+        // todo
+    }
+
+    override fun onAddLimitClicked() {
+        // todo
+    }
 }
