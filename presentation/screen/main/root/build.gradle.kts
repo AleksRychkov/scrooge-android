@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.presentation.screen.limits)
     implementation(projects.presentation.screen.main.tabs)
     implementation(projects.presentation.screen.reportCategoryTotal)
     implementation(projects.presentation.screen.transactions)

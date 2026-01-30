@@ -1,17 +1,22 @@
 package dev.aleksrychkov.scrooge.presentation.screen.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.presentation.component.settingstheme.SettingsThemeComponent
@@ -100,6 +105,14 @@ private fun Content(
                 .padding(horizontal = Large),
             component = component.transferExportComponent,
         )
+
+        Limits(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Normal)
+                .padding(horizontal = Large),
+            component = component,
+        )
     }
 }
 
@@ -134,4 +147,32 @@ private fun Export(
         modifier = modifier,
         component = component,
     )
+}
+
+@Composable
+private fun Limits(
+    modifier: Modifier,
+    component: SettingsComponentInternal,
+) {
+    Column(
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.secondary,
+                shape = CardDefaults.shape,
+            )
+            .clip(shape = CardDefaults.shape)
+            .debounceClickable(onClick = component::onLimitsClicked)
+            .padding(Normal),
+    ) {
+        Text(
+            text = stringResource(Resources.string.limits),
+            style = MaterialTheme.typography.titleMedium,
+        )
+
+        Text(
+            modifier = Modifier.padding(top = Normal),
+            text = stringResource(Resources.string.limits_description),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
 }

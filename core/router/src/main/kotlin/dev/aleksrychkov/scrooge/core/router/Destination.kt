@@ -45,3 +45,6 @@ data class DestinationReportCategoryTotal(
 data class DestinationTransactions(
     val filter: FilterEntity,
 ) : Destination
+
+@Serializable
+object DestinationLimits : Destination

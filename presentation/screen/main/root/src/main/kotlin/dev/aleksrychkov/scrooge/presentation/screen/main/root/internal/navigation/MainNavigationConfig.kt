@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation
 
+import dev.aleksrychkov.scrooge.core.router.DestinationLimits
 import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactions
@@ -23,5 +24,10 @@ internal sealed interface MainNavigationConfig {
     @Serializable
     data class Transactions(
         val destination: DestinationTransactions,
+    ) : MainNavigationConfig
+
+    @Serializable
+    data class Limits(
+        val destination: DestinationLimits,
     ) : MainNavigationConfig
 }

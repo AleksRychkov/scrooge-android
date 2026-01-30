@@ -5,10 +5,12 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import dev.aleksrychkov.scrooge.core.router.Destination
+import dev.aleksrychkov.scrooge.core.router.DestinationLimits
 import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactions
 import dev.aleksrychkov.scrooge.core.router.Router
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig.Limits
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig.ReportCategoryTotal
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig.TransactionForm
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.navigation.MainNavigationConfig.Transactions
@@ -30,6 +32,10 @@ internal class MainRouter(
 
             is DestinationTransactions -> {
                 navigation.pushNew(Transactions(destination = destination))
+            }
+
+            is DestinationLimits -> {
+                navigation.pushNew(Limits(destination = destination))
             }
         }
     }

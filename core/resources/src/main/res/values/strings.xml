@@ -45,6 +45,7 @@
     <string name="edit">Edit</string>
     <string name="theme">Theme</string>
     <string name="send">Send file</string>
+    <string name="limits">Limits</string>
     <string-array name="month_names">
         <item>January</item>
         <item>February</item>
@@ -176,4 +177,8 @@
     <string name="calculator_invalid_expression_error">Invalid expression</string>
     <string name="calculator_division_by_0">Can\'t divide by 0</string>
     <!-- Calculator -->
+
+    <!-- Limits -->
+    <string name="limits_description">Install daily, weekly or monthly limits.</string>
+    <!-- -->
 </resources>

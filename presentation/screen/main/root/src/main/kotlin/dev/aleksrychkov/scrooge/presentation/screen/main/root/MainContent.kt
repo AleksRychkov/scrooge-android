@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import dev.aleksrychkov.scrooge.presentation.screen.limits.LimitsContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsContent
 import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.ReportCategoryTotalContent
@@ -54,6 +55,11 @@ private fun MainContent(
                 )
 
                 is MainComponentInternal.Child.Transactions -> TransactionsContent(
+                    modifier = Modifier.fillMaxSize(),
+                    component = child.component,
+                )
+
+                is MainComponentInternal.Child.Limits -> LimitsContent(
                     modifier = Modifier.fillMaxSize(),
                     component = child.component,
                 )

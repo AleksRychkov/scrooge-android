@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.screen.main.root.internal
 
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.presentation.screen.limits.LimitsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.ReportCategoryTotalComponent
@@ -16,5 +17,6 @@ internal interface MainComponentInternal : MainComponent {
         class TransactionForm(val component: TransactionFormComponent) : Child()
         class ReportCategoryTotal(val component: ReportCategoryTotalComponent) : Child()
         class Transactions(val component: TransactionsComponent) : Child()
+        class Limits(val component: LimitsComponent) : Child()
     }
 }

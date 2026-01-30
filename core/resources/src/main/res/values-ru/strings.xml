@@ -45,6 +45,7 @@
     <string name="edit">Редактировать</string>
     <string name="theme">Тема</string>
     <string name="send">Отправить файл</string>
+    <string name="limits">Лимиты</string>
 
     <string-array name="month_names">
         <item>Январь</item>
@@ -181,4 +182,8 @@
     <string name="calculator_invalid_expression_error">Неверное выражение</string>
     <string name="calculator_division_by_0">Нельзя делить на 0</string>
     <!-- Calculator -->
+
+    <!-- Limits -->
+    <string name="limits_description">Установите ежедневные, еженедельные или ежемесячные лимиты.</string>
+    <!-- Limits -->
 </resources>

@@ -9,4 +9,6 @@ internal interface SettingsComponentInternal : SettingsComponent {
     val settingsThemeComponent: SettingsThemeComponent
     val transferImportComponent: TransferImportComponent
     val transferExportComponent: TransferExportComponent
+
+    fun onLimitsClicked()
 }

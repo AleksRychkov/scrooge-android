@@ -64,6 +64,7 @@ include(":presentation:component:transaction-list")
 
 // presentation screen
 include(":presentation:screen:hub")
+include(":presentation:screen:limits")
 include(":presentation:screen:main:root")
 include(":presentation:screen:main:tabs")
 include(":presentation:screen:report-annual-total")

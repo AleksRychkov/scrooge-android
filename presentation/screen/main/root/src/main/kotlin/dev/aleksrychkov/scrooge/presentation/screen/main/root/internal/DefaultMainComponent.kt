@@ -6,6 +6,8 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
+import dev.aleksrychkov.scrooge.presentation.screen.limits.LimitsComponent
+import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.Limits
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.MainTabs
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.ReportCategoryTotal
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.internal.MainComponentInternal.Child.TransactionForm
@@ -62,6 +64,10 @@ internal class DefaultMainComponent(
                     componentContext = routerComponentContext,
                     filter = config.destination.filter,
                 )
+            )
+
+            is MainNavigationConfig.Limits -> Limits(
+                LimitsComponent(componentContext = routerComponentContext)
             )
         }
     }

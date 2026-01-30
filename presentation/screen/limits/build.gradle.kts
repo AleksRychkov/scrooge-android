@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.settings"
+    namespace = "dev.aleksrychkov.scrooge.presentation.screen.limits"
     buildFeatures {
         compose = true
     }
@@ -15,9 +15,6 @@ dependencies {
     implementation(projects.core.designSystem)
     implementation(projects.core.resources)
     implementation(projects.core.router)
-
-    implementation(projects.presentation.component.settingsTheme)
-    implementation(projects.presentation.component.settingsTransfer)
 }
 
 dependencies {
