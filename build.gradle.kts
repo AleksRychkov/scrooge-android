@@ -26,5 +26,26 @@ allprojects {
 }
 
 subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+        compilerOptions {
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            project.layout.buildDirectory.asFile.get().absolutePath + "/compose_metrics"
+                )
+            )
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            project.layout.buildDirectory.asFile.get().absolutePath + "/compose_metrics"
+                )
+            )
+        }
+    }
+}
+
+subprojects {
     apply(from = "$rootDir/config/detekt/detekt.gradle")
 }
