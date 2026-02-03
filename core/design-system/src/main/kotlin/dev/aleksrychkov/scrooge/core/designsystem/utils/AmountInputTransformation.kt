@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.utils
+package dev.aleksrychkov.scrooge.core.designsystem.utils
 
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
@@ -9,7 +9,7 @@ import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER_STRING
 
 @Stable
-internal class AmountInputTransformation : InputTransformation {
+class AmountInputTransformation : InputTransformation {
 
     private companion object {
         val regex = Regex("[^0-9,]")

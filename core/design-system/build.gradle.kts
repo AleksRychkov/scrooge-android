@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.entity)
     implementation(projects.core.resources)
 }
 

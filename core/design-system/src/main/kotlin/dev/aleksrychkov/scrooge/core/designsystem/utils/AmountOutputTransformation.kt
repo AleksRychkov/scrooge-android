@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.utils
+package dev.aleksrychkov.scrooge.core.designsystem.utils
 
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
@@ -7,7 +7,7 @@ import androidx.compose.runtime.Stable
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 
 @Stable
-internal data class AmountOutputTransformation(
+data class AmountOutputTransformation(
     private val currency: String
 ) : OutputTransformation {
 

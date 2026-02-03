@@ -45,10 +45,10 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSecondaryCard
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
+import dev.aleksrychkov.scrooge.core.designsystem.utils.AmountInputTransformation
+import dev.aleksrychkov.scrooge.core.designsystem.utils.AmountOutputTransformation
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.utils.AmountInputTransformation
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.utils.AmountOutputTransformation
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import dev.aleksrychkov.scrooge.core.resources.R as Resources

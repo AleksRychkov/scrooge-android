@@ -1,10 +1,13 @@
 package dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf
 
 import dev.aleksrychkov.scrooge.core.di.get
+import dev.aleksrychkov.scrooge.core.entity.LimitEntity
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Create
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Delete
 
 internal class LimitsReducer(
     private val resourceManager: ResourceManager = get(),
@@ -17,7 +20,7 @@ internal class LimitsReducer(
         return when (event) {
             LimitsEvent.External.Init -> state.reduceWith(event) {
                 command {
-                    listOf(LimitsCommand.LoadLimits)
+                    listOf(LimitsCommand.LoadLimits, LimitsCommand.LoadLastUsedCurrency)
                 }
             }
 
@@ -31,12 +34,27 @@ internal class LimitsReducer(
                 }
             }
 
-            LimitsEvent.External.Save -> state.reduceWith(event) {
+            LimitsEvent.External.AddNewLimit -> state.reduceWith(event) {
+                val entity = LimitEntity(
+                    id = -1L,
+                    currency = state.lastUsedCurrencyEntity,
+                    amount = 0L,
+                    period = LimitEntity.Period.Monthly,
+                )
                 command {
-                    listOf(LimitsCommand.Save(state.editable.toEntity(resourceManager)))
+                    listOf(Create(entity = entity))
                 }
+            }
+
+            is LimitsEvent.External.DeleteLimit -> state.reduceWith(event) {
+                command {
+                    listOf(Delete(id = event.id))
+                }
+            }
+
+            is LimitsEvent.Internal.CurrencyResult -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = true)
+                    copy(lastUsedCurrencyEntity = event.currency)
                 }
             }
         }

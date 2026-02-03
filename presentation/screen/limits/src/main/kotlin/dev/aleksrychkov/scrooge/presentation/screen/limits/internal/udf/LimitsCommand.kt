@@ -4,5 +4,8 @@ import dev.aleksrychkov.scrooge.core.entity.LimitEntity
 
 internal sealed interface LimitsCommand {
     data object LoadLimits : LimitsCommand
-    data class Save(val limits: List<LimitEntity>) : LimitsCommand
+    data object LoadLastUsedCurrency : LimitsCommand
+    data class Update(val limit: LimitEntity) : LimitsCommand
+    data class Delete(val id: Long) : LimitsCommand
+    data class Create(val entity: LimitEntity) : LimitsCommand
 }

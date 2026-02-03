@@ -5,8 +5,8 @@ import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsEv
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
-internal class SaveDelegate {
-    suspend operator fun invoke(cmd: LimitsCommand.Save): Flow<LimitsEvent> {
+internal class DeleteDelegate {
+    suspend operator fun invoke(cmd: LimitsCommand.Delete): Flow<LimitsEvent> {
         return emptyFlow()
     }
 }
