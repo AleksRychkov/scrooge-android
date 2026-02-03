@@ -1,19 +1,20 @@
-package dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal
+package dev.aleksrychkov.scrooge.presentation.screen.limits.internal.modal
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.slot.ChildSlot
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
-import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyModal
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.CurrencySlotDto
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.LimitsComponentInternal
 
 @Composable
-internal fun FromCurrencyModal(
-    component: TransactionFormComponentInternal,
+internal fun LimitsCurrencyModal(
+    component: LimitsComponentInternal,
 ) {
     val currencySlot = component.currencyModal.subscribeAsState().value
-    FromCurrencyModal(
+
+    LimitsCurrencyModal(
         slot = currencySlot,
         close = component::closeCurrencyModal,
         select = component::selectCurrency,
@@ -21,16 +22,18 @@ internal fun FromCurrencyModal(
 }
 
 @Composable
-private fun FromCurrencyModal(
-    slot: ChildSlot<*, CurrencyComponent>,
+private fun LimitsCurrencyModal(
+    slot: ChildSlot<*, CurrencySlotDto>,
     close: () -> Unit,
-    select: (CurrencyEntity) -> Unit,
+    select: (Long, CurrencyEntity) -> Unit,
 ) {
-    slot.child?.instance?.also { component ->
+    slot.child?.instance?.also { dto ->
         CurrencyModal(
-            component = component,
+            component = dto.component,
             onDismiss = close,
-            callback = select,
+            callback = {
+                select(dto.limitId, it)
+            },
         )
     }
 }

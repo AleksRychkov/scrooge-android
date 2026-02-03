@@ -45,10 +45,10 @@ import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.com
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormComment
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormDate
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormTopAppBar
-import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.CurrencyModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormCalculatorModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormCategoryModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FormTagModal
+import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.modal.FromCurrencyModal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormEffect
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.udf.FormState
 import kotlinx.coroutines.flow.collect
@@ -116,7 +116,7 @@ private fun TransactionFormContent(
     FormTagModal(
         component = component,
     )
-    CurrencyModal(
+    FromCurrencyModal(
         component = component,
     )
     FormCalculatorModal(

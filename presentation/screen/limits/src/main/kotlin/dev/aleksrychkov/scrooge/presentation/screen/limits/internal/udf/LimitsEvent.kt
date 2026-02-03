@@ -11,6 +11,7 @@ internal sealed interface LimitsEvent {
         data class DeleteLimit(val id: Long) : External
         data class AmountChanged(val id: Long, val value: String) : External
         data class PeriodChanged(val id: Long, val value: String) : External
+        data class CurrencyChanged(val id: Long, val value: CurrencyEntity) : External
     }
 
     sealed interface Internal : LimitsEvent {

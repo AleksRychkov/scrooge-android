@@ -81,6 +81,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.utils.AmountOutputTransformati
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.LimitsComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.modal.LimitPeriodModal
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.modal.LimitsCurrencyModal
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitDto
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsState
 import kotlinx.collections.immutable.ImmutableList
@@ -117,7 +118,10 @@ private fun LimitsContent(
         onAmountChanged = component::onAmountChanged,
         onDeleteLimitClicked = component::onDeleteLimitClicked,
         onPeriodSelected = component::onPeriodChanged,
+        onCurrencyClicked = component::openCurrencyModal,
     )
+
+    LimitsCurrencyModal(component = component)
 }
 
 @Composable
@@ -129,6 +133,7 @@ private fun LimitsContent(
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
     onPeriodSelected: (Long, String) -> Unit,
+    onCurrencyClicked: (Long) -> Unit,
 ) {
     val scrollState = rememberLazyListState()
     Scaffold(
@@ -150,6 +155,7 @@ private fun LimitsContent(
             onAmountChanged = onAmountChanged,
             onDeleteLimitClicked = onDeleteLimitClicked,
             onPeriodSelected = onPeriodSelected,
+            onCurrencyClicked = onCurrencyClicked,
         )
     }
 }
@@ -200,6 +206,7 @@ private fun ContentIme(
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
     onPeriodSelected: (Long, String) -> Unit,
+    onCurrencyClicked: (Long) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -217,6 +224,7 @@ private fun ContentIme(
                 onAmountChanged = onAmountChanged,
                 onDeleteLimitClicked = onDeleteLimitClicked,
                 onPeriodSelected = onPeriodSelected,
+                onCurrencyClicked = onCurrencyClicked,
             )
         }
     }
@@ -231,6 +239,7 @@ private fun Content(
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
     onPeriodSelected: (Long, String) -> Unit,
+    onCurrencyClicked: (Long) -> Unit,
 ) {
     AnimatedVisibility(
         visible = state.editable.isEmpty() && !state.isLoading,
@@ -256,6 +265,7 @@ private fun Content(
             onAmountChanged = onAmountChanged,
             onDeleteLimitClicked = onDeleteLimitClicked,
             onPeriodSelected = onPeriodSelected,
+            onCurrencyClicked = onCurrencyClicked,
         )
     }
 }
@@ -290,6 +300,7 @@ private fun Limits(
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
     onPeriodSelected: (Long, String) -> Unit,
+    onCurrencyClicked: (Long) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -302,6 +313,7 @@ private fun Limits(
             onDeleteLimitClicked = onDeleteLimitClicked,
             onAddLimitClicked = onAddLimitClicked,
             onPeriodSelected = onPeriodSelected,
+            onCurrencyClicked = onCurrencyClicked,
         )
     }
 }
@@ -315,6 +327,7 @@ private fun LimitsList(
     onDeleteLimitClicked: (Long) -> Unit,
     onAddLimitClicked: () -> Unit,
     onPeriodSelected: (Long, String) -> Unit,
+    onCurrencyClicked: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.animateContentSize(),
@@ -334,6 +347,7 @@ private fun LimitsList(
                 onAmountChanged = onAmountChanged,
                 onDeleteLimitClicked = onDeleteLimitClicked,
                 onPeriodSelected = onPeriodSelected,
+                onCurrencyClicked = onCurrencyClicked,
             )
         }
 
@@ -357,6 +371,7 @@ private fun LimitsItem(
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
     onPeriodSelected: (Long, String) -> Unit,
+    onCurrencyClicked: (Long) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -373,6 +388,7 @@ private fun LimitsItem(
         LimitsItemAmount(
             item = item,
             onAmountChanged = onAmountChanged,
+            onCurrencyClicked = onCurrencyClicked,
         )
 
         Spacer(modifier = Modifier.width(Normal))
@@ -454,6 +470,7 @@ private fun LimitsItemPeriod(
 private fun RowScope.LimitsItemAmount(
     item: LimitDto,
     onAmountChanged: (Long, String) -> Unit,
+    onCurrencyClicked: (Long) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -516,7 +533,10 @@ private fun RowScope.LimitsItemAmount(
             )
             TextButton(
                 modifier = Modifier.fillMaxHeight(),
-                onClick = {},
+                onClick = {
+                    focusManager.clearFocus(force = true)
+                    onCurrencyClicked(item.id)
+                },
             ) {
                 Text(
                     text = item.currencySymbol,
@@ -608,6 +628,7 @@ private fun ContentPreview() {
                 onAddLimitClicked = {},
                 onAmountChanged = { _, _ -> },
                 onDeleteLimitClicked = { _ -> },
+                onCurrencyClicked = { _ -> },
                 onPeriodSelected = { _, _ -> },
             )
         }

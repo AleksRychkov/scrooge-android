@@ -2,10 +2,10 @@ package dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf
 
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
-import dev.aleksrychkov.scrooge.core.entity.toCents
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
+import dev.aleksrychkov.scrooge.core.udf.ReducerResultBuilder
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Create
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Delete
@@ -62,35 +62,65 @@ internal class LimitsReducer(
                 }
             }
 
-            is LimitsEvent.External.AmountChanged -> state.reduceWith(event) {
-                val dto = state.editable.firstOrNull { it.id == event.id } ?: return@reduceWith
-                val entity = dto.toEntity(resourceManager).copy(amount = event.value.toCents())
-                command {
-                    listOf(Update(entity = entity))
-                }
-            }
-
             LimitsEvent.Internal.Reload -> state.reduceWith(event) {
                 command {
                     listOf(LoadLimits)
                 }
             }
 
-            is LimitsEvent.External.PeriodChanged -> state.reduceWith(event) {
-                val editable = state.editable.toMutableList()
-                val dto = editable
-                    .firstOrNull { it.id == event.id }?.copy(periodText = event.value)
-                    ?: return@reduceWith
-                val index = editable.indexOfFirst { it.id == dto.id }
-                editable[index] = dto
-                val entity = dto.toEntity(resourceManager)
-                command {
-                    listOf(Update(entity = entity))
-                }
-                state {
-                    copy(editable = editable.toImmutableList())
+            is LimitsEvent.External.AmountChanged -> state.reduceWith(event) {
+                updateLimitState(
+                    state = state,
+                    builder = this,
+                ) { list ->
+                    list
+                        .firstOrNull { it.id == event.id }
+                        ?.copy(amount = event.value)
                 }
             }
+
+            is LimitsEvent.External.PeriodChanged -> state.reduceWith(event) {
+                updateLimitState(
+                    state = state,
+                    builder = this,
+                ) { list ->
+                    list
+                        .firstOrNull { it.id == event.id }
+                        ?.copy(periodText = event.value)
+                }
+            }
+
+            is LimitsEvent.External.CurrencyChanged -> state.reduceWith(event) {
+                updateLimitState(
+                    state = state,
+                    builder = this,
+                ) { list ->
+                    list
+                        .firstOrNull { it.id == event.id }
+                        ?.copy(
+                            currencyCode = event.value.currencyCode,
+                            currencySymbol = event.value.currencySymbol,
+                        )
+                }
+            }
+        }
+    }
+
+    private inline fun updateLimitState(
+        state: LimitsState,
+        builder: ReducerResultBuilder<LimitsState, out LimitsEvent, LimitsCommand, Unit>,
+        editable: (List<LimitDto>) -> LimitDto?
+    ) {
+        val editable = state.editable.toMutableList()
+        val dto = editable(editable) ?: return
+        val index = editable.indexOfFirst { it.id == dto.id }
+        editable[index] = dto
+        val entity = dto.toEntity(resourceManager)
+        builder.command {
+            listOf(Update(entity = entity))
+        }
+        builder.state {
+            copy(editable = editable.toImmutableList())
         }
     }
 }
