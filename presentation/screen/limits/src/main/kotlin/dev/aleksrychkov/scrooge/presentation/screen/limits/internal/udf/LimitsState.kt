@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
 import dev.aleksrychkov.scrooge.core.entity.amountToString
+import dev.aleksrychkov.scrooge.core.entity.toCents
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -42,7 +43,7 @@ internal fun List<LimitEntity>.toState(resourceManager: ResourceManager): Immuta
 internal fun LimitDto.toEntity(resourceManager: ResourceManager) = LimitEntity(
     id = this.id,
     currency = CurrencyEntity.fromCurrencyCode(this.currencyCode)!!,
-    amount = 1,
+    amount = this.amount.toCents(),
     period = this.periodText.periodTextToPeriod(resourceManager),
 )
 

@@ -10,6 +10,7 @@ internal sealed interface LimitsEvent {
         data object AddNewLimit : External
         data class DeleteLimit(val id: Long) : External
         data class AmountChanged(val id: Long, val value: String) : External
+        data class PeriodChanged(val id: Long, val value: String) : External
     }
 
     sealed interface Internal : LimitsEvent {

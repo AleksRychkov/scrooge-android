@@ -12,6 +12,7 @@ import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCo
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.LoadLastUsedCurrency
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.LoadLimits
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Update
+import kotlinx.collections.immutable.toImmutableList
 
 internal class LimitsReducer(
     private val resourceManager: ResourceManager = get(),
@@ -72,6 +73,22 @@ internal class LimitsReducer(
             LimitsEvent.Internal.Reload -> state.reduceWith(event) {
                 command {
                     listOf(LoadLimits)
+                }
+            }
+
+            is LimitsEvent.External.PeriodChanged -> state.reduceWith(event) {
+                val editable = state.editable.toMutableList()
+                val dto = editable
+                    .firstOrNull { it.id == event.id }?.copy(periodText = event.value)
+                    ?: return@reduceWith
+                val index = editable.indexOfFirst { it.id == dto.id }
+                editable[index] = dto
+                val entity = dto.toEntity(resourceManager)
+                command {
+                    listOf(Update(entity = entity))
+                }
+                state {
+                    copy(editable = editable.toImmutableList())
                 }
             }
         }

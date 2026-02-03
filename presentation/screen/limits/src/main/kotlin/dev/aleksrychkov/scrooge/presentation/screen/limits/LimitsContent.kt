@@ -56,10 +56,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -72,16 +74,19 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.designsystem.utils.AmountInputTransformation
 import dev.aleksrychkov.scrooge.core.designsystem.utils.AmountOutputTransformation
 import dev.aleksrychkov.scrooge.core.entity.AMOUNT_DELIMITER
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.LimitsComponentInternal
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.modal.LimitPeriodModal
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitDto
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.math.max
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 private const val MINIMAL_SCROLL_VALUE_TO_CAST_SHADOW = 10
@@ -111,6 +116,7 @@ private fun LimitsContent(
         onAddLimitClicked = component::onAddLimitClicked,
         onAmountChanged = component::onAmountChanged,
         onDeleteLimitClicked = component::onDeleteLimitClicked,
+        onPeriodSelected = component::onPeriodChanged,
     )
 }
 
@@ -122,6 +128,7 @@ private fun LimitsContent(
     onAddLimitClicked: () -> Unit,
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
+    onPeriodSelected: (Long, String) -> Unit,
 ) {
     val scrollState = rememberLazyListState()
     Scaffold(
@@ -142,6 +149,7 @@ private fun LimitsContent(
             onAddLimitClicked = onAddLimitClicked,
             onAmountChanged = onAmountChanged,
             onDeleteLimitClicked = onDeleteLimitClicked,
+            onPeriodSelected = onPeriodSelected,
         )
     }
 }
@@ -191,6 +199,7 @@ private fun ContentIme(
     onAddLimitClicked: () -> Unit,
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
+    onPeriodSelected: (Long, String) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -207,6 +216,7 @@ private fun ContentIme(
                 onAddLimitClicked = onAddLimitClicked,
                 onAmountChanged = onAmountChanged,
                 onDeleteLimitClicked = onDeleteLimitClicked,
+                onPeriodSelected = onPeriodSelected,
             )
         }
     }
@@ -220,6 +230,7 @@ private fun Content(
     onAddLimitClicked: () -> Unit,
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
+    onPeriodSelected: (Long, String) -> Unit,
 ) {
     AnimatedVisibility(
         visible = state.editable.isEmpty() && !state.isLoading,
@@ -244,6 +255,7 @@ private fun Content(
             onAddLimitClicked = onAddLimitClicked,
             onAmountChanged = onAmountChanged,
             onDeleteLimitClicked = onDeleteLimitClicked,
+            onPeriodSelected = onPeriodSelected,
         )
     }
 }
@@ -277,6 +289,7 @@ private fun Limits(
     onAddLimitClicked: () -> Unit,
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
+    onPeriodSelected: (Long, String) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -288,6 +301,7 @@ private fun Limits(
             onAmountChanged = onAmountChanged,
             onDeleteLimitClicked = onDeleteLimitClicked,
             onAddLimitClicked = onAddLimitClicked,
+            onPeriodSelected = onPeriodSelected,
         )
     }
 }
@@ -300,6 +314,7 @@ private fun LimitsList(
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
     onAddLimitClicked: () -> Unit,
+    onPeriodSelected: (Long, String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.animateContentSize(),
@@ -318,6 +333,7 @@ private fun LimitsList(
                 item = item,
                 onAmountChanged = onAmountChanged,
                 onDeleteLimitClicked = onDeleteLimitClicked,
+                onPeriodSelected = onPeriodSelected,
             )
         }
 
@@ -340,13 +356,17 @@ private fun LimitsItem(
     item: LimitDto,
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
+    onPeriodSelected: (Long, String) -> Unit,
 ) {
     Row(
         modifier = modifier
             .height(IntrinsicSize.Min)
             .padding(horizontal = Large),
     ) {
-        LimitsItemPeriod(item = item)
+        LimitsItemPeriod(
+            item = item,
+            onPeriodSelected = onPeriodSelected,
+        )
 
         Spacer(modifier = Modifier.width(Normal))
 
@@ -367,17 +387,46 @@ private fun LimitsItem(
 @Composable
 private fun LimitsItemPeriod(
     item: LimitDto,
+    onPeriodSelected: (Long, String) -> Unit,
 ) {
+    val periodDaily = stringResource(Resources.string.limits_daily)
+    val periodWeekly = stringResource(Resources.string.limits_weekly)
+    val periodMonthly = stringResource(Resources.string.limits_monthly)
+    val textMeasurer = rememberTextMeasurer()
+    val textStyle = MaterialTheme.typography.titleMedium
+    val density = LocalDensity.current
+    val width = remember(periodDaily, density) {
+        val resultDaily = textMeasurer.measure(
+            text = periodDaily,
+            style = textStyle,
+        ).size.width
+        val resultWeekly = textMeasurer.measure(
+            text = periodWeekly,
+            style = textStyle,
+        ).size.width
+        val resultMonthly = textMeasurer.measure(
+            text = periodMonthly,
+            style = textStyle,
+        ).size.width
+        with(density) {
+            max(max(resultDaily, resultWeekly), resultMonthly).toDp() + Normal2X
+        }
+    }
+
+    var showModal by remember { mutableStateOf(false) }
     DsSecondaryCard(
         modifier = Modifier
-            .wrapContentWidth()
+            .width(width)
             .fillMaxHeight()
             .clip(CardDefaults.shape)
             .debounceClickable {
+                showModal = true
             },
     ) {
         Box(
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -385,9 +434,19 @@ private fun LimitsItemPeriod(
                     .padding(horizontal = Normal),
                 text = item.periodText,
                 color = MaterialTheme.colorScheme.primary,
+                style = textStyle,
                 textAlign = TextAlign.Center,
             )
         }
+    }
+    if (showModal) {
+        LimitPeriodModal(
+            current = item.periodText,
+            onPeriodSelected = {
+                onPeriodSelected(item.id, it)
+            },
+            onDismiss = { showModal = false }
+        )
     }
 }
 
@@ -549,6 +608,7 @@ private fun ContentPreview() {
                 onAddLimitClicked = {},
                 onAmountChanged = { _, _ -> },
                 onDeleteLimitClicked = { _ -> },
+                onPeriodSelected = { _, _ -> },
             )
         }
     }

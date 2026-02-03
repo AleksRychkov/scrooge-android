@@ -52,6 +52,6 @@ internal class DefaultLimitsComponent(
     }
 
     override fun onPeriodChanged(id: Long, period: String) {
-        TODO("Not yet implemented")
+        store.handle(LimitsEvent.External.PeriodChanged(id = id, value = period))
     }
 }
