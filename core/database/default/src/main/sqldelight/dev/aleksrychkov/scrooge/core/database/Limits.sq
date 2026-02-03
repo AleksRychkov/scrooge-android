@@ -1,0 +1,20 @@
+-- Tables
+CREATE TABLE IF NOT EXISTS Limits (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    amount INTEGER NOT NULL,
+    type INTEGER NOT NULL,
+    currencyCode TEXT NOT NULL
+);
+
+-- Queries
+selectAll:
+SELECT * FROM Limits;
+
+create:
+INSERT INTO Limits (amount, type, currencyCode) VALUES (?, ?, ?);
+
+update:
+UPDATE Limits SET amount = :amount, type = :type, currencyCode = :currencyCode WHERE id = ?;
+
+delete:
+DELETE FROM Limits WHERE id = ?;

@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.core.database
 import android.content.Context
 import dev.aleksrychkov.scrooge.core.database.fileadapter.DatabaseFileAdapter
 import dev.aleksrychkov.scrooge.core.database.internal.dao.DefaultCategoryDao
+import dev.aleksrychkov.scrooge.core.database.internal.dao.DefaultLimitsDao
 import dev.aleksrychkov.scrooge.core.database.internal.dao.DefaultReportDao
 import dev.aleksrychkov.scrooge.core.database.internal.dao.DefaultTagDao
 import dev.aleksrychkov.scrooge.core.database.internal.dao.DefaultTransactionDao
@@ -43,6 +44,13 @@ fun buildDatabaseModule(context: Context): NaiveModule {
         }
         singleton<ReportDao> {
             DefaultReportDao(
+                dbProvider = dbManager,
+                readDispatcher = readDispatcher,
+                writeDispatcher = writeDispatcher,
+            )
+        }
+        singleton<LimitsDao> {
+            DefaultLimitsDao(
                 dbProvider = dbManager,
                 readDispatcher = readDispatcher,
                 writeDispatcher = writeDispatcher,
