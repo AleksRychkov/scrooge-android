@@ -8,8 +8,8 @@ android {
 
 dependencies {
     implementation(projects.core.database.api)
+    implementation(projects.core.di)
+    implementation(projects.core.utils)
 
     implementation(projects.feature.limits.api)
-
-    implementation(projects.core.di)
 }
