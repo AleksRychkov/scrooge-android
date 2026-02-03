@@ -3,11 +3,11 @@ package dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
+import dev.aleksrychkov.scrooge.core.entity.amountToString
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlin.random.Random
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Immutable
@@ -24,21 +24,7 @@ internal data class LimitDto(
     val amount: String,
     val currencySymbol: String,
     val currencyCode: String,
-) {
-    companion object {
-        fun new(
-            resourceManager: ResourceManager,
-            currency: CurrencyEntity,
-        ): LimitDto =
-            LimitDto(
-                id = Random.nextLong(),
-                periodText = LimitEntity.Period.Monthly.periodToText(resourceManager),
-                amount = "",
-                currencyCode = currency.currencyCode,
-                currencySymbol = currency.currencySymbol,
-            )
-    }
-}
+)
 
 internal fun List<LimitEntity>.toState(resourceManager: ResourceManager): ImmutableList<LimitDto> =
     this
@@ -46,16 +32,12 @@ internal fun List<LimitEntity>.toState(resourceManager: ResourceManager): Immuta
             LimitDto(
                 id = entity.id,
                 periodText = entity.period.periodToText(resourceManager),
-                amount = entity.amount.toString(),
+                amount = entity.amount.amountToString(),
                 currencySymbol = entity.currency.currencySymbol,
-
                 currencyCode = entity.currency.currencyCode,
             )
         }
         .toImmutableList()
-
-internal fun List<LimitDto>.toEntity(resourceManager: ResourceManager): List<LimitEntity> =
-    this.map { it.toEntity(resourceManager) }
 
 internal fun LimitDto.toEntity(resourceManager: ResourceManager) = LimitEntity(
     id = this.id,

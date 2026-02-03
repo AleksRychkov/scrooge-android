@@ -44,7 +44,7 @@ internal class DefaultLimitsComponent(
     }
 
     override fun onAmountChanged(id: Long, value: String) {
-        // todo
+        store.handle(LimitsEvent.External.AmountChanged(id = id, value = value))
     }
 
     override fun onCurrencyChanged(id: Long, code: String) {

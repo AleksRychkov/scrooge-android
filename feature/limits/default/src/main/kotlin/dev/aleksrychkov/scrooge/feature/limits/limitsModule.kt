@@ -32,7 +32,7 @@ fun buildLimitsModule(): NaiveModule {
                 ioDispatcher = Dispatchers.IO,
             )
         }
-        factory<LimitsObserveUseCase> {
+        factory<LimitsGetUseCase> {
             DefaultLimitsObserveUseCase(
                 dao = getLazy(),
                 ioDispatcher = Dispatchers.IO,

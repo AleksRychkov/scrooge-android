@@ -11,7 +11,7 @@ internal class UpdateDelegate(
     private val useCase: Lazy<LimitsUpdateUseCase> = getLazy(),
 ) {
     suspend operator fun invoke(cmd: LimitsCommand.Update): Flow<LimitsEvent> {
-        useCase.value.invoke(cmd.limit)
+        useCase.value.invoke(entity = cmd.entity)
         return emptyFlow()
     }
 }

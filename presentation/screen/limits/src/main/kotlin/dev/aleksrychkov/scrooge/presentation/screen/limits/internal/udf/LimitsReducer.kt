@@ -2,12 +2,16 @@ package dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf
 
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
+import dev.aleksrychkov.scrooge.core.entity.toCents
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Create
 import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Delete
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.LoadLastUsedCurrency
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.LoadLimits
+import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsCommand.Update
 
 internal class LimitsReducer(
     private val resourceManager: ResourceManager = get(),
@@ -20,7 +24,7 @@ internal class LimitsReducer(
         return when (event) {
             LimitsEvent.External.Init -> state.reduceWith(event) {
                 command {
-                    listOf(LimitsCommand.LoadLimits, LimitsCommand.LoadLastUsedCurrency)
+                    listOf(LoadLimits, LoadLastUsedCurrency)
                 }
             }
 
@@ -54,6 +58,20 @@ internal class LimitsReducer(
             is LimitsEvent.Internal.CurrencyResult -> state.reduceWith(event) {
                 state {
                     copy(lastUsedCurrencyEntity = event.currency)
+                }
+            }
+
+            is LimitsEvent.External.AmountChanged -> state.reduceWith(event) {
+                val dto = state.editable.firstOrNull { it.id == event.id } ?: return@reduceWith
+                val entity = dto.toEntity(resourceManager).copy(amount = event.value.toCents())
+                command {
+                    listOf(Update(entity = entity))
+                }
+            }
+
+            LimitsEvent.Internal.Reload -> state.reduceWith(event) {
+                command {
+                    listOf(LoadLimits)
                 }
             }
         }

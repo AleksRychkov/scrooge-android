@@ -56,3 +56,19 @@ fun Long.amountToStringFormatted(
 
     return "$sign$majorFormatted${AMOUNT_DELIMITER}${minor.toString().padStart(2, '0')}"
 }
+
+fun String.toCents(): Long {
+    val amountRegex = Regex("[^0-9,]")
+    val clean = this.replace(amountRegex, "")
+    val parts = clean.split(",")
+
+    val euros = parts.getOrNull(0).orEmpty()
+    val cents = parts.getOrNull(1).orEmpty()
+
+    val centsPadded = when (cents.length) {
+        0 -> "00"
+        1 -> cents + "0"
+        else -> cents.take(2)
+    }
+    return (euros.ifEmpty { "0" } + centsPadded).toLong()
+}

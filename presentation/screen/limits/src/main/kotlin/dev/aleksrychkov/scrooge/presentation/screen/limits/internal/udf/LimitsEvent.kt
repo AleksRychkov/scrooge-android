@@ -9,10 +9,12 @@ internal sealed interface LimitsEvent {
         data object Init : External
         data object AddNewLimit : External
         data class DeleteLimit(val id: Long) : External
+        data class AmountChanged(val id: Long, val value: String) : External
     }
 
     sealed interface Internal : LimitsEvent {
         data class LimitsResult(val data: ImmutableList<LimitEntity>) : Internal
         data class CurrencyResult(val currency: CurrencyEntity) : Internal
+        data object Reload : External
     }
 }
