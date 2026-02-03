@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,7 +33,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -111,7 +109,6 @@ private fun LimitsContent(
         state = state,
         onBackPressed = component::onBackPressed,
         onAddLimitClicked = component::onAddLimitClicked,
-        onSaveClicked = component::onSaveClicked,
         onAmountChanged = component::onAmountChanged,
         onDeleteLimitClicked = component::onDeleteLimitClicked,
     )
@@ -123,7 +120,6 @@ private fun LimitsContent(
     state: LimitsState,
     onBackPressed: () -> Unit,
     onAddLimitClicked: () -> Unit,
-    onSaveClicked: () -> Unit,
     onAmountChanged: (Long, String) -> Unit,
     onDeleteLimitClicked: (Long) -> Unit,
 ) {
@@ -133,9 +129,7 @@ private fun LimitsContent(
         topBar = {
             LimitsAppBar(
                 scrollState = scrollState,
-                state = state,
                 onBackPressed = onBackPressed,
-                onSaveClicked = onSaveClicked,
             )
         }
     ) { innerPadding ->
@@ -156,9 +150,7 @@ private fun LimitsContent(
 @Composable
 private fun LimitsAppBar(
     scrollState: LazyListState,
-    state: LimitsState,
     onBackPressed: () -> Unit,
-    onSaveClicked: () -> Unit,
 ) {
     val headerElevation by remember {
         derivedStateOf {
@@ -185,29 +177,6 @@ private fun LimitsAppBar(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(Resources.string.back),
                     )
-                }
-            },
-            actions = {
-                AnimatedVisibility(
-                    modifier = Modifier.padding(horizontal = Large),
-                    visible = state.isLoading,
-                    enter = fadeIn(),
-                    exit = fadeOut(),
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(24.dp),
-                        strokeWidth = Small,
-                    )
-                }
-                AnimatedVisibility(
-                    visible = !state.isLoading && state.editable.isNotEmpty(),
-                    enter = fadeIn(),
-                    exit = fadeOut(),
-                ) {
-                    TextButton(onClick = onSaveClicked) {
-                        Text(text = stringResource(Resources.string.save))
-                    }
                 }
             }
         )

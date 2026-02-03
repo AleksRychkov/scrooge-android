@@ -28,7 +28,6 @@ internal class LimitsReducer(
                 state {
                     copy(
                         isLoading = false,
-                        limits = event.data,
                         editable = event.data.toState(resourceManager),
                     )
                 }

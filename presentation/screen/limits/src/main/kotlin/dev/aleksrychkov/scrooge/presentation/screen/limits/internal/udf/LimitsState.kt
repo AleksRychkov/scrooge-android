@@ -12,8 +12,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Immutable
 internal data class LimitsState(
-    val isLoading: Boolean = false,
-    val limits: ImmutableList<LimitEntity> = persistentListOf(),
+    val isLoading: Boolean = true,
     val editable: ImmutableList<LimitDto> = persistentListOf(),
     val lastUsedCurrencyEntity: CurrencyEntity = CurrencyEntity.RUB,
 )

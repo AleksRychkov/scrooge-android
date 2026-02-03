@@ -9,11 +9,11 @@ import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.actors.U
 import kotlinx.coroutines.flow.Flow
 
 internal class LimitsActor(
-    val loadDelegate: Lazy<LoadDelegate> = lazy { LoadDelegate() },
-    val loadLastUsedCurrency: Lazy<LoadLastUsedCurrencyDelegate> = lazy { LoadLastUsedCurrencyDelegate() },
-    val updateDelegate: Lazy<UpdateDelegate> = lazy { UpdateDelegate() },
-    val createDelegate: Lazy<CreateDelegate> = lazy { CreateDelegate() },
-    val deleteDelegate: Lazy<DeleteDelegate> = lazy { DeleteDelegate() },
+    private val loadDelegate: Lazy<LoadDelegate> = lazy { LoadDelegate() },
+    private val loadLastUsedCurrency: Lazy<LoadLastUsedCurrencyDelegate> = lazy { LoadLastUsedCurrencyDelegate() },
+    private val updateDelegate: Lazy<UpdateDelegate> = lazy { UpdateDelegate() },
+    private val createDelegate: Lazy<CreateDelegate> = lazy { CreateDelegate() },
+    private val deleteDelegate: Lazy<DeleteDelegate> = lazy { DeleteDelegate() },
 ) : Actor<LimitsCommand, LimitsEvent> {
 
     override suspend fun process(command: LimitsCommand): Flow<LimitsEvent> {

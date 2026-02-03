@@ -35,10 +35,6 @@ internal class DefaultLimitsComponent(
         router.close()
     }
 
-    override fun onSaveClicked() {
-        // todo
-    }
-
     override fun onAddLimitClicked() {
         store.handle(LimitsEvent.External.AddNewLimit)
     }
@@ -49,5 +45,13 @@ internal class DefaultLimitsComponent(
 
     override fun onAmountChanged(id: Long, value: String) {
         // todo
+    }
+
+    override fun onCurrencyChanged(id: Long, code: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onPeriodChanged(id: Long, period: String) {
+        TODO("Not yet implemented")
     }
 }
