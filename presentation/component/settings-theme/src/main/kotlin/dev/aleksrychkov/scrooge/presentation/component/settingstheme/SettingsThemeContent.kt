@@ -120,9 +120,9 @@ private fun ThemeModal(
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier
-                        .padding(vertical = Normal, horizontal = Large),
+                        .padding(vertical = Large, horizontal = Large),
                     text = stringResource(Resources.string.settings_select_theme),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                 )
 
                 Text(
