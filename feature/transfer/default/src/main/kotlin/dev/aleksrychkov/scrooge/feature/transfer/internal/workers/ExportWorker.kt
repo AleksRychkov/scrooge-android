@@ -56,7 +56,6 @@ internal class ExportWorker(
         }
             .onFailure { e ->
                 cleanOnFailure()
-                e.printStackTrace()
                 stateUseCase(TransferStateEntity(TransferStateEntity.State.ExportingFailed(info = e.message)))
             }
             .getOrDefault(Result.failure())

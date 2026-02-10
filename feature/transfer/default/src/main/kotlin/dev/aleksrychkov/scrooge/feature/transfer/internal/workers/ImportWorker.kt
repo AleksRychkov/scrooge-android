@@ -57,7 +57,6 @@ internal class ImportWorker(
             Result.success()
         }
             .onFailure { e ->
-                e.printStackTrace()
                 stateUseCase(TransferStateEntity(TransferStateEntity.State.ImportingFailed(info = e.message)))
             }
             .getOrDefault(Result.failure())
