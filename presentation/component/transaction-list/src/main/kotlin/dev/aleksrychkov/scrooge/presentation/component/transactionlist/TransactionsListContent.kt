@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -89,16 +90,28 @@ private fun Content(
         items(count = items.itemCount) { index ->
             val item = items[index] ?: return@items
             when (item) {
-                is TransactionsItem.Group -> TransactionsGroupItem(
-                    modifier = Modifier.fillMaxWidth().animateItem(),
-                    group = item,
-                )
+                is TransactionsItem.Group -> {
+                    key(item.date) {
+                        TransactionsGroupItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
+                            group = item,
+                        )
+                    }
+                }
 
-                is TransactionsItem.Item -> TransactionItem(
-                    modifier = Modifier.fillMaxWidth().animateItem(),
-                    transaction = item,
-                    onTransactionClicked = onTransactionClicked,
-                )
+                is TransactionsItem.Item -> {
+                    key(item.id) {
+                        TransactionItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
+                            transaction = item,
+                            onTransactionClicked = onTransactionClicked,
+                        )
+                    }
+                }
             }
         }
     }
