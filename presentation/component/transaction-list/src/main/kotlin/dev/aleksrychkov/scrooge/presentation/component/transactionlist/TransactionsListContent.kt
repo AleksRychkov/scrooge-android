@@ -27,12 +27,14 @@ fun TransactionsListContent(
     paddingTop: Dp = 0.dp,
     paddingBottom: Dp = 0.dp,
     headerItem: @Composable (() -> Unit)? = null,
+    headerSubItem: @Composable (() -> Unit)? = null,
     component: TransactionsListComponent,
 ) {
     Content(
         modifier = modifier,
         listState = listState,
         headerItem = headerItem,
+        headerSubItem = headerSubItem,
         paddingTop = paddingTop,
         paddingBottom = paddingBottom,
         component = component as TransactionsListComponentInternal,
@@ -44,6 +46,7 @@ private fun Content(
     modifier: Modifier,
     listState: LazyListState? = null,
     headerItem: @Composable (() -> Unit)? = null,
+    headerSubItem: @Composable (() -> Unit)? = null,
     paddingTop: Dp,
     paddingBottom: Dp,
     component: TransactionsListComponentInternal,
@@ -53,6 +56,7 @@ private fun Content(
         modifier = modifier,
         listState = listState,
         headerItem = headerItem,
+        headerSubItem = headerSubItem,
         paddingTop = paddingTop,
         paddingBottom = paddingBottom,
         state = state,
@@ -65,6 +69,7 @@ private fun Content(
     modifier: Modifier,
     listState: LazyListState? = null,
     headerItem: @Composable (() -> Unit)? = null,
+    headerSubItem: @Composable (() -> Unit)? = null,
     paddingTop: Dp,
     paddingBottom: Dp,
     state: TransactionsListState,
@@ -84,6 +89,12 @@ private fun Content(
         if (headerItem != null) {
             item {
                 headerItem()
+            }
+        }
+
+        if (headerSubItem != null) {
+            item {
+                headerSubItem()
             }
         }
 

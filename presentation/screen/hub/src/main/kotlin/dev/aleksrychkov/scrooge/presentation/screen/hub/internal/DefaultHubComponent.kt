@@ -14,6 +14,7 @@ import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
+import dev.aleksrychkov.scrooge.presentation.component.limits.LimitsComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListComponent
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +40,13 @@ internal class DefaultHubComponent(
 
     private val _transactionsListComponent: TransactionsListComponent by lazy {
         TransactionsListComponent(
-            componentContext = childContext("TransactionsComponentTransactionsListChildContenxt"),
+            componentContext = childContext("TransactionsComponentTransactionsListChildContext"),
+        )
+    }
+
+    private val _limitsComponent: LimitsComponent by lazy {
+        LimitsComponent(
+            componentContext = childContext("TransactionsComponentLimitsChildContext"),
         )
     }
 
@@ -75,6 +82,9 @@ internal class DefaultHubComponent(
 
     override val transactionsListComponent: TransactionsListComponent
         get() = _transactionsListComponent
+
+    override val limitsComponent: LimitsComponent
+        get() = _limitsComponent
 
     override fun addIncome() {
         DestinationTransactionForm.addIncome().let(router::open)

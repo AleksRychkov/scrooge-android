@@ -49,6 +49,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.entity.readableName
+import dev.aleksrychkov.scrooge.presentation.component.limits.LimitsContent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.HubComponentInternal
@@ -160,6 +161,12 @@ private fun Content(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = periodContentElevation,
                     component = component.periodTotalComponent,
+                )
+            },
+            headerSubItem = {
+                LimitsContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    component = component.limitsComponent,
                 )
             },
             paddingBottom = 124.dp,
