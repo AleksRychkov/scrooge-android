@@ -7,7 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class LimitsState(
-    val isLoading: Boolean = false,
+    val isVisible: Boolean = false,
     val limits: ImmutableList<LimitProgress> = persistentListOf(
         LimitProgress(
             period = "\uD83D\uDCC5 " + LimitEntity.Period.Daily.name,

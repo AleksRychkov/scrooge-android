@@ -10,7 +10,6 @@ internal class LimitsReducer : Reducer<LimitsState, LimitsEvent, LimitsCommand, 
         state: LimitsState
     ): ReducerResult<LimitsState, LimitsCommand, Unit> {
         return when (event) {
-
             is LimitsEvent.Internal.LimitsResult -> state.reduceWith(event) {
                 println(event.limits.joinToString())
             }

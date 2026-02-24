@@ -57,7 +57,7 @@ private fun LimitsContent(
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
-    if (!state.isLoading && state.limits.isNotEmpty()) {
+    if (state.isVisible && state.limits.isNotEmpty()) {
         LimitsContent(
             modifier = modifier,
             state = state,
@@ -177,7 +177,7 @@ private fun LimitsContentPreview() {
             LimitsContent(
                 modifier = Modifier.fillMaxWidth(),
                 state = LimitsState(
-                    isLoading = false,
+                    isVisible = true,
                     limits = listOf(progress).toImmutableList()
                 ),
             )
