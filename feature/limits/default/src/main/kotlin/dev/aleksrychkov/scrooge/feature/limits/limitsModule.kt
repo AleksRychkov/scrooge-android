@@ -8,6 +8,7 @@ import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.feature.limits.internal.DefaultLimitsCreateUseCase
 import dev.aleksrychkov.scrooge.feature.limits.internal.DefaultLimitsDeleteUseCase
+import dev.aleksrychkov.scrooge.feature.limits.internal.DefaultLimitsObserveActualUseCase
 import dev.aleksrychkov.scrooge.feature.limits.internal.DefaultLimitsObserveUseCase
 import dev.aleksrychkov.scrooge.feature.limits.internal.DefaultLimitsUpdateUseCase
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,12 @@ fun buildLimitsModule(): NaiveModule {
         }
         factory<LimitsGetUseCase> {
             DefaultLimitsObserveUseCase(
+                dao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<LimitsObserveActualUseCase> {
+            DefaultLimitsObserveActualUseCase(
                 dao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )

@@ -1,5 +1,7 @@
 package dev.aleksrychkov.scrooge.core.database.internal.dao
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.LimitsDao
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
@@ -9,6 +11,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class DefaultLimitsDao(
@@ -54,4 +58,13 @@ internal class DefaultLimitsDao(
     override suspend fun delete(id: Long): Unit = withContext(writeDispatcher + NonCancellable) {
         database.limitsQueries.delete(id = id)
     }
+
+    override suspend fun observeActual(): Flow<ImmutableList<LimitEntity>> =
+        withContext(readDispatcher) {
+            database.limitsQueries
+                .getByMinAmount(mapper = LimitsMapper::toEntity)
+                .asFlow()
+                .mapToList(readDispatcher)
+                .map { list -> list.toImmutableList() }
+        }
 }
