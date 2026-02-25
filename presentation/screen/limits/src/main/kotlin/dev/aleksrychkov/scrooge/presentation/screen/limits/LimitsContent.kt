@@ -87,7 +87,9 @@ import dev.aleksrychkov.scrooge.presentation.screen.limits.internal.udf.LimitsSt
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlin.math.max
+import kotlin.time.Duration.Companion.milliseconds
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 private const val MINIMAL_SCROLL_VALUE_TO_CAST_SHADOW = 10
@@ -494,6 +496,7 @@ private fun RowScope.LimitsItemAmount(
             }
             LaunchedEffect(amountTextFieldState) {
                 snapshotFlow { amountTextFieldState.text.toString() }
+                    .debounce(500.milliseconds)
                     .collectLatest {
                         onAmountChanged(item.id, it)
                     }
