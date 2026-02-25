@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.HalfNormal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
@@ -154,7 +155,9 @@ private fun RowScope.LimitsProgressIndicator(
     progress: Float = 1.0f,
 ) {
     LinearProgressIndicator(
-        modifier = Modifier.weight(weight = weight),
+        modifier = Modifier
+            .height(Medium)
+            .weight(weight = weight),
         progress = { progress },
         gapSize = HalfNormal,
         drawStopIndicator = { null },
