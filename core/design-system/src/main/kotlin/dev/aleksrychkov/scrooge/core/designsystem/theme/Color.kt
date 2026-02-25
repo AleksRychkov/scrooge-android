@@ -28,7 +28,7 @@ internal val LightScheme = lightColorScheme(
     surfaceContainerHighest = Color(0xFFFFFFFF), // Card container color
     surfaceContainerLow = Color(0xFFFFFFFF), // Card container color
 
-    outline = Color(0xFF363636),
+    outline = Color(0xFFE2E2E2),
     error = Color(0xFFDD553A),
     onError = Color(0xFFFFFFFF),
     errorContainer = Color(0xFFFFDAD6),
@@ -58,7 +58,7 @@ internal val DarkScheme = darkColorScheme(
     surfaceVariant = Color(0xFF1D1D16),
     onSurfaceVariant = Color(0xFFCAC4D0),
 
-    outline = Color(0xFF948F99),
+    outline = Color(0xFF323232),
     error = Color(0xFFE58776),
     onError = Color(0xFF690005),
     errorContainer = Color(0xFF93000A),

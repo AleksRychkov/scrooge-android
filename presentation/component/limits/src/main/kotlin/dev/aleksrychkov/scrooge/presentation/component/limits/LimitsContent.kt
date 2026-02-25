@@ -72,9 +72,7 @@ private fun LimitsContent(
     state: LimitsState,
 ) {
     Column(
-        modifier = modifier
-            .padding(Large)
-            .padding(top = Large),
+        modifier = modifier,
     ) {
         Text(
             text = stringResource(Resources.string.limits),

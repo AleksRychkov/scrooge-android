@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsCardV2
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
@@ -48,6 +49,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.limits.LimitsContent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
@@ -92,7 +94,6 @@ private fun HubContent(
                 .padding(innerPadding),
             contentListState = contentListState,
             component = component,
-            periodContentElevation = elevation,
         )
     }
     FiltersModal(component = component)
@@ -107,7 +108,7 @@ private fun TransactionsAppBar(
 ) {
     val headerElevation by remember {
         derivedStateOf {
-            if (contentListState.firstVisibleItemIndex > 0) {
+            if (contentListState.firstVisibleItemScrollOffset > 0) {
                 elevation
             } else {
                 0.dp
@@ -146,7 +147,6 @@ private fun TransactionsAppBar(
 private fun Content(
     modifier: Modifier,
     contentListState: LazyListState,
-    periodContentElevation: Dp,
     component: HubComponentInternal
 ) {
     val isAddIncomeExpenseVisible by remember {
@@ -159,17 +159,30 @@ private fun Content(
             listState = contentListState,
             headers = persistentListOf(
                 {
-                    PeriodTotalContent(
-                        modifier = Modifier.fillMaxWidth(),
-                        elevation = periodContentElevation,
-                        component = component.periodTotalComponent,
-                    )
+                    DsCardV2(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Large),
+                    ) {
+                        PeriodTotalContent(
+                            modifier = Modifier.fillMaxWidth(),
+                            component = component.periodTotalComponent,
+                        )
+                    }
                 },
                 {
-                    LimitsContent(
-                        modifier = Modifier.fillMaxWidth(),
-                        component = component.limitsComponent,
-                    )
+                    DsCardV2(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Large),
+                    ) {
+                        LimitsContent(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Normal, vertical = Large),
+                            component = component.limitsComponent,
+                        )
+                    }
                 }
             ),
             paddingBottom = 124.dp,

@@ -13,11 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
@@ -33,10 +28,8 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.PeriodTotalComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.internal.udf.PeriodTotalState
 import kotlinx.collections.immutable.persistentListOf
@@ -46,12 +39,10 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun PeriodTotalContent(
     modifier: Modifier,
     component: PeriodTotalComponent,
-    elevation: Dp = Medium,
 ) {
     PeriodTotalContent(
         modifier = modifier,
         component = component as PeriodTotalComponentInternal,
-        elevation = elevation,
     )
 }
 
@@ -59,14 +50,12 @@ fun PeriodTotalContent(
 private fun PeriodTotalContent(
     modifier: Modifier,
     component: PeriodTotalComponentInternal,
-    elevation: Dp
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
     Content(
         modifier = modifier,
         state = state,
-        elevation = elevation,
         openCategoryTotal = component::openCategoryTotal,
     )
 }
@@ -75,13 +64,11 @@ private fun PeriodTotalContent(
 private fun Content(
     modifier: Modifier,
     state: PeriodTotalState,
-    elevation: Dp,
     openCategoryTotal: () -> Unit,
 ) {
     TotalContent(
         modifier = modifier,
         data = state.data,
-        elevation = elevation,
         openCategoryTotal = openCategoryTotal,
     )
 }
@@ -90,86 +77,74 @@ private fun Content(
 private fun TotalContent(
     modifier: Modifier,
     data: PeriodTotalState.ByType,
-    elevation: Dp,
     openCategoryTotal: () -> Unit,
 ) {
-    Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = elevation),
-        shape = ShapeDefaults.Large.copy(
-            topStart = CornerSize(0.dp),
-            topEnd = CornerSize(0.dp),
-            bottomStart = CornerSize(Large2X),
-            bottomEnd = CornerSize(Large2X),
-        ),
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Max)
+            .animateContentSize()
+            .debounceClickable {
+                openCategoryTotal()
+            }
     ) {
+        Text(
+            modifier = Modifier
+                .padding(horizontal = Large)
+                .padding(top = Large),
+            text = stringResource(Resources.string.total),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+        )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Max)
-                .animateContentSize()
-                .debounceClickable {
-                    openCategoryTotal()
-                }
+                .defaultMinSize(
+                    minHeight = 60.dp,
+                )
+                .padding(horizontal = Large)
+                .padding(vertical = Normal),
         ) {
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = Large)
-                    .padding(top = Small),
-                text = stringResource(Resources.string.total),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(
-                        minHeight = 60.dp,
+            data.total.forEach { item ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = item.amount,
+                        style = MaterialTheme.typography.titleLarge,
                     )
-                    .padding(horizontal = Large)
-                    .padding(vertical = Normal),
-            ) {
-                data.total.forEach { item ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = item.amount,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                        Spacer(modifier = Modifier.width(Normal))
-                        Text(
-                            text = item.currencySymbol,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                    }
+                    Spacer(modifier = Modifier.width(Normal))
+                    Text(
+                        text = item.currencySymbol,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
                 }
             }
+        }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(
-                        minHeight = 80.dp,
-                    )
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .padding(horizontal = Large)
-                    .padding(bottom = Normal),
-            ) {
-                IncomeExpenseBlock(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(Resources.string.incomes),
-                    items = data.income,
-                    color = IncomeColor,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .defaultMinSize(
+                    minHeight = 80.dp,
                 )
+                .background(MaterialTheme.colorScheme.secondary)
+                .padding(horizontal = Large)
+                .padding(bottom = Normal),
+        ) {
+            IncomeExpenseBlock(
+                modifier = Modifier.weight(1f),
+                title = stringResource(Resources.string.incomes),
+                items = data.income,
+                color = IncomeColor,
+            )
 
-                IncomeExpenseBlock(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(Resources.string.expenses),
-                    items = data.expense,
-                    color = ExpenseColor,
-                )
-            }
+            IncomeExpenseBlock(
+                modifier = Modifier.weight(1f),
+                title = stringResource(Resources.string.expenses),
+                items = data.expense,
+                color = ExpenseColor,
+            )
         }
     }
 }
@@ -218,7 +193,6 @@ private fun TotalContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TotalContent(
                 modifier = Modifier.fillMaxWidth(),
-                elevation = Medium,
                 openCategoryTotal = {},
                 data = PeriodTotalState.ByType(
                     income = persistentListOf(

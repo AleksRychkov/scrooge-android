@@ -29,9 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsCardV2
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
@@ -65,14 +65,12 @@ private fun ReportAnnualTotalContent(
     component: ReportAnnualTotalComponentInternal,
 ) {
     val contentListState = rememberLazyListState()
-    val elevation = AppBarShadow
     Scaffold(
         modifier = modifier,
         topBar = {
             ReportAppBar(
                 component = component,
                 contentListState = contentListState,
-                elevation = elevation,
             )
         }
     ) { innerPadding ->
@@ -82,7 +80,6 @@ private fun ReportAnnualTotalContent(
                 .padding(innerPadding),
             component = component,
             contentListState = contentListState,
-            periodContentElevation = elevation,
             openCategoryReport = component::openCategoryTotal,
         )
     }
@@ -96,12 +93,11 @@ private fun ReportAnnualTotalContent(
 private fun ReportAppBar(
     component: ReportAnnualTotalComponentInternal,
     contentListState: LazyListState,
-    elevation: Dp,
 ) {
     val headerElevation by remember {
         derivedStateOf {
-            if (contentListState.firstVisibleItemIndex > 0) {
-                elevation
+            if (contentListState.firstVisibleItemScrollOffset > 0) {
+                AppBarShadow
             } else {
                 0.dp
             }
@@ -140,13 +136,11 @@ private fun Content(
     modifier: Modifier,
     component: ReportAnnualTotalComponentInternal,
     contentListState: LazyListState,
-    periodContentElevation: Dp,
     openCategoryReport: (PeriodDatestampEntity) -> Unit,
 ) {
     Content(
         modifier = modifier,
         contentListState = contentListState,
-        periodContentElevation = periodContentElevation,
         periodTotalComponent = component.periodTotalComponent,
         totalMonthlyComponent = component.totalMonthlyComponent,
         openCategoryReport = openCategoryReport,
@@ -157,7 +151,6 @@ private fun Content(
 private fun Content(
     modifier: Modifier,
     contentListState: LazyListState,
-    periodContentElevation: Dp,
     periodTotalComponent: PeriodTotalComponent,
     totalMonthlyComponent: TotalMonthlyComponent,
     openCategoryReport: (PeriodDatestampEntity) -> Unit,
@@ -170,11 +163,16 @@ private fun Content(
             modifier = Modifier.fillMaxWidth(),
             listState = contentListState,
             headerItem = {
-                PeriodTotalContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = periodContentElevation,
-                    component = periodTotalComponent,
-                )
+                DsCardV2(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Large),
+                ) {
+                    PeriodTotalContent(
+                        modifier = Modifier.fillMaxWidth(),
+                        component = periodTotalComponent,
+                    )
+                }
             },
             paddingBottom = Large2X,
             component = totalMonthlyComponent,
