@@ -3,7 +3,7 @@ package dev.aleksrychkov.scrooge.presentation.component.limits.internal.udf
 import androidx.compose.runtime.Immutable
 import dev.aleksrychkov.scrooge.core.entity.LimitDataEntity
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
-import dev.aleksrychkov.scrooge.core.entity.amountToString
+import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -38,7 +38,7 @@ internal fun LimitDataEntity.toLimitProgress(resourceManager: ResourceManager): 
         LimitEntity.Period.Monthly -> "\uD83D\uDDD3 " + resourceManager.getString(Resources.string.limits_monthly)
     }
     val progress = this.spentAmount / this.limit.amount.toFloat()
-    val totalInfoPrefix = abs(this.limit.amount - this.spentAmount).amountToString()
+    val totalInfoPrefix = abs(this.limit.amount - this.spentAmount).amountToStringFormatted("")
     val totalInfoSuffix = if (this.limit.amount - this.spentAmount < 0) {
         resourceManager.getString(Resources.string.limits_over)
     } else {
