@@ -189,6 +189,8 @@
     <string name="limits_daily">Дневной</string>
     <string name="limits_weekly">Недельный</string>
     <string name="limits_monthly">Месячный</string>
+    <string name="limits_left">осталось</string>
+    <string name="limits_over">свыше</string>
     <string name="limits_delete_confirmation_text">Вы уверены, что хотите удалить лимит?</string>
     <!-- Limits -->
 </resources>

@@ -18,7 +18,6 @@ internal class ObserveLimitsDelegate(
         return when (val res = useCase.value.invoke()) {
             LimitsObserveTotalResult.Failure -> emptyFlow()
             is LimitsObserveTotalResult.Success -> res.result.map {
-                println(it.joinToString())
                 LimitsEvent.Internal.LimitsResult(it)
             }
         }
