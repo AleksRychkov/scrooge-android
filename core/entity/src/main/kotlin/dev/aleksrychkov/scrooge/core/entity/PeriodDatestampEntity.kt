@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.core.entity
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.until
 import kotlinx.serialization.Serializable
@@ -19,11 +20,12 @@ fun startEndOfYear(year: Int): PeriodDatestampEntity {
 }
 
 fun startEndOfMonth(month: Month, year: Int): PeriodDatestampEntity {
-    val ld = LocalDate(year = year, month = month, 1)
-    val from = Datestamp.from(ld)
-    val to = Datestamp.from(LocalDate(year = year, month = month, ld.daysInMonth()))
-
-    return PeriodDatestampEntity(from = from, to = to)
+    val start = LocalDate(year, month, 1)
+    val end = start.plus(1, DateTimeUnit.MONTH).minus(1, DateTimeUnit.DAY)
+    return PeriodDatestampEntity(
+        from = Datestamp.from(start),
+        to = Datestamp.from(end)
+    )
 }
 
 fun startEndOf(

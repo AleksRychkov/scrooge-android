@@ -20,14 +20,23 @@ delete:
 DELETE FROM Limits WHERE id = ?;
 
 getByMinAmount:
-SELECT id, amount, type, currencyCode
+SELECT l1.id, l1.amount, l1.type, l1.currencyCode
 FROM Limits l1
-WHERE id = (
-    SELECT id
-    FROM Limits l2
-    WHERE l2.type = l1.type
-      AND l2.currencyCode = l1.currencyCode
-    ORDER BY l2.amount ASC, l2.id ASC
-    LIMIT 1
-)
-ORDER BY currencyCode, type;
+JOIN (
+    SELECT type, currencyCode, MIN(amount) AS minAmount
+    FROM Limits
+    GROUP BY type, currencyCode
+) grouped
+ON l1.type = grouped.type
+AND l1.currencyCode = grouped.currencyCode
+AND l1.amount = grouped.minAmount
+ORDER BY l1.currencyCode, l1.type;
+
+getLimitData:
+SELECT sum(t.amount) AS total
+FROM TTransaction t
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND t.currencyCode = :currencyCode
+  AND t.type = 1;

@@ -2,10 +2,12 @@ package dev.aleksrychkov.scrooge.core.database.internal.dao
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import dev.aleksrychkov.scrooge.core.database.LimitsDao
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.LimitsMapper
+import dev.aleksrychkov.scrooge.core.entity.LimitDataEntity
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -59,7 +61,7 @@ internal class DefaultLimitsDao(
         database.limitsQueries.delete(id = id)
     }
 
-    override suspend fun observeActual(): Flow<ImmutableList<LimitEntity>> =
+    override suspend fun observeActualLimits(): Flow<ImmutableList<LimitEntity>> =
         withContext(readDispatcher) {
             database.limitsQueries
                 .getByMinAmount(mapper = LimitsMapper::toEntity)
@@ -67,4 +69,25 @@ internal class DefaultLimitsDao(
                 .mapToList(readDispatcher)
                 .map { list -> list.toImmutableList() }
         }
+
+    override suspend fun observeLimitData(
+        limit: LimitEntity,
+        fromDatestamp: Long,
+        toDatestamp: Long,
+    ): Flow<LimitDataEntity> = withContext(readDispatcher) {
+        database.limitsQueries
+            .getLimitData(
+                fromDatestamp = fromDatestamp,
+                toDatestamp = toDatestamp,
+                currencyCode = limit.currency.currencyCode,
+            )
+            .asFlow()
+            .mapToOneOrNull(readDispatcher)
+            .map { value ->
+                LimitDataEntity(
+                    limit = limit,
+                    spentAmount = value?.total ?: 0L
+                )
+            }
+    }
 }
