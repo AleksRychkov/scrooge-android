@@ -54,6 +54,7 @@ import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalCo
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.HubComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.modal.FiltersModal
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -156,19 +157,21 @@ private fun Content(
         TransactionsListContent(
             modifier = Modifier.fillMaxWidth(),
             listState = contentListState,
-            headerItem = {
-                PeriodTotalContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = periodContentElevation,
-                    component = component.periodTotalComponent,
-                )
-            },
-            headerSubItem = {
-                LimitsContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    component = component.limitsComponent,
-                )
-            },
+            headers = persistentListOf(
+                {
+                    PeriodTotalContent(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = periodContentElevation,
+                        component = component.periodTotalComponent,
+                    )
+                },
+                {
+                    LimitsContent(
+                        modifier = Modifier.fillMaxWidth(),
+                        component = component.limitsComponent,
+                    )
+                }
+            ),
             paddingBottom = 124.dp,
             component = component.transactionsListComponent,
         )

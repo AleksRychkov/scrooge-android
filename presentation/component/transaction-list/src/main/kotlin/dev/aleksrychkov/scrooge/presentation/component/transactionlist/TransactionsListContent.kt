@@ -19,6 +19,8 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.composables.TransactionsGroupItem
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsItem
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf.TransactionsListState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun TransactionsListContent(
@@ -26,15 +28,13 @@ fun TransactionsListContent(
     listState: LazyListState? = null,
     paddingTop: Dp = 0.dp,
     paddingBottom: Dp = 0.dp,
-    headerItem: @Composable (() -> Unit)? = null,
-    headerSubItem: @Composable (() -> Unit)? = null,
+    headers: ImmutableList<@Composable (() -> Unit)> = persistentListOf(),
     component: TransactionsListComponent,
 ) {
     Content(
         modifier = modifier,
         listState = listState,
-        headerItem = headerItem,
-        headerSubItem = headerSubItem,
+        headers = headers,
         paddingTop = paddingTop,
         paddingBottom = paddingBottom,
         component = component as TransactionsListComponentInternal,
@@ -45,8 +45,7 @@ fun TransactionsListContent(
 private fun Content(
     modifier: Modifier,
     listState: LazyListState? = null,
-    headerItem: @Composable (() -> Unit)? = null,
-    headerSubItem: @Composable (() -> Unit)? = null,
+    headers: ImmutableList<@Composable (() -> Unit)> = persistentListOf(),
     paddingTop: Dp,
     paddingBottom: Dp,
     component: TransactionsListComponentInternal,
@@ -55,8 +54,7 @@ private fun Content(
     Content(
         modifier = modifier,
         listState = listState,
-        headerItem = headerItem,
-        headerSubItem = headerSubItem,
+        headers = headers,
         paddingTop = paddingTop,
         paddingBottom = paddingBottom,
         state = state,
@@ -68,8 +66,7 @@ private fun Content(
 private fun Content(
     modifier: Modifier,
     listState: LazyListState? = null,
-    headerItem: @Composable (() -> Unit)? = null,
-    headerSubItem: @Composable (() -> Unit)? = null,
+    headers: ImmutableList<@Composable (() -> Unit)> = persistentListOf(),
     paddingTop: Dp,
     paddingBottom: Dp,
     state: TransactionsListState,
@@ -86,15 +83,9 @@ private fun Content(
             bottom = paddingBottom,
         ),
     ) {
-        if (headerItem != null) {
-            item {
-                headerItem()
-            }
-        }
-
-        if (headerSubItem != null) {
-            item {
-                headerSubItem()
+        if (headers.isNotEmpty()) {
+            headers.forEach {
+                item { it.invoke() }
             }
         }
 
