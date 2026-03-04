@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.limits.internal
 
 import com.arkivanov.decompose.ComponentContext
+import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.limits.internal.udf.LimitsActor
@@ -18,10 +19,13 @@ internal class DefaultLimitsComponent(
             initialState = LimitsState(),
             actor = LimitsActor(),
             reducer = LimitsReducer(),
-            startEvent = LimitsEvent.External.Init,
         )
     }
 
     override val state: StateFlow<LimitsState>
         get() = store.state
+
+    override fun setFilter(filter: FilterEntity) {
+        store.handle(LimitsEvent.External.Load(filter = filter))
+    }
 }

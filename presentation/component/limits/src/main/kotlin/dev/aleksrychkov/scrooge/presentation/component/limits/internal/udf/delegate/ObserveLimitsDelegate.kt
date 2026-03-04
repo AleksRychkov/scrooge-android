@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.presentation.component.limits.internal.udf.dele
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.feature.limits.LimitsObserveTotalResult
 import dev.aleksrychkov.scrooge.feature.limits.LimitsObserveTotalUseCase
+import dev.aleksrychkov.scrooge.presentation.component.limits.internal.udf.LimitsCommand
 import dev.aleksrychkov.scrooge.presentation.component.limits.internal.udf.LimitsEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -14,8 +15,8 @@ internal class ObserveLimitsDelegate(
 ) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend operator fun invoke(): Flow<LimitsEvent> {
-        return when (val res = useCase.value.invoke()) {
+    suspend operator fun invoke(cmd: LimitsCommand.ObserveLimits): Flow<LimitsEvent> {
+        return when (val res = useCase.value.invoke(cmd.filter)) {
             LimitsObserveTotalResult.Failure -> emptyFlow()
             is LimitsObserveTotalResult.Success -> res.result.map {
                 LimitsEvent.Internal.LimitsResult(it)

@@ -102,6 +102,7 @@ internal class DefaultHubComponent(
         _state.value = _state.value.copy(filter = filter)
         _periodTotalComponent.setFilters(filter)
         _transactionsListComponent.setFilters(filter)
+        _limitsComponent.setFilter(filter)
     }
 
     private fun resetFilter() {

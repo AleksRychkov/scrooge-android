@@ -26,9 +26,9 @@ internal class LimitsReducer(
                 }
             }
 
-            LimitsEvent.External.Init -> state.reduceWith(event) {
+            is LimitsEvent.External.Load -> state.reduceWith(event) {
                 command {
-                    listOf(LimitsCommand.ObserveLimits)
+                    listOf(LimitsCommand.ObserveLimits(filter = event.filter))
                 }
             }
         }
