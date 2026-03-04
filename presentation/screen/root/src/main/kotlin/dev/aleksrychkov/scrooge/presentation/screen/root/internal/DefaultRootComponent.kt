@@ -22,6 +22,7 @@ import kotlinx.serialization.Serializable
 
 internal class DefaultRootComponent(
     componentContext: ComponentContext,
+    deeplink: String? = null,
 ) : RootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
@@ -34,7 +35,7 @@ internal class DefaultRootComponent(
             .onEach {
                 if (it.current is TransferStateEntity.State.None) {
                     if (stack.value.active.configuration !is Configuration.Main) {
-                        navigation.replaceAll(Configuration.Main)
+                        navigation.replaceAll(Configuration.Main(deeplink = deeplink))
                     }
                 } else {
                     if (stack.value.active.configuration !is Configuration.Transfer) {
@@ -60,7 +61,13 @@ internal class DefaultRootComponent(
         childComponentContext: ComponentContext
     ): RootComponent.Child =
         when (configuration) {
-            is Configuration.Main -> Main(MainComponent(childComponentContext))
+            is Configuration.Main -> Main(
+                MainComponent(
+                    componentContext = childComponentContext,
+                    deeplink = configuration.deeplink,
+                )
+            )
+
             is Configuration.Intermediate -> Intermediate()
             is Configuration.Transfer -> Transfer(
                 RootTransferComponent(
@@ -70,6 +77,12 @@ internal class DefaultRootComponent(
             )
         }
 
+    override fun handleDeeplink(deeplink: String) {
+        if (stack.value.active.configuration is Configuration.Main) {
+            (stack.value.active.component2() as? Main)?.component?.handleDeeplink(deeplink)
+        }
+    }
+
     @Serializable
     private sealed interface Configuration {
 
@@ -77,7 +90,9 @@ internal class DefaultRootComponent(
         data object Intermediate : Configuration
 
         @Serializable
-        data object Main : Configuration
+        data class Main(
+            val deeplink: String?,
+        ) : Configuration
 
         @Serializable
         data class Transfer(val state: TransferStateEntity) : Configuration

@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
@@ -20,10 +19,9 @@ import dev.aleksrychkov.scrooge.presentation.screen.transfer.RootTransferContent
 @Composable
 internal fun RootContent(
     modifier: Modifier = Modifier,
-    componentContext: ComponentContext,
+    component: DefaultRootComponent,
     readyCallback: () -> Unit,
 ) {
-    val component = remember { DefaultRootComponent(componentContext = componentContext) }
     RootContent(
         modifier = modifier,
         component = component,

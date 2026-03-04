@@ -13,4 +13,6 @@ internal interface RootComponent {
         class Main(val component: MainComponent) : Child()
         class Transfer(val component: RootTransferComponent) : Child()
     }
+
+    fun handleDeeplink(deeplink: String)
 }

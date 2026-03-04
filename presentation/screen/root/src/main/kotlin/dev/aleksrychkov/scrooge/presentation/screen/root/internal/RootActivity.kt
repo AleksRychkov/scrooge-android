@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,7 +12,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +42,7 @@ internal class RootActivity : ComponentActivity() {
     }
 
     private var module: NaiveModule? = null
+    private lateinit var root: DefaultRootComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -53,8 +54,12 @@ internal class RootActivity : ComponentActivity() {
             splashScreen.setKeepOnScreenCondition { false }
         }
 
+        root = DefaultRootComponent(
+            componentContext = defaultComponentContext(),
+            deeplink = intent.data?.toString(),
+        )
+
         setContent {
-            val componentContext = remember { defaultComponentContext() }
             val theme by theme().collectAsStateWithLifecycle(null)
             val useDarkTheme = when (theme?.type) {
                 ThemeEntity.Type.Light -> false
@@ -75,7 +80,7 @@ internal class RootActivity : ComponentActivity() {
                 AppTheme(useDarkTheme = useDarkTheme ?: isSystemInDarkTheme()) {
                     CompositionLocalProvider(LocalAppTheme provides appTheme) {
                         RootContent(
-                            componentContext = componentContext,
+                            component = root,
                             readyCallback = hideSplashScreen,
                         )
                     }
@@ -83,11 +88,19 @@ internal class RootActivity : ComponentActivity() {
             }
         }
         setupRootModule()
+
+        installAddIncomeShortcut(this)
+        installAddExpenseShortcut(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         module?.let(Naive::remove)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        intent.data?.toString()?.let(root::handleDeeplink)
     }
 
     private fun setupRootModule() {

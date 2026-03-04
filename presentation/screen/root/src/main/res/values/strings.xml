@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scheme" translatable="false">scrooge</string>
+    <string name="deeplink_add_income" translatable="false">scrooge://open/add_income</string>
+    <string name="deeplink_add_expense" translatable="false">scrooge://open/add_expense</string>
+</resources>
