@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_add_circle_24"
+        android:shortcutId="add_income"
+        android:shortcutShortLabel="@string/add_income">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="scrooge://open/add_income"
+            android:targetClass="dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootActivity"
+            android:targetPackage="dev.aleksrychkov.scrooge">
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_remove_circle_24"
+        android:shortcutId="add_expense"
+        android:shortcutShortLabel="@string/add_expense">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="scrooge://open/add_expense"
+            android:targetClass="dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootActivity"
+            android:targetPackage="dev.aleksrychkov.scrooge">
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent>
+    </shortcut>
+
+</shortcuts>

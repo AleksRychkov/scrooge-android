@@ -88,9 +88,6 @@ internal class RootActivity : ComponentActivity() {
             }
         }
         setupRootModule()
-
-        installAddIncomeShortcut(this)
-        installAddExpenseShortcut(this)
     }
 
     override fun onDestroy() {
