@@ -184,8 +184,6 @@
     <string name="limits_daily">Daily</string>
     <string name="limits_weekly">Weekly</string>
     <string name="limits_monthly">Monthly</string>
-    <string name="limits_left">left</string>
-    <string name="limits_over">over</string>
     <string name="limits_delete_confirmation_text">Are you sure you want to delete limit?</string>
     <!-- -->
 </resources>

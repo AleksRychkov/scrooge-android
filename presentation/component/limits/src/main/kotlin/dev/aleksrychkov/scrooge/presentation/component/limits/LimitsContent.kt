@@ -23,7 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -100,6 +103,7 @@ private fun LimitProgress(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = limitProgress.period,
@@ -107,8 +111,20 @@ private fun LimitProgress(
                 style = MaterialTheme.typography.bodyMedium,
             )
 
+            val annotatedString = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontSize = MaterialTheme.typography.labelLarge.fontSize)) {
+                    append(limitProgress.spent)
+                }
+                withStyle(style = SpanStyle(fontSize = MaterialTheme.typography.labelSmall.fontSize)) {
+                    append(" / ")
+                    append(limitProgress.limit)
+                    append(" ")
+                    append(limitProgress.currencySymbol)
+                }
+            }
+
             Text(
-                text = limitProgress.totalInfo,
+                text = annotatedString,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
@@ -173,7 +189,9 @@ private fun LimitsContentPreview() {
                 period = "\uD83D\uDCC5 " + LimitEntity.Period.Daily.name,
                 progress = 1.0f,
                 overflowProgress = 0.25f,
-                totalInfo = "250₽ over",
+                limit = "1 000",
+                spent = "250",
+                currencySymbol = "₽",
             )
             LimitsContent(
                 modifier = Modifier.fillMaxWidth(),

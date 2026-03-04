@@ -7,20 +7,12 @@ import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlin.math.abs
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Immutable
 internal data class LimitsState(
     val isVisible: Boolean = false,
-    val limits: ImmutableList<LimitProgress> = persistentListOf(
-        LimitProgress(
-            period = "\uD83D\uDCC5 " + LimitEntity.Period.Daily.name,
-            progress = 1.0f,
-            overflowProgress = 0.25f,
-            totalInfo = "250₽ over",
-        )
-    )
+    val limits: ImmutableList<LimitProgress> = persistentListOf(),
 )
 
 @Immutable
@@ -28,7 +20,9 @@ internal data class LimitProgress(
     val period: String = "",
     val progress: Float = 0.0f,
     val overflowProgress: Float = 0.0f,
-    val totalInfo: String = "",
+    val limit: String = "",
+    val spent: String = "",
+    val currencySymbol: String = "",
 )
 
 internal fun LimitDataEntity.toLimitProgress(resourceManager: ResourceManager): LimitProgress {
@@ -38,16 +32,13 @@ internal fun LimitDataEntity.toLimitProgress(resourceManager: ResourceManager): 
         LimitEntity.Period.Monthly -> "\uD83D\uDDD3 " + resourceManager.getString(Resources.string.limits_monthly)
     }
     val progress = this.spentAmount / this.limit.amount.toFloat()
-    val totalInfoPrefix = abs(this.limit.amount - this.spentAmount).amountToStringFormatted("")
-    val totalInfoSuffix = if (this.limit.amount - this.spentAmount < 0) {
-        resourceManager.getString(Resources.string.limits_over)
-    } else {
-        resourceManager.getString(Resources.string.limits_left)
-    }
+
     return LimitProgress(
         period = period,
         progress = minOf(1f, progress),
         overflowProgress = maxOf(0f, progress - 1f),
-        totalInfo = "$totalInfoPrefix ${this.limit.currency.currencySymbol} $totalInfoSuffix"
+        limit = this.limit.amount.amountToStringFormatted(""),
+        spent = this.spentAmount.amountToStringFormatted(""),
+        currencySymbol = this.limit.currency.currencySymbol
     )
 }
