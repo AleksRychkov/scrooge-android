@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.doOnResume
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.router.DestinationReportCategoryTotal
@@ -50,12 +51,7 @@ internal class DefaultReportAnnualTotalComponent(
     }
 
     init {
-        retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
-            val initialFilters = FilterEntity.currentYear()
-            _state.value = _state.value.copy(filter = initialFilters)
-            _periodTotalComponent.setFilters(initialFilters)
-            _totalMonthlyComponent.setFilters(initialFilters)
-        }
+        doOnResume(isOneTime = true, block = ::resetFilter)
     }
 
     override val state: StateFlow<ReportAnnualTotalState>
@@ -102,5 +98,11 @@ internal class DefaultReportAnnualTotalComponent(
     override fun openCategoryTotal(period: PeriodDatestampEntity) {
         val filter = state.value.filter.copy(period = period)
         router.open(DestinationReportCategoryTotal(filter = filter))
+    }
+
+    private fun resetFilter() {
+        retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
+            FilterEntity.currentYear().let(::setFilter)
+        }
     }
 }

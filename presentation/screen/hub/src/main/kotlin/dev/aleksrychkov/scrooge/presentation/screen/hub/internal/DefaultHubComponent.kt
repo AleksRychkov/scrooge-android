@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.doOnResume
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
@@ -53,12 +54,7 @@ internal class DefaultHubComponent(
     private val _state = MutableStateFlow(HubState())
 
     init {
-        retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
-            val initialFilters = FilterEntity.currentMonth()
-            _state.value = _state.value.copy(filter = initialFilters)
-            _periodTotalComponent.setFilters(initialFilters)
-            _transactionsListComponent.setFilters(initialFilters)
-        }
+        doOnResume(isOneTime = false, block = ::resetFilter)
     }
 
     override val state: StateFlow<HubState>
@@ -106,5 +102,11 @@ internal class DefaultHubComponent(
         _state.value = _state.value.copy(filter = filter)
         _periodTotalComponent.setFilters(filter)
         _transactionsListComponent.setFilters(filter)
+    }
+
+    private fun resetFilter() {
+        retainedCoroutineScope(dispatcher = Dispatchers.IO).launch {
+            FilterEntity.currentMonth().let(::setFilter)
+        }
     }
 }
