@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal
+package dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value

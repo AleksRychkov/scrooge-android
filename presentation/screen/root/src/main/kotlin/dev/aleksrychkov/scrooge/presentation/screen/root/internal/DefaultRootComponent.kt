@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal
+package dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -9,11 +9,11 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.TransferStateEntity
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
-import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Intermediate
-import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Main
-import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Transfer
 import dev.aleksrychkov.scrooge.feature.transfer.ObserveTransferStateUseCase
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainComponent
+import dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Intermediate
+import dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Main
+import dev.aleksrychkov.scrooge.presentation.screen.root.internal.RootComponent.Child.Transfer
 import dev.aleksrychkov.scrooge.presentation.screen.transfer.RootTransferComponent
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn

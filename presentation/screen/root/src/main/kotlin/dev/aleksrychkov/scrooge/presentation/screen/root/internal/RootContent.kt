@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal
+package dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -13,8 +13,8 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.component.IntermediateContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.root.MainContent
+import dev.aleksrychkov.scrooge.presentation.screen.root.internal.component.IntermediateContent
 import dev.aleksrychkov.scrooge.presentation.screen.transfer.RootTransferContent
 
 @Composable

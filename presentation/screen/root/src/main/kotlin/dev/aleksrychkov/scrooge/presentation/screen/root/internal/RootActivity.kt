@@ -1,4 +1,4 @@
-package dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal
+package dev.aleksrychkov.scrooge.presentation.screen.root.internal
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,11 +25,11 @@ import dev.aleksrychkov.scrooge.core.di.factory
 import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.di.module
 import dev.aleksrychkov.scrooge.core.entity.ThemeEntity
-import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.transfer.DefaultGetExportUriUseCase
-import dev.aleksrychkov.scrooge.dev.aleksrychkov.scrooge.presentation.screen.root.internal.transfer.DefaultGetImportUriUseCase
 import dev.aleksrychkov.scrooge.feature.theme.ObserveThemeUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.GetExportUriUseCase
 import dev.aleksrychkov.scrooge.feature.transfer.GetImportUriUseCase
+import dev.aleksrychkov.scrooge.presentation.screen.root.internal.transfer.DefaultGetExportUriUseCase
+import dev.aleksrychkov.scrooge.presentation.screen.root.internal.transfer.DefaultGetImportUriUseCase
 
 internal class RootActivity : ComponentActivity() {
     private val theme: ObserveThemeUseCase = get()
