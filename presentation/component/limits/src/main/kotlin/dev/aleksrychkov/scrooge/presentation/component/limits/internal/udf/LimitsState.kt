@@ -31,12 +31,23 @@ internal fun LimitDataEntity.toLimitProgress(resourceManager: ResourceManager): 
         LimitEntity.Period.Weekly -> "\uD83D\uDCC6 " + resourceManager.getString(Resources.string.limits_weekly)
         LimitEntity.Period.Monthly -> "\uD83D\uDDD3 " + resourceManager.getString(Resources.string.limits_monthly)
     }
-    val progress = this.spentAmount / this.limit.amount.toFloat()
+    val totalRatio = this.spentAmount / this.limit.amount.toFloat()
+
+    val progress: Float
+    val overflowProgress: Float
+
+    if (totalRatio <= 1f) {
+        progress = totalRatio
+        overflowProgress = 0f
+    } else {
+        progress = 1f / totalRatio
+        overflowProgress = 1f - progress
+    }
 
     return LimitProgress(
         period = period,
-        progress = minOf(1f, progress),
-        overflowProgress = maxOf(0f, progress - 1f),
+        progress = progress,
+        overflowProgress = overflowProgress,
         limit = this.limit.amount.amountToStringFormatted(""),
         spent = this.spentAmount.amountToStringFormatted(""),
         currencySymbol = this.limit.currency.currencySymbol
