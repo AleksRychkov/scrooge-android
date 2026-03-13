@@ -1,0 +1,5 @@
+package dev.aleksrychkov.scrooge.presentation.component.transactionform.internal
+
+import dev.aleksrychkov.scrooge.presentation.component.transactionform.TransactionFormComponent
+
+internal interface TransactionFormComponentInternal : TransactionFormComponent

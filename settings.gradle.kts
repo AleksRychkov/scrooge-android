@@ -70,6 +70,7 @@ include(":presentation:component:period-total")
 include(":presentation:component:settings-theme")
 include(":presentation:component:settings-transfer")
 include(":presentation:component:tags")
+include(":presentation:component:transaction-form")
 include(":presentation:component:transaction-list")
 
 // presentation screen
