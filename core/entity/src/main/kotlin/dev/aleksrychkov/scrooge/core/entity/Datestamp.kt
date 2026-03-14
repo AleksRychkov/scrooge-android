@@ -1,10 +1,13 @@
 package dev.aleksrychkov.scrooge.core.entity
 
+import dev.aleksrychkov.scrooge.core.entity.Datestamp.Companion.now
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format
 import kotlinx.datetime.format.char
+import kotlinx.datetime.minus
 import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
@@ -57,4 +60,17 @@ data class Datestamp(val value: Long) {
         date.atStartOfDayIn(timeZone = timeZone)
 
     fun readableName(): String = date.readableName()
+
+}
+
+fun Datestamp.readableName(
+    today: String,
+    yesterday: String,
+): String {
+    val now = now()
+    return when {
+        now == this -> today
+        this.date == now.date.minus(1, DateTimeUnit.DAY) -> yesterday
+        else -> this.readableName()
+    }
 }

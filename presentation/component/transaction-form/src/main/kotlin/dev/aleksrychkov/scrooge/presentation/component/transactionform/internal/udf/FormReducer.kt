@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.component.transactionform.internal
 
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.amountToString
+import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
@@ -15,8 +16,6 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormCommand.Submit
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormEffect.ShowErrorMessage
 import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.minus
 import kotlin.time.Instant
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -223,17 +222,9 @@ internal class FormReducer(
         }
     }
 
-    private fun Datestamp.toReadable(): String {
-        val today = Datestamp.now()
-        return when {
-            today == this ->
-                resourceManager.getString(Resources.string.today)
-
-            this.date == today.date.minus(1, DateTimeUnit.DAY) ->
-                resourceManager.getString(Resources.string.yesterday)
-
-            else ->
-                this.readableName()
-        }
-    }
+    private fun Datestamp.toReadable(): String =
+        this.readableName(
+            today = resourceManager.getString(Resources.string.today),
+            yesterday = resourceManager.getString(Resources.string.yesterday)
+        )
 }
