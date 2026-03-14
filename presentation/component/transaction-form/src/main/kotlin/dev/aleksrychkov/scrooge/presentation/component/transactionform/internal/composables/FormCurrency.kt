@@ -37,7 +37,6 @@ internal fun FormCurrency(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium,
                 text = currencySymbol,
                 textAlign = TextAlign.Center,
