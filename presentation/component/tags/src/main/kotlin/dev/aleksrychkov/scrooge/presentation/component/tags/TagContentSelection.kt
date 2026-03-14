@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,10 +30,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,29 +57,38 @@ import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsBar
 import dev.aleksrychkov.scrooge.presentation.component.tags.internal.TagComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagEffect
 import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagState
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
-fun TagContent(
+fun TagSelectionContent(
     modifier: Modifier,
     component: TagComponent,
-    callback: (TagEntity?) -> Unit,
+    initialSelection: ImmutableSet<TagEntity>,
+    callback: (Set<TagEntity>) -> Unit,
 ) {
-    TagContent(
+    TagSelectionContent(
         modifier = modifier,
         component = component as TagComponentInternal,
+        initialSelection = initialSelection,
         callback = callback,
     )
 }
 
 @Composable
-private fun TagContent(
+private fun TagSelectionContent(
     modifier: Modifier,
     component: TagComponentInternal,
-    callback: (TagEntity?) -> Unit,
+    initialSelection: ImmutableSet<TagEntity>,
+    callback: (Set<TagEntity>) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -112,7 +125,8 @@ private fun TagContent(
                 .fillMaxSize(),
             component = component,
             contentListState = contentListState,
-            selectTag = callback,
+            initialSelection = initialSelection,
+            callback = callback,
         )
     }
 }
@@ -122,16 +136,40 @@ private fun TagContent(
     modifier: Modifier,
     component: TagComponentInternal,
     contentListState: LazyListState,
-    selectTag: (TagEntity) -> Unit,
+    initialSelection: ImmutableSet<TagEntity>,
+    callback: (ImmutableSet<TagEntity>) -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
+
+    val selectedTags = remember {
+        SnapshotStateList<TagEntity>().also { list ->
+            initialSelection.forEach(list::add)
+        }
+    }
+    LaunchedEffect(component) {
+        snapshotFlow { selectedTags.toList() }
+            .distinctUntilChanged()
+            .onEach { callback(it.toImmutableSet()) }
+            .flowOn(Dispatchers.Default)
+            .launchIn(this)
+    }
 
     TagsList(
         modifier = modifier,
         state = state,
-        selectTag = selectTag,
+        selectedTags = selectedTags,
         contentListState = contentListState,
         deleteTag = component::deleteTag,
+        selectTag = { tag ->
+            if (!selectedTags.contains(tag)) {
+                selectedTags.add(tag)
+            }
+        },
+        unselectTag = { tag ->
+            if (selectedTags.contains(tag)) {
+                selectedTags.remove(tag)
+            }
+        }
     )
 }
 
@@ -139,8 +177,10 @@ private fun TagContent(
 private fun TagsList(
     modifier: Modifier,
     state: TagState,
+    selectedTags: List<TagEntity>,
     contentListState: LazyListState,
     selectTag: (TagEntity) -> Unit,
+    unselectTag: (TagEntity) -> Unit,
     deleteTag: (TagEntity) -> Unit,
 ) {
     Box(
@@ -165,9 +205,11 @@ private fun TagsList(
                 Tag(
                     modifier = Modifier.animateItem(),
                     entity = tag,
+                    isChecked = selectedTags.contains(tag),
                     isEditable = state.isEditable,
-                    selectTag = selectTag,
                     deleteTag = deleteTag,
+                    selectTag = selectTag,
+                    unselectTag = unselectTag,
                 )
             }
 
@@ -199,21 +241,35 @@ private fun TagsList(
 private fun Tag(
     modifier: Modifier = Modifier,
     entity: TagEntity,
+    isChecked: Boolean,
     isEditable: Boolean,
-    selectTag: (TagEntity) -> Unit,
     deleteTag: (TagEntity) -> Unit,
+    selectTag: (TagEntity) -> Unit,
+    unselectTag: (TagEntity) -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = ListItemHeight)
             .clickable {
-                selectTag(entity)
+                if (isChecked) unselectTag(entity) else selectTag(entity)
             }
             .padding(start = Large),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        Checkbox(
+            modifier = Modifier
+                .height(ListItemHeight)
+                .padding(vertical = Normal)
+                .padding(end = Normal)
+                .aspectRatio(1f),
+            checked = isChecked,
+            onCheckedChange = {
+                if (isChecked) unselectTag(entity) else selectTag(entity)
+            },
+        )
+
         Text(
             modifier = Modifier.weight(weight = 1f, fill = true),
             text = entity.name,
@@ -253,6 +309,7 @@ private fun Tag(
                     onClick = {
                         isConfirmationAlertVisible.value = false
                         deleteTag(entity)
+                        unselectTag(entity)
                     }
                 ) {
                     Text(text = stringResource(Resources.string.confirm))

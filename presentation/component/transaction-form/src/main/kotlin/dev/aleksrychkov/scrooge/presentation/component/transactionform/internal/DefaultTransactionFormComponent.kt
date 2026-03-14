@@ -178,12 +178,8 @@ internal class DefaultTransactionFormComponent(
         tagNavigation.dismiss()
     }
 
-    override fun addTag(tag: TagEntity) {
-        store.handle(FormEvent.External.AddTag(tag = tag))
-    }
-
-    override fun removeTag(tag: TagEntity) {
-        store.handle(FormEvent.External.RemoveTag(tag = tag))
+    override fun setTags(tags: Set<TagEntity>) {
+        store.handle(FormEvent.External.SetTags(tags = tags))
     }
     // endregion Tag
 

@@ -52,19 +52,9 @@ internal class FormReducer(
                 }
             }
 
-            is FormEvent.External.AddTag -> state.reduceWith(event) {
+            is FormEvent.External.SetTags -> state.reduceWith(event) {
                 state {
-                    val tmp = tags.toMutableSet()
-                    tmp.add(event.tag)
-                    copy(tags = tmp.toImmutableSet())
-                }
-            }
-
-            is FormEvent.External.RemoveTag -> state.reduceWith(event) {
-                state {
-                    val tmp = tags.toMutableSet()
-                    tmp.remove(event.tag)
-                    copy(tags = tmp.toImmutableSet())
+                    copy(tags = event.tags.toImmutableSet())
                 }
             }
 

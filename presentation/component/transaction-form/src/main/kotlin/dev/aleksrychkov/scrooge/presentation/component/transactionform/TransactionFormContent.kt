@@ -41,6 +41,7 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCurrency
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDate
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDeleteTransaction
+import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormTags
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.NumPad
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormCalculatorModal
@@ -124,6 +125,7 @@ private fun Content(
         onDateSelected = component::updateDate,
         onCurrencyClicked = component::openCurrencyModal,
         onCloseClicked = onCloseClicked,
+        openTagModal = component::openTagModal,
     )
 
     FormCategoryModal(
@@ -131,6 +133,8 @@ private fun Content(
     )
     FormTagModal(
         component = component,
+        tags = state.tags,
+        setTags = component::setTags,
     )
     FromCurrencyModal(
         component = component,
@@ -152,6 +156,7 @@ private fun ContentIme(
     onDateSelected: (Long?) -> Unit,
     onCurrencyClicked: () -> Unit,
     onCloseClicked: () -> Unit,
+    openTagModal: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -172,6 +177,7 @@ private fun ContentIme(
                 onDateSelected = onDateSelected,
                 onCurrencyClicked = onCurrencyClicked,
                 onCloseClicked = onCloseClicked,
+                openTagModal = openTagModal,
             )
         }
     }
@@ -189,6 +195,7 @@ private fun FormContent(
     onDateSelected: (Long?) -> Unit,
     onCurrencyClicked: () -> Unit,
     onCloseClicked: () -> Unit,
+    openTagModal: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -221,25 +228,30 @@ private fun FormContent(
             )
         }
 
-        Box(
+        Box(modifier = Modifier.weight(weight = 1f))
+
+        FormAmount(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            FormAmount(
-                modifier = Modifier,
-                amount = state.amount,
-                currencySymbol = state.currency.currencySymbol,
-            )
-        }
+                .fillMaxWidth(),
+            amount = state.amount,
+            currencySymbol = state.currency.currencySymbol,
+        )
+
+        Box(modifier = Modifier.weight(weight = 1f))
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.End
         ) {
+            FormTags(
+                modifier = Modifier.fillMaxHeight(),
+                openTagModal = openTagModal,
+                tagsCount = state.tags.size,
+            )
+
+            Spacer(modifier = Modifier.weight(weight = 1f))
+
             FormDate(
                 modifier = Modifier.fillMaxHeight(),
                 datestamp = state.datestamp,
@@ -297,7 +309,7 @@ private fun FormContentPreview() {
                 modifier = Modifier.fillMaxSize(),
                 state = FormState(
                     transactionId = 1,
-                    datestampReadable = "Today"
+                    datestampReadable = "Today",
                 ),
                 onSubmitClicked = {},
                 onDeleteClicked = {},
@@ -307,6 +319,7 @@ private fun FormContentPreview() {
                 onDateSelected = { _ -> },
                 onCurrencyClicked = {},
                 onCloseClicked = {},
+                openTagModal = {},
             )
         }
     }

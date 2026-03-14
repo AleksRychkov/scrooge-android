@@ -44,8 +44,7 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
 
     fun openTagModal()
     fun closeTagModal()
-    fun addTag(tag: TagEntity)
-    fun removeTag(tag: TagEntity)
+    fun setTags(tags: Set<TagEntity>)
 
     fun openCalculatorModal()
     fun closeCalculatorModal()

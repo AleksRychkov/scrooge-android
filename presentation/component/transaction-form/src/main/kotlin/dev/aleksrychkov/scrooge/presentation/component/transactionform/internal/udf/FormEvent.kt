@@ -15,8 +15,7 @@ internal sealed interface FormEvent {
         data class SetCategory(val category: CategoryEntity) : External
         data class SetCurrency(val currency: CurrencyEntity) : External
         data class SetDate(val timestamp: Long) : External
-        data class AddTag(val tag: TagEntity) : External
-        data class RemoveTag(val tag: TagEntity) : External
+        data class SetTags(val tags: Set<TagEntity>) : External
         data object Submit : External
         data object Delete : External
         data object SubmitSuccess : External
