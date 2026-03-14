@@ -29,6 +29,7 @@ fun TransactionFormModal(
                 .fillMaxSize()
                 .displayCutoutPadding()
                 .statusBarsPadding(),
+            dragHandle = null,
             sheetState = modalBottomSheetState,
         ) {
             TransactionFormContent(
