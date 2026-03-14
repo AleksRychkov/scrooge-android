@@ -46,7 +46,7 @@ internal fun FormDeleteTransaction(
                 shadow = Shadow(
                     radius = Normal,
                     spread = Tinny,
-                    color = Color.Black.copy(alpha = 0.15f),
+                    color = Color.Black.copy(alpha = 0.25f),
                 )
             )
             .background(

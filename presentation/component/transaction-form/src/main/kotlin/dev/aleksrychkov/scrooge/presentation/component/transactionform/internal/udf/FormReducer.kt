@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.AmountInputTransformation
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormCommand.Delete
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormCommand.Exit
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormCommand.GetLastUsedCurrency
@@ -22,6 +23,10 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 internal class FormReducer(
     private val resourceManager: ResourceManager,
 ) : Reducer<FormState, FormEvent, FormCommand, FormEffect> {
+
+    private val transformation: AmountInputTransformation by lazy {
+        AmountInputTransformation()
+    }
 
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun reduce(
@@ -66,6 +71,21 @@ internal class FormReducer(
             is FormEvent.External.SetAmount -> state.reduceWith(event) {
                 state {
                     copy(amount = event.amount)
+                }
+            }
+
+            is FormEvent.External.AppendAmount -> state.reduceWith(event) {
+                if (event.value.isBlank() || event.value.length > 1) return@reduceWith
+                val newAmount = state.amount + event.value
+                state {
+                    copy(amount = transformation.transform(newAmount))
+                }
+            }
+
+            FormEvent.External.RemoveLastFromAmount -> state.reduceWith(event) {
+                val newAmount = if (state.amount.isBlank()) "" else state.amount.dropLast(1)
+                state {
+                    copy(amount = transformation.transform(newAmount))
                 }
             }
 
@@ -185,7 +205,7 @@ internal class FormReducer(
                     copy(
                         isLoading = false,
                         transactionType = event.entity.type,
-                        amount = event.entity.amount.amountToString(),
+                        amount = transformation.transform(event.entity.amount.amountToString()),
                         datestamp = event.entity.datestamp,
                         datestampReadable = event.entity.datestamp.toReadable(),
                         category = event.entity.category,

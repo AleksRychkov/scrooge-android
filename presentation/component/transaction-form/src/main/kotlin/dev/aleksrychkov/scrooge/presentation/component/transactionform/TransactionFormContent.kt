@@ -35,6 +35,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.TransactionFormComponentInternal
+import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormAmount
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormClose
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormComment
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCurrency
@@ -223,8 +224,15 @@ private fun FormContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
-        )
+                .weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            FormAmount(
+                modifier = Modifier,
+                amount = state.amount,
+                currencySymbol = state.currency.currencySymbol,
+            )
+        }
 
         Row(
             modifier = Modifier

@@ -133,11 +133,11 @@ internal class DefaultTransactionFormComponent(
 
     // region Amount
     override fun appendInput(input: String) {
-        TODO("Not yet implemented")
+        store.handle(FormEvent.External.AppendAmount(value = input))
     }
 
     override fun removeLastFromInput() {
-        TODO("Not yet implemented")
+        store.handle(FormEvent.External.RemoveLastFromAmount)
     }
 
     override fun setAmount(amount: String) {

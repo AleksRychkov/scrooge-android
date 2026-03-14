@@ -71,7 +71,7 @@ internal fun NumPad(
             Spacer(modifier = Modifier.width(Small))
             Pad(
                 text = "0",
-                onClick = { append(".") },
+                onClick = { append("0") },
             )
             Spacer(modifier = Modifier.width(Small))
             Pad(
@@ -127,7 +127,7 @@ private fun RowScope.Pad(
                 containerColor = containerColor,
                 contentColor = contentColor,
             ),
-        debounce = 500.milliseconds,
+        debounce = 100.milliseconds,
         onClick = onClick
     ) {
         content?.invoke() ?: run {
