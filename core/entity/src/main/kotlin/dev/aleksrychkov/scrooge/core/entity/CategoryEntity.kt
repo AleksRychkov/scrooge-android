@@ -16,13 +16,14 @@ data class CategoryEntity(
         const val DEFAULT_ICON_ID = "QuestionMark"
         const val DEFAULT_COLOR = 0xFF212121.toInt()
         fun from(
+            id: Long = 0L,
             name: String,
             type: TransactionType,
             iconId: String = DEFAULT_ICON_ID,
             color: Int = DEFAULT_COLOR,
         ): CategoryEntity =
             CategoryEntity(
-                id = 0L,
+                id = id,
                 name = name,
                 type = type,
                 iconId = iconId,

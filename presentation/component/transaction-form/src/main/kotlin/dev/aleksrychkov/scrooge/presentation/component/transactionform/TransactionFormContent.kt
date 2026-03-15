@@ -42,8 +42,8 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDate
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDeleteTransaction
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormTags
+import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormTransactionType
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.NumPad
-import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormCalculatorModal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormCategoryModal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormTagModal
@@ -217,7 +217,7 @@ private fun FormContent(
                 onCloseClicked = onCloseClicked,
             )
 
-            TransactionType(transactionType = state.transactionType)
+            FormTransactionType(transactionType = state.transactionType)
 
             FormDeleteTransaction(
                 modifier = Modifier

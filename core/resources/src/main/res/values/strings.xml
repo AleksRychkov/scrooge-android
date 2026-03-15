@@ -46,6 +46,7 @@
     <string name="theme">Theme</string>
     <string name="send">Send file</string>
     <string name="limits">Limits</string>
+    <string name="undefined">Undefined</string>
     <string-array name="month_names">
         <item>January</item>
         <item>February</item>

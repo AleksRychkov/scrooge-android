@@ -46,7 +46,7 @@
     <string name="theme">Тема</string>
     <string name="send">Отправить файл</string>
     <string name="limits">Лимиты</string>
-
+    <string name="undefined">Не определена</string>
     <string-array name="month_names">
         <item>Январь</item>
         <item>Февраль</item>

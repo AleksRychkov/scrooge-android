@@ -33,7 +33,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
 @Composable
 @NonRestartableComposable
-internal fun TransactionType(
+internal fun FormTransactionType(
     modifier: Modifier = Modifier,
     transactionType: TransactionType,
 ) {
@@ -71,17 +71,17 @@ internal fun TransactionType(
 @Preview
 @Composable
 @Suppress("UnusedPrivateMember")
-private fun TransactionTypePreview() {
+private fun FormTransactionTypePreview() {
     AppTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            TransactionType(
+            FormTransactionType(
                 transactionType = TransactionType.Income
             )
             Spacer(modifier = Modifier.height(Large))
-            TransactionType(
+            FormTransactionType(
                 transactionType = TransactionType.Expense
             )
         }

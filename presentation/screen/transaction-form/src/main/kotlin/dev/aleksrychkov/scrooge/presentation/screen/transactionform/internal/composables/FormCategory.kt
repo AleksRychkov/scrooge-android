@@ -65,7 +65,11 @@ private fun FormContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             FormCategory(
                 modifier = Modifier.fillMaxWidth(),
-                category = CategoryEntity.from("Transport", TransactionType.Income, "Savings"),
+                category = CategoryEntity.from(
+                    name = "Transport",
+                    type = TransactionType.Income,
+                    iconId = "Savings",
+                ),
                 openCategoryModal = {},
             )
         }

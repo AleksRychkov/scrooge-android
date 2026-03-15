@@ -60,7 +60,6 @@ data class Datestamp(val value: Long) {
         date.atStartOfDayIn(timeZone = timeZone)
 
     fun readableName(): String = date.readableName()
-
 }
 
 fun Datestamp.readableName(
