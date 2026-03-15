@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionform.internal
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
@@ -8,7 +9,6 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.di.get
-import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -18,7 +18,7 @@ import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.presentation.component.calculator.CalculatorComponent
-import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
+import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.CategoryCarouselComponent
 import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormActor
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormEffect
@@ -35,10 +35,15 @@ internal class DefaultTransactionFormComponent(
     private val type: TransactionType,
 ) : TransactionFormComponentInternal, ComponentContext by componentContext {
 
-    private val categoryNavigation = SlotNavigation<TransactionType>()
     private val tagNavigation = SlotNavigation<Unit>()
     private val currencyNavigation = SlotNavigation<Unit>()
     private val calculatorNavigation = SlotNavigation<Unit>()
+
+    private val _categoryCarouselComponent: CategoryCarouselComponent by lazy {
+        CategoryCarouselComponent(
+            componentContext = childContext("TransactionFormComponentCategoryCarousel")
+        )
+    }
 
     private val router: Router by lazy {
         (componentContext as RouterComponentContext).router
@@ -62,18 +67,8 @@ internal class DefaultTransactionFormComponent(
     override val effects: Flow<FormEffect>
         get() = store.effects
 
-    override val categoryModal: Value<ChildSlot<*, CategoryComponent>> =
-        childSlot(
-            source = categoryNavigation,
-            serializer = null,
-            handleBackButton = true,
-            key = "CategoryModalSlot",
-        ) { type, childComponentContext ->
-            CategoryComponent(
-                componentContext = childComponentContext,
-                transactionType = type,
-            )
-        }
+    override val categoryCarouselComponent: CategoryCarouselComponent
+        get() = _categoryCarouselComponent
 
     override val tagModal: Value<ChildSlot<*, TagComponent>> =
         childSlot(
@@ -182,19 +177,5 @@ internal class DefaultTransactionFormComponent(
         store.handle(FormEvent.External.SetTags(tags = tags))
     }
     // endregion Tag
-
-    // region Category
-    override fun openCategoryModal() {
-        categoryNavigation.activate(type)
-    }
-
-    override fun closeCategoryModal() {
-        categoryNavigation.dismiss()
-    }
-
-    override fun setCategory(category: CategoryEntity) {
-        store.handle(FormEvent.External.SetCategory(category = category))
-    }
-    // endregion Category
     // endregion Inputs
 }

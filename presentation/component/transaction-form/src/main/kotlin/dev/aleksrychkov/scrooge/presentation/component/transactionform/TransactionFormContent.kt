@@ -34,8 +34,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.CategoryCarouselComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.TransactionFormComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormAmount
+import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCategory
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormClose
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormComment
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCurrency
@@ -45,7 +47,6 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormTransactionType
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.NumPad
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormCalculatorModal
-import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormCategoryModal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormTagModal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FromCurrencyModal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.udf.FormEffect
@@ -117,6 +118,7 @@ private fun Content(
     ContentIme(
         modifier = modifier,
         state = state,
+        carouselComponent = component.categoryCarouselComponent,
         onSubmitClicked = component::submit,
         onDeleteClicked = component::delete,
         onPadClicked = component::appendInput,
@@ -128,9 +130,6 @@ private fun Content(
         openTagModal = component::openTagModal,
     )
 
-    FormCategoryModal(
-        component = component,
-    )
     FormTagModal(
         component = component,
         tags = state.tags,
@@ -148,6 +147,7 @@ private fun Content(
 private fun ContentIme(
     modifier: Modifier,
     state: FormState,
+    carouselComponent: CategoryCarouselComponent,
     onSubmitClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
     onPadClicked: (String) -> Unit,
@@ -169,6 +169,7 @@ private fun ContentIme(
             FormContent(
                 modifier = Modifier.fillMaxSize(),
                 state = state,
+                carouselComponent = carouselComponent,
                 onSubmitClicked = onSubmitClicked,
                 onDeleteClicked = onDeleteClicked,
                 onPadClicked = onPadClicked,
@@ -184,9 +185,11 @@ private fun ContentIme(
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun FormContent(
     modifier: Modifier,
     state: FormState,
+    carouselComponent: CategoryCarouselComponent,
     onSubmitClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
     onPadClicked: (String) -> Unit,
@@ -280,6 +283,13 @@ private fun FormContent(
 
         Spacer(modifier = Modifier.height(Normal))
 
+        FormCategory(
+            modifier = Modifier.fillMaxWidth(),
+            component = carouselComponent,
+        )
+
+        Spacer(modifier = Modifier.height(Normal))
+
         NumPad(
             modifier = Modifier.fillMaxWidth(),
             append = onPadClicked,
@@ -311,6 +321,7 @@ private fun FormContentPreview() {
                     transactionId = 1,
                     datestampReadable = "Today",
                 ),
+                carouselComponent = CategoryCarouselComponent.stub(),
                 onSubmitClicked = {},
                 onDeleteClicked = {},
                 onPadClicked = { _ -> },

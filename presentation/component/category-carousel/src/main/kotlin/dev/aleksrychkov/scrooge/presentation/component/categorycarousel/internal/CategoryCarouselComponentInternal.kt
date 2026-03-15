@@ -1,0 +1,7 @@
+package dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal
+
+import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.CategoryCarouselComponent
+
+internal interface CategoryCarouselComponentInternal : CategoryCarouselComponent
+
+internal interface CategoryCarouselComponentInternalStub : CategoryCarouselComponentInternal

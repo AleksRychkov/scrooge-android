@@ -64,6 +64,7 @@ listOf(
 include(":presentation:component:calculator")
 include(":presentation:component:currency")
 include(":presentation:component:category")
+include(":presentation:component:category-carousel")
 include(":presentation:component:filters")
 include(":presentation:component:limits")
 include(":presentation:component:period-total")
