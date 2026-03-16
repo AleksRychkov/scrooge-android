@@ -61,13 +61,11 @@ fun TransactionFormContent(
     modifier: Modifier,
     component: TransactionFormComponent,
     scrollState: ScrollState? = null,
-    onDone: () -> Unit,
 ) {
     TransactionFormContent(
         modifier = modifier,
         scrollState = scrollState,
         component = component as TransactionFormComponentInternal,
-        onCloseClicked = onDone,
     )
 }
 
@@ -76,7 +74,6 @@ private fun TransactionFormContent(
     modifier: Modifier,
     component: TransactionFormComponentInternal,
     scrollState: ScrollState? = null,
-    onCloseClicked: () -> Unit,
 ) {
     SideEffects(component = component)
 
@@ -84,7 +81,6 @@ private fun TransactionFormContent(
         modifier = modifier,
         scrollState = scrollState,
         component = component,
-        onCloseClicked = onCloseClicked,
     )
 }
 
@@ -116,7 +112,6 @@ private fun Content(
     modifier: Modifier,
     component: TransactionFormComponentInternal,
     scrollState: ScrollState? = null,
-    onCloseClicked: () -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
 
@@ -136,11 +131,6 @@ private fun Content(
         onCalculatorClicked = component::openCalculatorModal,
     )
 
-    DoneCheck(
-        state = state,
-        onClose = onCloseClicked,
-    )
-
     FormTagModal(
         component = component,
         tags = state.tags,
@@ -152,14 +142,6 @@ private fun Content(
     FormCalculatorModal(
         component = component,
     )
-}
-
-@Composable
-private fun DoneCheck(
-    state: FormState,
-    onClose: () -> Unit,
-) {
-    if (state.isDone) onClose()
 }
 
 @Composable

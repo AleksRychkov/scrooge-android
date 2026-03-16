@@ -59,6 +59,5 @@ private fun FormContent(
         modifier = modifier,
         scrollState = scrollState,
         component = component.formComponent,
-        onDone = component::onBackClicked,
     )
 }

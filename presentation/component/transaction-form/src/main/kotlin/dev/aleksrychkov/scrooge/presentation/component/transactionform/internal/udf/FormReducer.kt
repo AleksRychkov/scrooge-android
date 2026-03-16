@@ -35,18 +35,20 @@ internal class FormReducer(
         return when (event) {
             is FormEvent.External.Init -> state.reduceWith(event) {
                 if (event.transactionId != null) {
-                    command {
-                        listOf(LoadTransaction(transactionId = event.transactionId))
-                    }
                     state {
                         copy(isLoading = true)
+                    }
+                    command {
+                        listOf(LoadTransaction(transactionId = event.transactionId))
                     }
                 } else {
                     command {
                         listOf(GetLastUsedCurrency)
                     }
                     state {
-                        copy(datestampReadable = datestamp.toReadable())
+                        copy(
+                            isLoading = false, datestampReadable = datestamp.toReadable()
+                        )
                     }
                 }
             }
@@ -127,7 +129,7 @@ internal class FormReducer(
 
             FormEvent.Internal.DeleteTransactionSuccess -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = false, isDone = true)
+                    copy(isLoading = false)
                 }
                 command {
                     listOf(Exit)
@@ -182,7 +184,7 @@ internal class FormReducer(
 
             FormEvent.Internal.SubmitTransactionSuccess -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = false, isDone = true)
+                    copy(isLoading = false)
                 }
                 command {
                     listOf(SetLastUsedCurrency(state.currency), Exit)
