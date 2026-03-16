@@ -27,13 +27,9 @@ internal class CategoryCarouselReducer(
 
             is CategoryCarouselEvent.Internal.CategoriesResult -> state.reduceWith(event) {
                 state {
-                    if (selectedCategory == null) {
-                        event.categories.firstOrNull()?.let(callback)
-                    }
                     copy(
                         isLoading = false,
                         carousel = event.categories.map(CarouselItem::map).toImmutableList(),
-                        selectedCategory = selectedCategory ?: event.categories.firstOrNull(),
                     )
                 }
             }
