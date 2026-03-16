@@ -267,7 +267,7 @@ private fun AddIncomeExpense(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = Large, start = Medium),
-                onClick = { component.addExpense() },
+                onClick = { component.openExpenseModal() },
                 icon = {
                     Icon(
                         imageVector = Icons.Rounded.RemoveCircleOutline,

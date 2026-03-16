@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -87,19 +88,6 @@ private fun CategoryCarouselContent(
     Row(
         modifier = modifier
     ) {
-        Box(
-            modifier = Modifier
-                .size(itemSize)
-                .clip(RoundedCornerShape(Normal))
-                .debounceClickable(onClick = onCategoryListClicked),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.FormatListBulleted,
-                contentDescription = null
-            )
-        }
-
         Column(
             modifier = Modifier
                 .padding(start = Small)
@@ -117,10 +105,12 @@ private fun CategoryCarouselContent(
 
             Spacer(modifier = Modifier.height(Tinny))
 
-            val txt = if (state.selectedCategory == null) {
-                stringResource(Resources.string.undefined)
+            val (txt, color) = if (state.selectedCategory == null) {
+                stringResource(Resources.string.undefined) to MaterialTheme.colorScheme.onBackground.copy(
+                    alpha = 0.25f
+                )
             } else {
-                state.selectedCategory.name
+                state.selectedCategory.name to Color.Unspecified
             }
 
             AnimatedContent(
@@ -133,9 +123,23 @@ private fun CategoryCarouselContent(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = txt,
+                    color = color,
                     softWrap = false,
                 )
             }
+        }
+
+        Box(
+            modifier = Modifier
+                .size(itemSize)
+                .clip(RoundedCornerShape(Normal))
+                .debounceClickable(onClick = onCategoryListClicked),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.FormatListBulleted,
+                contentDescription = null
+            )
         }
     }
 }

@@ -126,6 +126,10 @@ internal class DefaultHubComponent(
         formModalNavigation.activate(TransactionType.Income)
     }
 
+    override fun openExpenseModal() {
+        formModalNavigation.activate(TransactionType.Expense)
+    }
+
     override fun closeFormModal() {
         formModalNavigation.dismiss()
     }

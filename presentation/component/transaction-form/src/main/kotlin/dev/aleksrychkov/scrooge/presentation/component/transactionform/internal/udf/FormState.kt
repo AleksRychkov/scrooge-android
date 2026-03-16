@@ -15,6 +15,7 @@ import kotlin.time.ExperimentalTime
 @Immutable
 internal data class FormState(
     val isLoading: Boolean = false,
+    val isDone: Boolean = false,
     val transactionId: Long? = null,
     val transactionType: TransactionType = TransactionType.Expense,
     val amount: String = "",

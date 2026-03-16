@@ -25,6 +25,7 @@ internal interface HubComponentInternal : HubComponent {
     fun addExpense()
 
     fun openIncomeModal()
+    fun openExpenseModal()
     fun closeFormModal()
 
     fun openFiltersModal()

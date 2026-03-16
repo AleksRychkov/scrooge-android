@@ -130,6 +130,11 @@ private fun Content(
         openTagModal = component::openTagModal,
     )
 
+    DoneCheck(
+        state = state,
+        onClose = onCloseClicked,
+    )
+
     FormTagModal(
         component = component,
         tags = state.tags,
@@ -141,6 +146,14 @@ private fun Content(
     FormCalculatorModal(
         component = component,
     )
+}
+
+@Composable
+private fun DoneCheck(
+    state: FormState,
+    onClose: () -> Unit,
+) {
+    if (state.isDone) onClose()
 }
 
 @Composable

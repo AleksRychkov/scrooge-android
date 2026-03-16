@@ -31,6 +31,7 @@ internal class FormActor(
     }
 
     private suspend fun exit(): Flow<FormEvent> {
+        // todo: currently exit implemented with FormState.isDone, fix it
         withContext(Dispatchers.Main) {
             router.close()
         }

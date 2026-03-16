@@ -127,7 +127,7 @@ internal class FormReducer(
 
             FormEvent.Internal.DeleteTransactionSuccess -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = false)
+                    copy(isLoading = false, isDone = true)
                 }
                 command {
                     listOf(Exit)
@@ -182,7 +182,7 @@ internal class FormReducer(
 
             FormEvent.Internal.SubmitTransactionSuccess -> state.reduceWith(event) {
                 state {
-                    copy(isLoading = false)
+                    copy(isLoading = false, isDone = true)
                 }
                 command {
                     listOf(SetLastUsedCurrency(state.currency), Exit)
