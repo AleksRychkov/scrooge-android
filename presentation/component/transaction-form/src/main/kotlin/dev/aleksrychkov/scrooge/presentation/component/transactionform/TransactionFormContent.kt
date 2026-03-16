@@ -4,10 +4,8 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -30,21 +27,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.CategoryCarouselComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.TransactionFormComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormAmount
+import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCalculator
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCategory
-import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormClose
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormComment
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCurrency
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDate
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDeleteTransaction
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormTags
-import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormTransactionType
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.NumPad
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormCalculatorModal
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormTagModal
@@ -126,8 +124,8 @@ private fun Content(
         onCommentChanged = component::updateComment,
         onDateSelected = component::updateDate,
         onCurrencyClicked = component::openCurrencyModal,
-        onCloseClicked = onCloseClicked,
         openTagModal = component::openTagModal,
+        onCalculatorClicked = component::openCalculatorModal,
     )
 
     DoneCheck(
@@ -168,8 +166,8 @@ private fun ContentIme(
     onCommentChanged: (String) -> Unit,
     onDateSelected: (Long?) -> Unit,
     onCurrencyClicked: () -> Unit,
-    onCloseClicked: () -> Unit,
     openTagModal: () -> Unit,
+    onCalculatorClicked: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -190,15 +188,14 @@ private fun ContentIme(
                 onCommentChanged = onCommentChanged,
                 onDateSelected = onDateSelected,
                 onCurrencyClicked = onCurrencyClicked,
-                onCloseClicked = onCloseClicked,
-                openTagModal = openTagModal,
+                onTagClicked = openTagModal,
+                onCalculatorClicked = onCalculatorClicked,
             )
         }
     }
 }
 
 @Composable
-@Suppress("LongMethod")
 private fun FormContent(
     modifier: Modifier,
     state: FormState,
@@ -210,8 +207,8 @@ private fun FormContent(
     onCommentChanged: (String) -> Unit,
     onDateSelected: (Long?) -> Unit,
     onCurrencyClicked: () -> Unit,
-    onCloseClicked: () -> Unit,
-    openTagModal: () -> Unit,
+    onTagClicked: () -> Unit,
+    onCalculatorClicked: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -219,70 +216,25 @@ private fun FormContent(
             .padding(Large),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            FormClose(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f),
-                onCloseClicked = onCloseClicked,
-            )
-
-            FormTransactionType(transactionType = state.transactionType)
-
-            FormDeleteTransaction(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f),
-                transactionId = state.transactionId,
-                onDeleteClicked = onDeleteClicked,
-            )
-        }
-
-        Box(modifier = Modifier.weight(weight = 1f))
-
         FormAmount(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .weight(1f),
             amount = state.amount,
             currencySymbol = state.currency.currencySymbol,
         )
 
-        Box(modifier = Modifier.weight(weight = 1f))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min),
-        ) {
-            FormTags(
-                modifier = Modifier.fillMaxHeight(),
-                openTagModal = openTagModal,
-                tagsCount = state.tags.size,
-            )
-
-            Spacer(modifier = Modifier.weight(weight = 1f))
-
-            FormDate(
-                modifier = Modifier.fillMaxHeight(),
-                datestamp = state.datestamp,
-                datestampReadable = state.datestampReadable,
-                onDateSelected = onDateSelected,
-            )
-
-            Spacer(modifier = Modifier.width(Normal))
-
-            FormCurrency(
-                modifier = Modifier.fillMaxHeight(),
-                currencySymbol = state.currency.currencySymbol,
-                onCurrencyClicked = onCurrencyClicked,
-            )
-        }
+        Controls(
+            modifier = Modifier.fillMaxWidth(),
+            tagsCount = state.tags.size,
+            datestamp = state.datestamp,
+            datestampReadable = state.datestampReadable,
+            currencySymbol = state.currency.currencySymbol,
+            onTagClicked = onTagClicked,
+            onDateSelected = onDateSelected,
+            onCurrencyClicked = onCurrencyClicked,
+            onCalculatorClicked = onCalculatorClicked,
+        )
 
         Spacer(modifier = Modifier.height(Normal))
 
@@ -313,11 +265,59 @@ private fun FormContent(
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = Normal, top = Large),
+                .padding(top = Large),
             onClick = onSubmitClicked,
         ) {
             Text(stringResource(Resources.string.save))
         }
+
+        FormDeleteTransaction(
+            modifier = Modifier.fillMaxWidth(),
+            transactionId = state.transactionId,
+            onDeleteClicked = onDeleteClicked,
+        )
+    }
+}
+
+@Composable
+private fun Controls(
+    modifier: Modifier = Modifier,
+    tagsCount: Int,
+    datestamp: Datestamp,
+    datestampReadable: String,
+    currencySymbol: String,
+    onTagClicked: () -> Unit,
+    onDateSelected: (Long?) -> Unit,
+    onCurrencyClicked: () -> Unit,
+    onCalculatorClicked: () -> Unit,
+) {
+    FlowRow(
+        modifier = modifier.height(54.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        FormTags(
+            modifier = Modifier.fillMaxHeight(),
+            openTagModal = onTagClicked,
+            tagsCount = tagsCount,
+        )
+
+        FormDate(
+            modifier = Modifier.fillMaxHeight(),
+            datestamp = datestamp,
+            datestampReadable = datestampReadable,
+            onDateSelected = onDateSelected,
+        )
+
+        FormCurrency(
+            modifier = Modifier.fillMaxHeight(),
+            currencySymbol = currencySymbol,
+            onCurrencyClicked = onCurrencyClicked,
+        )
+
+        FormCalculator(
+            modifier = Modifier.fillMaxHeight(),
+            onCalculatorClicked = onCalculatorClicked,
+        )
     }
 }
 
@@ -326,7 +326,7 @@ private fun FormContent(
 @Suppress("UnusedPrivateMember")
 private fun FormContentPreview() {
     AppTheme(
-        useDarkTheme = true
+        useDarkTheme = false
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             FormContent(
@@ -343,8 +343,8 @@ private fun FormContentPreview() {
                 onCommentChanged = { _ -> },
                 onDateSelected = { _ -> },
                 onCurrencyClicked = {},
-                onCloseClicked = {},
-                openTagModal = {},
+                onTagClicked = {},
+                onCalculatorClicked = {},
             )
         }
     }

@@ -14,8 +14,10 @@ interface TransactionFormComponent {
             return DefaultTransactionFormComponent(
                 componentContext = componentContext,
                 transactionId = transactionId,
-                type = type,
+                transactionType = type,
             )
         }
     }
+
+    val transactionType: TransactionType
 }

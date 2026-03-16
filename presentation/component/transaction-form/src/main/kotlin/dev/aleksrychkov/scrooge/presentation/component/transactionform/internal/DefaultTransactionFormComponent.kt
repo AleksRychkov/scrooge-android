@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal class DefaultTransactionFormComponent(
     componentContext: ComponentContext,
     private val transactionId: Long?,
-    private val type: TransactionType,
+    override val transactionType: TransactionType,
 ) : TransactionFormComponentInternal, ComponentContext by componentContext {
 
     private val tagNavigation = SlotNavigation<Unit>()
@@ -42,7 +42,7 @@ internal class DefaultTransactionFormComponent(
     private val _categoryCarouselComponent: CategoryCarouselComponent by lazy {
         CategoryCarouselComponent(
             componentContext = childContext("TransactionFormComponentCategoryCarousel"),
-            type = type,
+            type = transactionType,
         ) { category ->
             store.handle(FormEvent.External.SetCategory(category = category))
         }
@@ -55,7 +55,7 @@ internal class DefaultTransactionFormComponent(
     private val store: Store<FormState, FormEvent, FormEffect> by lazy {
         instanceKeeper.createStore(
             initialState = FormState(
-                transactionType = type,
+                transactionType = transactionType,
                 transactionId = transactionId,
             ),
             actor = FormActor(router = router),

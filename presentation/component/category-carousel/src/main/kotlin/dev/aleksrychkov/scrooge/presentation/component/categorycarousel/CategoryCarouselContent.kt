@@ -155,6 +155,7 @@ private fun CarouselContent(
     LazyRow(
         modifier = modifier,
         horizontalArrangement = spacedBy(Small),
+        state = state,
         contentPadding = PaddingValues(horizontal = Normal),
     ) {
         item {
