@@ -286,6 +286,7 @@ private fun FormContent(
         FormCategory(
             modifier = Modifier.fillMaxWidth(),
             component = carouselComponent,
+            category = state.category,
         )
 
         Spacer(modifier = Modifier.height(Normal))

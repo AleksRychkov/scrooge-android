@@ -19,6 +19,8 @@ dependencies {
     implementation(projects.core.udfExtensions)
 
     implementation(projects.feature.category.api)
+
+    implementation(projects.presentation.component.category)
 }
 
 dependencies {

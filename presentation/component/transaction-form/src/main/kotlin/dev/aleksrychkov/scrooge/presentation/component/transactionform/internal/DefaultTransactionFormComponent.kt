@@ -41,8 +41,11 @@ internal class DefaultTransactionFormComponent(
 
     private val _categoryCarouselComponent: CategoryCarouselComponent by lazy {
         CategoryCarouselComponent(
-            componentContext = childContext("TransactionFormComponentCategoryCarousel")
-        )
+            componentContext = childContext("TransactionFormComponentCategoryCarousel"),
+            type = type,
+        ) { category ->
+            store.handle(FormEvent.External.SetCategory(category = category))
+        }
     }
 
     private val router: Router by lazy {
