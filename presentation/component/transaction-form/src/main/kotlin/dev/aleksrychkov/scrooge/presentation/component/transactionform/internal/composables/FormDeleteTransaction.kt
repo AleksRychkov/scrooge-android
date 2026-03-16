@@ -28,7 +28,7 @@ internal fun FormDeleteTransaction(
     }
     val showModal = remember { mutableStateOf(false) }
     TextButton(
-        modifier = modifier.padding(vertical = Normal),
+        modifier = modifier.padding(top = Normal),
         shape = MaterialTheme.shapes.large,
         onClick = {
             showModal.value = true

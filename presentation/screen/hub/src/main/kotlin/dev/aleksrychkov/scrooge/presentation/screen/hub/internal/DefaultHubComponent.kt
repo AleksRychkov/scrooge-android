@@ -10,7 +10,6 @@ import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.doOnResume
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
-import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.router.DestinationTransactionForm
 import dev.aleksrychkov.scrooge.core.router.Router
 import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
@@ -18,7 +17,6 @@ import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.limits.LimitsComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
-import dev.aleksrychkov.scrooge.presentation.component.transactionform.TransactionFormComponent
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +28,6 @@ internal class DefaultHubComponent(
     private val componentContext: ComponentContext,
 ) : HubComponentInternal, ComponentContext by componentContext {
     private val filtersNavigation = SlotNavigation<FilterEntity>()
-    private val formModalNavigation = SlotNavigation<TransactionType>()
 
     private val router: Router by lazy {
         (componentContext as RouterComponentContext).router
@@ -76,20 +73,6 @@ internal class DefaultHubComponent(
             )
         }
 
-    override val formModal: Value<ChildSlot<*, TransactionFormComponent>> =
-        childSlot(
-            source = formModalNavigation,
-            serializer = null,
-            handleBackButton = true,
-            key = "TransactionFormModalSlot",
-        ) { type, childComponentContext ->
-            TransactionFormComponent(
-                componentContext = childComponentContext,
-                transactionId = null,
-                type = type,
-            )
-        }
-
     override val periodTotalComponent: PeriodTotalComponent
         get() = _periodTotalComponent
 
@@ -120,18 +103,6 @@ internal class DefaultHubComponent(
         _periodTotalComponent.setFilters(filter)
         _transactionsListComponent.setFilters(filter)
         _limitsComponent.setFilter(filter)
-    }
-
-    override fun openIncomeModal() {
-        formModalNavigation.activate(TransactionType.Income)
-    }
-
-    override fun openExpenseModal() {
-        formModalNavigation.activate(TransactionType.Expense)
-    }
-
-    override fun closeFormModal() {
-        formModalNavigation.dismiss()
     }
 
     private fun resetFilter() {

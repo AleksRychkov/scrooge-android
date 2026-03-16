@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal class DefaultTransactionFormComponent(
     componentContext: ComponentContext,
     private val transactionId: Long?,
-    override val transactionType: TransactionType,
+    private val transactionType: TransactionType,
 ) : TransactionFormComponentInternal, ComponentContext by componentContext {
 
     private val tagNavigation = SlotNavigation<Unit>()
@@ -108,6 +108,10 @@ internal class DefaultTransactionFormComponent(
                 componentContext = childComponentContext,
             )
         }
+
+    override fun onSaveClicked() {
+        store.handle(FormEvent.External.Submit)
+    }
 
     // region Inputs
     override fun submit() {

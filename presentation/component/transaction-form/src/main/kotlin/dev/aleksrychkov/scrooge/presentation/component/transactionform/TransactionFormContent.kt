@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionform
 
 import android.widget.Toast
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.CategoryCarouselComponent
@@ -58,10 +60,12 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun TransactionFormContent(
     modifier: Modifier,
     component: TransactionFormComponent,
+    scrollState: ScrollState? = null,
     onDone: () -> Unit,
 ) {
     TransactionFormContent(
         modifier = modifier,
+        scrollState = scrollState,
         component = component as TransactionFormComponentInternal,
         onCloseClicked = onDone,
     )
@@ -71,12 +75,14 @@ fun TransactionFormContent(
 private fun TransactionFormContent(
     modifier: Modifier,
     component: TransactionFormComponentInternal,
+    scrollState: ScrollState? = null,
     onCloseClicked: () -> Unit,
 ) {
     SideEffects(component = component)
 
     Content(
         modifier = modifier,
+        scrollState = scrollState,
         component = component,
         onCloseClicked = onCloseClicked,
     )
@@ -109,6 +115,7 @@ private fun SideEffects(component: TransactionFormComponentInternal) {
 private fun Content(
     modifier: Modifier,
     component: TransactionFormComponentInternal,
+    scrollState: ScrollState? = null,
     onCloseClicked: () -> Unit,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
@@ -116,6 +123,7 @@ private fun Content(
     ContentIme(
         modifier = modifier,
         state = state,
+        scrollState = scrollState,
         carouselComponent = component.categoryCarouselComponent,
         onSubmitClicked = component::submit,
         onDeleteClicked = component::delete,
@@ -158,6 +166,7 @@ private fun DoneCheck(
 private fun ContentIme(
     modifier: Modifier,
     state: FormState,
+    scrollState: ScrollState? = null,
     carouselComponent: CategoryCarouselComponent,
     onSubmitClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
@@ -180,6 +189,7 @@ private fun ContentIme(
             FormContent(
                 modifier = Modifier.fillMaxSize(),
                 state = state,
+                scrollState = scrollState,
                 carouselComponent = carouselComponent,
                 onSubmitClicked = onSubmitClicked,
                 onDeleteClicked = onDeleteClicked,
@@ -199,6 +209,7 @@ private fun ContentIme(
 private fun FormContent(
     modifier: Modifier,
     state: FormState,
+    scrollState: ScrollState? = null,
     carouselComponent: CategoryCarouselComponent,
     onSubmitClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
@@ -212,17 +223,20 @@ private fun FormContent(
 ) {
     Column(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(Large),
+            .verticalScroll(scrollState ?: rememberScrollState())
+            .padding(horizontal = Large)
+            .padding(bottom = Medium),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.weight(1f))
+
         FormAmount(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
+            modifier = Modifier.fillMaxWidth(),
             amount = state.amount,
             currencySymbol = state.currency.currencySymbol,
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Controls(
             modifier = Modifier.fillMaxWidth(),

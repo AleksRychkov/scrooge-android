@@ -16,7 +16,6 @@ dependencies {
     implementation(projects.presentation.component.limits)
     implementation(projects.presentation.component.periodTotal)
     implementation(projects.presentation.component.transactionList)
-    implementation(projects.presentation.component.transactionForm)
 
     implementation(projects.core.designSystem)
     implementation(projects.core.di)

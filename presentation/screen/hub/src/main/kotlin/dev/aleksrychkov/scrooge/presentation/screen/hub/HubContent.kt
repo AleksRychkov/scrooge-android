@@ -56,7 +56,6 @@ import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalCo
 import dev.aleksrychkov.scrooge.presentation.component.transactionlist.TransactionsListContent
 import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.HubComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.modal.FiltersModal
-import dev.aleksrychkov.scrooge.presentation.screen.hub.internal.modal.FormModal
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
@@ -98,7 +97,6 @@ private fun HubContent(
         )
     }
     FiltersModal(component = component)
-    FormModal(component = component)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -248,7 +246,7 @@ private fun AddIncomeExpense(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = Large, end = Medium),
-                onClick = { component.openIncomeModal() },
+                onClick = { component.addIncome() },
                 icon = {
                     Icon(
                         imageVector = Icons.Rounded.AddCircleOutline,
@@ -267,7 +265,7 @@ private fun AddIncomeExpense(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = Large, start = Medium),
-                onClick = { component.openExpenseModal() },
+                onClick = { component.addExpense() },
                 icon = {
                     Icon(
                         imageVector = Icons.Rounded.RemoveCircleOutline,

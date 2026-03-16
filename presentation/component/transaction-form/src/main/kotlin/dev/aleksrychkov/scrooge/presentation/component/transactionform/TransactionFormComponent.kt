@@ -19,5 +19,5 @@ interface TransactionFormComponent {
         }
     }
 
-    val transactionType: TransactionType
+    fun onSaveClicked()
 }
