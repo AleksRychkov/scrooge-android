@@ -9,7 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
@@ -25,21 +26,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.CategoryCarouselComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.modal.CategoryModal
@@ -85,62 +86,59 @@ private fun CategoryCarouselContent(
     onCategoryListClicked: () -> Unit,
 ) {
     val itemSize = 56.dp
-    Row(
+
+    Column(
         modifier = modifier
     ) {
-        Column(
+        CarouselContent(
             modifier = Modifier
-                .padding(start = Small)
-                .weight(1f)
-        ) {
-            CarouselContent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(itemSize),
-                list = state.carousel,
-                itemSize = itemSize,
-                selected = state.selectedCategory,
-                onItemClicked = onItemClicked,
-            )
+                .fillMaxWidth()
+                .height(itemSize),
+            list = state.carousel,
+            itemSize = itemSize,
+            selected = state.selectedCategory,
+            onItemClicked = onItemClicked,
+            onCategoryListClicked = onCategoryListClicked,
+        )
 
-            Spacer(modifier = Modifier.height(Tinny))
+        Spacer(modifier = Modifier.height(Medium))
 
-            val (txt, color) = if (state.selectedCategory == null) {
-                stringResource(Resources.string.undefined) to MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = 0.25f
-                )
-            } else {
-                state.selectedCategory.name to Color.Unspecified
-            }
-
-            AnimatedContent(
-                modifier = Modifier.fillMaxWidth(),
-                targetState = txt,
-                transitionSpec = {
-                    slideInVertically { -it } togetherWith slideOutVertically { it }
-                }
-            ) { txt ->
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = txt,
-                    color = color,
-                    softWrap = false,
-                )
-            }
-        }
-
-        Box(
+        SelectedCategory(
             modifier = Modifier
-                .size(itemSize)
-                .clip(RoundedCornerShape(Normal))
-                .debounceClickable(onClick = onCategoryListClicked),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.FormatListBulleted,
-                contentDescription = null
-            )
+                .fillMaxWidth()
+                .padding(horizontal = Normal),
+            category = state.selectedCategory,
+        )
+    }
+}
+
+@Composable
+private fun SelectedCategory(
+    modifier: Modifier,
+    category: CategoryEntity?,
+) {
+    val (txt, color) = if (category == null) {
+        stringResource(Resources.string.undefined) to MaterialTheme.colorScheme.onBackground.copy(
+            alpha = 0.25f
+        )
+    } else {
+        category.name to MaterialTheme.colorScheme.primary
+    }
+
+    AnimatedContent(
+        modifier = modifier,
+        targetState = txt,
+        transitionSpec = {
+            slideInVertically { -it } togetherWith slideOutVertically { it }
         }
+    ) { txt ->
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = txt,
+            color = color,
+            textAlign = TextAlign.Center,
+            softWrap = false,
+        )
     }
 }
 
@@ -151,11 +149,33 @@ private fun CarouselContent(
     itemSize: Dp,
     selected: CategoryEntity?,
     onItemClicked: (CarouselItem) -> Unit,
+    onCategoryListClicked: () -> Unit,
 ) {
+    val state = rememberLazyListState()
     LazyRow(
         modifier = modifier,
         horizontalArrangement = spacedBy(Small),
+        contentPadding = PaddingValues(horizontal = Normal),
     ) {
+        item {
+            Box(
+                modifier = Modifier
+                    .size(itemSize)
+                    .clip(RoundedCornerShape(Normal))
+                    .debounceClickable(onClick = onCategoryListClicked)
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.15f))
+                        .padding(Normal),
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    imageVector = Icons.AutoMirrored.Filled.FormatListBulleted,
+                    contentDescription = null,
+                )
+            }
+        }
+
         items(
             items = list,
             key = { item -> item.id }
@@ -179,6 +199,11 @@ private fun CarouselContent(
                     contentDescription = null,
                 )
             }
+        }
+    }
+    LaunchedEffect(selected) {
+        if (selected != null) {
+            state.animateScrollToItem(list.indexOfFirst { it.id == selected.id })
         }
     }
 }

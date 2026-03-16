@@ -24,7 +24,7 @@ internal fun FormCategory(
         CategoryCarouselContent(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Normal),
+                .padding(vertical = Normal),
             component = component,
         )
     }

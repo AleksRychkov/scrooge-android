@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal class DefaultCategoryCarouselComponent(
     componentContext: ComponentContext,
     private val type: TransactionType,
-    private val callback: (CategoryEntity) -> Unit,
+    callback: (CategoryEntity) -> Unit,
 ) : CategoryCarouselComponentInternal, ComponentContext by componentContext {
     private val categoryNavigation = SlotNavigation<TransactionType>()
     override val categoryModal: Value<ChildSlot<*, CategoryComponent>> =
@@ -41,7 +41,7 @@ internal class DefaultCategoryCarouselComponent(
         instanceKeeper.createStore(
             initialState = CategoryCarouselState(),
             actor = CategoryCarouselActor(),
-            reducer = CategoryCarouselReducer(),
+            reducer = CategoryCarouselReducer(callback = callback), // todo: don't like it
             startEvent = CategoryCarouselEvent.External.ObserveCategories(type = type),
         )
     }
@@ -51,7 +51,6 @@ internal class DefaultCategoryCarouselComponent(
 
     override fun selectItem(item: CarouselItem) {
         store.handle(CategoryCarouselEvent.External.SelectCategory(category = item.ref))
-        callback(item.ref)
     }
 
     // region Category
@@ -66,7 +65,6 @@ internal class DefaultCategoryCarouselComponent(
     override fun setCategory(category: CategoryEntity) {
         if (state.value.selectedCategory == category) return
         store.handle(CategoryCarouselEvent.External.SelectCategory(category = category))
-        callback(category)
     }
     // endregion Category
 }

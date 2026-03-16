@@ -1,12 +1,15 @@
 package dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.udf
 
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.udf.CategoryCarouselCommand.ObserveCategories
 import kotlinx.collections.immutable.toImmutableList
 
-internal class CategoryCarouselReducer :
+internal class CategoryCarouselReducer(
+    private val callback: (CategoryEntity) -> Unit,
+) :
     Reducer<CategoryCarouselState, CategoryCarouselEvent, CategoryCarouselCommand, Unit> {
     override fun reduce(
         event: CategoryCarouselEvent,
@@ -24,14 +27,19 @@ internal class CategoryCarouselReducer :
 
             is CategoryCarouselEvent.Internal.CategoriesResult -> state.reduceWith(event) {
                 state {
+                    if (selectedCategory == null) {
+                        event.categories.firstOrNull()?.let(callback)
+                    }
                     copy(
                         isLoading = false,
                         carousel = event.categories.map(CarouselItem::map).toImmutableList(),
+                        selectedCategory = selectedCategory ?: event.categories.firstOrNull(),
                     )
                 }
             }
 
             is CategoryCarouselEvent.External.SelectCategory -> state.reduceWith(event) {
+                callback(event.category)
                 state {
                     copy(selectedCategory = event.category)
                 }
