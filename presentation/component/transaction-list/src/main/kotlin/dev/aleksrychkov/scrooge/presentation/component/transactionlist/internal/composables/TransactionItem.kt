@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Comment
 import androidx.compose.material3.Icon
@@ -23,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,9 +30,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsCategoryItem
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
-import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
@@ -65,17 +63,13 @@ internal fun TransactionItem(
             TransactionType.Income -> IncomeColor
             TransactionType.Expense -> ExpenseColor
         }
-        Icon(
-            modifier = Modifier
-                .height(CategoryIconSize)
-                .width(CategoryIconSize)
-                .clip(CircleShape)
-                .background(Color(transaction.categoryColor))
-                .padding(Normal),
-            tint = Color.White,
-            imageVector = transaction.categoryIcon.icon,
-            contentDescription = null,
+
+        DsCategoryItem(
+            color = transaction.categoryColor,
+            tint = transaction.categoryTint,
+            imageVector = transaction.categoryIcon,
         )
+
         Column(
             modifier = Modifier.padding(start = Normal),
             verticalArrangement = Arrangement.Center,
@@ -189,8 +183,9 @@ private fun FormContentPreview() {
                 transaction = TransactionsItem.Item(
                     id = 0L,
                     categoryName = TransactionEntity.DUMMY.category.name,
-                    categoryColor = TransactionEntity.DUMMY.category.color,
-                    categoryIcon = UncategorizedIcon,
+                    categoryColor = Color(TransactionEntity.DUMMY.category.color),
+                    categoryTint = Color(TransactionEntity.DUMMY.category.color),
+                    categoryIcon = UncategorizedIcon.icon,
                     amount = "+123,00 $",
                     type = TransactionType.Income,
                     tags = longText,

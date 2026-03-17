@@ -506,7 +506,7 @@ private fun ContentPreview() {
                 selectedMonths = persistentListOf(12),
                 selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
                 selectedType = null,
-                category = CategoryEntity.from("Transport", TransactionType.Expense),
+                category = CategoryEntity.from(name = "Transport", type = TransactionType.Expense),
                 onYearClicked = {},
                 onYearLongClicked = {},
                 onMonthClicked = {},

@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 
 @Composable
 fun DsSecondaryCard(
@@ -14,7 +15,7 @@ fun DsSecondaryCard(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clip(ShapeDefaults.Large),
         shape = ShapeDefaults.Large,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondary,

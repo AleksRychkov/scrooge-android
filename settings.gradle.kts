@@ -64,12 +64,14 @@ listOf(
 include(":presentation:component:calculator")
 include(":presentation:component:currency")
 include(":presentation:component:category")
+include(":presentation:component:category-carousel")
 include(":presentation:component:filters")
 include(":presentation:component:limits")
 include(":presentation:component:period-total")
 include(":presentation:component:settings-theme")
 include(":presentation:component:settings-transfer")
 include(":presentation:component:tags")
+include(":presentation:component:transaction-form")
 include(":presentation:component:transaction-list")
 
 // presentation screen

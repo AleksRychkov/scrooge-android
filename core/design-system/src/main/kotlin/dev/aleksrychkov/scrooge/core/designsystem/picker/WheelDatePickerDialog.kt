@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.core.designsystem.picker
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -90,6 +91,12 @@ private fun Content(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Large, vertical = Normal),
+            contentPadding = PaddingValues(
+                start = Normal,
+                top = Large,
+                end = Normal,
+                bottom = Large,
+            ),
             onClick = {
                 onDismiss.invoke()
                 onDateSelected(selectedDate)

@@ -10,8 +10,19 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+
+val DEFAULT_DEBOUNCE = 500.milliseconds
 
 @Composable
 fun DsButton(
@@ -28,10 +39,24 @@ fun DsButton(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource? = null,
+    debounce: Duration? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
+    var debounceFilter by remember { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
     Button(
-        onClick = onClick,
+        onClick = {
+            if (debounceFilter) {
+                onClick()
+                if (debounce != null) {
+                    debounceFilter = false
+                    scope.launch {
+                        delay(debounce)
+                        debounceFilter = true
+                    }
+                }
+            }
+        },
         modifier = modifier,
         enabled = enabled,
         shape = shape,

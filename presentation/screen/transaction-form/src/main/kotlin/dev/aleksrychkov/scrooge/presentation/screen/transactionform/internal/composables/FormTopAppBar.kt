@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -32,6 +32,8 @@ const val MINIMAL_SCROLL_VALUE_TO_CAST_SHADOW = 10
 internal fun FormTopAppBar(
     component: TransactionFormComponentInternal,
     scrollState: ScrollState,
+    transactionId: Long?,
+    transactionType: TransactionType,
 ) {
     val headerElevation by remember {
         derivedStateOf {
@@ -43,16 +45,16 @@ internal fun FormTopAppBar(
         }
     }
     val animatedElevation by headerElevation.animateElevation()
-    val state by component.state.collectAsStateWithLifecycle()
 
     Surface(
         Modifier.fillMaxWidth(),
         shadowElevation = animatedElevation,
     ) {
         FormTopAppBar(
-            isEditing = state.transactionId != null,
-            type = state.transactionType,
+            isEditing = transactionId != null,
+            type = transactionType,
             onBackClicked = component::onBackClicked,
+            onSaveClicked = component::onSaveClicked,
         )
     }
 }
@@ -63,6 +65,7 @@ private fun FormTopAppBar(
     isEditing: Boolean,
     type: TransactionType,
     onBackClicked: () -> Unit,
+    onSaveClicked: () -> Unit,
 ) {
     val title: String
 
@@ -100,5 +103,13 @@ private fun FormTopAppBar(
                 )
             }
         },
+        actions = {
+            IconButton(onClick = onSaveClicked) {
+                Icon(
+                    imageVector = Icons.Rounded.Save,
+                    contentDescription = stringResource(Resources.string.save),
+                )
+            }
+        }
     )
 }

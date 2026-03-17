@@ -26,7 +26,7 @@ data class TransactionEntity(
             amount = 125,
             datestamp = Datestamp.now(),
             type = TransactionType.Income,
-            category = CategoryEntity.from("Category", TransactionType.Income),
+            category = CategoryEntity.from(name = "Category", type = TransactionType.Income),
             tags = persistentSetOf(TagEntity(0L, "tag1")),
             currency = CurrencyEntity.RUB,
         )

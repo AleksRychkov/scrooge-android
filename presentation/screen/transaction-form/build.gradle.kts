@@ -12,10 +12,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.presentation.component.calculator)
-    implementation(projects.presentation.component.category)
-    implementation(projects.presentation.component.currency)
-    implementation(projects.presentation.component.tags)
+    implementation(projects.presentation.component.transactionForm)
 
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
@@ -23,9 +20,6 @@ dependencies {
     implementation(projects.core.resources)
     implementation(projects.core.router)
     implementation(projects.core.udfExtensions)
-
-    implementation(projects.feature.currency.api)
-    implementation(projects.feature.transaction.api)
 }
 
 dependencies {

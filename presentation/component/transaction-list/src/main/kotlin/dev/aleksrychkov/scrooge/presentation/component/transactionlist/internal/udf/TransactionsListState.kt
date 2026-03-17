@@ -1,9 +1,10 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.paging.PagingData
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
-import dev.aleksrychkov.scrooge.core.resources.CategoryIcon
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
@@ -27,8 +28,9 @@ internal sealed interface TransactionsItem {
     data class Item(
         val id: Long,
         val categoryName: String,
-        val categoryIcon: CategoryIcon,
-        val categoryColor: Int,
+        val categoryIcon: ImageVector,
+        val categoryColor: Color,
+        val categoryTint: Color,
         val amount: String,
         val type: TransactionType,
         val tags: String,

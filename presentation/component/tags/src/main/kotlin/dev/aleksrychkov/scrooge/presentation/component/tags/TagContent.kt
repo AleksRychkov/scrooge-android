@@ -6,12 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,12 +25,10 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,19 +41,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
-import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
-import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
-import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
+import dev.aleksrychkov.scrooge.presentation.component.tags.composable.TagsBar
 import dev.aleksrychkov.scrooge.presentation.component.tags.internal.TagComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagEffect
 import dev.aleksrychkov.scrooge.presentation.component.tags.internal.udf.TagState
@@ -85,7 +77,6 @@ private fun TagContent(
     component: TagComponentInternal,
     callback: (TagEntity?) -> Unit,
 ) {
-    val state by component.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     DisposableEffect(component) {
@@ -108,7 +99,7 @@ private fun TagContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TagBar(
+            TagsBar(
                 modifier = Modifier.fillMaxWidth(),
                 component = component,
                 contentListState = contentListState,
@@ -277,59 +268,5 @@ private fun Tag(
                 }
             },
         )
-    }
-}
-
-@Composable
-private fun TagBar(
-    modifier: Modifier,
-    component: TagComponentInternal,
-    contentListState: LazyListState,
-) {
-    val state by component.state.collectAsStateWithLifecycle()
-
-    val headerElevation by remember {
-        derivedStateOf {
-            if (contentListState.firstVisibleItemScrollOffset > 0 ||
-                contentListState.firstVisibleItemIndex != 0
-            ) {
-                AppBarShadow
-            } else {
-                0.dp
-            }
-        }
-    }
-    val animatedElevation by headerElevation.animateElevation()
-    Surface(
-        Modifier.fillMaxWidth(),
-        shadowElevation = animatedElevation,
-    ) {
-        Row(
-            modifier = modifier
-                .height(IntrinsicSize.Max)
-                .padding(Large),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier.weight(weight = 1f, fill = true),
-            ) {
-                DsSearchTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = state.searchQuery,
-                    onValueChanged = component::setSearchQuery,
-                )
-            }
-
-            if (state.isEditable) {
-                DsButton(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(start = Normal),
-                    onClick = component::addNewTag,
-                ) {
-                    Text(text = stringResource(Resources.string.add))
-                }
-            }
-        }
     }
 }
