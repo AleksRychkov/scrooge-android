@@ -60,11 +60,11 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsCategoryItem
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsSearchTextField
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
-import dev.aleksrychkov.scrooge.core.designsystem.theme.CategoryIconSize
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ListItemHeight
@@ -72,11 +72,10 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
-import dev.aleksrychkov.scrooge.core.resources.CategoryIcons
-import dev.aleksrychkov.scrooge.core.resources.UncategorizedIcon
 import dev.aleksrychkov.scrooge.presentation.component.category.internal.CategoryComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.category.internal.modal.CreateCategoryModal
 import dev.aleksrychkov.scrooge.presentation.component.category.internal.udf.CategoryEffect
+import dev.aleksrychkov.scrooge.presentation.component.category.internal.udf.CategoryItem
 import dev.aleksrychkov.scrooge.presentation.component.category.internal.udf.CategoryState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.FlowPreview
@@ -198,7 +197,7 @@ private fun CategoryList(
         }
     LaunchedEffect(reorderableList) {
         delay(SWAP_ORDER_INDEX_DEBOUNCE_DURATION)
-        reorderableList.mapIndexed { index, entity -> entity.id to index }.let(swapOrder)
+        reorderableList.mapIndexed { index, entity -> entity.ref.id to index }.let(swapOrder)
     }
     Box(
         modifier = modifier
@@ -257,7 +256,7 @@ private fun CategoryList(
 }
 
 private fun LazyListScope.reorderableList(
-    list: List<CategoryEntity>,
+    list: List<CategoryItem>,
     isEditable: Boolean,
     reorderableLazyColumnState: ReorderableLazyListState,
     selectCategory: (CategoryEntity) -> Unit,
@@ -266,13 +265,16 @@ private fun LazyListScope.reorderableList(
 ) {
     items(
         list,
-        key = { category -> "${category.id}-${category.type.type}" }
+        key = { category -> "${category.ref.id}-${category.ref.type.type}" }
     ) { category ->
-        ReorderableItem(reorderableLazyColumnState, "${category.id}-${category.type.type}") {
+        ReorderableItem(
+            reorderableLazyColumnState,
+            "${category.ref.id}-${category.ref.type.type}"
+        ) {
             val interactionSource = remember { MutableInteractionSource() }
             Category(
                 modifier = Modifier.animateItem(),
-                entity = category,
+                item = category,
                 isEditable = isEditable,
                 selectCategory = selectCategory,
                 deleteCategory = deleteCategory,
@@ -292,7 +294,7 @@ private fun LazyListScope.reorderableList(
 }
 
 private fun LazyListScope.ordinalList(
-    list: ImmutableList<CategoryEntity>,
+    list: ImmutableList<CategoryItem>,
     isEditable: Boolean,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
@@ -300,11 +302,11 @@ private fun LazyListScope.ordinalList(
 ) {
     items(
         items = list,
-        key = { category -> "${category.id}-${category.type.type}" }
+        key = { category -> "${category.ref.id}-${category.ref.type.type}" }
     ) { category ->
         Category(
             modifier = Modifier.animateItem(),
-            entity = category,
+            item = category,
             isEditable = isEditable,
             selectCategory = selectCategory,
             deleteCategory = deleteCategory,
@@ -317,7 +319,7 @@ private fun LazyListScope.ordinalList(
 private fun Category(
     modifier: Modifier = Modifier,
     isEditable: Boolean,
-    entity: CategoryEntity,
+    item: CategoryItem,
     selectCategory: (CategoryEntity) -> Unit,
     deleteCategory: (CategoryEntity) -> Unit,
     editCategory: (CategoryEntity) -> Unit,
@@ -327,7 +329,7 @@ private fun Category(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = ListItemHeight)
-            .debounceClickable { selectCategory(entity) }
+            .debounceClickable { selectCategory(item.ref) }
             .padding(end = Medium),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -336,29 +338,22 @@ private fun Category(
             Spacer(modifier = Modifier.width(Large))
         }
 
-        Icon(
-            modifier = Modifier
-                .height(CategoryIconSize)
-                .width(CategoryIconSize)
-                .clip(CircleShape)
-                .background(Color(entity.color))
-                .padding(Normal),
-            tint = Color.White,
-            imageVector = CategoryIcons.find { it.id == entity.iconId }?.icon
-                ?: UncategorizedIcon.icon,
-            contentDescription = null,
+        DsCategoryItem(
+            color = item.color,
+            tint = item.tint,
+            imageVector = item.imageVector,
         )
 
         Text(
             modifier = Modifier
                 .weight(weight = 1f, fill = true)
                 .padding(start = Normal),
-            text = entity.name,
+            text = item.ref.name,
         )
 
         if (!isEditable) return
         CategoryOptions(
-            entity = entity,
+            entity = item.ref,
             deleteCategory = deleteCategory,
             editCategory = editCategory,
         )

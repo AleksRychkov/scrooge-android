@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.category.internal
 
+import androidx.compose.runtime.Immutable
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
@@ -10,6 +11,7 @@ import dev.aleksrychkov.scrooge.presentation.component.category.internal.udf.Cat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
+@Immutable
 internal interface CategoryComponentInternal : CategoryComponent {
     val createCategoryModal: Value<ChildSlot<*, CreateCategoryComponent>>
 

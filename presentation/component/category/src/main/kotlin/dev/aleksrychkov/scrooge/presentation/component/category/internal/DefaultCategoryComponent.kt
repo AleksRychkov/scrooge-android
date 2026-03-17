@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.category.internal
 
+import androidx.compose.runtime.Immutable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
@@ -20,6 +21,7 @@ import dev.aleksrychkov.scrooge.presentation.component.category.internal.udf.Cat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
+@Immutable
 internal class DefaultCategoryComponent(
     private val componentContext: ComponentContext,
     transactionType: TransactionType?,

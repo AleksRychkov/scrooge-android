@@ -47,7 +47,8 @@ internal class FormReducer(
                     }
                     state {
                         copy(
-                            isLoading = false, datestampReadable = datestamp.toReadable()
+                            isLoading = false,
+                            datestampReadable = datestamp.toReadable()
                         )
                     }
                 }

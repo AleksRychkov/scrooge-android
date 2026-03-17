@@ -5,7 +5,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -33,14 +31,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.DsCategoryItem
 import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
+import dev.aleksrychkov.scrooge.core.designsystem.theme.categoryItemSize
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.CategoryCarouselComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.modal.CategoryModal
@@ -82,20 +80,15 @@ private fun CategoryCarouselContent(
 private fun CategoryCarouselContent(
     modifier: Modifier,
     state: CategoryCarouselState,
-    onItemClicked: (CarouselItem) -> Unit,
+    onItemClicked: (CategoryEntity) -> Unit,
     onCategoryListClicked: () -> Unit,
 ) {
-    val itemSize = 56.dp
-
     Column(
         modifier = modifier
     ) {
         CarouselContent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(itemSize),
+            modifier = Modifier.fillMaxWidth(),
             list = state.carousel,
-            itemSize = itemSize,
             selected = state.selectedCategory,
             onItemClicked = onItemClicked,
             onCategoryListClicked = onCategoryListClicked,
@@ -146,9 +139,8 @@ private fun SelectedCategory(
 private fun CarouselContent(
     modifier: Modifier,
     list: ImmutableList<CarouselItem>,
-    itemSize: Dp,
     selected: CategoryEntity?,
-    onItemClicked: (CarouselItem) -> Unit,
+    onItemClicked: (CategoryEntity) -> Unit,
     onCategoryListClicked: () -> Unit,
 ) {
     val state = rememberLazyListState()
@@ -161,7 +153,7 @@ private fun CarouselContent(
         item {
             Box(
                 modifier = Modifier
-                    .size(itemSize)
+                    .categoryItemSize()
                     .clip(RoundedCornerShape(Normal))
                     .debounceClickable(onClick = onCategoryListClicked)
             ) {
@@ -181,46 +173,20 @@ private fun CarouselContent(
             items = list,
             key = { item -> item.id }
         ) { item ->
-            Box(
-                modifier = Modifier
-                    .size(itemSize)
-                    .clip(RoundedCornerShape(Normal))
-                    .carouselItemBorder(isSelected = item.id == selected?.id)
-                    .debounceClickable(onClick = {
-                        onItemClicked(item)
-                    })
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(item.color.copy(alpha = 0.15f))
-                        .padding(Normal),
-                    tint = item.tint,
-                    imageVector = item.imageVector,
-                    contentDescription = null,
-                )
-            }
+            DsCategoryItem(
+                category = item.ref,
+                color = item.color,
+                tint = item.tint,
+                borderEnabled = item.id == selected?.id,
+                imageVector = item.imageVector,
+                onItemClicked = onItemClicked,
+            )
         }
     }
     LaunchedEffect(selected) {
         if (selected != null) {
             state.animateScrollToItem(list.indexOfFirst { it.id == selected.id })
         }
-    }
-}
-
-@Composable
-private fun Modifier.carouselItemBorder(
-    isSelected: Boolean
-): Modifier {
-    return this then if (isSelected) {
-        Modifier.border(
-            width = 2.dp,
-            color = MaterialTheme.colorScheme.primary,
-            shape = RoundedCornerShape(Normal),
-        )
-    } else {
-        Modifier
     }
 }
 

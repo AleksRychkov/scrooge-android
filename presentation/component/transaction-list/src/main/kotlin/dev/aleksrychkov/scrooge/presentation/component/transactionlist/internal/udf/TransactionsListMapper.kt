@@ -1,5 +1,6 @@
 package dev.aleksrychkov.scrooge.presentation.component.transactionlist.internal.udf
 
+import androidx.compose.ui.graphics.Color
 import dev.aleksrychkov.scrooge.core.entity.TransactionEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.entity.amountToStringFormatted
@@ -18,10 +19,12 @@ internal class TransactionsListMapper {
             TransactionType.Expense -> "-"
         }
 
+        val color = Color(entity.category.color)
         return TransactionsItem.Item(
             categoryName = entity.category.name,
-            categoryIcon = categoryIconFromId(entity.category.iconId),
-            categoryColor = entity.category.color,
+            categoryIcon = categoryIconFromId(entity.category.iconId).icon,
+            categoryColor = color,
+            categoryTint = color,
             amount = "${entity.amount.amountToStringFormatted(sign)} " +
                 entity.currency.currencySymbol,
             type = entity.type,

@@ -5,6 +5,8 @@ import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
+import dev.aleksrychkov.scrooge.presentation.component.category.internal.udf.CategoryCommand.Search
+import kotlinx.collections.immutable.toImmutableList
 import dev.aleksrychkov.scrooge.core.resources.R as resources
 
 internal class CategoryReducer(
@@ -38,9 +40,9 @@ internal class CategoryReducer(
                 state.reduceWith(event) {
                     command {
                         listOf(
-                            CategoryCommand.Search(
+                            Search(
                                 query = event.query,
-                                categories = categories.toList()
+                                categories = categories.map(CategoryItem::ref).toList()
                             )
                         )
                     }
@@ -55,7 +57,7 @@ internal class CategoryReducer(
                     if (state.searchQuery.isNotBlank()) {
                         command {
                             listOf(
-                                CategoryCommand.Search(
+                                Search(
                                     query = state.searchQuery,
                                     categories = event.list
                                 )
@@ -64,7 +66,7 @@ internal class CategoryReducer(
                     }
                     state {
                         copy(
-                            categories = event.list,
+                            categories = event.list.map(CategoryItem::map).toImmutableList(),
                             categoriesHash = event.hash,
                         )
                     }
@@ -74,7 +76,7 @@ internal class CategoryReducer(
             is CategoryEvent.Internal.Filtered -> {
                 state.reduceWith(event) {
                     state {
-                        copy(filtered = event.list)
+                        copy(filtered = event.list.map(CategoryItem::map).toImmutableList())
                     }
                 }
             }

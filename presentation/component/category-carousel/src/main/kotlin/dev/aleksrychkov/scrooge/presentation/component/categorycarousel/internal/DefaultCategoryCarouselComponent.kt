@@ -12,7 +12,6 @@ import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
-import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.udf.CarouselItem
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.udf.CategoryCarouselActor
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.udf.CategoryCarouselEvent
 import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal.udf.CategoryCarouselReducer
@@ -49,8 +48,8 @@ internal class DefaultCategoryCarouselComponent(
     override val state: StateFlow<CategoryCarouselState>
         get() = store.state
 
-    override fun selectItem(item: CarouselItem) {
-        store.handle(CategoryCarouselEvent.External.SelectCategory(category = item.ref))
+    override fun selectItem(item: CategoryEntity) {
+        store.handle(CategoryCarouselEvent.External.SelectCategory(category = item))
     }
 
     // region Category
