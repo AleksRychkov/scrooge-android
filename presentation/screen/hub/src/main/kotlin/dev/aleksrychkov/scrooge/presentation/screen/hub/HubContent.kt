@@ -49,7 +49,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.IncomeColor
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.limits.LimitsContent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
@@ -178,8 +177,7 @@ private fun Content(
                     ) {
                         LimitsContent(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(Normal, vertical = Large),
+                                .fillMaxWidth(),
                             component = component.limitsComponent,
                         )
                     }

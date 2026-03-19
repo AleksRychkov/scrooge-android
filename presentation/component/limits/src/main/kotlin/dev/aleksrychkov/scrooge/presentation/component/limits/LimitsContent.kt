@@ -32,8 +32,10 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.aleksrychkov.scrooge.core.designsystem.composables.debounceClickable
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.ExpenseColor
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.LimitEntity
@@ -66,6 +68,7 @@ private fun LimitsContent(
         LimitsContent(
             modifier = modifier,
             state = state,
+            onContentClicked = component::navigateToLimitSettings,
         )
     }
 }
@@ -74,9 +77,12 @@ private fun LimitsContent(
 private fun LimitsContent(
     modifier: Modifier,
     state: LimitsState,
+    onContentClicked: () -> Unit,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .debounceClickable(onClick = onContentClicked)
+            .padding(Large),
     ) {
         Text(
             text = stringResource(Resources.string.limits),
@@ -215,6 +221,7 @@ private fun LimitsContentPreview() {
                     isVisible = true,
                     limits = listOf(progress).toImmutableList()
                 ),
+                onContentClicked = {},
             )
         }
     }

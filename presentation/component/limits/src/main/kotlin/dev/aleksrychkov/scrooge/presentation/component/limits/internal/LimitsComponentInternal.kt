@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal interface LimitsComponentInternal : LimitsComponent {
     val state: StateFlow<LimitsState>
+
+    fun navigateToLimitSettings()
 }
