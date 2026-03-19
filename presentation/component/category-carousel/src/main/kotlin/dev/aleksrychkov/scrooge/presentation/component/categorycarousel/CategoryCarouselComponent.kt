@@ -18,11 +18,13 @@ interface CategoryCarouselComponent {
         operator fun invoke(
             componentContext: ComponentContext,
             type: TransactionType,
+            isEditing: Boolean,
             callback: (CategoryEntity) -> Unit,
         ): CategoryCarouselComponent {
             return DefaultCategoryCarouselComponent(
                 componentContext = componentContext,
                 type = type,
+                isEditing = isEditing,
                 callback = callback,
             )
         }

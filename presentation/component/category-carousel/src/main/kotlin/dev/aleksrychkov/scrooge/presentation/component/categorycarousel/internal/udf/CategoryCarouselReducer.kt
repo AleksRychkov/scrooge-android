@@ -8,6 +8,7 @@ import dev.aleksrychkov.scrooge.presentation.component.categorycarousel.internal
 import kotlinx.collections.immutable.toImmutableList
 
 internal class CategoryCarouselReducer(
+    private val isEditing: Boolean,
     private val callback: (CategoryEntity) -> Unit,
 ) :
     Reducer<CategoryCarouselState, CategoryCarouselEvent, CategoryCarouselCommand, Unit> {
@@ -26,6 +27,9 @@ internal class CategoryCarouselReducer(
             }
 
             is CategoryCarouselEvent.Internal.CategoriesResult -> state.reduceWith(event) {
+                if (!isEditing) {
+                    event.categories.firstOrNull()?.let(callback)
+                }
                 state {
                     copy(
                         isLoading = false,

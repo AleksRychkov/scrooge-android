@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal class DefaultCategoryCarouselComponent(
     componentContext: ComponentContext,
     private val type: TransactionType,
+    isEditing: Boolean,
     callback: (CategoryEntity) -> Unit,
 ) : CategoryCarouselComponentInternal, ComponentContext by componentContext {
     private val categoryNavigation = SlotNavigation<TransactionType>()
@@ -40,7 +41,10 @@ internal class DefaultCategoryCarouselComponent(
         instanceKeeper.createStore(
             initialState = CategoryCarouselState(),
             actor = CategoryCarouselActor(),
-            reducer = CategoryCarouselReducer(callback = callback), // todo: don't like it
+            reducer = CategoryCarouselReducer(
+                isEditing = isEditing,
+                callback = callback, // todo: don't like it
+            ),
             startEvent = CategoryCarouselEvent.External.ObserveCategories(type = type),
         )
     }

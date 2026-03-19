@@ -43,6 +43,7 @@ internal class DefaultTransactionFormComponent(
         CategoryCarouselComponent(
             componentContext = childContext("TransactionFormComponentCategoryCarousel"),
             type = transactionType,
+            isEditing = transactionId != null,
         ) { category ->
             store.handle(FormEvent.External.SetCategory(category = category))
         }

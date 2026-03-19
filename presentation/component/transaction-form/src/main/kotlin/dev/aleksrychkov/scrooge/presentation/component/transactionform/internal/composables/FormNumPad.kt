@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.aleksrychkov.scrooge.core.designsystem.composables.DsButton
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
-import dev.aleksrychkov.scrooge.core.designsystem.theme.Tinny
 import kotlin.time.Duration.Companion.milliseconds
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
 
@@ -132,7 +131,7 @@ private fun RowScope.Pad(
     ) {
         content?.invoke() ?: run {
             Text(
-                modifier = Modifier.padding(vertical = Tinny),
+                modifier = Modifier.padding(vertical = Small),
                 style = MaterialTheme.typography.titleMedium,
                 text = text,
             )
