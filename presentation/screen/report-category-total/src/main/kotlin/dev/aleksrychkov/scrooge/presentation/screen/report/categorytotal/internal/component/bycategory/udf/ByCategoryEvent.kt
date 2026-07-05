@@ -6,6 +6,7 @@ import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 internal sealed interface ByCategoryEvent {
     sealed interface External : ByCategoryEvent {
         data class Load(val filter: FilterEntity) : External
+        data object Reload : External
         data class SetType(val type: Int) : External
         data class BottomSheetOffset(val offset: Float) : External
     }

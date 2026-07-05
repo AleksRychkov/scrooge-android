@@ -54,7 +54,7 @@ private class DefaultByCategoryComponent(
 
     init {
         doOnResume(isOneTime = false) {
-            store.handle(ByCategoryEvent.External.Load(filter))
+            store.handle(ByCategoryEvent.External.Reload)
         }
     }
 

@@ -25,6 +25,12 @@ internal class ByCategoryReducer(
                 }
             }
 
+            ByCategoryEvent.External.Reload -> state.reduceWith(event) {
+                command {
+                    listOf(Load(filter))
+                }
+            }
+
             is ByCategoryEvent.External.SetType -> state.reduceWith(event) {
                 state {
                     copy(currentType = TransactionType.from(event.type))
