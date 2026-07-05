@@ -169,7 +169,15 @@ private fun ByCurrency(
 
         LaunchedEffect(Unit) {
             if (storedBottomSheetOffset >= 0f) {
-                launch { bottomSheetOffset.snapTo(storedBottomSheetOffset) }
+                bottomSheetOffset.snapTo(storedBottomSheetOffset)
+            }
+        }
+
+        // If the data shrinks, ensure the pager is on a valid page.
+        LaunchedEffect(byCurrency.size) {
+            val lastPage = byCurrency.lastIndex
+            if (lastPage >= 0 && pagerState.currentPage > lastPage) {
+                pagerState.scrollToPage(lastPage)
             }
         }
 
@@ -183,22 +191,28 @@ private fun ByCurrency(
                 pagerSnapDistance = PagerSnapDistance.atMost(0)
             )
         ) { page ->
+            val currency = byCurrency[page]
+
             ByCategoryChart(
                 modifier = Modifier.fillMaxWidth(),
                 page = page,
                 pagerState = pagerState,
                 maxWidth = this@BoxWithConstraints.maxWidth,
-                chartData = byCurrency[page].chartData,
-                currencySymbol = byCurrency[page].currencySymbol,
+                chartData = currency.chartData,
+                currencySymbol = currency.currencySymbol,
                 bottomSheetOffset = bottomSheetOffset,
                 maxBottomSheetOffset = maxBottomSheetOffset,
             )
         }
 
+        // Prevent IndexOutOfBoundsException during recomposition.
+        val currentPage = pagerState.currentPage.coerceIn(0, byCurrency.lastIndex)
+        val currentCurrency = byCurrency[currentPage]
+
         ByCategoryBottomSheet(
             modifier = Modifier.fillMaxSize(),
-            data = byCurrency[pagerState.currentPage].rowData,
-            totalData = byCurrency[pagerState.currentPage].totalData,
+            data = currentCurrency.rowData,
+            totalData = currentCurrency.totalData,
             maxOffset = maxBottomSheetOffset,
             sheetOffset = bottomSheetOffset,
             onCategoryClicked = onCategoryClicked,
