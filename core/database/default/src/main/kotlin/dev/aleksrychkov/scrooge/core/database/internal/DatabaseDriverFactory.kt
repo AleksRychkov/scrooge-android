@@ -16,9 +16,13 @@ internal fun createDriver(context: Context): SqlDriver {
         callback = object : AndroidSqliteDriver.Callback(Scrooge.Schema.synchronous()) {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-//                if (BuildConfig.DEBUG) {
+//                if (dev.aleksrychkov.scrooge.core.database.BuildConfig.DEBUG) {
 //                    @Suppress("MagicNumber")
-//                    PreloadData.preload(db, 25000)
+//                    dev.aleksrychkov.scrooge.core.database.internal.debug.PreloadData
+//                        .preload(
+//                            db = db,
+//                            rowsCount = 2500,
+//                        )
 //                }
             }
 

@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -58,6 +59,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -195,7 +197,8 @@ private fun ByCurrency(
 
         ByCategoryBottomSheet(
             modifier = Modifier.fillMaxSize(),
-            data = byCurrency[pagerState.currentPage].valueData,
+            data = byCurrency[pagerState.currentPage].rowData,
+            totalData = byCurrency[pagerState.currentPage].totalData,
             maxOffset = maxBottomSheetOffset,
             sheetOffset = bottomSheetOffset,
             onCategoryClicked = onCategoryClicked,
@@ -208,7 +211,8 @@ private fun ByCurrency(
 @Composable
 private fun ByCategoryBottomSheet(
     modifier: Modifier,
-    data: List<ByCategoryState.ByCurrency.Value>,
+    data: List<ByCategoryState.ByCurrency.Row>,
+    totalData: ByCategoryState.ByCurrency.Row,
     maxOffset: Float,
     sheetOffset: Animatable<Float, AnimationVector1D>,
     onCategoryClicked: (CategoryEntity, String) -> Unit,
@@ -302,18 +306,18 @@ private fun ByCategoryBottomSheet(
         }
 
         AnimatedContent(
-            targetState = data,
+            targetState = data to totalData,
             transitionSpec = {
                 fadeIn(tween(durationMillis = 500))
                     .togetherWith(fadeOut(tween(durationMillis = 500)))
             },
             label = "ByCategoryListFade"
         ) { animatedData ->
-
             ByCategoryList(
                 modifier = Modifier
                     .fillMaxSize(),
-                data = animatedData,
+                data = animatedData.first,
+                totalData = animatedData.second,
                 listState = listState,
                 onCategoryClicked = onCategoryClicked,
             )
@@ -380,7 +384,8 @@ private fun ByCategoryChart(
 @Composable
 private fun ByCategoryList(
     modifier: Modifier,
-    data: List<ByCategoryState.ByCurrency.Value>,
+    data: List<ByCategoryState.ByCurrency.Row>,
+    totalData: ByCategoryState.ByCurrency.Row,
     listState: LazyListState,
     onCategoryClicked: (CategoryEntity, String) -> Unit,
 ) {
@@ -388,6 +393,46 @@ private fun ByCategoryList(
         modifier = modifier,
         state = listState,
     ) {
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = ListItemHeight)
+                    .padding(horizontal = Large, vertical = Normal),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .height(CategoryIconSize)
+                        .width(CategoryIconSize)
+                        .clip(CircleShape)
+                        .background(Color(totalData.categoryColor))
+                        .padding(Medium),
+                    tint = Color.White,
+                    imageVector = totalData.categoryIcon.icon,
+                    contentDescription = null,
+                )
+
+                Text(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(horizontal = Normal),
+                    text = totalData.categoryName,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                )
+
+                Text(
+                    color = Color.Unspecified,
+                    text = "${totalData.amount} ${totalData.currencySymbol}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+        }
+
         items(
             items = data,
             key = { it.categoryName }
@@ -424,11 +469,24 @@ private fun ByCategoryList(
                     maxLines = 1,
                 )
 
-                Text(
-                    color = Color.Unspecified,
-                    text = "${value.amount} ${value.currencySymbol}",
-                    style = MaterialTheme.typography.bodyLarge,
-                )
+                Row(
+                    modifier = Modifier.wrapContentHeight(),
+                    horizontalArrangement = Arrangement.Start,
+                ) {
+                    Text(
+                        modifier = Modifier.alignByBaseline(),
+                        color = Color.Unspecified,
+                        text = "${value.amount} ${value.currencySymbol}",
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+
+                    Text(
+                        modifier = Modifier.alignByBaseline(),
+                        color = Color.Unspecified,
+                        text = " / ${value.share}%",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         }
     }

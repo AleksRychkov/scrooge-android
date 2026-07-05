@@ -1,13 +1,16 @@
 package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf
 
+import dev.aleksrychkov.scrooge.core.di.get
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.core.resources.ResourceManager
 import dev.aleksrychkov.scrooge.core.udf.Reducer
 import dev.aleksrychkov.scrooge.core.udf.ReducerResult
 import dev.aleksrychkov.scrooge.core.udf.reduceWith
 import dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory.udf.ByCategoryCommand.Load
 
-internal class ByCategoryReducer :
-    Reducer<ByCategoryState, ByCategoryEvent, ByCategoryCommand, Unit> {
+internal class ByCategoryReducer(
+    private val resourceManager: ResourceManager = get(),
+) : Reducer<ByCategoryState, ByCategoryEvent, ByCategoryCommand, Unit> {
     override fun reduce(
         event: ByCategoryEvent,
         state: ByCategoryState
@@ -38,8 +41,10 @@ internal class ByCategoryReducer :
                 state {
                     copy(
                         isLoading = false,
-                        byCurrencyIncome = event.result.income.toByCurrencyStateList(),
-                        byCurrencyExpense = event.result.expense.toByCurrencyStateList(),
+                        byCurrencyIncome = event.result.income
+                            .toByCurrencyStateList(resourceManager = resourceManager),
+                        byCurrencyExpense = event.result.expense
+                            .toByCurrencyStateList(resourceManager = resourceManager),
                     )
                 }
             }

@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.screen.report.categorytotal.internal.component.bycategory
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnResume
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
@@ -48,8 +49,13 @@ private class DefaultByCategoryComponent(
             initialState = ByCategoryState(filter = filter),
             actor = ByCategoryActor(),
             reducer = ByCategoryReducer(),
-            startEvent = ByCategoryEvent.External.Load(filter),
         )
+    }
+
+    init {
+        doOnResume(isOneTime = false) {
+            store.handle(ByCategoryEvent.External.Load(filter))
+        }
     }
 
     override val state: StateFlow<ByCategoryState>
