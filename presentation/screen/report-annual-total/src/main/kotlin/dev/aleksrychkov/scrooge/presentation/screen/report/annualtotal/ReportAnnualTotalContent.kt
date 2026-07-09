@@ -6,11 +6,16 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerSnapDistance
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,6 +53,8 @@ import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.modal.FiltersModal
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
+
+private const val TOTAL_REPORTS_PAGER_COUNT = 2
 
 @Composable
 fun ReportAnnualTotalContent(
@@ -158,20 +166,43 @@ private fun Content(
     val isScrillUpVisible by remember {
         derivedStateOf { contentListState.firstVisibleItemIndex != 0 }
     }
+    val pagerState = rememberPagerState(pageCount = {
+        TOTAL_REPORTS_PAGER_COUNT
+    })
+    val fling = PagerDefaults.flingBehavior(
+        state = pagerState,
+        pagerSnapDistance = PagerSnapDistance.atMost(0)
+    )
     Box(modifier = modifier) {
         TotalMonthlyContent(
             modifier = Modifier.fillMaxWidth(),
             listState = contentListState,
             headerItem = {
-                DsCardV2(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Large),
-                ) {
-                    PeriodTotalContent(
-                        modifier = Modifier.fillMaxWidth(),
-                        component = periodTotalComponent,
-                    )
+                HorizontalPager(
+                    modifier = Modifier.fillMaxSize(),
+                    state = pagerState,
+                    flingBehavior = fling,
+                    contentPadding = PaddingValues(horizontal = Large2X, vertical = Large),
+                    pageSpacing = Large,
+                    beyondViewportPageCount = 0,
+                ) { _ ->
+                    DsCardV2(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .graphicsLayer {
+                                if (pagerState.currentPage == 0) {
+                                    translationX -= Large.toPx()
+                                }
+                                if (pagerState.currentPage == pagerState.pageCount - 1) {
+                                    translationX += Large.toPx()
+                                }
+                            }
+                    ) {
+                        PeriodTotalContent(
+                            modifier = Modifier.fillMaxWidth(),
+                            component = periodTotalComponent,
+                        )
+                    }
                 }
             },
             paddingBottom = Large2X,
