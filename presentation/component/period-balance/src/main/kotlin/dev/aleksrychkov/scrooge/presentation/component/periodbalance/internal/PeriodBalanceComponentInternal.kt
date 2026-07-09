@@ -1,0 +1,5 @@
+package dev.aleksrychkov.scrooge.presentation.component.periodbalance.internal
+
+import dev.aleksrychkov.scrooge.presentation.component.periodbalance.PeriodBalanceComponent
+
+internal interface PeriodBalanceComponentInternal : PeriodBalanceComponent

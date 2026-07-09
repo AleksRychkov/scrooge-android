@@ -5,17 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal"
+    namespace = "dev.aleksrychkov.scrooge.presentation.component.periodbalance"
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(projects.presentation.component.filters)
-    implementation(projects.presentation.component.periodBalance)
-    implementation(projects.presentation.component.periodTotal)
-
     implementation(projects.core.designSystem)
     implementation(projects.core.di)
     implementation(projects.core.resources)
@@ -34,6 +30,9 @@ dependencies {
 
     implementation(libs.decompose.decompose)
     implementation(libs.decompose.extensionsComposeJetbrains)
+
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
 
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.immutable.collections)

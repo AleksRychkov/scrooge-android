@@ -28,6 +28,7 @@ detekt = "1.23.8"
 
 essenty = "2.5.0"
 
+
 kotlin = "2.3.0"
 
 mockk = "1.14.7"
@@ -46,6 +47,8 @@ sqldelight = "2.2.1"
 
 uiToolingPreviewAndroid = "1.10.1"
 uiTooling = "1.10.1"
+
+vico = "3.2.3"
 
 juint = "6.0.1"
 
@@ -101,6 +104,9 @@ reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reo
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-paging = { module = "app.cash.sqldelight:androidx-paging3-extensions", version.ref = "sqldelight" }
+
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 
 junit = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "juint" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }

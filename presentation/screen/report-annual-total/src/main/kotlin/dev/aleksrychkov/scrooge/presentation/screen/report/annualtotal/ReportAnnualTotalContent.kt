@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -45,6 +46,8 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.readableName
+import dev.aleksrychkov.scrooge.presentation.component.periodbalance.PeriodBalanceComponent
+import dev.aleksrychkov.scrooge.presentation.component.periodbalance.PeriodBalanceContent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.ReportAnnualTotalComponentInternal
@@ -150,6 +153,7 @@ private fun Content(
         modifier = modifier,
         contentListState = contentListState,
         periodTotalComponent = component.periodTotalComponent,
+        periodBalanceComponent = component.periodBalanceComponent,
         totalMonthlyComponent = component.totalMonthlyComponent,
         openCategoryReport = openCategoryReport,
     )
@@ -160,6 +164,7 @@ private fun Content(
     modifier: Modifier,
     contentListState: LazyListState,
     periodTotalComponent: PeriodTotalComponent,
+    periodBalanceComponent: PeriodBalanceComponent,
     totalMonthlyComponent: TotalMonthlyComponent,
     openCategoryReport: (PeriodDatestampEntity) -> Unit,
 ) {
@@ -179,16 +184,18 @@ private fun Content(
             listState = contentListState,
             headerItem = {
                 HorizontalPager(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp),
                     state = pagerState,
                     flingBehavior = fling,
                     contentPadding = PaddingValues(horizontal = Large2X, vertical = Large),
                     pageSpacing = Large,
                     beyondViewportPageCount = 0,
-                ) { _ ->
+                ) { page ->
                     DsCardV2(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxSize()
                             .graphicsLayer {
                                 if (pagerState.currentPage == 0) {
                                     translationX -= Large.toPx()
@@ -198,10 +205,17 @@ private fun Content(
                                 }
                             }
                     ) {
-                        PeriodTotalContent(
-                            modifier = Modifier.fillMaxWidth(),
-                            component = periodTotalComponent,
-                        )
+                        when (page) {
+                            0 -> PeriodTotalContent(
+                                modifier = Modifier.fillMaxSize(),
+                                component = periodTotalComponent,
+                            )
+
+                            1 -> PeriodBalanceContent(
+                                modifier = Modifier.fillMaxSize(),
+                                component = periodBalanceComponent,
+                            )
+                        }
                     }
                 }
             },
