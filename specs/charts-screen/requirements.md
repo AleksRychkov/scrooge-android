@@ -46,6 +46,14 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 3. Category color and label shall come from `CategoryEntity` and repository resources.
 4. The chart shall provide readable marker values and explicit loading, empty, and failure states.
 
+### R4a — Balance Total chart
+
+1. The screen shall display an all-time running balance at each month in the selected period.
+2. Transactions before the selected period shall form the opening balance.
+3. Each displayed month shall add that month’s income-minus-expense change to the previous total.
+4. The series shall use only the selected currency and date upper bound; category and other filters shall not affect it.
+5. Future months shall be omitted, and loading, empty, failure, scrolling, marker, and currency formatting shall match the balance chart.
+
 ### R5 — Refresh and consistency
 
 1. Applying a filter shall refresh both charts from the same immutable filter snapshot.

@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
 import dev.aleksrychkov.scrooge.core.database.BalanceTimeline
+import dev.aleksrychkov.scrooge.core.database.BalanceTotalTimeline
 import dev.aleksrychkov.scrooge.core.database.ByCategory
 import dev.aleksrychkov.scrooge.core.database.CategoryTimeline
 import dev.aleksrychkov.scrooge.core.database.TotalAmount
@@ -136,6 +137,27 @@ internal object ReportMapper {
         return ReportBalanceTimelineEntity(points = points.toImmutableList())
     }
 
+    fun balanceTotalTimelineToEntity(
+        list: List<BalanceTotalTimeline>,
+        period: PeriodDatestampEntity,
+        currentDate: LocalDate = Datestamp.now().date,
+    ): ReportBalanceTimelineEntity {
+        if (list.isEmpty()) return ReportBalanceTimelineEntity()
+        val changesByMonth = list.associate { row ->
+            row.toMonth() to (row.balance ?: 0L)
+        }
+        var runningBalance = 0L
+        val totalsByMonth = changesByMonth.toSortedMap().mapValues { (_, change) ->
+            runningBalance += change
+            runningBalance
+        }
+        val points = period.months(currentDate).map { month ->
+            val total = totalsByMonth.entries.lastOrNull { it.key <= month }?.value ?: 0L
+            ReportBalanceTimelineEntity.Point(month = month, amount = total)
+        }
+        return ReportBalanceTimelineEntity(points = points.toImmutableList())
+    }
+
     fun categoryTimelineToEntity(
         list: List<CategoryTimeline>,
         period: PeriodDatestampEntity,
@@ -220,6 +242,9 @@ internal object ReportMapper {
     }
 
     private fun BalanceTimeline.toMonth(): LocalDate =
+        LocalDate(year = year.toInt(), month = month.toInt(), day = 1)
+
+    private fun BalanceTotalTimeline.toMonth(): LocalDate =
         LocalDate(year = year.toInt(), month = month.toInt(), day = 1)
 
     private fun CategoryTimeline.toMonth(): LocalDate =

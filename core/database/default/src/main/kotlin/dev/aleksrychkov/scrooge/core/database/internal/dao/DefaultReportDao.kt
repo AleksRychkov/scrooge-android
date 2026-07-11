@@ -96,6 +96,24 @@ internal class DefaultReportDao(
             }
     }
 
+    override suspend fun balanceTotalTimeline(
+        filter: FilterEntity,
+    ): ReportBalanceTimelineEntity = withContext(readDispatcher) {
+        database.reportQueries
+            .balanceTotalTimeline(
+                fromDatestamp = filter.period.from.value,
+                toDatestamp = filter.period.to.value,
+                currencyCode = filter.currency?.currencyCode,
+            )
+            .executeAsList()
+            .let { rows ->
+                ReportMapper.balanceTotalTimelineToEntity(
+                    list = rows,
+                    period = filter.period,
+                )
+            }
+    }
+
     override suspend fun categoryTimeline(
         filter: FilterEntity,
     ): ReportCategoryTimelineEntity = withContext(readDispatcher) {

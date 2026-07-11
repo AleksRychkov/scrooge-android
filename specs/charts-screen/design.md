@@ -72,6 +72,8 @@ Extend `ReportDao` with balance-timeline and category-timeline methods. Add SQLD
 
 The balance timeline is the exception to the shared non-currency predicates: it uses only date range and currency. Category, tag, and transaction-type filters apply to the category timeline but must not change balance points.
 
+Balance Total queries monthly income-minus-expense changes from the beginning of transaction history through the selected period end. Its mapper accumulates all earlier changes into an opening balance, emits the total at every selected month, carries totals through inactive months, and omits future months. It reuses the balance entity and bar renderer but has a dedicated report use case and retained component.
+
 Add `ReportBalanceTimelineUseCase` and `ReportCategoryTimelineUseCase` to `feature:reports:api`, default implementations using `runSuspendCatching`, and factories in `buildReportsModule()`.
 
 ## Presentation Components

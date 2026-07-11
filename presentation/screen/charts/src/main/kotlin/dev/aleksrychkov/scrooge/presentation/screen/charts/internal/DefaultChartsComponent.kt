@@ -12,6 +12,7 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceLineChartComponent
+import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceTotalChartComponent
 import dev.aleksrychkov.scrooge.presentation.component.categorylinechart.CategoryLineChartComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
@@ -35,6 +36,7 @@ internal interface ChartsComponentInternal : ChartsComponent {
     val state: StateFlow<ChartsState>
     val filtersModal: Value<ChildSlot<*, FiltersComponent>>
     val balanceChart: BalanceLineChartComponent
+    val balanceTotalChart: BalanceTotalChartComponent
     val categoryChart: CategoryLineChartComponent
     fun openFilters()
     fun closeFilters()
@@ -53,6 +55,9 @@ internal class DefaultChartsComponent(
 
     private val _balanceChart by lazy {
         BalanceLineChartComponent(childContext("ChartsBalanceLineChart"))
+    }
+    private val _balanceTotalChart by lazy {
+        BalanceTotalChartComponent(childContext("ChartsBalanceTotalChart"))
     }
     private val _categoryChart by lazy {
         CategoryLineChartComponent(childContext("ChartsCategoryLineChart"))
@@ -84,6 +89,9 @@ internal class DefaultChartsComponent(
 
     override val balanceChart: BalanceLineChartComponent
         get() = _balanceChart
+
+    override val balanceTotalChart: BalanceTotalChartComponent
+        get() = _balanceTotalChart
 
     override val categoryChart: CategoryLineChartComponent
         get() = _categoryChart
@@ -122,6 +130,7 @@ internal class DefaultChartsComponent(
     private fun applyFilter(filter: FilterEntity) {
         _state.value = ChartsState(filter)
         _balanceChart.setFilters(filter)
+        _balanceTotalChart.setFilters(filter)
         _categoryChart.setFilters(filter)
     }
 }

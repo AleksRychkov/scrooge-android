@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
 import dev.aleksrychkov.scrooge.core.database.BalanceTimeline
+import dev.aleksrychkov.scrooge.core.database.BalanceTotalTimeline
 import dev.aleksrychkov.scrooge.core.database.CategoryTimeline
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
@@ -62,6 +63,27 @@ internal class ReportMapperTest {
             result.points.map { it.month },
         )
         assertEquals(listOf(100L, 0L, 0L), result.points.map { it.amount })
+    }
+
+    @Test
+    fun `When total balance is mapped Then transactions before period form opening balance`() {
+        // Given
+        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 3, 31))
+        val rows = listOf(
+            BalanceTotalTimeline(year = 2024, month = 12, balance = 1_000),
+            BalanceTotalTimeline(year = 2025, month = 2, balance = -200),
+            BalanceTotalTimeline(year = 2025, month = 3, balance = 500),
+        )
+
+        // When
+        val result = ReportMapper.balanceTotalTimelineToEntity(
+            list = rows,
+            period = period,
+            currentDate = LocalDate(2025, 3, 15),
+        )
+
+        // Then
+        assertEquals(listOf(1_000L, 800L, 1_300L), result.points.map { it.amount })
     }
 
     @Test

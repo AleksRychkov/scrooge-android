@@ -25,6 +25,7 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 - [x] Apply the missing currency predicate to every existing SQL query backed by `FilterEntity`. (R2)
 - [x] Extend `ReportDao`, `ReportMapper`, and `DefaultReportDao`; normalize sorting and missing buckets. (R3, R4)
 - [x] Add report API use cases, default implementations, and DI registrations. (R3, R4)
+- [x] Add all-time Balance Total persistence, mapper, use case, and opening-balance tests. (R4a)
 - [x] Add data/use-case tests for currency counts/ties, multi-currency reports, sparse months, empty periods, income-only, and expense-only data. (R2–R4)
 
 ## 4. Build Chart Components
@@ -34,12 +35,14 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 - [x] Register `presentation:component:category-line-chart`; implement public API, retained UDF state, category label, mapper, and Vico content. (R4, R5)
 - [x] Add category reducer/mapper tests for changing categories and zero-filled gaps. (R4)
 - [x] Verify both components discard stale filter results and support retry. (R5)
+- [x] Add a retained Balance Total chart using the shared balance bar rendering and interaction behavior. (R4a, R5)
 
 ## 5. Build and Integrate Charts Screen
 
 - [x] Register `presentation:screen:charts` and implement `ChartsComponent`, internal interface/state, filter slot, and child contexts. (R1, R5)
 - [x] Resolve a null currency in Charts, then propagate one resolved filter snapshot to the filter state and both charts. (R2, R5)
-- [x] Implement the Compose screen with title, filter action, two chart cards, and all UI states. (R1, R3, R4)
+- [x] Implement the Compose screen with title, filter action, chart cards, and all UI states. (R1, R3, R4)
+- [x] Add the Balance Total card and propagate the resolved filter to it with the other charts. (R4a, R5)
 - [x] Add a serialized Charts child to `presentation:screen:main:tabs`, preserve the existing Reports child, and update bottom-bar ordering and dependencies. (R1)
 
 ## 6. Validate

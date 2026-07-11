@@ -24,6 +24,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceLineChartContent
+import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceTotalChartContent
 import dev.aleksrychkov.scrooge.presentation.component.categorylinechart.CategoryLineChartContent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersBottomSheetModal
 import dev.aleksrychkov.scrooge.presentation.screen.charts.internal.ChartsComponentInternal
@@ -44,6 +45,12 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
                 .verticalScroll(rememberScrollState()),
         ) {
             val currencySymbol = state.filter.currency?.currencySymbol.orEmpty()
+            ChartCard(stringResource(R.string.balance_total_chart_title, currencySymbol)) {
+                BalanceTotalChartContent(
+                    modifier = Modifier.fillMaxWidth().height(CHART_HEIGHT),
+                    component = internal.balanceTotalChart,
+                )
+            }
             ChartCard(stringResource(R.string.balance_chart_title, currencySymbol)) {
                 BalanceLineChartContent(
                     modifier = Modifier.fillMaxWidth().height(CHART_HEIGHT),
