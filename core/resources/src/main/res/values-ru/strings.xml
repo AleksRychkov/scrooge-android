@@ -21,6 +21,7 @@
     <string name="delete">Удалить</string>
     <string name="transactions">Транзакции</string>
     <string name="reports">Отчёты</string>
+    <string name="charts">Графики</string>
     <string name="totals">Итоги</string>
     <string name="settings">Настройки</string>
     <string name="income">Доход</string>
