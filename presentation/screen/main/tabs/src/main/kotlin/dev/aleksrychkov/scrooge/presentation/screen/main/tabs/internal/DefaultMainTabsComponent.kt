@@ -11,6 +11,7 @@ import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackCallback
 import com.arkivanov.essenty.lifecycle.doOnDestroy
+import dev.aleksrychkov.scrooge.presentation.screen.charts.ChartsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.hub.HubComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.settings.SettingsComponent
@@ -64,6 +65,15 @@ internal class DefaultMainTabsComponent(
         }
     }
 
+    override fun onChartsClicked() {
+        backCallback.isEnabled = true
+        if (stack.items.size == 1) {
+            nav.bringToFront(Config.Charts)
+        } else {
+            nav.replaceCurrent(Config.Charts)
+        }
+    }
+
     private fun child(
         config: Config,
         componentContext: ComponentContext
@@ -74,6 +84,9 @@ internal class DefaultMainTabsComponent(
 
             Config.Report ->
                 MainTabsComponentInternal.Child.Report(ReportAnnualTotalComponent(componentContext = componentContext))
+
+            Config.Charts ->
+                MainTabsComponentInternal.Child.Charts(ChartsComponent(componentContext = componentContext))
 
             Config.Settings ->
                 MainTabsComponentInternal.Child.Settings(SettingsComponent(componentContext = componentContext))
@@ -86,6 +99,9 @@ internal class DefaultMainTabsComponent(
 
         @Serializable
         data object Report : Config
+
+        @Serializable
+        data object Charts : Config
 
         @Serializable
         data object Settings : Config

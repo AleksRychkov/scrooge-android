@@ -79,6 +79,7 @@ include(":presentation:component:transaction-list")
 
 // presentation screen
 include(":presentation:screen:hub")
+include(":presentation:screen:charts")
 include(":presentation:screen:limits")
 include(":presentation:screen:main:root")
 include(":presentation:screen:main:tabs")

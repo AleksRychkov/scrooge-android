@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShowChart
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
+import dev.aleksrychkov.scrooge.presentation.screen.charts.ChartsContent
 import dev.aleksrychkov.scrooge.presentation.screen.hub.HubContent
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal.MainTabsComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalContent
@@ -102,6 +104,11 @@ private fun Tabs(
                 component = child.component,
             )
 
+            is MainTabsComponentInternal.Child.Charts -> ChartsContent(
+                modifier = Modifier.fillMaxSize(),
+                component = child.component,
+            )
+
             is MainTabsComponentInternal.Child.Settings -> SettingsContent(
                 modifier = Modifier.fillMaxSize(),
                 component = child.component,
@@ -122,6 +129,7 @@ private fun BottomBar(
         stack = stack,
         onHomeClicked = component::onTransactionsClicked,
         onReportsClicked = component::onReportsClicked,
+        onChartsClicked = component::onChartsClicked,
         onSettingsClicked = component::onSettingsClicked,
     )
 }
@@ -132,6 +140,7 @@ private fun BottomBar(
     stack: ChildStack<*, MainTabsComponentInternal.Child>,
     onHomeClicked: () -> Unit,
     onReportsClicked: () -> Unit,
+    onChartsClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
 ) {
     val activeComponent = stack.active.instance
@@ -161,6 +170,13 @@ private fun BottomBar(
                 title = stringResource(Resources.string.reports),
                 axis = ROTATE_X,
                 onClick = onReportsClicked,
+            )
+            BottomBarItem(
+                isSelected = activeComponent is MainTabsComponentInternal.Child.Charts,
+                icon = Icons.Filled.ShowChart,
+                title = stringResource(Resources.string.charts),
+                axis = ROTATE_Y,
+                onClick = onChartsClicked,
             )
             BottomBarItem(
                 isSelected = activeComponent is MainTabsComponentInternal.Child.Settings,

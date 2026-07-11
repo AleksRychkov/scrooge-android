@@ -13,9 +13,9 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 
 - [x] Add `FiltersSettings.Currency` and localized labels. (R2)
 - [x] Add currency modal navigation and reuse `CurrencyComponent`/`CurrencyModal`. (R2)
-- [x] Add automatic/manual currency state, currency events, reducer transitions, UI selection, reset behavior, and active-filter indication. (R2)
+- [x] Keep currency editing presentation-only: explicit selection/clear, reset to null, and active-filter indication. (R2)
 - [x] Add the most-used-currency transaction query/use case with period, tag, category, and type predicates plus deterministic tie-breaking. (R2)
-- [x] Add reducer tests and Compose previews for automatic and manual currency filtering. (R2)
+- [x] Add reducer tests and Compose previews for selected and cleared currency filtering. (R2)
 
 ## 3. Add Report Domain and Persistence
 
@@ -36,11 +36,10 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 
 ## 5. Build and Integrate Charts Screen
 
-- [ ] Register `presentation:screen:charts` and implement `ChartsComponent`, internal interface/state, filter slot, and child contexts. (R1, R5)
-- [ ] Wait for the filters component's automatically resolved currency, then propagate one filter snapshot to both charts. (R2, R5)
-- [ ] Implement the Compose screen with title, filter action, two chart cards, and all UI states. (R1, R3, R4)
-- [ ] Add a serialized Charts child to `presentation:screen:main:tabs`, preserve the existing Reports child, and update bottom-bar ordering and dependencies. (R1)
-- [ ] Add navigation/screen component tests where practical. (R1, R5)
+- [x] Register `presentation:screen:charts` and implement `ChartsComponent`, internal interface/state, filter slot, and child contexts. (R1, R5)
+- [x] Resolve a null currency in Charts, then propagate one resolved filter snapshot to the filter state and both charts. (R2, R5)
+- [x] Implement the Compose screen with title, filter action, two chart cards, and all UI states. (R1, R3, R4)
+- [x] Add a serialized Charts child to `presentation:screen:main:tabs`, preserve the existing Reports child, and update bottom-bar ordering and dependencies. (R1)
 
 ## 6. Validate
 

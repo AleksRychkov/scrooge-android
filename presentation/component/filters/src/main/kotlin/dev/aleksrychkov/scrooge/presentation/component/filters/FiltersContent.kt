@@ -51,7 +51,6 @@ import dev.aleksrychkov.scrooge.presentation.component.filters.internal.composab
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCategoryModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCurrencyModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersTagModal
-import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.CurrencySelectionMode
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
 import kotlinx.collections.immutable.persistentListOf
@@ -263,7 +262,6 @@ private fun AutomaticCurrencyPreview() {
     FiltersContentPreview(
         state = FiltersState(
             filter = FilterEntity.currentYear().copy(currency = CurrencyEntity.RUB),
-            currencySelectionMode = CurrencySelectionMode.Automatic,
             allYears = persistentListOf(2024),
             allMonths = Month.entries.map { it.name }.toImmutableList(),
         )
@@ -277,7 +275,6 @@ private fun ManuallyClearedCurrencyPreview() {
     FiltersContentPreview(
         state = FiltersState(
             filter = FilterEntity.currentYear(),
-            currencySelectionMode = CurrencySelectionMode.Manual,
             allYears = persistentListOf(2024),
             allMonths = Month.entries.map { it.name }.toImmutableList(),
         )

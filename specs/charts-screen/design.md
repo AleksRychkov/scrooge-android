@@ -22,7 +22,9 @@ Register the new modules in `settings.gradle.kts`. Extend `presentation:screen:m
 
 Add a transaction-domain query/use case that returns the currency with the highest transaction count for a filter while ignoring `filter.currency`. Apply the period, tag, category, and transaction-type predicates and break equal counts by currency code. This belongs in `feature:transaction:api/default/di` and the transaction DAO/SQL rather than presentation code; the filters module already depends on `feature:transaction:api`.
 
-Track whether currency selection is automatic or manual in internal filter state. On initialization and Reset, enter automatic mode and resolve the most-used currency for the current filter. When non-currency criteria change in automatic mode, resolve it again. An explicit currency choice or clear action enters manual mode and remains stable while other filters change. Mirror the category control by showing a trailing clear icon only for a selected currency. Charts requires a resolved currency before Apply/chart loading. If the selected filter contains no transactions, use `GetLastUsedCurrencyUseCase`; if that is also empty, use `CurrencyEntity.RUB`. Cover the complete fallback chain in reducer tests.
+Keep `FiltersComponent` presentation-only: it edits the supplied `FilterEntity`, preserves an explicitly selected currency while other criteria change, and returns `null` after clear or Reset. Mirror the category control by showing a trailing clear icon only for a selected currency. The owning screen is the source of truth for the applied filter.
+
+When Charts receives a filter whose currency is null, dispatch a screen command that resolves the most-used currency for the non-currency filter. If the selected period has no transactions, use `GetLastUsedCurrencyUseCase`; if that is also empty, use `CurrencyEntity.RUB`. Cancel stale resolution commands, update the screen filter with the result, and only then propagate the same snapshot to both charts. Cover the fallback chain in Charts tests.
 
 ## Screen Wireframe
 

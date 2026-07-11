@@ -7,11 +7,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.util.EnumSet
 
-internal enum class CurrencySelectionMode {
-    Automatic,
-    Manual,
-}
-
 @Immutable
 internal data class FiltersState(
     val settings: EnumSet<FiltersSettings> = EnumSet.allOf(FiltersSettings::class.java),
@@ -19,8 +14,6 @@ internal data class FiltersState(
     val initialFilter: FilterEntity = FilterEntity(),
     val filter: FilterEntity = FilterEntity(),
     val filterReadable: String = "",
-    val currencySelectionMode: CurrencySelectionMode = CurrencySelectionMode.Automatic,
-
     val allYears: ImmutableList<Int> = persistentListOf(),
     val allMonths: ImmutableList<String> = persistentListOf(),
 )

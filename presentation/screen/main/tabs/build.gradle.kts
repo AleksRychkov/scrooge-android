@@ -13,6 +13,7 @@ android {
 
 dependencies {
     implementation(projects.presentation.screen.hub)
+    implementation(projects.presentation.screen.charts)
     implementation(projects.presentation.screen.reportAnnualTotal)
     implementation(projects.presentation.screen.settings)
 

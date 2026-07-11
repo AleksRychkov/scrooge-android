@@ -38,12 +38,7 @@ internal class FiltersReducer(
         return when (event) {
             is FiltersEvent.External.Init -> state.reduceWith(event) {
                 command {
-                    buildList {
-                        add(FiltersCommand.GetFiltersStartEndYears)
-                        if (event.settings.contains(FiltersSettings.Currency) && event.filter.currency == null) {
-                            add(FiltersCommand.ResolveCurrency(filter = event.filter))
-                        }
-                    }
+                    listOf(FiltersCommand.GetFiltersStartEndYears)
                 }
                 state {
                     copy(
@@ -51,11 +46,6 @@ internal class FiltersReducer(
                         filter = event.filter,
                         initialFilter = event.filter.copy(),
                         filterReadable = readableNameHelper.getName(filter = event.filter),
-                        currencySelectionMode = if (event.filter.currency == null) {
-                            CurrencySelectionMode.Automatic
-                        } else {
-                            CurrencySelectionMode.Manual
-                        },
                     )
                 }
             }
@@ -67,26 +57,6 @@ internal class FiltersReducer(
                         allMonths = resourceManager.value
                             .getStringArray(Resources.array.short_month_names)
                             .toImmutableList(),
-                    )
-                }
-            }
-
-            is FiltersEvent.Internal.SetAutomaticCurrency -> state.reduceWith(event) {
-                val currentFilter = state.filter.copy(currency = null)
-                if (
-                    state.currencySelectionMode == CurrencySelectionMode.Manual ||
-                    currentFilter != event.filter.copy(currency = null)
-                ) {
-                    return@reduceWith
-                }
-                val filter = state.filter.copy(currency = event.currency)
-                effects {
-                    if (event.submitWhenResolved) listOf(SubmitFilters(filter)) else emptyList()
-                }
-                state {
-                    copy(
-                        filter = filter,
-                        filterReadable = readableNameHelper.getName(filter = filter),
                     )
                 }
             }
@@ -130,9 +100,6 @@ internal class FiltersReducer(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
                     )
-                }
-                command {
-                    resolveCurrencyCommand(filter = filter)
                 }
             }
 
@@ -189,9 +156,6 @@ internal class FiltersReducer(
                         filterReadable = readableNameHelper.getName(filter = filter),
                     )
                 }
-                command {
-                    resolveCurrencyCommand(filter = filter)
-                }
             }
 
             is FiltersEvent.External.RemoveTag -> state.reduceWith(event) {
@@ -204,9 +168,6 @@ internal class FiltersReducer(
                         filter = filter
                     )
                 }
-                command {
-                    resolveCurrencyCommand(filter = filter)
-                }
             }
 
             is FiltersEvent.External.Reset -> state.reduceWith(event) {
@@ -215,27 +176,13 @@ internal class FiltersReducer(
                 } else {
                     FilterEntity.currentYear()
                 }
-                val resolveCurrency = state.settings.contains(FiltersSettings.Currency)
                 effects {
-                    if (resolveCurrency) emptyList() else listOf(SubmitFilters(filter))
-                }
-                command {
-                    if (resolveCurrency) {
-                        listOf(
-                            FiltersCommand.ResolveCurrency(
-                                filter = filter,
-                                submitWhenResolved = true,
-                            )
-                        )
-                    } else {
-                        emptyList()
-                    }
+                    listOf(SubmitFilters(filter))
                 }
                 state {
                     copy(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
-                        currencySelectionMode = CurrencySelectionMode.Automatic,
                     )
                 }
             }
@@ -250,9 +197,6 @@ internal class FiltersReducer(
                         filter = filter
                     )
                 }
-                command {
-                    resolveCurrencyCommand(filter = filter)
-                }
             }
 
             FiltersEvent.External.RemoveCategory -> state.reduceWith(event) {
@@ -261,9 +205,6 @@ internal class FiltersReducer(
                     copy(
                         filter = filter
                     )
-                }
-                command {
-                    resolveCurrencyCommand(filter = filter)
                 }
             }
 
@@ -274,9 +215,6 @@ internal class FiltersReducer(
                         filter = filter
                     )
                 }
-                command {
-                    resolveCurrencyCommand(filter = filter)
-                }
             }
 
             is FiltersEvent.External.SetTransactionType -> state.reduceWith(event) {
@@ -286,9 +224,6 @@ internal class FiltersReducer(
                         filter = filter
                     )
                 }
-                command {
-                    resolveCurrencyCommand(filter = filter)
-                }
             }
 
             is FiltersEvent.External.SetCurrency -> state.reduceWith(event) {
@@ -297,7 +232,6 @@ internal class FiltersReducer(
                     copy(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
-                        currencySelectionMode = CurrencySelectionMode.Manual,
                     )
                 }
             }
@@ -308,21 +242,9 @@ internal class FiltersReducer(
                     copy(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
-                        currencySelectionMode = CurrencySelectionMode.Manual,
                     )
                 }
             }
-        }
-    }
-
-    private fun FiltersState.resolveCurrencyCommand(filter: FilterEntity): List<FiltersCommand> {
-        return if (
-            settings.contains(FiltersSettings.Currency) &&
-            currencySelectionMode == CurrencySelectionMode.Automatic
-        ) {
-            listOf(FiltersCommand.ResolveCurrency(filter = filter.copy(currency = null)))
-        } else {
-            emptyList()
         }
     }
 }

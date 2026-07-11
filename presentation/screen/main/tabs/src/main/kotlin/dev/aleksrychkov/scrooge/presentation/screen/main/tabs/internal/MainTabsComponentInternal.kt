@@ -2,6 +2,7 @@ package dev.aleksrychkov.scrooge.presentation.screen.main.tabs.internal
 
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
+import dev.aleksrychkov.scrooge.presentation.screen.charts.ChartsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.hub.HubComponent
 import dev.aleksrychkov.scrooge.presentation.screen.main.tabs.MainTabsComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalComponent
@@ -12,11 +13,13 @@ internal interface MainTabsComponentInternal : MainTabsComponent {
 
     fun onTransactionsClicked()
     fun onReportsClicked()
+    fun onChartsClicked()
     fun onSettingsClicked()
 
     sealed class Child {
         class Transactions(val component: HubComponent) : Child()
         class Report(val component: ReportAnnualTotalComponent) : Child()
+        class Charts(val component: ChartsComponent) : Child()
         class Settings(val component: SettingsComponent) : Child()
     }
 }

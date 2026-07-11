@@ -25,10 +25,5 @@ internal sealed interface FiltersEvent {
 
     sealed interface Internal : FiltersEvent {
         data class SetMinMaxYearsPeriod(val startYear: Int, val endYear: Int) : Internal
-        data class SetAutomaticCurrency(
-            val filter: FilterEntity,
-            val currency: CurrencyEntity,
-            val submitWhenResolved: Boolean,
-        ) : Internal
     }
 }
