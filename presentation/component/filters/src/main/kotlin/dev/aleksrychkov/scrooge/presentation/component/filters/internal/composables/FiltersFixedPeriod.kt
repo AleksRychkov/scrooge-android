@@ -52,6 +52,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
 import dev.aleksrychkov.scrooge.core.designsystem.utils.reallyPerformHapticFeedback
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
@@ -76,6 +77,7 @@ internal fun FiltersFixedPeriod(
     selectedMonths: ImmutableList<Int>,
     selectedTags: ImmutableSet<TagEntity>,
     category: CategoryEntity?,
+    currency: CurrencyEntity?,
     selectedType: TransactionType?,
     onYearClicked: (Int) -> Unit,
     onYearLongClicked: (Int) -> Unit,
@@ -85,6 +87,7 @@ internal fun FiltersFixedPeriod(
     openTagModal: () -> Unit,
     openCategoryModal: () -> Unit,
     removeCategory: () -> Unit,
+    openCurrencyModal: () -> Unit,
     onTransactionTypeSelected: (TransactionType?) -> Unit,
 ) {
     Column(
@@ -135,6 +138,16 @@ internal fun FiltersFixedPeriod(
             )
         }
 
+        if (settings.contains(FiltersSettings.Currency)) {
+            Spacer(modifier = Modifier.height(Normal))
+
+            Currency(
+                modifier = Modifier.fillMaxWidth(),
+                currency = currency,
+                selectCurrency = openCurrencyModal,
+            )
+        }
+
         if (settings.contains(FiltersSettings.Tags)) {
             Spacer(modifier = Modifier.height(Normal))
 
@@ -143,6 +156,40 @@ internal fun FiltersFixedPeriod(
                 selectedTags = selectedTags,
                 removeTag = removeTag,
                 addTag = openTagModal,
+            )
+        }
+    }
+}
+
+@Composable
+private fun Currency(
+    modifier: Modifier,
+    currency: CurrencyEntity?,
+    selectCurrency: () -> Unit,
+) {
+    DsSecondaryCard(
+        modifier = modifier
+            .padding(horizontal = Large)
+            .height(intrinsicSize = IntrinsicSize.Max)
+    ) {
+        Box {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Small),
+                value = currency?.let { "${it.currencyCode} · ${it.currencySymbol}" }.orEmpty(),
+                singleLine = true,
+                label = {
+                    Text(stringResource(Resources.string.currency))
+                },
+                colors = DsInputTextFieldsColors(),
+                readOnly = true,
+                onValueChange = { },
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .debounceClickable(onClick = selectCurrency)
             )
         }
     }
@@ -507,6 +554,7 @@ private fun ContentPreview() {
                 selectedTags = persistentSetOf(TagEntity.from("Tag 1")),
                 selectedType = null,
                 category = CategoryEntity.from(name = "Transport", type = TransactionType.Expense),
+                currency = CurrencyEntity.RUB,
                 onYearClicked = {},
                 onYearLongClicked = {},
                 onMonthClicked = {},
@@ -515,6 +563,7 @@ private fun ContentPreview() {
                 removeTag = { _ -> },
                 openCategoryModal = {},
                 removeCategory = {},
+                openCurrencyModal = {},
                 onTransactionTypeSelected = { _ -> },
             )
         }

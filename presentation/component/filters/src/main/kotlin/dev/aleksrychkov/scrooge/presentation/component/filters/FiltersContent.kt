@@ -48,6 +48,7 @@ import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.FiltersComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.composables.FiltersFixedPeriod
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCategoryModal
+import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCurrencyModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersTagModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
@@ -90,6 +91,7 @@ private fun FiltersContent(
         removeTag = component::removeTag,
         openCategoryModal = component::openCategoryModal,
         removeCategory = component::removeCategory,
+        openCurrencyModal = component::openCurrencyModal,
         onSubmitClicked = { callback(state.filter) },
         resetFilters = component::resetFilters,
         onTransactionTypeSelected = component::onTransactionTypeSelected,
@@ -104,6 +106,9 @@ private fun FiltersContent(
         component = component,
     )
     FiltersCategoryModal(
+        component = component,
+    )
+    FiltersCurrencyModal(
         component = component,
     )
 }
@@ -122,6 +127,7 @@ private fun FiltersContent(
     removeTag: (TagEntity) -> Unit,
     openCategoryModal: () -> Unit,
     removeCategory: () -> Unit,
+    openCurrencyModal: () -> Unit,
     resetFilters: () -> Unit,
     onTransactionTypeSelected: (TransactionType?) -> Unit,
 ) {
@@ -169,6 +175,7 @@ private fun FiltersContent(
                 selectedMonths = state.filter.months,
                 selectedTags = state.filter.tags,
                 category = state.filter.category,
+                currency = state.filter.currency,
                 selectedType = state.filter.transactionType,
                 onYearClicked = onYearClicked,
                 onYearLongClicked = onYearLongClicked,
@@ -178,6 +185,7 @@ private fun FiltersContent(
                 openTagModal = openTagModal,
                 openCategoryModal = openCategoryModal,
                 removeCategory = removeCategory,
+                openCurrencyModal = openCurrencyModal,
                 onTransactionTypeSelected = onTransactionTypeSelected,
             )
 
@@ -264,6 +272,7 @@ private fun FormContentPreview() {
                 openTagModal = {},
                 openCategoryModal = {},
                 removeCategory = {},
+                openCurrencyModal = {},
                 resetFilters = {},
                 onTransactionTypeSelected = { _ -> },
             )

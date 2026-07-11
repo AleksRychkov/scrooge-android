@@ -46,6 +46,11 @@ internal class FiltersReducer(
                         filter = event.filter,
                         initialFilter = event.filter.copy(),
                         filterReadable = readableNameHelper.getName(filter = event.filter),
+                        currencySelectionMode = if (event.filter.currency == null) {
+                            CurrencySelectionMode.Automatic
+                        } else {
+                            CurrencySelectionMode.Manual
+                        },
                     )
                 }
             }
@@ -182,6 +187,7 @@ internal class FiltersReducer(
                     copy(
                         filter = filter,
                         filterReadable = readableNameHelper.getName(filter = filter),
+                        currencySelectionMode = CurrencySelectionMode.Automatic,
                     )
                 }
             }
@@ -217,6 +223,17 @@ internal class FiltersReducer(
                 state {
                     copy(
                         filter = filter.copy(transactionType = event.type)
+                    )
+                }
+            }
+
+            is FiltersEvent.External.SetCurrency -> state.reduceWith(event) {
+                state {
+                    val filter = filter.copy(currency = event.currency)
+                    copy(
+                        filter = filter,
+                        filterReadable = readableNameHelper.getName(filter = filter),
+                        currencySelectionMode = CurrencySelectionMode.Manual,
                     )
                 }
             }

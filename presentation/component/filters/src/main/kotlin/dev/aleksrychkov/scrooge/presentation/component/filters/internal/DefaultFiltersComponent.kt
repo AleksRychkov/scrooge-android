@@ -8,11 +8,13 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
+import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersActor
@@ -25,6 +27,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.EnumSet
 
+@Suppress("TooManyFunctions")
 internal class DefaultFiltersComponent(
     componentContext: ComponentContext,
     filter: FilterEntity,
@@ -33,6 +36,7 @@ internal class DefaultFiltersComponent(
 
     private val tagNavigation = SlotNavigation<Unit>()
     private val categoryNavigation = SlotNavigation<Unit>()
+    private val currencyNavigation = SlotNavigation<Unit>()
 
     private val store: Store<FiltersState, FiltersEvent, FiltersEffect> by lazy {
         instanceKeeper.createStore(
@@ -131,6 +135,30 @@ internal class DefaultFiltersComponent(
         store.handle(FiltersEvent.External.RemoveCategory)
     }
     // endregion Category
+
+    // region Currency
+    override val currencyModal: Value<ChildSlot<*, CurrencyComponent>> =
+        childSlot(
+            source = currencyNavigation,
+            serializer = null,
+            handleBackButton = true,
+            key = "FiltersComponentCurrencyModalSlot",
+        ) { _, childComponentContext ->
+            CurrencyComponent(componentContext = childComponentContext)
+        }
+
+    override fun openCurrencyModal() {
+        currencyNavigation.activate(Unit)
+    }
+
+    override fun closeCurrencyModal() {
+        currencyNavigation.dismiss()
+    }
+
+    override fun setCurrency(currency: CurrencyEntity) {
+        store.handle(FiltersEvent.External.SetCurrency(currency = currency))
+    }
+    // endregion Currency
 
     override fun resetFilters() {
         store.handle(FiltersEvent.External.Reset)

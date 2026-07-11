@@ -14,7 +14,10 @@ internal class FiltersReadableNameHelper(
     fun getName(filter: FilterEntity): String {
         val months = getMonths()
         val shortMonths = getShortMonths()
-        return filter.readableName(months = months, shortMonths = shortMonths)
+        val period = filter.readableName(months = months, shortMonths = shortMonths)
+        return filter.currency?.let { currency ->
+            "$period · ${currency.currencyCode}"
+        } ?: period
     }
 
     private fun getMonths(): Array<String> {

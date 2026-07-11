@@ -3,8 +3,10 @@ package dev.aleksrychkov.scrooge.presentation.component.filters.internal
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
+import dev.aleksrychkov.scrooge.presentaion.component.currency.CurrencyComponent
 import dev.aleksrychkov.scrooge.presentation.component.category.CategoryComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
@@ -13,12 +15,14 @@ import dev.aleksrychkov.scrooge.presentation.component.tags.TagComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
+@Suppress("TooManyFunctions")
 internal interface FiltersComponentInternal : FiltersComponent {
     val state: StateFlow<FiltersState>
     val effects: Flow<FiltersEffect>
 
     val tagModal: Value<ChildSlot<*, TagComponent>>
     val categoryModal: Value<ChildSlot<*, CategoryComponent>>
+    val currencyModal: Value<ChildSlot<*, CurrencyComponent>>
 
     fun onYearClicked(year: Int)
     fun onYearLongClicked(year: Int)
@@ -35,6 +39,10 @@ internal interface FiltersComponentInternal : FiltersComponent {
     fun closeCategoryModal()
     fun setCategory(category: CategoryEntity)
     fun removeCategory()
+
+    fun openCurrencyModal()
+    fun closeCurrencyModal()
+    fun setCurrency(currency: CurrencyEntity)
 
     fun onTransactionTypeSelected(type: TransactionType?)
 }
