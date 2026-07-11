@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install Debug APK"
+  short_description: "Install and launch the debug APK on a device"
+  default_prompt: "Use $install-debug-apk to install and launch the debug APK on a connected Android device."
