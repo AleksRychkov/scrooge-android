@@ -7,7 +7,9 @@ import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.ReportMapper
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportBalanceTimelineEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportCategoryTimelineEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import kotlinx.coroutines.CoroutineDispatcher
@@ -73,6 +75,48 @@ internal class DefaultReportDao(
             )
             .executeAsList()
             .let(ReportMapper::byCategoryToEntity)
+    }
+
+    override suspend fun balanceTimeline(
+        filter: FilterEntity,
+    ): ReportBalanceTimelineEntity = withContext(readDispatcher) {
+        prepareTagFilter(filter)
+        database.reportQueries
+            .balanceTimeline(
+                fromDatestamp = filter.period.from.value,
+                toDatestamp = filter.period.to.value,
+                categoryId = filter.category?.id,
+                transactionType = filter.transactionType?.type?.toLong(),
+                currencyCode = filter.currency?.currencyCode,
+            )
+            .executeAsList()
+            .let { rows ->
+                ReportMapper.balanceTimelineToEntity(
+                    list = rows,
+                    period = filter.period,
+                )
+            }
+    }
+
+    override suspend fun categoryTimeline(
+        filter: FilterEntity,
+    ): ReportCategoryTimelineEntity = withContext(readDispatcher) {
+        prepareTagFilter(filter)
+        database.reportQueries
+            .categoryTimeline(
+                fromDatestamp = filter.period.from.value,
+                toDatestamp = filter.period.to.value,
+                categoryId = filter.category?.id,
+                transactionType = filter.transactionType?.type?.toLong(),
+                currencyCode = filter.currency?.currencyCode,
+            )
+            .executeAsList()
+            .let { rows ->
+                ReportMapper.categoryTimelineToEntity(
+                    list = rows,
+                    period = filter.period,
+                )
+            }
     }
 
     private suspend fun prepareTagFilter(filter: FilterEntity) =

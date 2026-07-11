@@ -1,19 +1,26 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
+import dev.aleksrychkov.scrooge.core.database.BalanceTimeline
 import dev.aleksrychkov.scrooge.core.database.ByCategory
+import dev.aleksrychkov.scrooge.core.database.CategoryTimeline
 import dev.aleksrychkov.scrooge.core.database.TotalAmount
 import dev.aleksrychkov.scrooge.core.database.TotalAmountMothly
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportBalanceTimelineEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportCategoryTimelineEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
+import kotlinx.datetime.plus
 
 internal object ReportMapper {
     fun totalAmountToEntity(
@@ -110,6 +117,54 @@ internal object ReportMapper {
         )
     }
 
+    fun balanceTimelineToEntity(
+        list: List<BalanceTimeline>,
+        period: PeriodDatestampEntity,
+    ): ReportBalanceTimelineEntity {
+        val valuesByMonth = list.associate { row ->
+            row.toMonth() to (row.balance ?: 0L)
+        }
+        val points = period.months().map { month ->
+            ReportBalanceTimelineEntity.Point(
+                month = month,
+                amount = valuesByMonth[month] ?: 0L,
+            )
+        }
+        return ReportBalanceTimelineEntity(points = points.toImmutableList())
+    }
+
+    fun categoryTimelineToEntity(
+        list: List<CategoryTimeline>,
+        period: PeriodDatestampEntity,
+    ): ReportCategoryTimelineEntity {
+        val months = period.months()
+        val series = list
+            .groupBy { row -> row.toCategoryEntity() }
+            .map { (category, rows) ->
+                val valuesByMonth = rows
+                    .groupBy { row -> row.toMonth() }
+                    .mapValues { (_, monthRows) -> monthRows.sumOf { it.total ?: 0L } }
+                ReportCategoryTimelineEntity.CategorySeries(
+                    category = category,
+                    points = months.map { month ->
+                        ReportCategoryTimelineEntity.Point(
+                            month = month,
+                            amount = valuesByMonth[month] ?: 0L,
+                        )
+                    }.toImmutableList(),
+                )
+            }
+            .sortedWith(
+                compareBy(
+                    { it.category.type.ordinal },
+                    { it.category.name },
+                    { it.category.id },
+                )
+            )
+            .toImmutableList()
+        return ReportCategoryTimelineEntity(series = series)
+    }
+
     private fun List<ByCategory>.toReportByCategoryEntityByCurrency(
         currencyCode: String,
     ): ReportByCategoryEntity.ByCurrency {
@@ -140,6 +195,40 @@ internal object ReportMapper {
                 name = "Deleted",
                 type = TransactionType.from(this.type.toInt()),
             )
+        }
+    }
+
+    private fun CategoryTimeline.toCategoryEntity(): CategoryEntity {
+        return if (categoryId != null) {
+            CategoryEntity(
+                id = categoryId,
+                name = categoryName!!,
+                type = TransactionType.from(categoryType!!.toInt()),
+                iconId = categoryIconId ?: CategoryEntity.DEFAULT_ICON_ID,
+                color = categoryColor?.toInt() ?: CategoryEntity.DEFAULT_COLOR,
+            )
+        } else {
+            CategoryEntity.from(
+                name = "Deleted",
+                type = TransactionType.from(type.toInt()),
+            )
+        }
+    }
+
+    private fun BalanceTimeline.toMonth(): LocalDate =
+        LocalDate(year = year.toInt(), month = month.toInt(), day = 1)
+
+    private fun CategoryTimeline.toMonth(): LocalDate =
+        LocalDate(year = year.toInt(), month = month.toInt(), day = 1)
+
+    private fun PeriodDatestampEntity.months(): List<LocalDate> {
+        var current = from.date.let { LocalDate(it.year, it.month, 1) }
+        val end = to.date.let { LocalDate(it.year, it.month, 1) }
+        return buildList {
+            while (current <= end) {
+                add(current)
+                current = current.plus(1, DateTimeUnit.MONTH)
+            }
         }
     }
 }
