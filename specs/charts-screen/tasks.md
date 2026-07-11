@@ -24,7 +24,7 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 - [x] Apply the missing currency predicate to every existing SQL query backed by `FilterEntity`. (R2)
 - [x] Extend `ReportDao`, `ReportMapper`, and `DefaultReportDao`; normalize sorting and missing buckets. (R3, R4)
 - [x] Add report API use cases, default implementations, and DI registrations. (R3, R4)
-- [ ] Add data/use-case tests for currency counts/ties, multi-currency reports, sparse months, empty periods, income-only, and expense-only data. (R2–R4)
+- [x] Add data/use-case tests for currency counts/ties, multi-currency reports, sparse months, empty periods, income-only, and expense-only data. (R2–R4)
 
 ## 4. Build Chart Components
 
