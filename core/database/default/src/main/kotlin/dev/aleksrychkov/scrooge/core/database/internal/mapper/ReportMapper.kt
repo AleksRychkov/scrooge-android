@@ -7,6 +7,7 @@ import dev.aleksrychkov.scrooge.core.database.TotalAmount
 import dev.aleksrychkov.scrooge.core.database.TotalAmountMothly
 import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
+import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportBalanceTimelineEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
@@ -120,12 +121,13 @@ internal object ReportMapper {
     fun balanceTimelineToEntity(
         list: List<BalanceTimeline>,
         period: PeriodDatestampEntity,
+        currentDate: LocalDate = Datestamp.now().date,
     ): ReportBalanceTimelineEntity {
         if (list.isEmpty()) return ReportBalanceTimelineEntity()
         val valuesByMonth = list.associate { row ->
             row.toMonth() to (row.balance ?: 0L)
         }
-        val points = period.months().map { month ->
+        val points = period.months(currentDate).map { month ->
             ReportBalanceTimelineEntity.Point(
                 month = month,
                 amount = valuesByMonth[month] ?: 0L,
@@ -137,8 +139,9 @@ internal object ReportMapper {
     fun categoryTimelineToEntity(
         list: List<CategoryTimeline>,
         period: PeriodDatestampEntity,
+        currentDate: LocalDate = Datestamp.now().date,
     ): ReportCategoryTimelineEntity {
-        val months = period.months()
+        val months = period.months(currentDate)
         val series = list
             .groupBy { row -> row.toCategoryEntity() }
             .map { (category, rows) ->
@@ -222,9 +225,11 @@ internal object ReportMapper {
     private fun CategoryTimeline.toMonth(): LocalDate =
         LocalDate(year = year.toInt(), month = month.toInt(), day = 1)
 
-    private fun PeriodDatestampEntity.months(): List<LocalDate> {
+    private fun PeriodDatestampEntity.months(currentDate: LocalDate): List<LocalDate> {
         var current = from.date.let { LocalDate(it.year, it.month, 1) }
-        val end = to.date.let { LocalDate(it.year, it.month, 1) }
+        val periodEnd = to.date.let { LocalDate(it.year, it.month, 1) }
+        val currentMonth = LocalDate(currentDate.year, currentDate.month, 1)
+        val end = minOf(periodEnd, currentMonth)
         return buildList {
             while (current <= end) {
                 add(current)

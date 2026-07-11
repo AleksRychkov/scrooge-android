@@ -44,6 +44,27 @@ internal class ReportMapperTest {
     }
 
     @Test
+    fun `When balance period extends into future Then future months are omitted`() {
+        // Given
+        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 12, 31))
+        val rows = listOf(BalanceTimeline(year = 2025, month = 1, balance = 100))
+
+        // When
+        val result = ReportMapper.balanceTimelineToEntity(
+            list = rows,
+            period = period,
+            currentDate = LocalDate(2025, 3, 15),
+        )
+
+        // Then
+        assertEquals(
+            listOf(LocalDate(2025, 1, 1), LocalDate(2025, 2, 1), LocalDate(2025, 3, 1)),
+            result.points.map { it.month },
+        )
+        assertEquals(listOf(100L, 0L, 0L), result.points.map { it.amount })
+    }
+
+    @Test
     fun `When category months are sparse Then every series contains all months`() {
         // Given
         val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 3, 31))
@@ -70,6 +91,26 @@ internal class ReportMapperTest {
 
         // Then
         assertTrue(result.series.isEmpty())
+    }
+
+    @Test
+    fun `When category period extends into future Then future months are omitted`() {
+        // Given
+        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 12, 31))
+        val rows = listOf(categoryRow(month = 1, total = 10))
+
+        // When
+        val result = ReportMapper.categoryTimelineToEntity(
+            list = rows,
+            period = period,
+            currentDate = LocalDate(2025, 2, 15),
+        )
+
+        // Then
+        assertEquals(
+            listOf(LocalDate(2025, 1, 1), LocalDate(2025, 2, 1)),
+            result.series.single().points.map { it.month },
+        )
     }
 
     private fun categoryRow(month: Long, total: Long): CategoryTimeline =
