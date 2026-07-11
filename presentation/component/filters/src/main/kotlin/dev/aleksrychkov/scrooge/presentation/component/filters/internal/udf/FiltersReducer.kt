@@ -237,6 +237,17 @@ internal class FiltersReducer(
                     )
                 }
             }
+
+            FiltersEvent.External.RemoveCurrency -> state.reduceWith(event) {
+                state {
+                    val filter = filter.copy(currency = null)
+                    copy(
+                        filter = filter,
+                        filterReadable = readableNameHelper.getName(filter = filter),
+                        currencySelectionMode = CurrencySelectionMode.Manual,
+                    )
+                }
+            }
         }
     }
 }

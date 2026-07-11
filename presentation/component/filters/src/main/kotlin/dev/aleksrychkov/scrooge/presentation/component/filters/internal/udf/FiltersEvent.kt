@@ -19,6 +19,7 @@ internal sealed interface FiltersEvent {
         data class SetTransactionType(val type: TransactionType?) : External
         data class SetCurrency(val currency: CurrencyEntity) : External
         data object RemoveCategory : External
+        data object RemoveCurrency : External
         data object Reset : External
     }
 

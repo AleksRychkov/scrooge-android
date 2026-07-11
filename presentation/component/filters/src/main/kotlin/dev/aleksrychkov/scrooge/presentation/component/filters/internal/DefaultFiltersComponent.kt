@@ -158,6 +158,10 @@ internal class DefaultFiltersComponent(
     override fun setCurrency(currency: CurrencyEntity) {
         store.handle(FiltersEvent.External.SetCurrency(currency = currency))
     }
+
+    override fun removeCurrency() {
+        store.handle(FiltersEvent.External.RemoveCurrency)
+    }
     // endregion Currency
 
     override fun resetFilters() {

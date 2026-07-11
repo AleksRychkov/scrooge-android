@@ -92,6 +92,7 @@ private fun FiltersContent(
         openCategoryModal = component::openCategoryModal,
         removeCategory = component::removeCategory,
         openCurrencyModal = component::openCurrencyModal,
+        removeCurrency = component::removeCurrency,
         onSubmitClicked = { callback(state.filter) },
         resetFilters = component::resetFilters,
         onTransactionTypeSelected = component::onTransactionTypeSelected,
@@ -128,6 +129,7 @@ private fun FiltersContent(
     openCategoryModal: () -> Unit,
     removeCategory: () -> Unit,
     openCurrencyModal: () -> Unit,
+    removeCurrency: () -> Unit,
     resetFilters: () -> Unit,
     onTransactionTypeSelected: (TransactionType?) -> Unit,
 ) {
@@ -186,6 +188,7 @@ private fun FiltersContent(
                 openCategoryModal = openCategoryModal,
                 removeCategory = removeCategory,
                 openCurrencyModal = openCurrencyModal,
+                removeCurrency = removeCurrency,
                 onTransactionTypeSelected = onTransactionTypeSelected,
             )
 
@@ -273,6 +276,7 @@ private fun FormContentPreview() {
                 openCategoryModal = {},
                 removeCategory = {},
                 openCurrencyModal = {},
+                removeCurrency = {},
                 resetFilters = {},
                 onTransactionTypeSelected = { _ -> },
             )

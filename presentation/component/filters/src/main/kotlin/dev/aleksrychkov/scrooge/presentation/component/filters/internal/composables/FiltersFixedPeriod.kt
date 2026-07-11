@@ -88,6 +88,7 @@ internal fun FiltersFixedPeriod(
     openCategoryModal: () -> Unit,
     removeCategory: () -> Unit,
     openCurrencyModal: () -> Unit,
+    removeCurrency: () -> Unit,
     onTransactionTypeSelected: (TransactionType?) -> Unit,
 ) {
     Column(
@@ -145,6 +146,7 @@ internal fun FiltersFixedPeriod(
                 modifier = Modifier.fillMaxWidth(),
                 currency = currency,
                 selectCurrency = openCurrencyModal,
+                removeCurrency = removeCurrency,
             )
         }
 
@@ -166,12 +168,14 @@ private fun Currency(
     modifier: Modifier,
     currency: CurrencyEntity?,
     selectCurrency: () -> Unit,
+    removeCurrency: () -> Unit,
 ) {
     DsSecondaryCard(
         modifier = modifier
             .padding(horizontal = Large)
             .height(intrinsicSize = IntrinsicSize.Max)
     ) {
+        val focusManager = LocalFocusManager.current
         Box {
             TextField(
                 modifier = Modifier
@@ -184,6 +188,8 @@ private fun Currency(
                 },
                 colors = DsInputTextFieldsColors(),
                 readOnly = true,
+                trailingIcon = {
+                },
                 onValueChange = { },
             )
             Box(
@@ -191,6 +197,20 @@ private fun Currency(
                     .fillMaxSize()
                     .debounceClickable(onClick = selectCurrency)
             )
+            if (currency != null) {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = stringResource(Resources.string.clear),
+                    modifier = Modifier
+                        .padding(end = Normal)
+                        .clip(CircleShape)
+                        .debounceClickable {
+                            focusManager.clearFocus(force = true)
+                            removeCurrency()
+                        }
+                        .align(Alignment.CenterEnd)
+                )
+            }
         }
     }
 }
@@ -564,6 +584,7 @@ private fun ContentPreview() {
                 openCategoryModal = {},
                 removeCategory = {},
                 openCurrencyModal = {},
+                removeCurrency = {},
                 onTransactionTypeSelected = { _ -> },
             )
         }

@@ -43,6 +43,7 @@ internal interface FiltersComponentInternal : FiltersComponent {
     fun openCurrencyModal()
     fun closeCurrencyModal()
     fun setCurrency(currency: CurrencyEntity)
+    fun removeCurrency()
 
     fun onTransactionTypeSelected(type: TransactionType?)
 }

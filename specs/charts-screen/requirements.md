@@ -27,7 +27,7 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 3. By default, Charts shall select the currency having the greatest number of transactions within the selected period and other active non-currency filters.
 4. Ties shall be resolved deterministically by currency code so the default does not flicker.
 5. If that filter has no transactions, Charts shall fall back to the last-used currency and then `CurrencyEntity.RUB`.
-6. An explicit user selection shall update `FilterEntity.currency` and remain selected until reset; Reset shall return currency selection to automatic mode.
+6. An explicit user selection shall update `FilterEntity.currency` and remain selected until reset. The currency control shall expose a clear action that sets it to `null`; Reset shall return currency selection to automatic mode.
 7. Apply shall return the selected currency, and Charts shall not run a chart query without one.
 8. The readable/active-filter UI shall indicate when a currency constraint is applied.
 9. Report database queries shall apply `currencyCode` when `FilterEntity.currency` is non-null.
