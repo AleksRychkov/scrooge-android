@@ -35,6 +35,7 @@ import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.columnModel
 import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.DefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
@@ -60,13 +61,19 @@ private val startAxisFormatter = CartesianValueFormatter { _, value, _ -> format
 fun CategoryLineChartContent(modifier: Modifier, component: CategoryLineChartComponent) {
     val internal = component as CategoryLineChartComponentInternal
     val state by internal.state.collectAsStateWithLifecycle()
-    CategoryLineChartContent(modifier, state.content, internal::retry)
+    CategoryLineChartContent(
+        modifier = modifier,
+        content = state.content,
+        currencySymbol = state.filter.currency?.currencySymbol.orEmpty(),
+        retry = internal::retry,
+    )
 }
 
 @Composable
 internal fun CategoryLineChartContent(
     modifier: Modifier,
     content: CategoryLineChartState.Content,
+    currencySymbol: String,
     retry: () -> Unit,
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
@@ -80,7 +87,7 @@ internal fun CategoryLineChartContent(
                 Message(R.string.category_chart_error)
                 Button(onClick = retry) { Text(stringResource(R.string.category_chart_retry)) }
             }
-            is CategoryLineChartState.Content.Data -> ChartWithLegend(content)
+            is CategoryLineChartState.Content.Data -> ChartWithLegend(content, currencySymbol)
         }
     }
 }
@@ -91,7 +98,10 @@ private fun Message(resource: Int) {
 }
 
 @Composable
-private fun ChartWithLegend(content: CategoryLineChartState.Content.Data) {
+private fun ChartWithLegend(
+    content: CategoryLineChartState.Content.Data,
+    currencySymbol: String,
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(horizontal = Large),
@@ -109,7 +119,7 @@ private fun ChartWithLegend(content: CategoryLineChartState.Content.Data) {
                 }
             }
         }
-        CategoryChart(Modifier.fillMaxWidth().weight(1f), content)
+        CategoryChart(Modifier.fillMaxWidth().weight(1f), content, currencySymbol)
     }
 }
 
@@ -117,6 +127,7 @@ private fun ChartWithLegend(content: CategoryLineChartState.Content.Data) {
 private fun CategoryChart(
     modifier: Modifier,
     content: CategoryLineChartState.Content.Data,
+    currencySymbol: String,
 ) {
     val producer = remember { CartesianChartModelProducer() }
     val scrollState = rememberVicoScrollState(scrollEnabled = true)
@@ -136,6 +147,7 @@ private fun CategoryChart(
     }
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(style = MaterialTheme.typography.labelMedium),
+        valueFormatter = DefaultCartesianMarker.ValueFormatter.default(suffix = " $currencySymbol"),
     )
     CartesianChartHost(
         modifier = modifier.padding(Large),
@@ -170,6 +182,7 @@ private fun CategoryLineChartPreview() {
                     CategoryLineChartState.Series("Taxi", 0xFF64B5F6.toInt(), persistentListOf(10.0, 25.0, 40.0)),
                 ),
             ),
+            currencySymbol = "₽",
             retry = {},
         )
     }
