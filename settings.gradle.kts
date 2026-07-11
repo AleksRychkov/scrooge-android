@@ -62,6 +62,7 @@ listOf(
 
 // presentation component
 include(":presentation:component:calculator")
+include(":presentation:component:balance-line-chart")
 include(":presentation:component:currency")
 include(":presentation:component:category")
 include(":presentation:component:category-carousel")

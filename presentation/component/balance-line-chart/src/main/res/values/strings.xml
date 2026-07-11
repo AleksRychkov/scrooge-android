@@ -1,0 +1,5 @@
+<resources>
+    <string name="balance_chart_no_data">No balance data for these filters</string>
+    <string name="balance_chart_error">Could not load balance data</string>
+    <string name="balance_chart_retry">Retry</string>
+</resources>
