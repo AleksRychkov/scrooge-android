@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run Detekt Checks"
+  short_description: "Run and resolve repository Detekt checks"
+  default_prompt: "Use $run-detekt-checks to run the project Detekt checks and report the result."
