@@ -5,7 +5,6 @@ import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.udf.Store
 import dev.aleksrychkov.scrooge.core.udfextensions.createStore
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceTotalChartComponent
-import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.internal.udf.BalanceLineChartCommand
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.internal.udf.BalanceLineChartEvent
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.internal.udf.BalanceLineChartReducer
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.internal.udf.BalanceLineChartState
