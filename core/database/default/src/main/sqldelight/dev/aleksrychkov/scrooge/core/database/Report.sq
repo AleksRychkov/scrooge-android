@@ -50,6 +50,63 @@ WITH monthly AS (
 )
 SELECT * FROM monthly;
 
+balanceTimeline:
+SELECT
+  (t.datestamp / 10000) AS year,
+  ((t.datestamp / 100) % 100) AS month,
+  SUM(CASE WHEN t.type = 0 THEN t.amount ELSE 0 END)
+    - SUM(CASE WHEN t.type = 1 THEN t.amount ELSE 0 END) AS balance
+FROM TTransaction t
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND (
+          NOT EXISTS (SELECT 1 FROM FilterTag)
+          OR EXISTS (
+            SELECT 1
+            FROM TransactionTag tt2
+            JOIN FilterTag ft ON ft.tagId = tt2.tagId
+            WHERE tt2.transactionId = t.id
+          )
+      )
+  AND (:categoryId IS NULL OR t.categoryId = :categoryId)
+  AND (:transactionType IS NULL OR t.type = :transactionType)
+  AND (:currencyCode IS NULL OR t.currencyCode = :currencyCode)
+GROUP BY year, month
+ORDER BY year, month;
+
+categoryTimeline:
+SELECT
+  (t.datestamp / 10000) AS year,
+  ((t.datestamp / 100) % 100) AS month,
+  t.type,
+  t.currencyCode,
+  SUM(t.amount) AS total,
+  Category.id AS categoryId,
+  Category.name AS categoryName,
+  Category.iconId AS categoryIconId,
+  Category.type AS categoryType,
+  Category.color AS categoryColor
+FROM TTransaction t
+LEFT JOIN Category ON t.categoryId = Category.id
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND (
+          NOT EXISTS (SELECT 1 FROM FilterTag)
+          OR EXISTS (
+            SELECT 1
+            FROM TransactionTag tt2
+            JOIN FilterTag ft ON ft.tagId = tt2.tagId
+            WHERE tt2.transactionId = t.id
+          )
+      )
+  AND (:categoryId IS NULL OR t.categoryId = :categoryId)
+  AND (:transactionType IS NULL OR t.type = :transactionType)
+  AND (:currencyCode IS NULL OR t.currencyCode = :currencyCode)
+GROUP BY year, month, t.type, t.currencyCode, t.categoryId
+ORDER BY year, month, t.type, t.categoryId;
+
 byCategory:
 SELECT
   t.type,
