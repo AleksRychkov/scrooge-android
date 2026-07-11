@@ -34,6 +34,7 @@ internal class DefaultReportDao(
                     toDatestamp = filter.period.to.value,
                     categoryId = filter.category?.id,
                     transactionType = filter.transactionType?.type?.toLong(),
+                    currencyCode = filter.currency?.currencyCode,
                 )
                 .asFlow()
                 .mapToList(readDispatcher)
@@ -52,6 +53,7 @@ internal class DefaultReportDao(
                 toDatestamp = filter.period.to.value,
                 categoryId = filter.category?.id,
                 transactionType = filter.transactionType?.type?.toLong(),
+                currencyCode = filter.currency?.currencyCode,
             )
             .executeAsList()
             .let(ReportMapper::totalAmountMonthlyToEntity)
@@ -67,6 +69,7 @@ internal class DefaultReportDao(
                 toDatestamp = filter.period.to.value,
                 categoryId = filter.category?.id,
                 transactionType = filter.transactionType?.type?.toLong(),
+                currencyCode = filter.currency?.currencyCode,
             )
             .executeAsList()
             .let(ReportMapper::byCategoryToEntity)

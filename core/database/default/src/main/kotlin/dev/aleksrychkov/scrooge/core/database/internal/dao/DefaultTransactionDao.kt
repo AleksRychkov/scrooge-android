@@ -41,6 +41,7 @@ internal class DefaultTransactionDao(
                 toDatestamp = filter.period.to.value,
                 categoryId = filter.category?.id,
                 transactionType = filter.transactionType?.type?.toLong(),
+                currencyCode = filter.currency?.currencyCode,
                 mapper = TransactionMapper::transactionEntityMapper,
             )
             .asFlow()
