@@ -42,6 +42,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal2X
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Small
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.TagEntity
 import dev.aleksrychkov.scrooge.core.entity.TransactionType
@@ -50,6 +51,7 @@ import dev.aleksrychkov.scrooge.presentation.component.filters.internal.composab
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCategoryModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersCurrencyModal
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.modal.FiltersTagModal
+import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.CurrencySelectionMode
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersEffect
 import dev.aleksrychkov.scrooge.presentation.component.filters.internal.udf.FiltersState
 import kotlinx.collections.immutable.persistentListOf
@@ -254,18 +256,41 @@ private fun HandleEffects(
     }
 }
 
-@Preview
+@Preview(name = "Automatic currency")
 @Composable
 @Suppress("UnusedPrivateMember")
-private fun FormContentPreview() {
+private fun AutomaticCurrencyPreview() {
+    FiltersContentPreview(
+        state = FiltersState(
+            filter = FilterEntity.currentYear().copy(currency = CurrencyEntity.RUB),
+            currencySelectionMode = CurrencySelectionMode.Automatic,
+            allYears = persistentListOf(2024),
+            allMonths = Month.entries.map { it.name }.toImmutableList(),
+        )
+    )
+}
+
+@Preview(name = "Manually cleared currency")
+@Composable
+@Suppress("UnusedPrivateMember")
+private fun ManuallyClearedCurrencyPreview() {
+    FiltersContentPreview(
+        state = FiltersState(
+            filter = FilterEntity.currentYear(),
+            currencySelectionMode = CurrencySelectionMode.Manual,
+            allYears = persistentListOf(2024),
+            allMonths = Month.entries.map { it.name }.toImmutableList(),
+        )
+    )
+}
+
+@Composable
+private fun FiltersContentPreview(state: FiltersState) {
     AppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             FiltersContent(
                 modifier = Modifier.fillMaxSize(),
-                state = FiltersState(
-                    allYears = persistentListOf(2024),
-                    allMonths = Month.entries.map { it.name }.toImmutableList(),
-                ),
+                state = state,
                 onYearClicked = { _ -> },
                 onYearLongClicked = { _ -> },
                 onMonthClicked = { _ -> },

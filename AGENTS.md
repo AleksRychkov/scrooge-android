@@ -23,7 +23,7 @@ Follow Kotlin conventions with four-space indentation and trailing commas in mul
 
 ## Testing Guidelines
 
-Tests use JUnit 5, with MockK and `kotlinx-coroutines-test` available in relevant modules. Mirror the production package and name files/classes `*Test.kt`, for example `PostfixNotationTest.kt`. Add unit tests for reducers, transformations, serializers, and domain logic. There is no configured coverage threshold; prioritize regression tests for changed behavior.
+Tests use JUnit 5, with MockK and `kotlinx-coroutines-test` available in relevant modules. Mirror the production package and name files/classes `*Test.kt`, for example `PostfixNotationTest.kt`. Name test methods `When <condition> Then <result>` and structure each body with `// Given`, `// When`, and `// Then` sections. Add unit tests for reducers, transformations, serializers, and domain logic. There is no configured coverage threshold; prioritize regression tests for changed behavior.
 
 ## Commit & Pull Request Guidelines
 

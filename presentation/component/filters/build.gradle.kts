@@ -37,4 +37,9 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     debugImplementation(libs.androidx.ui.tooling)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
