@@ -4,7 +4,9 @@ import dev.aleksrychkov.scrooge.core.di.NaiveModule
 import dev.aleksrychkov.scrooge.core.di.factory
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
+import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportBalanceTimelineUseCase
 import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportByCategoryUseCase
+import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportCategoryTimelineUseCase
 import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportTotalAmountMonthlyUseCase
 import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportTotalAmountUseCase
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +27,18 @@ fun buildReportsModule(): NaiveModule {
         }
         factory<ReportByCategoryUseCase> {
             DefaultReportByCategoryUseCase(
+                reportDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<ReportBalanceTimelineUseCase> {
+            DefaultReportBalanceTimelineUseCase(
+                reportDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<ReportCategoryTimelineUseCase> {
+            DefaultReportCategoryTimelineUseCase(
                 reportDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )

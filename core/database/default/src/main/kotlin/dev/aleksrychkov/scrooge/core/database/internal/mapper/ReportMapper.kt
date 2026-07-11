@@ -121,6 +121,7 @@ internal object ReportMapper {
         list: List<BalanceTimeline>,
         period: PeriodDatestampEntity,
     ): ReportBalanceTimelineEntity {
+        if (list.isEmpty()) return ReportBalanceTimelineEntity()
         val valuesByMonth = list.associate { row ->
             row.toMonth() to (row.balance ?: 0L)
         }
