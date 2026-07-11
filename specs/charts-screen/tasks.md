@@ -30,9 +30,9 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 
 - [x] Register `presentation:component:balance-line-chart`; implement public API, retained UDF state, mapper, and Vico content. (R3, R5)
 - [x] Add balance reducer/mapper tests and state previews. (R3)
-- [ ] Register `presentation:component:category-line-chart`; implement public API, retained UDF state, legend, mapper, and multi-series Vico content. (R4, R5)
-- [ ] Add category reducer/mapper tests for changing categories and zero-filled gaps. (R4)
-- [ ] Verify both components discard stale filter results and support retry. (R5)
+- [x] Register `presentation:component:category-line-chart`; implement public API, retained UDF state, legend, mapper, and multi-series Vico content. (R4, R5)
+- [x] Add category reducer/mapper tests for changing categories and zero-filled gaps. (R4)
+- [x] Verify both components discard stale filter results and support retry. (R5)
 
 ## 5. Build and Integrate Charts Screen
 

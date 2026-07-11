@@ -1,0 +1,5 @@
+<resources>
+    <string name="category_chart_no_data">No category data for these filters</string>
+    <string name="category_chart_error">Could not load category data</string>
+    <string name="category_chart_retry">Retry</string>
+</resources>
