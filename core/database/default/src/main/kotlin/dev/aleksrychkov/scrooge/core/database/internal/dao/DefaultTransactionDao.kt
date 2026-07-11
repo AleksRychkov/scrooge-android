@@ -9,6 +9,7 @@ import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TransactionDao
 import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TransactionMapper
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
@@ -48,6 +49,20 @@ internal class DefaultTransactionDao(
             .mapToList(readDispatcher)
             .map { list -> list.toImmutableList() }
     }
+
+    override suspend fun getMostUsedCurrency(filter: FilterEntity): CurrencyEntity? =
+        withContext(readDispatcher) {
+            prepareTagFilter(filter)
+            database.transactionQueries
+                .selectMostUsedCurrency(
+                    fromDatestamp = filter.period.from.value,
+                    toDatestamp = filter.period.to.value,
+                    categoryId = filter.category?.id,
+                    transactionType = filter.transactionType?.type?.toLong(),
+                )
+                .executeAsOneOrNull()
+                ?.let(CurrencyEntity::fromCurrencyCode)
+        }
 
     override suspend fun prepareTagFilter(filter: FilterEntity) =
         withContext(writeDispatcher + NonCancellable) {

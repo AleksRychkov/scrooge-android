@@ -14,7 +14,7 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 - [x] Add `FiltersSettings.Currency` and localized labels. (R2)
 - [x] Add currency modal navigation and reuse `CurrencyComponent`/`CurrencyModal`. (R2)
 - [x] Add automatic/manual currency state, currency events, reducer transitions, UI selection, reset behavior, and active-filter indication. (R2)
-- [ ] Add the most-used-currency transaction query/use case with period, tag, category, and type predicates plus deterministic tie-breaking. (R2)
+- [x] Add the most-used-currency transaction query/use case with period, tag, category, and type predicates plus deterministic tie-breaking. (R2)
 - [ ] Add reducer tests and Compose previews for automatic and manual currency filtering. (R2)
 
 ## 3. Add Report Domain and Persistence

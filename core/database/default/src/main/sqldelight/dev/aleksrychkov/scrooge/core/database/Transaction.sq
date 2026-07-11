@@ -52,6 +52,28 @@ WHERE
 GROUP BY t.id
 ORDER BY t.datestamp DESC, t.id DESC;
 
+selectMostUsedCurrency:
+SELECT
+  t.currencyCode
+FROM TTransaction t
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND (
+        NOT EXISTS (SELECT 1 FROM FilterTag)
+        OR EXISTS (
+          SELECT 1
+          FROM TransactionTag tt2
+          JOIN FilterTag ft ON ft.tagId = tt2.tagId
+          WHERE tt2.transactionId = t.id
+        )
+    )
+  AND (:categoryId IS NULL OR t.categoryId = :categoryId)
+  AND (:transactionType IS NULL OR t.type = :transactionType)
+GROUP BY t.currencyCode
+ORDER BY COUNT(t.id) DESC, t.currencyCode ASC
+LIMIT 1;
+
 selectFromToForExport:
 SELECT
   t.id,

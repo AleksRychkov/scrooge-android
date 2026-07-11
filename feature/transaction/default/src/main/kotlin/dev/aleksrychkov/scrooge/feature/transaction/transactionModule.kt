@@ -10,6 +10,7 @@ import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultCreateTransa
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultDeleteTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultEditTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetMinMaxTimestampUseCase
+import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetMostUsedCurrencyUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetPagedTransactionsUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetTransactionUseCase
 import dev.aleksrychkov.scrooge.feature.transaction.internal.DefaultGetTransactionsUseCase
@@ -49,6 +50,12 @@ fun buildTransactionModule(): NaiveModule {
         }
         factory<GetMinMaxTimestampUseCase> {
             DefaultGetMinMaxTimestampUseCase(
+                transactionDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<GetMostUsedCurrencyUseCase> {
+            DefaultGetMostUsedCurrencyUseCase(
                 transactionDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )

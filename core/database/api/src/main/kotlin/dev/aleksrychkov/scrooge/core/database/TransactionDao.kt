@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.core.database
 
 import androidx.paging.PagingSource
+import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionDao {
 
     suspend fun get(filter: FilterEntity): Flow<ImmutableList<TransactionEntity>>
+
+    suspend fun getMostUsedCurrency(filter: FilterEntity): CurrencyEntity?
 
     suspend fun prepareTagFilter(filter: FilterEntity)
 
