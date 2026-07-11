@@ -16,14 +16,14 @@ internal fun createDriver(context: Context): SqlDriver {
         callback = object : AndroidSqliteDriver.Callback(Scrooge.Schema.synchronous()) {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-//                if (dev.aleksrychkov.scrooge.core.database.BuildConfig.DEBUG) {
-//                    @Suppress("MagicNumber")
-//                    dev.aleksrychkov.scrooge.core.database.internal.debug.PreloadData
-//                        .preload(
-//                            db = db,
-//                            rowsCount = 2500,
-//                        )
-//                }
+                preloadDebugData(db)
+            }
+
+            override fun onOpen(db: SupportSQLiteDatabase) {
+                super.onOpen(db)
+                if (!db.hasTransactions()) {
+                    preloadDebugData(db)
+                }
             }
 
             override fun onConfigure(db: SupportSQLiteDatabase) {
@@ -33,4 +33,20 @@ internal fun createDriver(context: Context): SqlDriver {
             }
         }
     )
+}
+
+private fun preloadDebugData(db: SupportSQLiteDatabase) {
+    if (dev.aleksrychkov.scrooge.core.database.BuildConfig.DEBUG) {
+        @Suppress("MagicNumber")
+        dev.aleksrychkov.scrooge.core.database.internal.debug.PreloadData.preload(
+            db = db,
+            rowsCount = 2500,
+        )
+    }
+}
+
+private fun SupportSQLiteDatabase.hasTransactions(): Boolean {
+    return query("SELECT EXISTS(SELECT 1 FROM TTransaction LIMIT 1)").use { cursor ->
+        cursor.moveToFirst() && cursor.getInt(0) == 1
+    }
 }
