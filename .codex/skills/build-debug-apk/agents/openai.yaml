@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Debug APK"
+  short_description: "Build the project debug APK with Gradle"
+  default_prompt: "Use $build-debug-apk to build the project debug APK."
