@@ -28,7 +28,7 @@ internal data class BalanceLineChartState(
         data object Failure : Content
         data class Data(
             val labels: ImmutableList<String>,
-            val amounts: ImmutableList<Long>,
+            val amounts: ImmutableList<Double>,
         ) : Content
     }
 }
@@ -107,8 +107,9 @@ internal fun ReportBalanceTimelineEntity.toContent(): BalanceLineChartState.Cont
                 MONTH_ABBREVIATION_LENGTH
             ).lowercase().replaceFirstChar(Char::uppercase)} ${point.month.year}"
         }.toImmutableList(),
-        amounts = points.map { it.amount }.toImmutableList(),
+        amounts = points.map { it.amount / CENTS_IN_MAJOR_UNIT }.toImmutableList(),
     )
 }
 
 private const val MONTH_ABBREVIATION_LENGTH = 3
+private const val CENTS_IN_MAJOR_UNIT = 100.0

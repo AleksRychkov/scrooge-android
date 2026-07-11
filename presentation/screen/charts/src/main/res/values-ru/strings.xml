@@ -1,0 +1,5 @@
+<resources>
+    <string name="charts_title">Графики</string>
+    <string name="balance_chart_title">Баланс %1$s</string>
+    <string name="category_chart_title">Категория %1$s</string>
+</resources>

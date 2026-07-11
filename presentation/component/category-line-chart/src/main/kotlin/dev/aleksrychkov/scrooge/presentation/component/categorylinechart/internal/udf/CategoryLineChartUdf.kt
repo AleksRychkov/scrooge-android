@@ -36,7 +36,7 @@ internal data class CategoryLineChartState(
     data class Series(
         val name: String,
         val color: Int,
-        val amounts: ImmutableList<Long>,
+        val amounts: ImmutableList<Double>,
     )
 }
 
@@ -118,10 +118,13 @@ internal fun ReportCategoryTimelineEntity.toContent(): CategoryLineChartState.Co
             CategoryLineChartState.Series(
                 name = categorySeries.category.name,
                 color = categorySeries.category.color,
-                amounts = categorySeries.points.map { it.amount }.toImmutableList(),
+                amounts = categorySeries.points
+                    .map { it.amount / CENTS_IN_MAJOR_UNIT }
+                    .toImmutableList(),
             )
         }.toImmutableList(),
     )
 }
 
 private const val MONTH_ABBREVIATION_LENGTH = 3
+private const val CENTS_IN_MAJOR_UNIT = 100.0

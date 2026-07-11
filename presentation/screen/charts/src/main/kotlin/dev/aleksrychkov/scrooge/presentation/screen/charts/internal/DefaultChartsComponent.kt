@@ -14,6 +14,7 @@ import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceLineChartComponent
 import dev.aleksrychkov.scrooge.presentation.component.categorylinechart.CategoryLineChartComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
+import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
 import dev.aleksrychkov.scrooge.presentation.screen.charts.ChartsComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,12 +22,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.EnumSet
 
 @Immutable
 internal data class ChartsState(val filter: FilterEntity = FilterEntity.currentYear())
 
 internal sealed interface ChartsCommand {
-    data class ResolveCurrency(val filter: FilterEntity) : ChartsCommand
+    data class ResolveFilter(val filter: FilterEntity) : ChartsCommand
 }
 
 internal interface ChartsComponentInternal : ChartsComponent {
@@ -45,7 +47,7 @@ internal class DefaultChartsComponent(
     private val filtersNavigation = SlotNavigation<FilterEntity>()
     private val _state = MutableStateFlow(ChartsState())
 
-    private val currencyResolver = ChartsCurrencyResolver()
+    private val filterResolver = ChartsFilterResolver()
     private val scope = retainedCoroutineScope(Dispatchers.IO)
     private var resolveCurrencyJob: Job? = null
 
@@ -69,7 +71,15 @@ internal class DefaultChartsComponent(
         handleBackButton = true,
         key = "ChartsFiltersModal",
     ) { filter, childComponentContext ->
-        FiltersComponent(childComponentContext, filter)
+        FiltersComponent(
+            componentContext = childComponentContext,
+            filter = filter,
+            settings = EnumSet.of(
+                FiltersSettings.Years,
+                FiltersSettings.Currency,
+                FiltersSettings.Category,
+            ),
+        )
     }
 
     override val balanceChart: BalanceLineChartComponent
@@ -88,9 +98,9 @@ internal class DefaultChartsComponent(
 
     override fun setFilter(filter: FilterEntity) {
         resolveCurrencyJob?.cancel()
-        if (filter.currency == null) {
+        if (filter.currency == null || filter.category == null) {
             _state.value = ChartsState(filter)
-            execute(ChartsCommand.ResolveCurrency(filter))
+            execute(ChartsCommand.ResolveFilter(filter))
             return
         }
         applyFilter(filter)
@@ -99,9 +109,11 @@ internal class DefaultChartsComponent(
     private fun execute(command: ChartsCommand) {
         resolveCurrencyJob = scope.launch {
             when (command) {
-                is ChartsCommand.ResolveCurrency -> {
-                    val currency = currencyResolver(command.filter)
-                    applyFilter(command.filter.copy(currency = currency))
+                is ChartsCommand.ResolveFilter -> {
+                    val resolvedFilter = filterResolver(command.filter)
+                    if (resolvedFilter.currency != null && resolvedFilter.category != null) {
+                        applyFilter(resolvedFilter)
+                    }
                 }
             }
         }

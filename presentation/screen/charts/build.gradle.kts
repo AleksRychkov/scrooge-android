@@ -20,6 +20,7 @@ dependencies {
     implementation(projects.presentation.component.categoryLineChart)
     implementation(projects.presentation.component.filters)
     implementation(projects.feature.currency.api)
+    implementation(projects.feature.category.api)
     implementation(projects.feature.transaction.api)
 
     implementation(platform(libs.androidx.compose.bom))

@@ -26,6 +26,10 @@ Keep `FiltersComponent` presentation-only: it edits the supplied `FilterEntity`,
 
 When Charts receives a filter whose currency is null, dispatch a screen command that resolves the most-used currency for the non-currency filter. If the selected period has no transactions, use `GetLastUsedCurrencyUseCase`; if that is also empty, use `CurrencyEntity.RUB`. Cancel stale resolution commands, update the screen filter with the result, and only then propagate the same snapshot to both charts. Cover the fallback chain in Charts tests.
 
+After currency resolution, resolve a null category to the category with the most matching transactions while ignoring `filter.category`. If no transaction matches, select a random available category constrained by `filter.transactionType` when present. Store both defaults in the authoritative Charts filter before loading either chart, so the category chart always renders one series.
+
+The Charts filter modal exposes only year, currency, and category controls. Month, tag, and transaction-type controls remain available to other owning screens but are not shown on Charts.
+
 ## Screen Wireframe
 
 ```text
@@ -65,6 +69,8 @@ Add immutable time-series entities in `core:entity`, for example:
 - Each point contains a `LocalDate` bucket and `Long` minor-unit amount.
 
 Extend `ReportDao` with balance-timeline and category-timeline methods. Add SQLDelight queries grouped by year/month. Every report query, including existing totals, should accept `currencyCode` and apply `(:currencyCode IS NULL OR t.currencyCode = :currencyCode)`. Reuse the temporary tag-filter mechanism and existing category/type/date predicates. Mappers must sort buckets and synthesize missing month/category values as zero.
+
+The balance timeline is the exception to the shared non-currency predicates: it uses only date range and currency. Category, tag, and transaction-type filters apply to the category timeline but must not change balance points.
 
 Add `ReportBalanceTimelineUseCase` and `ReportCategoryTimelineUseCase` to `feature:reports:api`, default implementations using `runSuspendCatching`, and factories in `buildReportsModule()`.
 

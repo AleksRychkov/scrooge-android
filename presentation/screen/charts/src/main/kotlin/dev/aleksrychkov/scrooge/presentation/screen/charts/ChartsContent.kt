@@ -43,13 +43,14 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
                 .padding(padding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            ChartCard(stringResource(R.string.balance_chart_title)) {
+            val currencySymbol = state.filter.currency?.currencySymbol.orEmpty()
+            ChartCard(stringResource(R.string.balance_chart_title, currencySymbol)) {
                 BalanceLineChartContent(
                     modifier = Modifier.fillMaxWidth().height(CHART_HEIGHT),
                     component = internal.balanceChart,
                 )
             }
-            ChartCard(stringResource(R.string.category_chart_title)) {
+            ChartCard(stringResource(R.string.category_chart_title, currencySymbol)) {
                 CategoryLineChartContent(
                     modifier = Modifier.fillMaxWidth().height(CATEGORY_CHART_HEIGHT),
                     component = internal.categoryChart,

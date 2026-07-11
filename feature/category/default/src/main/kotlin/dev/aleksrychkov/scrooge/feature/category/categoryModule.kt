@@ -11,6 +11,7 @@ import dev.aleksrychkov.scrooge.feature.category.internal.DefaultCategories
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultCreateCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultDeleteCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultGetCategoryUseCase
+import dev.aleksrychkov.scrooge.feature.category.internal.DefaultGetRandomCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultObserveCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultPreloadCategoriesUseCase
 import dev.aleksrychkov.scrooge.feature.category.internal.DefaultSwapOrderIndexCategoryUseCase
@@ -40,6 +41,12 @@ fun buildCategoryModule(context: Context): NaiveModule {
         }
         factory<GetCategoryUseCase> {
             DefaultGetCategoryUseCase(
+                categoryDao = getLazy(),
+                ioDispatcher = Dispatchers.IO,
+            )
+        }
+        factory<GetRandomCategoryUseCase> {
+            DefaultGetRandomCategoryUseCase(
                 categoryDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )

@@ -34,17 +34,17 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 
 ### R3 — Balance line chart
 
-1. The screen shall display a balance line chart for the selected period, selected currency, tags, category, and transaction type.
+1. The screen shall display a balance line chart filtered only by selected period and currency; category, tags, and transaction type shall not affect it.
 2. Each calendar-month point within the selected period shall equal filtered income minus filtered expense for the selected currency.
 3. The component shall expose loading, content, empty, and failure states using the existing Component + internal UDF pattern.
 4. Axes, markers, amount formatting, colors, and spacing shall use Vico and the design system.
 
 ### R4 — Category line chart
 
-1. The screen shall display one time series per category for the same filter and monthly buckets.
-2. Category colors and labels shall come from `CategoryEntity` and repository resources.
-3. The chart shall provide a readable legend and marker values; it shall handle categories appearing or disappearing across buckets.
-4. Loading, empty, and failure states shall be explicit.
+1. The screen shall display one category time series for the same filter and monthly buckets.
+2. When category is null, Charts shall select the category with the most matching transactions after currency resolution, then fall back to a random available category.
+3. Category color and label shall come from `CategoryEntity` and repository resources.
+4. The chart shall provide readable marker values and explicit loading, empty, and failure states.
 
 ### R5 — Refresh and consistency
 

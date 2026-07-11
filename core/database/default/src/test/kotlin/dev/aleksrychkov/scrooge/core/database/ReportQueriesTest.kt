@@ -80,6 +80,38 @@ class ReportQueriesTest {
     }
 
     @Test
+    fun `When category usage is filtered Then most frequent matching category is selected`() = runTest {
+        // Given
+        addTransaction(amount = 10, datestamp = 20260101, type = EXPENSE, categoryId = 2, currency = "RUB")
+        addTransaction(amount = 20, datestamp = 20260102, type = EXPENSE, categoryId = 2, currency = "RUB")
+        addTransaction(amount = 30, datestamp = 20260103, type = INCOME, categoryId = 1, currency = "RUB")
+        addTransaction(amount = 40, datestamp = 20260104, type = EXPENSE, categoryId = 2, currency = "USD")
+
+        // When
+        val category = database.transactionQueries.selectMostUsedCategory(
+            fromDatestamp = 20260101,
+            toDatestamp = 20260131,
+            transactionType = EXPENSE,
+            currencyCode = "RUB",
+        ).executeAsOne()
+
+        // Then
+        assertEquals("Food", category.name)
+    }
+
+    @Test
+    fun `When random category is filtered by type Then matching category is returned`() = runTest {
+        // Given
+        val type = INCOME
+
+        // When
+        val category = database.categoryQueries.selectRandom(type).executeAsOne()
+
+        // Then
+        assertEquals("Salary", category.name)
+    }
+
+    @Test
     fun `When balance timeline is queried Then it subtracts expenses and isolates currency`() = runTest {
         // Given
         addTransaction(amount = 500, datestamp = 20260101, type = INCOME, categoryId = 1, currency = "RUB")
@@ -87,13 +119,12 @@ class ReportQueriesTest {
         addTransaction(amount = 70, datestamp = 20260202, type = EXPENSE, categoryId = 2, currency = "RUB")
         addTransaction(amount = 200, datestamp = 20260302, type = INCOME, categoryId = 1, currency = "RUB")
         addTransaction(amount = 999, datestamp = 20260103, type = INCOME, categoryId = 1, currency = "USD")
+        database.tagQueries.insertFilterTag(999)
 
         // When
         val rows = database.reportQueries.balanceTimeline(
             fromDatestamp = 20260101,
             toDatestamp = 20260331,
-            categoryId = null,
-            transactionType = null,
             currencyCode = "RUB",
         ).executeAsList()
 

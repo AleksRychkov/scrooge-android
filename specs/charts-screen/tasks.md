@@ -15,6 +15,7 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 - [x] Add currency modal navigation and reuse `CurrencyComponent`/`CurrencyModal`. (R2)
 - [x] Keep currency editing presentation-only: explicit selection/clear, reset to null, and active-filter indication. (R2)
 - [x] Add the most-used-currency transaction query/use case with period, tag, category, and type predicates plus deterministic tie-breaking. (R2)
+- [x] Add most-used-category resolution with a transaction-type-aware random category fallback. (R4)
 - [x] Add reducer tests and Compose previews for selected and cleared currency filtering. (R2)
 
 ## 3. Add Report Domain and Persistence
@@ -30,7 +31,7 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 
 - [x] Register `presentation:component:balance-line-chart`; implement public API, retained UDF state, mapper, and Vico content. (R3, R5)
 - [x] Add balance reducer/mapper tests and state previews. (R3)
-- [x] Register `presentation:component:category-line-chart`; implement public API, retained UDF state, legend, mapper, and multi-series Vico content. (R4, R5)
+- [x] Register `presentation:component:category-line-chart`; implement public API, retained UDF state, category label, mapper, and Vico content. (R4, R5)
 - [x] Add category reducer/mapper tests for changing categories and zero-filled gaps. (R4)
 - [x] Verify both components discard stale filter results and support retry. (R5)
 

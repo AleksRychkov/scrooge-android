@@ -27,27 +27,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.Scroll
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
-import com.patrykandpatrick.vico.compose.cartesian.data.lineModel
-import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.data.columnModel
+import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.patrykandpatrick.vico.compose.common.data.ExtraStore
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.utils.formatCompactNumber
 import dev.aleksrychkov.scrooge.presentation.component.categorylinechart.internal.CategoryLineChartComponentInternal
 import dev.aleksrychkov.scrooge.presentation.component.categorylinechart.internal.udf.CategoryLineChartState
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
 
 private val labelsKey = ExtraStore.Key<List<String>>()
 private val bottomAxisFormatter = CartesianValueFormatter { context, value, _ ->
     context.model.extraStore[labelsKey].getOrElse(value.toInt()) { "" }
 }
+private val startAxisFormatter = CartesianValueFormatter { _, value, _ -> formatCompactNumber(value) }
 
 @Composable
 fun CategoryLineChartContent(modifier: Modifier, component: CategoryLineChartComponent) {
@@ -112,31 +119,42 @@ private fun CategoryChart(
     content: CategoryLineChartState.Content.Data,
 ) {
     val producer = remember { CartesianChartModelProducer() }
+    val scrollState = rememberVicoScrollState(scrollEnabled = true)
     LaunchedEffect(content) {
         producer.runTransaction {
-            lineModel { content.series.forEach { series(it.amounts) } }
+            columnModel { content.series.forEach { series(it.amounts) } }
             extras { it[labelsKey] = content.labels }
         }
+        delay(SCROLL_AFTER_LAYOUT_DELAY_MILLIS)
+        scrollState.scroll(Scroll.Absolute.End)
     }
-    val lines = content.series.map { series ->
-        LineCartesianLayer.rememberLine(
-            fill = LineCartesianLayer.LineFill.single(Fill(Color(series.color))),
+    val columns = content.series.map { series ->
+        rememberLineComponent(
+            fill = Fill(Color(series.color)),
+            thickness = CATEGORY_COLUMN_WIDTH,
         )
     }
+    val marker = rememberDefaultCartesianMarker(
+        label = rememberTextComponent(style = MaterialTheme.typography.labelMedium),
+    )
     CartesianChartHost(
         modifier = modifier.padding(Large),
         modelProducer = producer,
+        scrollState = scrollState,
         animateIn = false,
         chart = rememberCartesianChart(
-            rememberLineCartesianLayer(
-                lineProvider = LineCartesianLayer.LineProvider.series(lines),
-                pointSpacing = 56.dp,
+            rememberColumnCartesianLayer(
+                columnProvider = ColumnCartesianLayer.ColumnProvider.series(columns),
             ),
-            startAxis = VerticalAxis.rememberStart(),
+            startAxis = VerticalAxis.rememberStart(valueFormatter = startAxisFormatter),
             bottomAxis = HorizontalAxis.rememberBottom(valueFormatter = bottomAxisFormatter),
+            marker = marker,
         ),
     )
 }
+
+private const val SCROLL_AFTER_LAYOUT_DELAY_MILLIS = 100L
+private val CATEGORY_COLUMN_WIDTH = 24.dp
 
 @Preview
 @Composable
@@ -148,8 +166,8 @@ private fun CategoryLineChartPreview() {
             content = CategoryLineChartState.Content.Data(
                 labels = persistentListOf("Jan 2026", "Feb 2026", "Mar 2026"),
                 series = persistentListOf(
-                    CategoryLineChartState.Series("Food", 0xFFE57373.toInt(), persistentListOf(30, 45, 20)),
-                    CategoryLineChartState.Series("Taxi", 0xFF64B5F6.toInt(), persistentListOf(10, 25, 40)),
+                    CategoryLineChartState.Series("Food", 0xFFE57373.toInt(), persistentListOf(30.0, 45.0, 20.0)),
+                    CategoryLineChartState.Series("Taxi", 0xFF64B5F6.toInt(), persistentListOf(10.0, 25.0, 40.0)),
                 ),
             ),
             retry = {},

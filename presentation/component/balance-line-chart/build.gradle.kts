@@ -15,6 +15,7 @@ dependencies {
     implementation(projects.core.di)
     implementation(projects.core.entity)
     implementation(projects.core.udfExtensions)
+    implementation(projects.core.utils)
     implementation(projects.feature.reports.api)
 
     implementation(platform(libs.androidx.compose.bom))

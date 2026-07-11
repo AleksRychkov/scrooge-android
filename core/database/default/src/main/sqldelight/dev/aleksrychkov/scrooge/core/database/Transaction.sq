@@ -74,6 +74,34 @@ GROUP BY t.currencyCode
 ORDER BY COUNT(t.id) DESC, t.currencyCode ASC
 LIMIT 1;
 
+selectMostUsedCategory:
+SELECT
+  Category.id,
+  Category.name,
+  Category.type,
+  Category.iconId,
+  Category.color,
+  Category.orderIndex
+FROM TTransaction t
+JOIN Category ON t.categoryId = Category.id
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND (
+        NOT EXISTS (SELECT 1 FROM FilterTag)
+        OR EXISTS (
+          SELECT 1
+          FROM TransactionTag tt2
+          JOIN FilterTag ft ON ft.tagId = tt2.tagId
+          WHERE tt2.transactionId = t.id
+        )
+    )
+  AND (:transactionType IS NULL OR t.type = :transactionType)
+  AND (:currencyCode IS NULL OR t.currencyCode = :currencyCode)
+GROUP BY Category.id
+ORDER BY COUNT(t.id) DESC, Category.id ASC
+LIMIT 1;
+
 selectFromToForExport:
 SELECT
   t.id,

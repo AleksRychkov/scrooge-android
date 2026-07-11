@@ -1,0 +1,5 @@
+<resources>
+    <string name="category_chart_no_data">Нет данных по категории для выбранных фильтров</string>
+    <string name="category_chart_error">Не удалось загрузить данные по категории</string>
+    <string name="category_chart_retry">Повторить</string>
+</resources>

@@ -8,7 +8,9 @@ import app.cash.sqldelight.paging3.QueryPagingSource
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.TransactionDao
 import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
+import dev.aleksrychkov.scrooge.core.database.internal.mapper.CategoryMapper
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.TransactionMapper
+import dev.aleksrychkov.scrooge.core.entity.CategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.CurrencyEntity
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
@@ -62,6 +64,20 @@ internal class DefaultTransactionDao(
                 )
                 .executeAsOneOrNull()
                 ?.let(CurrencyEntity::fromCurrencyCode)
+        }
+
+    override suspend fun getMostUsedCategory(filter: FilterEntity): CategoryEntity? =
+        withContext(readDispatcher) {
+            prepareTagFilter(filter)
+            database.transactionQueries
+                .selectMostUsedCategory(
+                    fromDatestamp = filter.period.from.value,
+                    toDatestamp = filter.period.to.value,
+                    transactionType = filter.transactionType?.type?.toLong(),
+                    currencyCode = filter.currency?.currencyCode,
+                    mapper = CategoryMapper::toEntity,
+                )
+                .executeAsOneOrNull()
         }
 
     override suspend fun prepareTagFilter(filter: FilterEntity) =

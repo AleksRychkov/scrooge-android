@@ -49,5 +49,11 @@ UPDATE Category SET orderIndex = :orderIndex WHERE id = :id;
 selectAll:
 SELECT * FROM Category;
 
+selectRandom:
+SELECT * FROM Category
+WHERE (:type IS NULL OR type = :type)
+ORDER BY RANDOM()
+LIMIT 1;
+
 getSize:
 SELECT COUNT(id) FROM Category;

@@ -60,6 +60,16 @@ internal class DefaultCategoryDao(
             .executeAsOneOrNull()
     }
 
+    override suspend fun getRandom(type: TransactionType?): CategoryEntity? =
+        withContext(readDispatcher) {
+            database.categoryQueries
+                .selectRandom(
+                    type = type?.type?.toLong(),
+                    mapper = CategoryMapper::toEntity,
+                )
+                .executeAsOneOrNull()
+        }
+
     override suspend fun create(
         name: String,
         type: TransactionType,

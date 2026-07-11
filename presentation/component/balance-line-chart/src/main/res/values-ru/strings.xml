@@ -1,0 +1,5 @@
+<resources>
+    <string name="balance_chart_no_data">Нет данных о балансе для выбранных фильтров</string>
+    <string name="balance_chart_error">Не удалось загрузить данные о балансе</string>
+    <string name="balance_chart_retry">Повторить</string>
+</resources>

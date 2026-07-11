@@ -85,8 +85,6 @@ internal class DefaultReportDao(
             .balanceTimeline(
                 fromDatestamp = filter.period.from.value,
                 toDatestamp = filter.period.to.value,
-                categoryId = filter.category?.id,
-                transactionType = filter.transactionType?.type?.toLong(),
                 currencyCode = filter.currency?.currencyCode,
             )
             .executeAsList()
