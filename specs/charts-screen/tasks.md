@@ -19,7 +19,7 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 
 ## 3. Add Report Domain and Persistence
 
-- [ ] Define balance/category timeline entities in `core:entity`. (R3, R4)
+- [x] Define balance/category timeline entities in `core:entity`. (R3, R4)
 - [ ] Add SQLDelight monthly balance and monthly-by-category queries with date, tag, category, type, and currency predicates. (R2–R4)
 - [x] Apply the missing currency predicate to every existing SQL query backed by `FilterEntity`. (R2)
 - [ ] Extend `ReportDao`, `ReportMapper`, and `DefaultReportDao`; normalize sorting and missing buckets. (R3, R4)
