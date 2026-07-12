@@ -147,7 +147,11 @@ private fun CategoryChart(
     }
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(style = MaterialTheme.typography.labelMedium),
-        valueFormatter = DefaultCartesianMarker.ValueFormatter.default(suffix = " $currencySymbol"),
+        valueFormatter = DefaultCartesianMarker.ValueFormatter.default(
+            decimalSeparator = ",",
+            thousandsSeparator = " ",
+            suffix = " $currencySymbol",
+        ),
     )
     CartesianChartHost(
         modifier = modifier.padding(Large),

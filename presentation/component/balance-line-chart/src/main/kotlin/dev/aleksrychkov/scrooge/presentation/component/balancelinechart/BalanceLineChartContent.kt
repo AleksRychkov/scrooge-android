@@ -127,7 +127,11 @@ private fun Chart(
     }
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(style = MaterialTheme.typography.labelMedium),
-        valueFormatter = DefaultCartesianMarker.ValueFormatter.default(suffix = " $currencySymbol"),
+        valueFormatter = DefaultCartesianMarker.ValueFormatter.default(
+            decimalSeparator = ",",
+            thousandsSeparator = " ",
+            suffix = " $currencySymbol",
+        ),
     )
     CartesianChartHost(
         modifier = Modifier.fillMaxSize().padding(Large),
@@ -135,9 +139,7 @@ private fun Chart(
         scrollState = scrollState,
         animateIn = false,
         chart = rememberCartesianChart(
-            rememberColumnCartesianLayer(
-                columnProvider = columnProvider,
-            ),
+            rememberColumnCartesianLayer(columnProvider = columnProvider),
             startAxis = VerticalAxis.rememberStart(valueFormatter = startAxisFormatter),
             bottomAxis = HorizontalAxis.rememberBottom(valueFormatter = bottomAxisFormatter),
             marker = marker,
