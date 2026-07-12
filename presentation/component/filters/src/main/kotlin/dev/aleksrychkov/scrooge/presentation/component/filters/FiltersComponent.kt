@@ -6,6 +6,8 @@ import dev.aleksrychkov.scrooge.presentation.component.filters.internal.DefaultF
 import java.util.EnumSet
 
 interface FiltersComponent {
+    fun openCategoryModal()
+
     companion object {
         operator fun invoke(
             componentContext: ComponentContext,

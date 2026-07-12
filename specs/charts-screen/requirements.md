@@ -45,6 +45,7 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 2. When category is null, Charts shall select the category with the most matching transactions after currency resolution, then fall back to a random available category.
 3. Category color and label shall come from `CategoryEntity` and repository resources.
 4. The chart shall provide readable marker values and explicit loading, empty, and failure states.
+5. Tapping the category name shall open the Charts filters modal with the category picker displayed.
 
 ### R4a — Balance Total chart
 
@@ -69,7 +70,7 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 ## Out of Scope
 
 - Currency conversion or exchange rates.
-- Daily/weekly bucket selection, chart exporting, comparisons, forecasting, or interactive category filtering from the chart.
+- Daily/weekly bucket selection, chart exporting, comparisons, or forecasting.
 
 ## Acceptance
 

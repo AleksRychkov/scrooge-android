@@ -43,6 +43,7 @@ Tasks are ordered by dependency. Complete each checkbox with focused tests befor
 - [x] Resolve a null currency in Charts, then propagate one resolved filter snapshot to the filter state and both charts. (R2, R5)
 - [x] Implement the Compose screen with title, filter action, chart cards, and all UI states. (R1, R3, R4)
 - [x] Add the Balance Total card and propagate the resolved filter to it with the other charts. (R4a, R5)
+- [x] Open the filters modal and category picker when the category chart label is tapped. (R4)
 - [x] Add a serialized Charts child to `presentation:screen:main:tabs`, preserve the existing Reports child, and update bottom-bar ordering and dependencies. (R1)
 
 ## 6. Validate

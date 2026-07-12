@@ -35,7 +35,7 @@ internal interface FiltersComponentInternal : FiltersComponent {
     fun addTag(tag: TagEntity)
     fun removeTag(tag: TagEntity)
 
-    fun openCategoryModal()
+    override fun openCategoryModal()
     fun closeCategoryModal()
     fun setCategory(category: CategoryEntity)
     fun removeCategory()

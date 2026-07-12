@@ -1,6 +1,7 @@
 package dev.aleksrychkov.scrooge.presentation.component.categorylinechart
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,13 +59,18 @@ private val bottomAxisFormatter = CartesianValueFormatter { context, value, _ ->
 private val startAxisFormatter = CartesianValueFormatter { _, value, _ -> formatCompactNumber(value) }
 
 @Composable
-fun CategoryLineChartContent(modifier: Modifier, component: CategoryLineChartComponent) {
+fun CategoryLineChartContent(
+    modifier: Modifier,
+    component: CategoryLineChartComponent,
+    openCategoryFilter: () -> Unit,
+) {
     val internal = component as CategoryLineChartComponentInternal
     val state by internal.state.collectAsStateWithLifecycle()
     CategoryLineChartContent(
         modifier = modifier,
         content = state.content,
         currencySymbol = state.filter.currency?.currencySymbol.orEmpty(),
+        openCategoryFilter = openCategoryFilter,
         retry = internal::retry,
     )
 }
@@ -74,6 +80,7 @@ internal fun CategoryLineChartContent(
     modifier: Modifier,
     content: CategoryLineChartState.Content,
     currencySymbol: String,
+    openCategoryFilter: () -> Unit,
     retry: () -> Unit,
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
@@ -87,7 +94,8 @@ internal fun CategoryLineChartContent(
                 Message(R.string.category_chart_error)
                 Button(onClick = retry) { Text(stringResource(R.string.category_chart_retry)) }
             }
-            is CategoryLineChartState.Content.Data -> ChartWithLegend(content, currencySymbol)
+            is CategoryLineChartState.Content.Data ->
+                ChartWithLegend(content, currencySymbol, openCategoryFilter)
         }
     }
 }
@@ -101,6 +109,7 @@ private fun Message(resource: Int) {
 private fun ChartWithLegend(
     content: CategoryLineChartState.Content.Data,
     currencySymbol: String,
+    openCategoryFilter: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -115,7 +124,11 @@ private fun ChartWithLegend(
                     Box(
                         Modifier.size(8.dp).background(Color(series.color), CircleShape),
                     )
-                    Text(series.name, style = MaterialTheme.typography.labelMedium)
+                    Text(
+                        modifier = Modifier.clickable(onClick = openCategoryFilter),
+                        text = series.name,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
                 }
             }
         }
@@ -188,6 +201,7 @@ private fun CategoryLineChartPreview() {
                 ),
             ),
             currencySymbol = "₽",
+            openCategoryFilter = {},
             retry = {},
         )
     }

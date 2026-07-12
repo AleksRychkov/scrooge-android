@@ -12,7 +12,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +38,7 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
     val internal = component as ChartsComponentInternal
     val state by internal.state.collectAsStateWithLifecycle()
+    var openCategoryPicker by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         modifier = modifier,
         topBar = { ChartsAppBar(state.filter.readableName(), internal::openFilters) },
@@ -61,11 +66,21 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
                 CategoryLineChartContent(
                     modifier = Modifier.fillMaxWidth().height(CATEGORY_CHART_HEIGHT),
                     component = internal.categoryChart,
+                    openCategoryFilter = {
+                        openCategoryPicker = true
+                        internal.openFilters()
+                    },
                 )
             }
         }
     }
     internal.filtersModal.subscribeAsState().value.child?.instance?.let { filters ->
+        if (openCategoryPicker) {
+            LaunchedEffect(filters) {
+                filters.openCategoryModal()
+                openCategoryPicker = false
+            }
+        }
         FiltersBottomSheetModal(
             component = filters,
             close = internal::closeFilters,
