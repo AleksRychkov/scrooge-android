@@ -6,17 +6,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerDefaults
-import androidx.compose.foundation.pager.PagerSnapDistance
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,8 +39,6 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large2X
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.core.entity.readableName
-import dev.aleksrychkov.scrooge.presentation.component.periodbalance.PeriodBalanceComponent
-import dev.aleksrychkov.scrooge.presentation.component.periodbalance.PeriodBalanceContent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalContent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.ReportAnnualTotalComponentInternal
@@ -56,8 +47,6 @@ import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.modal.FiltersModal
 import kotlinx.coroutines.launch
 import dev.aleksrychkov.scrooge.core.resources.R as Resources
-
-private const val TOTAL_REPORTS_PAGER_COUNT = 2
 
 @Composable
 fun ReportAnnualTotalContent(
@@ -153,7 +142,6 @@ private fun Content(
         modifier = modifier,
         contentListState = contentListState,
         periodTotalComponent = component.periodTotalComponent,
-        periodBalanceComponent = component.periodBalanceComponent,
         totalMonthlyComponent = component.totalMonthlyComponent,
         openCategoryReport = openCategoryReport,
     )
@@ -164,59 +152,27 @@ private fun Content(
     modifier: Modifier,
     contentListState: LazyListState,
     periodTotalComponent: PeriodTotalComponent,
-    periodBalanceComponent: PeriodBalanceComponent,
     totalMonthlyComponent: TotalMonthlyComponent,
     openCategoryReport: (PeriodDatestampEntity) -> Unit,
 ) {
-    val isScrillUpVisible by remember {
+    val isScrollUpVisible by remember {
         derivedStateOf { contentListState.firstVisibleItemIndex != 0 }
     }
-    val pagerState = rememberPagerState(pageCount = {
-        TOTAL_REPORTS_PAGER_COUNT
-    })
-    val fling = PagerDefaults.flingBehavior(
-        state = pagerState,
-        pagerSnapDistance = PagerSnapDistance.atMost(0)
-    )
+
     Box(modifier = modifier) {
         TotalMonthlyContent(
             modifier = Modifier.fillMaxWidth(),
             listState = contentListState,
             headerItem = {
-                HorizontalPager(
+                DsCardV2(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp),
-                    state = pagerState,
-                    flingBehavior = fling,
-                    contentPadding = PaddingValues(horizontal = Large2X, vertical = Large),
-                    pageSpacing = Large,
-                    beyondViewportPageCount = 0,
-                ) { page ->
-                    DsCardV2(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .graphicsLayer {
-                                if (pagerState.currentPage == 0) {
-                                    translationX -= Large.toPx()
-                                }
-                                if (pagerState.currentPage == pagerState.pageCount - 1) {
-                                    translationX += Large.toPx()
-                                }
-                            }
-                    ) {
-                        when (page) {
-                            0 -> PeriodTotalContent(
-                                modifier = Modifier.fillMaxSize(),
-                                component = periodTotalComponent,
-                            )
-
-                            1 -> PeriodBalanceContent(
-                                modifier = Modifier.fillMaxSize(),
-                                component = periodBalanceComponent,
-                            )
-                        }
-                    }
+                        .padding(Large),
+                ) {
+                    PeriodTotalContent(
+                        modifier = Modifier.fillMaxWidth(),
+                        component = periodTotalComponent,
+                    )
                 }
             },
             paddingBottom = Large2X,
@@ -225,7 +181,7 @@ private fun Content(
         )
 
         AnimatedVisibility(
-            visible = isScrillUpVisible,
+            visible = isScrollUpVisible,
             enter = slideInVertically { it } + fadeIn(),
             exit = slideOutVertically { it } + fadeOut(),
             modifier = Modifier

@@ -13,7 +13,6 @@ android {
 
 dependencies {
     implementation(projects.presentation.component.filters)
-    implementation(projects.presentation.component.periodBalance)
     implementation(projects.presentation.component.periodTotal)
 
     implementation(projects.core.designSystem)

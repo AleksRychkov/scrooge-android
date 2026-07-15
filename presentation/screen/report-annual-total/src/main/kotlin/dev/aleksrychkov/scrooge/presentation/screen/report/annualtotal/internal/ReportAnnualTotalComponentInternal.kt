@@ -5,7 +5,6 @@ import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
-import dev.aleksrychkov.scrooge.presentation.component.periodbalance.PeriodBalanceComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.ReportAnnualTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.TotalMonthlyComponent
@@ -17,7 +16,6 @@ internal interface ReportAnnualTotalComponentInternal : ReportAnnualTotalCompone
     val state: StateFlow<ReportAnnualTotalState>
 
     val periodTotalComponent: PeriodTotalComponent
-    val periodBalanceComponent: PeriodBalanceComponent
     val totalMonthlyComponent: TotalMonthlyComponent
 
     fun openFiltersModal()

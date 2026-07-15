@@ -17,7 +17,6 @@ import dev.aleksrychkov.scrooge.core.router.context.RouterComponentContext
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersComponent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersSettings
-import dev.aleksrychkov.scrooge.presentation.component.periodbalance.PeriodBalanceComponent
 import dev.aleksrychkov.scrooge.presentation.component.periodtotal.PeriodTotalComponent
 import dev.aleksrychkov.scrooge.presentation.screen.report.annualtotal.internal.component.totalMonthly.TotalMonthlyComponent
 import kotlinx.coroutines.Dispatchers
@@ -45,12 +44,6 @@ internal class DefaultReportAnnualTotalComponent(
         )
     }
 
-    private val _periodBalanceComponent: PeriodBalanceComponent by lazy {
-        PeriodBalanceComponent(
-            componentContext = childContext("ReportAnnualPeriodBalanceComponentContext")
-        )
-    }
-
     private val _totalMonthlyComponent: TotalMonthlyComponent by lazy {
         TotalMonthlyComponent(
             componentContext = childContext("ReportAnnualTotalMonthlyComponentContext")
@@ -66,9 +59,6 @@ internal class DefaultReportAnnualTotalComponent(
 
     override val periodTotalComponent: PeriodTotalComponent
         get() = _periodTotalComponent
-
-    override val periodBalanceComponent: PeriodBalanceComponent
-        get() = _periodBalanceComponent
 
     override val totalMonthlyComponent: TotalMonthlyComponent
         get() = _totalMonthlyComponent
@@ -101,7 +91,6 @@ internal class DefaultReportAnnualTotalComponent(
 
     override fun setFilter(filter: FilterEntity) {
         _periodTotalComponent.setFilters(filter = filter)
-        _periodBalanceComponent.setFilters(filter = filter)
         _totalMonthlyComponent.setFilters(filter = filter)
         _state.value = _state.value.copy(filter = filter)
     }
