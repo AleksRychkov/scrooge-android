@@ -175,7 +175,7 @@ private fun BalanceTotalChartPreview() {
         BalanceTotalChartContent(
             modifier = Modifier.fillMaxSize(),
             content = BalanceTotalChartState.Content.Data(
-                labels = persistentListOf("Jan 2026", "Feb 2026", "Mar 2026"),
+                labels = persistentListOf("01/26", "02/26", "03/26"),
                 amounts = persistentListOf(100.0, -30.0, 80.0),
             ),
             currencySymbol = "₽",

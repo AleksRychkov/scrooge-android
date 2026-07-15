@@ -47,7 +47,7 @@ class IncomeExpenseChartReducerTest {
 
         // Then
         val data = assertInstanceOf(IncomeExpenseChartState.Content.Data::class.java, content)
-        assertEquals(listOf("Jan 2026"), data.labels)
+        assertEquals(listOf("01/26"), data.labels)
         assertEquals(listOf(120.5), data.income)
         assertEquals(listOf(30.25), data.expense)
     }

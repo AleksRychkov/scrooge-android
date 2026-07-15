@@ -73,7 +73,7 @@ class CategoryLineChartReducerTest {
 
         // Then
         val data = assertInstanceOf(CategoryLineChartState.Content.Data::class.java, content)
-        assertEquals(listOf("Jan 2026", "Feb 2026"), data.labels)
+        assertEquals(listOf("01/26", "02/26"), data.labels)
         assertEquals(listOf("Food", "Taxi"), data.series.map { it.name })
         assertEquals(listOf(0.1, 0.0), data.series.first().amounts)
         assertEquals(listOf(0.0, 0.2), data.series.last().amounts)

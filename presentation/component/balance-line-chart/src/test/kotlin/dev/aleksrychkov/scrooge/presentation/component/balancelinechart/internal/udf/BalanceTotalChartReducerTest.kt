@@ -85,7 +85,7 @@ class BalanceTotalChartReducerTest {
 
         // Then
         val data = assertInstanceOf(BalanceTotalChartState.Content.Data::class.java, content)
-        assertEquals(listOf("Jan 2026", "Feb 2026"), data.labels)
+        assertEquals(listOf("01/26", "02/26"), data.labels)
         assertEquals(listOf(1.2, -0.3), data.amounts)
     }
 }

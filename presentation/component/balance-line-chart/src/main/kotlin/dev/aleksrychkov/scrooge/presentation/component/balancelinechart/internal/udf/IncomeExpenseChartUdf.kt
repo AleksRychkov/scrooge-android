@@ -103,14 +103,13 @@ internal fun ReportIncomeExpenseTimelineEntity.toContent(): IncomeExpenseChartSt
     if (points.isEmpty()) return IncomeExpenseChartState.Content.Empty
     return IncomeExpenseChartState.Content.Data(
         labels = points.map { point ->
-            "${point.month.month.name.take(
-                MONTH_ABBREVIATION_LENGTH
-            ).lowercase().replaceFirstChar(Char::uppercase)} ${point.month.year}"
+            "${(point.month.month.ordinal + 1).toString().padStart(2, '0')}/" +
+                (point.month.year % YEARS_IN_CENTURY).toString().padStart(2, '0')
         }.toImmutableList(),
         income = points.map { it.income / CENTS_IN_MAJOR_UNIT }.toImmutableList(),
         expense = points.map { it.expense / CENTS_IN_MAJOR_UNIT }.toImmutableList(),
     )
 }
 
-private const val MONTH_ABBREVIATION_LENGTH = 3
+private const val YEARS_IN_CENTURY = 100
 private const val CENTS_IN_MAJOR_UNIT = 100.0

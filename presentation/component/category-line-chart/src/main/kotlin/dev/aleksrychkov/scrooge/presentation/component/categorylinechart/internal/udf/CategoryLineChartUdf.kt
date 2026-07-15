@@ -107,10 +107,8 @@ internal class CategoryLineChartActor(
 internal fun ReportCategoryTimelineEntity.toContent(): CategoryLineChartState.Content {
     if (series.isEmpty()) return CategoryLineChartState.Content.Empty
     val labels = series.first().points.map { point ->
-        val month = point.month.month.name.take(MONTH_ABBREVIATION_LENGTH)
-            .lowercase()
-            .replaceFirstChar(Char::uppercase)
-        "$month ${point.month.year}"
+        "${(point.month.month.ordinal + 1).toString().padStart(2, '0')}/" +
+            (point.month.year % YEARS_IN_CENTURY).toString().padStart(2, '0')
     }.toImmutableList()
     return CategoryLineChartState.Content.Data(
         labels = labels,
@@ -126,5 +124,5 @@ internal fun ReportCategoryTimelineEntity.toContent(): CategoryLineChartState.Co
     )
 }
 
-private const val MONTH_ABBREVIATION_LENGTH = 3
+private const val YEARS_IN_CENTURY = 100
 private const val CENTS_IN_MAJOR_UNIT = 100.0

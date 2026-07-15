@@ -194,7 +194,7 @@ private fun CategoryLineChartPreview() {
         CategoryLineChartContent(
             modifier = Modifier.fillMaxWidth().height(400.dp),
             content = CategoryLineChartState.Content.Data(
-                labels = persistentListOf("Jan 2026", "Feb 2026", "Mar 2026"),
+                labels = persistentListOf("01/26", "02/26", "03/26"),
                 series = persistentListOf(
                     CategoryLineChartState.Series("Food", 0xFFE57373.toInt(), persistentListOf(30.0, 45.0, 20.0)),
                     CategoryLineChartState.Series("Taxi", 0xFF64B5F6.toInt(), persistentListOf(10.0, 25.0, 40.0)),
