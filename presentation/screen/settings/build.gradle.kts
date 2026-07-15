@@ -13,9 +13,11 @@ android {
 
 dependencies {
     implementation(projects.core.designSystem)
+    implementation(projects.core.entity)
     implementation(projects.core.resources)
     implementation(projects.core.router)
 
+    implementation(projects.presentation.component.category)
     implementation(projects.presentation.component.settingsTheme)
     implementation(projects.presentation.component.settingsTransfer)
 }
