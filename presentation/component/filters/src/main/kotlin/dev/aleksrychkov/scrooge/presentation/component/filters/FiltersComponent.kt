@@ -7,6 +7,7 @@ import java.util.EnumSet
 
 interface FiltersComponent {
     fun openCategoryModal()
+    fun openCurrencyModal()
 
     companion object {
         operator fun invoke(

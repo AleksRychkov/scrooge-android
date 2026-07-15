@@ -40,7 +40,7 @@ internal interface FiltersComponentInternal : FiltersComponent {
     fun setCategory(category: CategoryEntity)
     fun removeCategory()
 
-    fun openCurrencyModal()
+    override fun openCurrencyModal()
     fun closeCurrencyModal()
     fun setCurrency(currency: CurrencyEntity)
     fun removeCurrency()

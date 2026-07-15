@@ -1,12 +1,15 @@
 package dev.aleksrychkov.scrooge.presentation.screen.charts
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -22,8 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -32,6 +37,8 @@ import dev.aleksrychkov.scrooge.core.designsystem.composables.DsFilterAction
 import dev.aleksrychkov.scrooge.core.designsystem.composables.animateElevation
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppBarShadow
 import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Medium
+import dev.aleksrychkov.scrooge.core.designsystem.theme.Normal
 import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceTotalChartContent
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.IncomeExpenseChartContent
@@ -46,6 +53,11 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
     val state by internal.state.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     var openCategoryPicker by rememberSaveable { mutableStateOf(false) }
+    var openCurrencyPicker by rememberSaveable { mutableStateOf(false) }
+    val openCurrencyFilter = {
+        openCurrencyPicker = true
+        internal.openFilters()
+    }
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -63,19 +75,31 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
                 .verticalScroll(scrollState),
         ) {
             val currencySymbol = state.filter.currency?.currencySymbol.orEmpty()
-            ChartCard(stringResource(R.string.balance_total_chart_title, currencySymbol)) {
+            ChartCard(
+                title = stringResource(R.string.balance_total_chart_title, "").trimEnd(),
+                currencySymbol = currencySymbol,
+                openCurrencyFilter = openCurrencyFilter,
+            ) {
                 BalanceTotalChartContent(
                     modifier = Modifier.fillMaxWidth().height(CHART_HEIGHT),
                     component = internal.balanceTotalChart,
                 )
             }
-            ChartCard(stringResource(R.string.income_expense_chart_title, currencySymbol)) {
+            ChartCard(
+                title = stringResource(R.string.income_expense_chart_title, "").trimEnd(),
+                currencySymbol = currencySymbol,
+                openCurrencyFilter = openCurrencyFilter,
+            ) {
                 IncomeExpenseChartContent(
                     modifier = Modifier.fillMaxWidth().height(CHART_HEIGHT),
                     component = internal.incomeExpenseChart,
                 )
             }
-            ChartCard(stringResource(R.string.category_chart_title, currencySymbol)) {
+            ChartCard(
+                title = stringResource(R.string.category_chart_title, "").trimEnd(),
+                currencySymbol = currencySymbol,
+                openCurrencyFilter = openCurrencyFilter,
+            ) {
                 CategoryLineChartContent(
                     modifier = Modifier.fillMaxWidth().height(CATEGORY_CHART_HEIGHT),
                     component = internal.categoryChart,
@@ -92,6 +116,12 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
             LaunchedEffect(filters) {
                 filters.openCategoryModal()
                 openCategoryPicker = false
+            }
+        }
+        if (openCurrencyPicker) {
+            LaunchedEffect(filters) {
+                filters.openCurrencyModal()
+                openCurrencyPicker = false
             }
         }
         FiltersBottomSheetModal(
@@ -138,12 +168,35 @@ private fun ChartsAppBar(
 }
 
 @Composable
-private fun ChartCard(title: String, content: @Composable () -> Unit) {
+private fun ChartCard(
+    title: String,
+    currencySymbol: String,
+    openCurrencyFilter: () -> Unit,
+    content: @Composable () -> Unit,
+) {
     DsCardV2(
         modifier = Modifier.fillMaxWidth().padding(horizontal = Large, vertical = Large),
     ) {
         Column {
-            Text(modifier = Modifier.padding(Large), text = title)
+            Row(
+                modifier = Modifier.padding(
+                    start = Large,
+                    top = Large - Medium,
+                    end = Large,
+                    bottom = Large,
+                ),
+            ) {
+                Text(modifier = Modifier.alignByBaseline(), text = title)
+                Text(
+                    modifier = Modifier
+                        .alignByBaseline()
+                        .clip(RoundedCornerShape(Normal))
+                        .clickable(onClick = openCurrencyFilter)
+                        .padding(horizontal = Normal, vertical = Medium),
+                    text = currencySymbol,
+                    textDecoration = TextDecoration.Underline,
+                )
+            }
             content()
         }
     }

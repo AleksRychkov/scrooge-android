@@ -135,7 +135,9 @@ private fun Chart(
         ),
     )
     CartesianChartHost(
-        modifier = Modifier.fillMaxSize().padding(Large),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = Large, end = Large, bottom = Large),
         modelProducer = producer,
         scrollState = scrollState,
         animateIn = false,
