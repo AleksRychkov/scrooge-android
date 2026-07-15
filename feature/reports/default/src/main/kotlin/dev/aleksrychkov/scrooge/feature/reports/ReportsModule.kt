@@ -4,7 +4,6 @@ import dev.aleksrychkov.scrooge.core.di.NaiveModule
 import dev.aleksrychkov.scrooge.core.di.factory
 import dev.aleksrychkov.scrooge.core.di.getLazy
 import dev.aleksrychkov.scrooge.core.di.module
-import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportBalanceTimelineUseCase
 import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportBalanceTotalTimelineUseCase
 import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportByCategoryUseCase
 import dev.aleksrychkov.scrooge.feature.reports.internal.DefaultReportCategoryTimelineUseCase
@@ -29,12 +28,6 @@ fun buildReportsModule(): NaiveModule {
         }
         factory<ReportByCategoryUseCase> {
             DefaultReportByCategoryUseCase(
-                reportDao = getLazy(),
-                ioDispatcher = Dispatchers.IO,
-            )
-        }
-        factory<ReportBalanceTimelineUseCase> {
-            DefaultReportBalanceTimelineUseCase(
                 reportDao = getLazy(),
                 ioDispatcher = Dispatchers.IO,
             )

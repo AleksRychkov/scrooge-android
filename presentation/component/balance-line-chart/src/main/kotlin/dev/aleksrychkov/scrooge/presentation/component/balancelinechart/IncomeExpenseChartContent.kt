@@ -73,7 +73,7 @@ fun IncomeExpenseChartContent(
             ) {
                 Message(R.string.income_expense_chart_error)
                 Button(onClick = internal::retry) {
-                    Text(stringResource(R.string.balance_chart_retry))
+                    Text(stringResource(R.string.income_expense_chart_retry))
                 }
             }
             is IncomeExpenseChartState.Content.Data -> IncomeExpenseChart(

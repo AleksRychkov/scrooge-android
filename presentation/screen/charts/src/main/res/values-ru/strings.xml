@@ -1,6 +1,5 @@
 <resources>
     <string name="charts_title">Графики</string>
-    <string name="balance_chart_title">Баланс %1$s</string>
     <string name="balance_total_chart_title">Общий баланс %1$s</string>
     <string name="category_chart_title">Категория %1$s</string>
     <string name="income_expense_chart_title">Доходы/Расходы %1$s</string>

@@ -1,9 +1,10 @@
 <resources>
-    <string name="balance_chart_no_data">No balance data for these filters</string>
-    <string name="balance_chart_error">Could not load balance data</string>
-    <string name="balance_chart_retry">Retry</string>
+    <string name="balance_total_chart_no_data">No balance data for these filters</string>
+    <string name="balance_total_chart_error">Could not load balance data</string>
+    <string name="balance_total_chart_retry">Retry</string>
     <string name="income_expense_chart_no_data">No income or expense data for these filters</string>
     <string name="income_expense_chart_error">Could not load income and expense data</string>
+    <string name="income_expense_chart_retry">Retry</string>
     <string name="income_chart_legend">Income</string>
     <string name="expense_chart_legend">Expense</string>
 </resources>

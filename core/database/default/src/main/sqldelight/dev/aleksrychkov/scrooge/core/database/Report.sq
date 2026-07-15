@@ -50,20 +50,6 @@ WITH monthly AS (
 )
 SELECT * FROM monthly;
 
-balanceTimeline:
-SELECT
-  (t.datestamp / 10000) AS year,
-  ((t.datestamp / 100) % 100) AS month,
-  SUM(CASE WHEN t.type = 0 THEN t.amount ELSE 0 END)
-    - SUM(CASE WHEN t.type = 1 THEN t.amount ELSE 0 END) AS balance
-FROM TTransaction t
-WHERE
-  t.datestamp >= :fromDatestamp
-  AND t.datestamp <= :toDatestamp
-  AND (:currencyCode IS NULL OR t.currencyCode = :currencyCode)
-GROUP BY year, month
-ORDER BY year, month;
-
 incomeExpenseTimeline:
 SELECT
   (t.datestamp / 10000) AS year,

@@ -1,6 +1,5 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
-import dev.aleksrychkov.scrooge.core.database.BalanceTimeline
 import dev.aleksrychkov.scrooge.core.database.BalanceTotalTimeline
 import dev.aleksrychkov.scrooge.core.database.CategoryTimeline
 import dev.aleksrychkov.scrooge.core.database.IncomeExpenseTimeline
@@ -12,59 +11,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class ReportMapperTest {
-
-    @Test
-    fun `When balance months are sparse Then missing months are zero filled`() {
-        // Given
-        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 3, 31))
-        val rows = listOf(
-            BalanceTimeline(year = 2025, month = 1, balance = 100),
-            BalanceTimeline(year = 2025, month = 3, balance = -30),
-        )
-
-        // When
-        val result = ReportMapper.balanceTimelineToEntity(list = rows, period = period)
-
-        // Then
-        assertEquals(listOf(100L, 0L, -30L), result.points.map { it.amount })
-        assertEquals(
-            listOf(LocalDate(2025, 1, 1), LocalDate(2025, 2, 1), LocalDate(2025, 3, 1)),
-            result.points.map { it.month },
-        )
-    }
-
-    @Test
-    fun `When balance rows are empty Then timeline is empty`() {
-        // Given
-        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 3, 31))
-
-        // When
-        val result = ReportMapper.balanceTimelineToEntity(list = emptyList(), period = period)
-
-        // Then
-        assertTrue(result.points.isEmpty())
-    }
-
-    @Test
-    fun `When balance period extends into future Then future months are omitted`() {
-        // Given
-        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 12, 31))
-        val rows = listOf(BalanceTimeline(year = 2025, month = 1, balance = 100))
-
-        // When
-        val result = ReportMapper.balanceTimelineToEntity(
-            list = rows,
-            period = period,
-            currentDate = LocalDate(2025, 3, 15),
-        )
-
-        // Then
-        assertEquals(
-            listOf(LocalDate(2025, 1, 1), LocalDate(2025, 2, 1), LocalDate(2025, 3, 1)),
-            result.points.map { it.month },
-        )
-        assertEquals(listOf(100L, 0L, 0L), result.points.map { it.amount })
-    }
 
     @Test
     fun `When total balance is mapped Then transactions before period form opening balance`() {

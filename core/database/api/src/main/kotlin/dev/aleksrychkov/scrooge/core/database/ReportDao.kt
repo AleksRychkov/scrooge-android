@@ -13,7 +13,6 @@ interface ReportDao {
     suspend fun totalAmount(filter: FilterEntity): Flow<ReportTotalAmountEntity>
     suspend fun totalAmountMonthly(filter: FilterEntity): ReportTotalAmountMonthlyEntity
     suspend fun byCategory(filter: FilterEntity): ReportByCategoryEntity
-    suspend fun balanceTimeline(filter: FilterEntity): ReportBalanceTimelineEntity
     suspend fun incomeExpenseTimeline(filter: FilterEntity): ReportIncomeExpenseTimelineEntity
     suspend fun balanceTotalTimeline(filter: FilterEntity): ReportBalanceTimelineEntity
     suspend fun categoryTimeline(filter: FilterEntity): ReportCategoryTimelineEntity

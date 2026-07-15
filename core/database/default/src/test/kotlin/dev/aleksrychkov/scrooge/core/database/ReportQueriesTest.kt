@@ -112,27 +112,6 @@ class ReportQueriesTest {
     }
 
     @Test
-    fun `When balance timeline is queried Then it subtracts expenses and isolates currency`() = runTest {
-        // Given
-        addTransaction(amount = 500, datestamp = 20260101, type = INCOME, categoryId = 1, currency = "RUB")
-        addTransaction(amount = 120, datestamp = 20260102, type = EXPENSE, categoryId = 2, currency = "RUB")
-        addTransaction(amount = 70, datestamp = 20260202, type = EXPENSE, categoryId = 2, currency = "RUB")
-        addTransaction(amount = 200, datestamp = 20260302, type = INCOME, categoryId = 1, currency = "RUB")
-        addTransaction(amount = 999, datestamp = 20260103, type = INCOME, categoryId = 1, currency = "USD")
-        database.tagQueries.insertFilterTag(999)
-
-        // When
-        val rows = database.reportQueries.balanceTimeline(
-            fromDatestamp = 20260101,
-            toDatestamp = 20260331,
-            currencyCode = "RUB",
-        ).executeAsList()
-
-        // Then
-        assertEquals(listOf(380L, -70L, 200L), rows.map { it.balance })
-    }
-
-    @Test
     fun `When income expense timeline is queried Then it groups both types and isolates currency`() = runTest {
         // Given
         addTransaction(amount = 500, datestamp = 20260101, type = INCOME, categoryId = 1, currency = "RUB")

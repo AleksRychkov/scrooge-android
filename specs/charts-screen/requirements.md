@@ -32,13 +32,6 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 8. The readable/active-filter UI shall indicate when a currency constraint is applied.
 9. Report database queries shall apply `currencyCode` when `FilterEntity.currency` is non-null.
 
-### R3 — Balance line chart
-
-1. The screen shall display a balance line chart filtered only by selected period and currency; category, tags, and transaction type shall not affect it.
-2. Each calendar-month point within the selected period shall equal filtered income minus filtered expense for the selected currency.
-3. The component shall expose loading, content, empty, and failure states using the existing Component + internal UDF pattern.
-4. Axes, markers, amount formatting, colors, and spacing shall use Vico and the design system.
-
 ### R4 — Category line chart
 
 1. The screen shall display one category time series for the same filter and monthly buckets.
@@ -53,7 +46,7 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 2. Transactions before the selected period shall form the opening balance.
 3. Each displayed month shall add that month’s income-minus-expense change to the previous total.
 4. The series shall use only the selected currency and date upper bound; category and other filters shall not affect it.
-5. Future months shall be omitted, and loading, empty, failure, scrolling, marker, and currency formatting shall match the balance chart.
+5. Future months shall be omitted, with loading, empty, failure, scrolling, marker, and currency formatting consistent with the other charts.
 
 ### R4b — Income/Expense chart
 

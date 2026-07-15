@@ -1,6 +1,5 @@
 <resources>
     <string name="charts_title">Charts</string>
-    <string name="balance_chart_title">Balance %1$s</string>
     <string name="balance_total_chart_title">Balance Total %1$s</string>
     <string name="category_chart_title">Categories %1$s</string>
     <string name="income_expense_chart_title">Inc/Exp %1$s</string>

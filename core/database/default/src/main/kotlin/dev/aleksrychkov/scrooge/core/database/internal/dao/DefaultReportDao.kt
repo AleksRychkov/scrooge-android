@@ -79,25 +79,6 @@ internal class DefaultReportDao(
             .let(ReportMapper::byCategoryToEntity)
     }
 
-    override suspend fun balanceTimeline(
-        filter: FilterEntity,
-    ): ReportBalanceTimelineEntity = withContext(readDispatcher) {
-        prepareTagFilter(filter)
-        database.reportQueries
-            .balanceTimeline(
-                fromDatestamp = filter.period.from.value,
-                toDatestamp = filter.period.to.value,
-                currencyCode = filter.currency?.currencyCode,
-            )
-            .executeAsList()
-            .let { rows ->
-                ReportMapper.balanceTimelineToEntity(
-                    list = rows,
-                    period = filter.period,
-                )
-            }
-    }
-
     override suspend fun balanceTotalTimeline(
         filter: FilterEntity,
     ): ReportBalanceTimelineEntity = withContext(readDispatcher) {

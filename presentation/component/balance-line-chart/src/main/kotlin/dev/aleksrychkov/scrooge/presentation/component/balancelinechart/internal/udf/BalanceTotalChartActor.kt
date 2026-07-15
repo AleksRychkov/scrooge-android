@@ -10,19 +10,19 @@ import kotlinx.coroutines.flow.flowOf
 
 internal class BalanceTotalChartActor(
     private val useCase: Lazy<ReportBalanceTotalTimelineUseCase>,
-) : Actor<BalanceLineChartCommand, BalanceLineChartEvent> {
+) : Actor<BalanceTotalChartCommand, BalanceTotalChartEvent> {
     private val loadSwitcher = Switcher()
 
-    override suspend fun process(command: BalanceLineChartCommand): Flow<BalanceLineChartEvent> {
+    override suspend fun process(command: BalanceTotalChartCommand): Flow<BalanceTotalChartEvent> {
         val filter = when (command) {
-            is BalanceLineChartCommand.Load -> command.filter
+            is BalanceTotalChartCommand.Load -> command.filter
         }
         return loadSwitcher.switch {
             when (val result = useCase.value(filter)) {
                 ReportBalanceTotalTimelineResult.Failure ->
-                    flowOf(BalanceLineChartEvent.Internal.Failed)
+                    flowOf(BalanceTotalChartEvent.Internal.Failed)
                 is ReportBalanceTotalTimelineResult.Success ->
-                    flowOf(BalanceLineChartEvent.Internal.Loaded(result.result))
+                    flowOf(BalanceTotalChartEvent.Internal.Loaded(result.result))
             }
         }
     }

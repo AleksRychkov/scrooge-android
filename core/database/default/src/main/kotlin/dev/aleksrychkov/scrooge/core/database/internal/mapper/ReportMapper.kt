@@ -1,6 +1,5 @@
 package dev.aleksrychkov.scrooge.core.database.internal.mapper
 
-import dev.aleksrychkov.scrooge.core.database.BalanceTimeline
 import dev.aleksrychkov.scrooge.core.database.BalanceTotalTimeline
 import dev.aleksrychkov.scrooge.core.database.ByCategory
 import dev.aleksrychkov.scrooge.core.database.CategoryTimeline
@@ -119,24 +118,6 @@ internal object ReportMapper {
         )
     }
 
-    fun balanceTimelineToEntity(
-        list: List<BalanceTimeline>,
-        period: PeriodDatestampEntity,
-        currentDate: LocalDate = Datestamp.now().date,
-    ): ReportBalanceTimelineEntity {
-        if (list.isEmpty()) return ReportBalanceTimelineEntity()
-        val valuesByMonth = list.associate { row ->
-            row.toMonth() to (row.balance ?: 0L)
-        }
-        val points = period.months(currentDate).map { month ->
-            ReportBalanceTimelineEntity.Point(
-                month = month,
-                amount = valuesByMonth[month] ?: 0L,
-            )
-        }
-        return ReportBalanceTimelineEntity(points = points.toImmutableList())
-    }
-
     fun balanceTotalTimelineToEntity(
         list: List<BalanceTotalTimeline>,
         period: PeriodDatestampEntity,
@@ -240,9 +221,6 @@ internal object ReportMapper {
             )
         }
     }
-
-    private fun BalanceTimeline.toMonth(): LocalDate =
-        LocalDate(year = year.toInt(), month = month.toInt(), day = 1)
 
     private fun BalanceTotalTimeline.toMonth(): LocalDate =
         LocalDate(year = year.toInt(), month = month.toInt(), day = 1)

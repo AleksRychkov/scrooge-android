@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Test
 
-class BalanceLineChartReducerTest {
+class BalanceTotalChartReducerTest {
 
-    private val reducer = BalanceLineChartReducer()
+    private val reducer = BalanceTotalChartReducer()
 
     @Test
     fun `When filter is set Then loading starts for the new filter`() {
@@ -19,55 +19,55 @@ class BalanceLineChartReducerTest {
 
         // When
         val result = reducer.reduce(
-            event = BalanceLineChartEvent.External.SetFilter(filter),
-            state = BalanceLineChartState(content = BalanceLineChartState.Content.Failure),
+            event = BalanceTotalChartEvent.External.SetFilter(filter),
+            state = BalanceTotalChartState(content = BalanceTotalChartState.Content.Failure),
         )
 
         // Then
         assertEquals(filter, result.state.filter)
-        assertEquals(BalanceLineChartState.Content.Loading, result.state.content)
-        assertEquals(listOf(BalanceLineChartCommand.Load(filter)), result.commands)
+        assertEquals(BalanceTotalChartState.Content.Loading, result.state.content)
+        assertEquals(listOf(BalanceTotalChartCommand.Load(filter)), result.commands)
     }
 
     @Test
     fun `When retry is requested Then current filter is loaded again`() {
         // Given
         val filter = FilterEntity()
-        val state = BalanceLineChartState(
+        val state = BalanceTotalChartState(
             filter = filter,
-            content = BalanceLineChartState.Content.Failure,
+            content = BalanceTotalChartState.Content.Failure,
         )
 
         // When
-        val result = reducer.reduce(BalanceLineChartEvent.External.Retry, state)
+        val result = reducer.reduce(BalanceTotalChartEvent.External.Retry, state)
 
         // Then
-        assertEquals(BalanceLineChartState.Content.Loading, result.state.content)
-        assertEquals(listOf(BalanceLineChartCommand.Load(filter)), result.commands)
+        assertEquals(BalanceTotalChartState.Content.Loading, result.state.content)
+        assertEquals(listOf(BalanceTotalChartCommand.Load(filter)), result.commands)
     }
 
     @Test
     fun `When loading fails Then failure is shown`() {
         // Given
-        val state = BalanceLineChartState()
+        val state = BalanceTotalChartState()
 
         // When
-        val result = reducer.reduce(BalanceLineChartEvent.Internal.Failed, state)
+        val result = reducer.reduce(BalanceTotalChartEvent.Internal.Failed, state)
 
         // Then
-        assertEquals(BalanceLineChartState.Content.Failure, result.state.content)
+        assertEquals(BalanceTotalChartState.Content.Failure, result.state.content)
     }
 
     @Test
     fun `When an empty timeline is loaded Then empty content is shown`() {
         // Given
-        val event = BalanceLineChartEvent.Internal.Loaded(ReportBalanceTimelineEntity())
+        val event = BalanceTotalChartEvent.Internal.Loaded(ReportBalanceTimelineEntity())
 
         // When
-        val result = reducer.reduce(event, BalanceLineChartState())
+        val result = reducer.reduce(event, BalanceTotalChartState())
 
         // Then
-        assertEquals(BalanceLineChartState.Content.Empty, result.state.content)
+        assertEquals(BalanceTotalChartState.Content.Empty, result.state.content)
     }
 
     @Test
@@ -84,7 +84,7 @@ class BalanceLineChartReducerTest {
         val content = timeline.toContent()
 
         // Then
-        val data = assertInstanceOf(BalanceLineChartState.Content.Data::class.java, content)
+        val data = assertInstanceOf(BalanceTotalChartState.Content.Data::class.java, content)
         assertEquals(listOf("Jan 2026", "Feb 2026"), data.labels)
         assertEquals(listOf(1.2, -0.3), data.amounts)
     }

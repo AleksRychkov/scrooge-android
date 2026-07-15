@@ -11,7 +11,6 @@ import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.udfextensions.retainedCoroutineScope
-import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceLineChartComponent
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceTotalChartComponent
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.IncomeExpenseChartComponent
 import dev.aleksrychkov.scrooge.presentation.component.categorylinechart.CategoryLineChartComponent
@@ -36,7 +35,6 @@ internal sealed interface ChartsCommand {
 internal interface ChartsComponentInternal : ChartsComponent {
     val state: StateFlow<ChartsState>
     val filtersModal: Value<ChildSlot<*, FiltersComponent>>
-    val balanceChart: BalanceLineChartComponent
     val balanceTotalChart: BalanceTotalChartComponent
     val incomeExpenseChart: IncomeExpenseChartComponent
     val categoryChart: CategoryLineChartComponent
@@ -55,9 +53,6 @@ internal class DefaultChartsComponent(
     private val scope = retainedCoroutineScope(Dispatchers.IO)
     private var resolveCurrencyJob: Job? = null
 
-    private val _balanceChart by lazy {
-        BalanceLineChartComponent(childContext("ChartsBalanceLineChart"))
-    }
     private val _balanceTotalChart by lazy {
         BalanceTotalChartComponent(childContext("ChartsBalanceTotalChart"))
     }
@@ -91,9 +86,6 @@ internal class DefaultChartsComponent(
             ),
         )
     }
-
-    override val balanceChart: BalanceLineChartComponent
-        get() = _balanceChart
 
     override val balanceTotalChart: BalanceTotalChartComponent
         get() = _balanceTotalChart
@@ -137,7 +129,6 @@ internal class DefaultChartsComponent(
 
     private fun applyFilter(filter: FilterEntity) {
         _state.value = ChartsState(filter)
-        _balanceChart.setFilters(filter)
         _balanceTotalChart.setFilters(filter)
         _incomeExpenseChart.setFilters(filter)
         _categoryChart.setFilters(filter)
