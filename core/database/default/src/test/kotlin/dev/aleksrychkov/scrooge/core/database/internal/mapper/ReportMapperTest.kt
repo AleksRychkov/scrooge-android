@@ -3,6 +3,7 @@ package dev.aleksrychkov.scrooge.core.database.internal.mapper
 import dev.aleksrychkov.scrooge.core.database.BalanceTimeline
 import dev.aleksrychkov.scrooge.core.database.BalanceTotalTimeline
 import dev.aleksrychkov.scrooge.core.database.CategoryTimeline
+import dev.aleksrychkov.scrooge.core.database.IncomeExpenseTimeline
 import dev.aleksrychkov.scrooge.core.entity.Datestamp
 import dev.aleksrychkov.scrooge.core.entity.PeriodDatestampEntity
 import kotlinx.datetime.LocalDate
@@ -84,6 +85,45 @@ internal class ReportMapperTest {
 
         // Then
         assertEquals(listOf(1_000L, 800L, 1_300L), result.points.map { it.amount })
+    }
+
+    @Test
+    fun `When income expense months are sparse Then missing months are zero filled`() {
+        // Given
+        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 3, 31))
+        val rows = listOf(
+            IncomeExpenseTimeline(year = 2025, month = 1, income = 500, expense = 200),
+            IncomeExpenseTimeline(year = 2025, month = 3, income = 100, expense = 300),
+        )
+
+        // When
+        val result = IncomeExpenseTimelineMapper.toEntity(rows, period)
+
+        // Then
+        assertEquals(listOf(500L, 0L, 100L), result.points.map { it.income })
+        assertEquals(listOf(200L, 0L, 300L), result.points.map { it.expense })
+    }
+
+    @Test
+    fun `When income expense period extends into future Then future months are omitted`() {
+        // Given
+        val period = period(from = LocalDate(2025, 1, 1), to = LocalDate(2025, 12, 31))
+        val rows = listOf(
+            IncomeExpenseTimeline(year = 2025, month = 1, income = 500, expense = 200),
+        )
+
+        // When
+        val result = IncomeExpenseTimelineMapper.toEntity(
+            list = rows,
+            period = period,
+            currentDate = LocalDate(2025, 2, 15),
+        )
+
+        // Then
+        assertEquals(
+            listOf(LocalDate(2025, 1, 1), LocalDate(2025, 2, 1)),
+            result.points.map { it.month },
+        )
     }
 
     @Test

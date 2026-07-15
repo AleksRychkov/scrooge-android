@@ -5,11 +5,13 @@ import app.cash.sqldelight.coroutines.mapToList
 import dev.aleksrychkov.scrooge.core.database.ReportDao
 import dev.aleksrychkov.scrooge.core.database.Scrooge
 import dev.aleksrychkov.scrooge.core.database.internal.database.DatabaseProvider
+import dev.aleksrychkov.scrooge.core.database.internal.mapper.IncomeExpenseTimelineMapper
 import dev.aleksrychkov.scrooge.core.database.internal.mapper.ReportMapper
 import dev.aleksrychkov.scrooge.core.entity.FilterEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportBalanceTimelineEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportByCategoryEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportCategoryTimelineEntity
+import dev.aleksrychkov.scrooge.core.entity.ReportIncomeExpenseTimelineEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountEntity
 import dev.aleksrychkov.scrooge.core.entity.ReportTotalAmountMonthlyEntity
 import kotlinx.coroutines.CoroutineDispatcher
@@ -108,6 +110,24 @@ internal class DefaultReportDao(
             .executeAsList()
             .let { rows ->
                 ReportMapper.balanceTotalTimelineToEntity(
+                    list = rows,
+                    period = filter.period,
+                )
+            }
+    }
+
+    override suspend fun incomeExpenseTimeline(
+        filter: FilterEntity,
+    ): ReportIncomeExpenseTimelineEntity = withContext(readDispatcher) {
+        database.reportQueries
+            .incomeExpenseTimeline(
+                fromDatestamp = filter.period.from.value,
+                toDatestamp = filter.period.to.value,
+                currencyCode = filter.currency?.currencyCode,
+            )
+            .executeAsList()
+            .let { rows ->
+                IncomeExpenseTimelineMapper.toEntity(
                     list = rows,
                     period = filter.period,
                 )

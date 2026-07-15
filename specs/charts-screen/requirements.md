@@ -55,9 +55,16 @@ Provide a dedicated Charts tab for exploring financial trends with a shared filt
 4. The series shall use only the selected currency and date upper bound; category and other filters shall not affect it.
 5. Future months shall be omitted, and loading, empty, failure, scrolling, marker, and currency formatting shall match the balance chart.
 
+### R4b — Income/Expense chart
+
+1. The screen shall display monthly income and expense as two line series for the selected period and currency.
+2. Category, tags, and transaction type shall not affect either series.
+3. Income shall use the design-system income color and expense shall use the expense color.
+4. Future months shall be omitted, and the chart shall provide loading, empty, failure, scrolling, marker, and currency formatting consistent with the other charts.
+
 ### R5 — Refresh and consistency
 
-1. Applying a filter shall refresh both charts from the same immutable filter snapshot.
+1. Applying a filter shall refresh all charts from the same immutable filter snapshot.
 2. Stale requests shall not overwrite results from a newer filter.
 3. Screen and component state shall survive configuration changes using established Decompose/Essenty retention patterns.
 

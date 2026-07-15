@@ -133,6 +133,27 @@ class ReportQueriesTest {
     }
 
     @Test
+    fun `When income expense timeline is queried Then it groups both types and isolates currency`() = runTest {
+        // Given
+        addTransaction(amount = 500, datestamp = 20260101, type = INCOME, categoryId = 1, currency = "RUB")
+        addTransaction(amount = 100, datestamp = 20260102, type = INCOME, categoryId = 1, currency = "RUB")
+        addTransaction(amount = 120, datestamp = 20260103, type = EXPENSE, categoryId = 2, currency = "RUB")
+        addTransaction(amount = 70, datestamp = 20260202, type = EXPENSE, categoryId = 2, currency = "RUB")
+        addTransaction(amount = 999, datestamp = 20260104, type = INCOME, categoryId = 1, currency = "USD")
+
+        // When
+        val rows = database.reportQueries.incomeExpenseTimeline(
+            fromDatestamp = 20260101,
+            toDatestamp = 20260228,
+            currencyCode = "RUB",
+        ).executeAsList()
+
+        // Then
+        assertEquals(listOf(600L, 0L), rows.map { it.income })
+        assertEquals(listOf(120L, 70L), rows.map { it.expense })
+    }
+
+    @Test
     fun `When category timeline is queried Then it groups matching category by month`() = runTest {
         // Given
         addTransaction(amount = 40, datestamp = 20260101, type = EXPENSE, categoryId = 2, currency = "RUB")

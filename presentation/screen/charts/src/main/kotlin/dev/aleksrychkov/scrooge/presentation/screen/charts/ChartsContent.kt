@@ -29,6 +29,7 @@ import dev.aleksrychkov.scrooge.core.designsystem.theme.Large
 import dev.aleksrychkov.scrooge.core.entity.readableName
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceLineChartContent
 import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.BalanceTotalChartContent
+import dev.aleksrychkov.scrooge.presentation.component.balancelinechart.IncomeExpenseChartContent
 import dev.aleksrychkov.scrooge.presentation.component.categorylinechart.CategoryLineChartContent
 import dev.aleksrychkov.scrooge.presentation.component.filters.FiltersBottomSheetModal
 import dev.aleksrychkov.scrooge.presentation.screen.charts.internal.ChartsComponentInternal
@@ -60,6 +61,12 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
                 BalanceLineChartContent(
                     modifier = Modifier.fillMaxWidth().height(CHART_HEIGHT),
                     component = internal.balanceChart,
+                )
+            }
+            ChartCard(stringResource(R.string.income_expense_chart_title, currencySymbol)) {
+                IncomeExpenseChartContent(
+                    modifier = Modifier.fillMaxWidth().height(CHART_HEIGHT),
+                    component = internal.incomeExpenseChart,
                 )
             }
             ChartCard(stringResource(R.string.category_chart_title, currencySymbol)) {

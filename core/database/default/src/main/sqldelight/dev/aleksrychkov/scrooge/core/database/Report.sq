@@ -64,6 +64,20 @@ WHERE
 GROUP BY year, month
 ORDER BY year, month;
 
+incomeExpenseTimeline:
+SELECT
+  (t.datestamp / 10000) AS year,
+  ((t.datestamp / 100) % 100) AS month,
+  SUM(CASE WHEN t.type = 0 THEN t.amount ELSE 0 END) AS income,
+  SUM(CASE WHEN t.type = 1 THEN t.amount ELSE 0 END) AS expense
+FROM TTransaction t
+WHERE
+  t.datestamp >= :fromDatestamp
+  AND t.datestamp <= :toDatestamp
+  AND (:currencyCode IS NULL OR t.currencyCode = :currencyCode)
+GROUP BY year, month
+ORDER BY year, month;
+
 balanceTotalTimeline:
 SELECT
   (t.datestamp / 10000) AS year,
