@@ -36,4 +36,8 @@ internal class DefaultTransactionFormComponent(
     override fun onSaveClicked() {
         _formComponent.onSaveClicked()
     }
+
+    override fun onDeleteClicked() {
+        _formComponent.onDeleteClicked()
+    }
 }

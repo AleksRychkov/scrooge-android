@@ -26,7 +26,6 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
     val effects: Flow<FormEffect>
 
     fun submit()
-    fun delete()
     fun appendInput(input: String)
     fun removeLastFromInput()
     fun updateComment(comment: String)

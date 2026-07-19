@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.TransactionFormComponentInternal
 import dev.aleksrychkov.scrooge.presentation.screen.transactionform.internal.composables.FormTopAppBar
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.TransactionFormContent as FormContent
@@ -42,8 +43,9 @@ private fun TransactionFormContent(
         }
     ) { innerPadding ->
         FormContent(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
             component = component,
+            bottomPadding = innerPadding.calculateBottomPadding(),
             scrollState = scrollState,
         )
     }
@@ -53,11 +55,13 @@ private fun TransactionFormContent(
 private fun FormContent(
     modifier: Modifier,
     scrollState: ScrollState,
+    bottomPadding: Dp,
     component: TransactionFormComponentInternal,
 ) {
     FormContent(
         modifier = modifier,
         scrollState = scrollState,
+        bottomPadding = bottomPadding,
         component = component.formComponent,
     )
 }

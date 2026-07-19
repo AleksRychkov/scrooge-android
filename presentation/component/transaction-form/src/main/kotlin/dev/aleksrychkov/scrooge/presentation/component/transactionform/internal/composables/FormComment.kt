@@ -39,8 +39,6 @@ private const val MAX_COMMENT_LENGTH = 100
 @Composable
 internal fun FormComment(
     modifier: Modifier,
-    isEditing: Boolean,
-    isLoading: Boolean,
     comment: String,
     onCommentChanged: (String) -> Unit,
 ) {
@@ -50,8 +48,6 @@ internal fun FormComment(
         ) {
             val focusRequester = remember { FocusRequester() }
             val focusManager = LocalFocusManager.current
-
-            if (isEditing && isLoading) return@Row
 
             val commentTextFieldState = rememberTextFieldState("")
             LaunchedEffect(key1 = comment) {
@@ -111,8 +107,6 @@ private fun FormCommentPreview() {
                     " Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
                     " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris" +
                     " nisi ut aliquip ex ea commodo consequat.",
-                isEditing = false,
-                isLoading = false,
                 onCommentChanged = { _ -> },
             )
         }

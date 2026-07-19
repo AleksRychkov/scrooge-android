@@ -20,4 +20,5 @@ interface TransactionFormComponent {
     }
 
     fun onSaveClicked()
+    fun onDeleteClicked()
 }

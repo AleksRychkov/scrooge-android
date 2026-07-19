@@ -12,4 +12,5 @@ internal interface TransactionFormComponentInternal : TransactionFormComponent {
 
     fun onBackClicked()
     fun onSaveClicked()
+    fun onDeleteClicked()
 }

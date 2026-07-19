@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.aleksrychkov.scrooge.core.designsystem.theme.AppTheme
@@ -43,7 +44,6 @@ import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormComment
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormCurrency
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDate
-import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormDeleteTransaction
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.FormTags
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.composables.NumPad
 import dev.aleksrychkov.scrooge.presentation.component.transactionform.internal.modal.FormCalculatorModal
@@ -60,11 +60,13 @@ import dev.aleksrychkov.scrooge.core.resources.R as Resources
 fun TransactionFormContent(
     modifier: Modifier,
     component: TransactionFormComponent,
+    bottomPadding: Dp,
     scrollState: ScrollState? = null,
 ) {
     TransactionFormContent(
         modifier = modifier,
         scrollState = scrollState,
+        bottomPadding = bottomPadding,
         component = component as TransactionFormComponentInternal,
     )
 }
@@ -73,6 +75,7 @@ fun TransactionFormContent(
 private fun TransactionFormContent(
     modifier: Modifier,
     component: TransactionFormComponentInternal,
+    bottomPadding: Dp,
     scrollState: ScrollState? = null,
 ) {
     SideEffects(component = component)
@@ -80,6 +83,7 @@ private fun TransactionFormContent(
     Content(
         modifier = modifier,
         scrollState = scrollState,
+        bottomPadding = bottomPadding,
         component = component,
     )
 }
@@ -111,6 +115,7 @@ private fun SideEffects(component: TransactionFormComponentInternal) {
 private fun Content(
     modifier: Modifier,
     component: TransactionFormComponentInternal,
+    bottomPadding: Dp,
     scrollState: ScrollState? = null,
 ) {
     val state by component.state.collectAsStateWithLifecycle()
@@ -118,10 +123,10 @@ private fun Content(
     ContentIme(
         modifier = modifier,
         state = state,
+        bottomPadding = bottomPadding,
         scrollState = scrollState,
         carouselComponent = component.categoryCarouselComponent,
         onSubmitClicked = component::submit,
-        onDeleteClicked = component::delete,
         onPadClicked = component::appendInput,
         onPadRemoveClicked = component::removeLastFromInput,
         onCommentChanged = component::updateComment,
@@ -149,9 +154,9 @@ private fun ContentIme(
     modifier: Modifier,
     state: FormState,
     scrollState: ScrollState? = null,
+    bottomPadding: Dp,
     carouselComponent: CategoryCarouselComponent,
     onSubmitClicked: () -> Unit,
-    onDeleteClicked: () -> Unit,
     onPadClicked: (String) -> Unit,
     onPadRemoveClicked: () -> Unit,
     onCommentChanged: (String) -> Unit,
@@ -172,9 +177,9 @@ private fun ContentIme(
                 modifier = Modifier.fillMaxSize(),
                 state = state,
                 scrollState = scrollState,
+                bottomPadding = bottomPadding,
                 carouselComponent = carouselComponent,
                 onSubmitClicked = onSubmitClicked,
-                onDeleteClicked = onDeleteClicked,
                 onPadClicked = onPadClicked,
                 onPadRemoveClicked = onPadRemoveClicked,
                 onCommentChanged = onCommentChanged,
@@ -192,9 +197,9 @@ private fun FormContent(
     modifier: Modifier,
     state: FormState,
     scrollState: ScrollState? = null,
+    bottomPadding: Dp,
     carouselComponent: CategoryCarouselComponent,
     onSubmitClicked: () -> Unit,
-    onDeleteClicked: () -> Unit,
     onPadClicked: (String) -> Unit,
     onPadRemoveClicked: () -> Unit,
     onCommentChanged: (String) -> Unit,
@@ -236,8 +241,6 @@ private fun FormContent(
 
         FormComment(
             modifier = Modifier.fillMaxWidth(),
-            isLoading = state.isLoading,
-            isEditing = state.transactionId != null,
             comment = state.comment,
             onCommentChanged = onCommentChanged,
         )
@@ -267,10 +270,8 @@ private fun FormContent(
             Text(stringResource(Resources.string.save))
         }
 
-        FormDeleteTransaction(
-            modifier = Modifier.fillMaxWidth(),
-            transactionId = state.transactionId,
-            onDeleteClicked = onDeleteClicked,
+        Spacer(
+            modifier = Modifier.height(bottomPadding)
         )
     }
 }
@@ -331,9 +332,9 @@ private fun FormContentPreview() {
                     transactionId = 1,
                     datestampReadable = "Today",
                 ),
+                bottomPadding = Normal,
                 carouselComponent = CategoryCarouselComponent.stub(),
                 onSubmitClicked = {},
-                onDeleteClicked = {},
                 onPadClicked = { _ -> },
                 onPadRemoveClicked = {},
                 onCommentChanged = { _ -> },

@@ -114,13 +114,13 @@ internal class DefaultTransactionFormComponent(
         store.handle(FormEvent.External.Submit)
     }
 
+    override fun onDeleteClicked() {
+        store.handle(FormEvent.External.Delete)
+    }
+
     // region Inputs
     override fun submit() {
         store.handle(FormEvent.External.Submit)
-    }
-
-    override fun delete() {
-        store.handle(FormEvent.External.Delete)
     }
 
     // region Comment
