@@ -76,6 +76,7 @@ internal class DefaultReportAnnualTotalComponent(
                 settings = EnumSet.of(
                     FiltersSettings.Years,
                     FiltersSettings.Category,
+                    FiltersSettings.Currency,
                     FiltersSettings.Tags
                 ),
             )

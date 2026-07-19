@@ -76,7 +76,7 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
         ) {
             val currencySymbol = state.filter.currency?.currencySymbol.orEmpty()
             ChartCard(
-                title = stringResource(R.string.balance_total_chart_title, "").trimEnd(),
+                title = stringResource(Resources.string.charts_balance_total_chart_title, "").trimEnd(),
                 currencySymbol = currencySymbol,
                 openCurrencyFilter = openCurrencyFilter,
             ) {
@@ -86,7 +86,7 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
                 )
             }
             ChartCard(
-                title = stringResource(R.string.income_expense_chart_title, "").trimEnd(),
+                title = stringResource(Resources.string.charts_income_expense_chart_title, "").trimEnd(),
                 currencySymbol = currencySymbol,
                 openCurrencyFilter = openCurrencyFilter,
             ) {
@@ -96,7 +96,7 @@ fun ChartsContent(modifier: Modifier, component: ChartsComponent) {
                 )
             }
             ChartCard(
-                title = stringResource(R.string.category_chart_title, "").trimEnd(),
+                title = stringResource(Resources.string.charts_category_chart_title, "").trimEnd(),
                 currencySymbol = currencySymbol,
                 openCurrencyFilter = openCurrencyFilter,
             ) {
@@ -155,7 +155,7 @@ private fun ChartsAppBar(
         shadowElevation = animatedElevation,
     ) {
         TopAppBar(
-            title = { Text(stringResource(R.string.charts_title)) },
+            title = { Text(stringResource(Resources.string.charts_title)) },
             actions = {
                 DsFilterAction(
                     name = filterName,

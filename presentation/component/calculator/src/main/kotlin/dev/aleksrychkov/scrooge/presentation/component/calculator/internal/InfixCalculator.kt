@@ -21,12 +21,18 @@ internal class InfixCalculator {
         "CyclomaticComplexMethod"
     )
     fun calculate(input: String): BigDecimal {
-        val tmp = input
+        var tmp = input
             .replace(AMOUNT_DELIMITER, DECIMAL_SEPARATOR)
             .replace(MULTIPLY, LOCAL_MULTIPLY)
             .replace(SUBTRACT, LOCAL_SUBTRACT)
             .replace(DIVIDE, LOCAL_DIVIDE)
             .replace(ADD, LOCAL_ADD)
+        if (tmp.endsWith(LOCAL_ADD) || tmp.endsWith(LOCAL_SUBTRACT)) {
+            tmp += "0"
+        }
+        if (tmp.endsWith(LOCAL_MULTIPLY) || tmp.endsWith(LOCAL_DIVIDE)) {
+            tmp += "1"
+        }
 
         val numberStack = ArrayDeque<BigDecimal>()
         val operandsStack = ArrayDeque<Int>()

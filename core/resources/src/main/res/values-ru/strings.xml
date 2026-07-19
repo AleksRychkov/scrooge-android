@@ -193,4 +193,11 @@
     <string name="limits_monthly">Месячный</string>
     <string name="limits_delete_confirmation_text">Вы уверены, что хотите удалить лимит?</string>
     <!-- Limits -->
+
+    <!-- Charts -->
+    <string name="charts_title">Графики</string>
+    <string name="charts_balance_total_chart_title">Общий баланс %1$s</string>
+    <string name="charts_category_chart_title">Категория %1$s</string>
+    <string name="charts_income_expense_chart_title">Доходы/Расходы %1$s</string>
+    <!-- -->
 </resources>
